@@ -7,6 +7,7 @@ categoryHref: '/projects/see-more'
 author: Chris Bartosik
 publishedAt: 2026-08-20
 coverImage: '/articles/see-more-motion/cover.webp'
+sideMedia: '/articles/see-more-motion/1.webm'
 order: 1
 description: 'How See More Logistics uses seamless motion design to communicate operational continuity and regional authority.'
 ---

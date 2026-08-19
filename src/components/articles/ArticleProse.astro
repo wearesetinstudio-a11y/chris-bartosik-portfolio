@@ -1,12 +1,19 @@
 ---
 interface Props {
 	class?: string;
+	embedded?: boolean;
 }
 
-const { class: className = '' } = Astro.props;
+const { class: className = '', embedded = false } = Astro.props;
 ---
 
-<div class:list={['article-prose px-[var(--article-gutter)] py-16 md:py-24', className]}>
+<div
+	class:list={[
+		'article-prose',
+		!embedded && 'px-[var(--article-gutter)] py-16 md:py-24',
+		className,
+	]}
+>
 	<slot />
 </div>
 

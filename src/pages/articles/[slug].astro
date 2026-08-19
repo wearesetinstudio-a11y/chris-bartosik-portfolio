@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import ArticleHero from '../../components/articles/ArticleHero.astro';
+import ArticleBodySection from '../../components/articles/ArticleBodySection.astro';
 import ArticleProse from '../../components/articles/ArticleProse.astro';
 import { getCollection, render } from 'astro:content';
 import { formatArticleDate, resolveArticleProjectHref } from '../../utils/getArticles.ts';
@@ -51,9 +52,17 @@ const pageDescription = data.description || data.deck || data.title;
 				publishedLabel={formatArticleDate(data.publishedAt)}
 			/>
 
-			<ArticleProse>
-				<Content />
-			</ArticleProse>
+			{
+				data.sideMedia ? (
+					<ArticleBodySection sideMedia={data.sideMedia} sideMediaAlt={data.title}>
+						<Content />
+					</ArticleBodySection>
+				) : (
+					<ArticleProse>
+						<Content />
+					</ArticleProse>
+				)
+			}
 		</div>
 
 		<ContactSection />

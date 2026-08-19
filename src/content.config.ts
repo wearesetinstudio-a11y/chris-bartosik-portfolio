@@ -49,6 +49,7 @@ const articles = defineCollection({
 		author: z.string().default('Chris Bartosik'),
 		publishedAt: z.coerce.date(),
 		coverImage: z.string(),
+		sideMedia: z.string().optional().default(''),
 		order: z.number(),
 		description: z.string().optional().default(''),
 	}),
