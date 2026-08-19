@@ -16,12 +16,12 @@ const titleLineClass =
 ---
 
 <a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
-	<div class="project-card__media overflow-hidden bg-[#E8E8E8] md:aspect-[16/10]">
+	<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
 		{
 			video ? (
 				<video
 					src={videoSrc}
-					class="block h-auto w-full object-contain md:h-full md:object-cover"
+					class="block h-auto w-full object-contain"
 					autoplay
 					muted
 					loop
@@ -35,7 +35,7 @@ const titleLineClass =
 					alt={title}
 					width="960"
 					height="600"
-					class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02] md:h-full md:object-cover"
+					class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 					loading="lazy"
 				/>
 			)
