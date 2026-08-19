@@ -210,6 +210,14 @@ const headerClass = waitForIntro
 		background-color: #ffffff !important;
 	}
 
+	body.mobile-nav-open .site-header--light-bg .site-header__logo-mark img {
+		filter: none;
+	}
+
+	body.mobile-nav-open .site-header--light-bg .mobile-nav-toggle {
+		color: #f5f5f5;
+	}
+
 	.mobile-nav-toggle {
 		position: relative;
 		z-index: 50;
@@ -300,6 +308,7 @@ const headerClass = waitForIntro
 
 	let headerScrollCleanup: (() => void) | null = null;
 	let mobileNavCleanup: (() => void) | null = null;
+	let syncHeaderAppearance: (() => void) | null = null;
 
 	function initHeaderSolidBackground() {
 		headerScrollCleanup?.();
@@ -312,8 +321,14 @@ const headerClass = waitForIntro
 		const headline = document.getElementById('hero-headline');
 
 		function updateHeaderSolid() {
+			const menuOpen = document.body.classList.contains('mobile-nav-open');
 			const isLogoCompact = window.scrollY > 40;
-			header.classList.toggle('header-logo-compact', isLogoCompact);
+			header.classList.toggle('header-logo-compact', isLogoCompact && !menuOpen);
+
+			if (menuOpen) {
+				header.classList.add('header-solid');
+				return;
+			}
 
 			if (isLightBg) {
 				header.classList.toggle('header-solid', isLogoCompact);
@@ -349,6 +364,8 @@ const headerClass = waitForIntro
 			window.removeEventListener('scroll', onScroll);
 			window.removeEventListener('resize', updateHeaderSolid);
 		};
+
+		syncHeaderAppearance = updateHeaderSolid;
 	}
 
 	function closeMobileNav() {
@@ -363,6 +380,7 @@ const headerClass = waitForIntro
 		panel.classList.remove('is-open');
 		panel.setAttribute('aria-hidden', 'true');
 		document.body.classList.remove('mobile-nav-open');
+		syncHeaderAppearance?.();
 	}
 
 	function initMobileNav() {
@@ -384,6 +402,7 @@ const headerClass = waitForIntro
 			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 			toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
 			document.body.classList.toggle('mobile-nav-open', isOpen);
+			syncHeaderAppearance?.();
 		};
 
 		const onPanelClick = (event: Event) => {
