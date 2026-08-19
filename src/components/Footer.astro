@@ -28,7 +28,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 				height="30"
 				class="footer-brand h-auto w-8"
 			/>
-			<p class="mt-3 text-[1rem] text-setin-muted">
+			<p class="footer-copyright mt-3 text-[1rem] text-setin-muted">
 				&copy; {new Date().getFullYear()} Setin Studio
 			</p>
 		</div>
@@ -54,6 +54,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 
 <style is:global>
 	@media (max-width: 767px) {
+		.footer-copyright,
 		.footer-location__label,
 		.footer-location__time {
 			font-size: 0.8rem;

@@ -5,6 +5,7 @@ tags: ['Branding', 'Web Design']
 thumbnail: '/images/portfolio/epic-realty/cover.webp'
 folderName: 'epic-realty'
 order: 1
+heroImage: '/images/portfolio/epic-realty/bg.webp'
 heroSubtitle: 'A premium real estate identity engineered to convert high-intent buyers at scale'
 overviewTitle: 'Built for the outlier buyer'
 overviewText: 'Epic Realty needed a digital presence that matched the scale of their property portfolio — confident, refined, and built to convert. We developed a full brand system and a performance-focused website that positions Epic as a premium real estate partner across every touchpoint.'
