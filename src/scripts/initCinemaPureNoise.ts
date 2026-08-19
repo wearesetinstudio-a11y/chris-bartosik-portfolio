@@ -1,22 +1,31 @@
-const initializedCanvases = new WeakSet<HTMLCanvasElement>();
+type NoiseController = {
+	restart: () => void;
+	stop: () => void;
+};
+
+const controllers = new WeakMap<HTMLCanvasElement, NoiseController>();
 
 export function initCinemaPureNoise(
 	canvasId: string,
 	options: { observeElementId?: string } = {},
-): void {
+): NoiseController | null {
 	const canvas = document.getElementById(canvasId) as HTMLCanvasElement | null;
-	if (!canvas || initializedCanvases.has(canvas)) return;
+	if (!canvas) return null;
+
+	const existing = controllers.get(canvas);
+	if (existing) {
+		existing.restart();
+		return existing;
+	}
 
 	const ctx = canvas.getContext('2d');
 	const container = canvas.parentElement;
-	if (!ctx || !container) return;
-
-	initializedCanvases.add(canvas);
+	if (!ctx || !container) return null;
 
 	const isMobile = window.matchMedia('(max-width: 767px)').matches;
-	const NOISE_DENSITY = isMobile ? 0.028 : 0.052;
+	const NOISE_DENSITY = isMobile ? 0.034 : 0.052;
 	const GRAIN_SIZE = isMobile ? 0.65 : 0.75;
-	const BASE_OPACITY = 0.17;
+	const BASE_OPACITY = isMobile ? 0.2 : 0.17;
 	const MAX_NOISE_WIDTH = isMobile ? 640 : 1100;
 	const MAX_NOISE_HEIGHT = isMobile ? 420 : 700;
 	const TOTAL_BUFFERS = isMobile ? 4 : 6;
@@ -29,6 +38,9 @@ export function initCinemaPureNoise(
 	let noiseHeight = 0;
 	let intervalId: ReturnType<typeof setInterval> | null = null;
 	let pendingBufferIndex = 0;
+	let isObservedVisible = true;
+	let lastLayoutWidth = 0;
+	let lastLayoutHeight = 0;
 
 	function getNoiseDimensions(w: number, h: number) {
 		const scale = Math.min(1, MAX_NOISE_WIDTH / w, MAX_NOISE_HEIGHT / h);
@@ -68,9 +80,17 @@ export function initCinemaPureNoise(
 	}
 
 	function preRenderNoiseAsync(w: number, h: number) {
+		const previousBuffers = noiseBuffers.filter(Boolean);
 		noiseBuffers = new Array(TOTAL_BUFFERS);
 		pendingBufferIndex = 0;
-		renderNoiseBuffer(w, h, 0);
+
+		const firstBuffer = renderNoiseBuffer(w, h, 0);
+		if (!firstBuffer && previousBuffers.length > 0) {
+			noiseBuffers = previousBuffers.slice(0, TOTAL_BUFFERS);
+			return;
+		}
+
+		drawFrame();
 
 		function renderNextBuffer() {
 			pendingBufferIndex += 1;
@@ -90,6 +110,23 @@ export function initCinemaPureNoise(
 
 	function resizeCanvas() {
 		const rect = container.getBoundingClientRect();
+		if (rect.width < 2 || rect.height < 2) {
+			window.requestAnimationFrame(resizeCanvas);
+			return;
+		}
+
+		const nextWidth = Math.round(rect.width);
+		const nextHeight = Math.round(rect.height);
+		if (
+			nextWidth === lastLayoutWidth &&
+			nextHeight === lastLayoutHeight &&
+			noiseBuffers.some(Boolean)
+		) {
+			return;
+		}
+
+		lastLayoutWidth = nextWidth;
+		lastLayoutHeight = nextHeight;
 		dpr = window.devicePixelRatio || 1;
 
 		canvas.width = Math.max(1, Math.floor(rect.width * dpr));
@@ -133,18 +170,21 @@ export function initCinemaPureNoise(
 		intervalId = null;
 	}
 
+	function restart() {
+		resizeCanvas();
+		if (isObservedVisible) startNoise();
+	}
+
 	function initCanvas() {
 		resizeCanvas();
-		drawFrame();
+		if (isObservedVisible) startNoise();
 	}
 
-	if (isMobile) {
-		window.requestAnimationFrame(initCanvas);
-	} else {
-		initCanvas();
-	}
+	const onResize = () => {
+		window.requestAnimationFrame(resizeCanvas);
+	};
 
-	window.addEventListener('resize', resizeCanvas, { passive: true });
+	window.addEventListener('resize', onResize, { passive: true });
 
 	const observeElementId = options.observeElementId;
 	if (observeElementId) {
@@ -153,11 +193,12 @@ export function initCinemaPureNoise(
 			const visibilityObserver = new IntersectionObserver(
 				(entries) => {
 					for (const entry of entries) {
+						isObservedVisible = entry.isIntersecting;
 						if (entry.isIntersecting) startNoise();
 						else stopNoise();
 					}
 				},
-				{ threshold: 0 },
+				{ threshold: 0, rootMargin: '120px 0px 120px 0px' },
 			);
 			visibilityObserver.observe(observedElement);
 		} else {
@@ -167,12 +208,17 @@ export function initCinemaPureNoise(
 		startNoise();
 	}
 
-	window.addEventListener(
-		'pagehide',
-		() => {
-			stopNoise();
-			window.removeEventListener('resize', resizeCanvas);
-		},
-		{ once: true },
-	);
+	if (isMobile) {
+		window.requestAnimationFrame(initCanvas);
+	} else {
+		initCanvas();
+	}
+
+	const controller: NoiseController = {
+		restart,
+		stop: stopNoise,
+	};
+
+	controllers.set(canvas, controller);
+	return controller;
 }

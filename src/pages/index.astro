@@ -108,6 +108,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
 			window.addEventListener('resize', scheduleHeroBackgroundSync, { passive: true });
 			document.addEventListener('astro:page-load', () => {
+				initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
 				document.documentElement.classList.add('hero-cinema-active');
 				scheduleHeroBackgroundSync();
 			});
@@ -179,6 +180,17 @@ const { projectCount, articleCount } = await getSiteCounts();
 	.hero-background-stack__noise {
 		z-index: 2;
 		opacity: 0.85;
+		mix-blend-mode: overlay;
+	}
+
+	@media (max-width: 767px) {
+		.hero-background-stack__noise {
+			opacity: 0.95;
+		}
+
+		html.hero-cinema-active .noise-overlay--coarse {
+			opacity: 0.035;
+		}
 	}
 
 	html.hero-cinema-active .noise-overlay--coarse,
