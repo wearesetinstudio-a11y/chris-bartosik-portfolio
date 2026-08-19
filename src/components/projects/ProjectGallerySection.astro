@@ -1,0 +1,112 @@
+---
+import type { GalleryLayoutBlock } from '../../utils/getProjectGallery';
+import ProjectGalleryMedia from './ProjectGalleryMedia.astro';
+
+interface Props {
+	blocks: GalleryLayoutBlock[];
+	title: string;
+	startIndex?: number;
+}
+
+const { blocks, title, startIndex = 0 } = Astro.props;
+
+let mediaIndex = startIndex;
+---
+
+<section class="project-gallery px-[60px] py-12 md:py-16">
+	<div class="project-gallery__stack">
+		{
+			blocks.map((block) => {
+				if (block.kind === 'full') {
+					const currentIndex = mediaIndex;
+					mediaIndex += 1;
+
+					return (
+						<div class="project-gallery__row project-gallery__row--full">
+							<ProjectGalleryMedia item={block.item} title={title} index={currentIndex} />
+						</div>
+					);
+				}
+
+				const gridItems = block.items.map((item) => {
+					const currentIndex = mediaIndex;
+					mediaIndex += 1;
+					return { item, index: currentIndex };
+				});
+
+				return (
+					<div
+						class:list={[
+							'project-gallery__row project-gallery__row--grid',
+							gridItems.length === 3 ? 'project-gallery__row--grid-3' : 'project-gallery__row--grid-2',
+						]}
+					>
+						{gridItems.map(({ item, index }) => (
+							<ProjectGalleryMedia item={item} title={title} index={index} />
+						))}
+					</div>
+				);
+			})
+		}
+	</div>
+</section>
+
+<style>
+	.project-gallery {
+		background: #ffffff;
+	}
+
+	.project-gallery__stack {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	@media (min-width: 768px) {
+		.project-gallery__stack {
+			gap: 2.5rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.project-gallery__stack {
+			gap: 3rem;
+		}
+	}
+
+	.project-gallery__row--full,
+	.project-gallery__row--grid {
+		width: 100%;
+	}
+
+	.project-gallery__row--grid {
+		display: grid;
+		gap: 2rem;
+	}
+
+	@media (min-width: 768px) {
+		.project-gallery__row--grid {
+			gap: 2.5rem;
+		}
+	}
+
+	.project-gallery__row--grid-2 {
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 768px) {
+		.project-gallery__row--grid-2 {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	.project-gallery__row--grid-3 {
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 768px) {
+		.project-gallery__row--grid-3 {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>

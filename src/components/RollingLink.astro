@@ -1,0 +1,32 @@
+---
+interface Props {
+	href: string;
+	label: string;
+	count?: number;
+	inverted?: boolean;
+}
+
+const { href, label, count, inverted = false } = Astro.props;
+const text = count !== undefined ? `${label} [${count}]` : label;
+
+const lineClass = inverted
+	? 'flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-black'
+	: 'flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg';
+---
+
+<a
+	href={href}
+	class:list={[
+		'rolling-link group relative -mx-1 -my-2 inline-flex flex-col px-1 py-2',
+		inverted ? 'text-black' : 'text-setin-fg',
+	]}
+>
+	<div class="flex h-[1.5em] flex-col overflow-hidden">
+		<div
+			class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
+		>
+			<span class={lineClass}>{text}</span>
+			<span class={lineClass}>{text}</span>
+		</div>
+	</div>
+</a>

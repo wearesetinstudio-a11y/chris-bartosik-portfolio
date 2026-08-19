@@ -1,0 +1,34 @@
+---
+interface Props {
+	count: number;
+	href?: string;
+}
+
+const { count, href = '/projects' } = Astro.props;
+
+const label = `See all projects [${count}]`;
+const lineClass =
+	'flex h-[1.5em] items-center leading-[1.15] text-[1.6rem] font-semibold uppercase text-black';
+---
+
+<a href={href} class="see-all-projects group block">
+	<div
+		class="see-all-projects__surface flex aspect-[16/10] items-center justify-center bg-[#ECECEC] transition-colors duration-300 ease-out group-hover:bg-[#D6D6D6]"
+	>
+		<span class="relative inline-block pb-1.5 text-[1.6rem]">
+			<span class="flex h-[1.5em] flex-col overflow-hidden">
+				<span
+					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
+				>
+					<span class={lineClass}>{label}</span>
+					<span class={lineClass}>{label}</span>
+				</span>
+			</span>
+
+			<span
+				class="absolute bottom-0 left-0 h-[1.5px] w-full origin-left scale-x-100 bg-black transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0"
+				aria-hidden="true"
+			></span>
+		</span>
+	</div>
+</a>

@@ -1,0 +1,400 @@
+---
+const testimonials = [
+	{
+		quote:
+			'I am more than pleased with the result. Our website has gone from being merely informative to becoming a true representation of who we are as a company.',
+		name: 'Nedelka Velasco',
+		role: 'CEO of NRV',
+		logo: '/images/logos/nrv.svg',
+		logoHeight: 38,
+	},
+	{
+		quote:
+			"The way the guys built our new Webflow site moved See more to finally show our clients a professional side we're actually proud of.",
+		name: 'Karen Núñez',
+		role: 'CEO of See More Logistics',
+		logo: '/images/logos/see-more.svg',
+		logoHeight: 42,
+	},
+	{
+		quote:
+			'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
+		name: 'Thays Ríos Gun',
+		role: 'Owner of TRG',
+		logo: '/images/logos/trg.svg',
+		logoHeight: 48,
+	},
+	{
+		quote:
+			'The fresh look and energy provided by the brothers allowed us to show the world what MexiMunchies is all about.',
+		name: 'Andrea Vega Alvarado',
+		role: 'Founder of Mexi Munchies',
+		logo: '/images/logos/meximunchies.svg',
+		logoHeight: 48,
+	},
+	{
+		quote:
+			'A total transformation. The guys provided the strategic branding we needed to stand out on market and connect with our audience.',
+		name: 'Sergio Vega Alvarado',
+		role: 'Founder of Snacks Lovers PTY',
+		logo: '/images/logos/snacks-lovers.svg',
+		logoHeight: 48,
+	},
+];
+
+const loopTestimonials = [...testimonials, ...testimonials];
+---
+
+<section id="testimonials" class="relative z-20 bg-[#F5F5F5] px-[60px] py-[200px] lg:pr-0">
+	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
+		<div class="testimonials-intro">
+			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
+				<span data-reveal-line>What they say</span>
+				<br />
+				<span data-reveal-line>about the setin</span>
+			</h2>
+			<p class="testimonials-description mt-8 max-w-md leading-relaxed text-black/55">
+				Every digital landmark we create is a result of deep trust and precise execution.
+			</p>
+		</div>
+
+		<div class="testimonials-scroll min-w-0">
+			<div id="testimonials-viewport" class="testimonials-scroll__viewport" aria-live="off">
+				<div id="testimonials-track" class="testimonials-scroll__track">
+					{
+						loopTestimonials.map((testimonial, index) => (
+							<article class="testimonial-card" data-testimonial-index={index % testimonials.length}>
+								<p class="testimonial-card__quote">{testimonial.quote}</p>
+
+								<div class="testimonial-card__footer mt-auto pt-10">
+									<img
+										src={testimonial.logo}
+										alt=""
+										width="205"
+										height={testimonial.logoHeight}
+										style={`max-height: ${testimonial.logoHeight}px`}
+										class="testimonial-card__logo h-auto w-auto max-w-[9.5rem] shrink-0 object-contain object-left"
+									/>
+									<span
+										class="testimonial-card__divider h-10 w-px shrink-0 bg-black/10"
+										aria-hidden="true"
+									/>
+									<div>
+										<p class="testimonial-card__name uppercase">{testimonial.name}</p>
+										<p class="testimonial-card__role mt-1 uppercase">{testimonial.role}</p>
+									</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.testimonials-heading {
+		font-size: 2rem;
+		font-weight: 500;
+		color: #000000;
+	}
+
+	.testimonials-description {
+		font-size: 1.2rem;
+	}
+
+	#testimonials-heading .reveal-char {
+		color: rgba(0, 0, 0, 0.15);
+		transition: color 0.35s ease-out;
+	}
+
+	#testimonials-heading .reveal-char.active {
+		color: #000000;
+	}
+
+	.testimonials-scroll__viewport {
+		position: relative;
+		overflow: hidden;
+		border-left: 1px solid rgba(0, 0, 0, 0.12);
+		padding-left: 1.25rem;
+		cursor: grab;
+		touch-action: pan-y;
+	}
+
+	.testimonials-scroll__viewport.is-dragging {
+		cursor: grabbing;
+		user-select: none;
+	}
+
+	.testimonials-scroll__track {
+		display: flex;
+		width: max-content;
+		gap: 1.25rem;
+	}
+
+	.testimonial-card {
+		display: flex;
+		width: 22.5rem;
+		min-height: 26rem;
+		flex-shrink: 0;
+		flex-direction: column;
+		background-color: #ffffff;
+		padding: 2.5rem;
+	}
+
+	.testimonial-card__quote {
+		font-size: 1.2rem;
+		font-weight: 500;
+		line-height: 1.5;
+		color: rgba(0, 0, 0, 0.82);
+	}
+
+	.testimonial-card__footer {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.testimonial-card__logo {
+		filter: brightness(0);
+		opacity: 0.22;
+	}
+
+	.testimonial-card__name {
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 1.3;
+		color: rgba(0, 0, 0, 0.45);
+	}
+
+	.testimonial-card__role {
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1.3;
+		color: rgba(0, 0, 0, 0.3);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.testimonials-scroll__viewport {
+			cursor: default;
+		}
+	}
+</style>
+
+<script>
+	function wrapLetters(element: HTMLElement) {
+		const text = element.textContent ?? '';
+		element.textContent = '';
+
+		for (const char of text) {
+			const span = document.createElement('span');
+			span.className = 'reveal-char';
+			span.textContent = char === ' ' ? '\u00a0' : char;
+			element.appendChild(span);
+		}
+	}
+
+	function updateTestimonialsHeadingReveal() {
+		const heading = document.getElementById('testimonials-heading');
+		if (!heading) return;
+
+		const chars = heading.querySelectorAll('.reveal-char');
+		if (!chars.length) return;
+
+		const rect = heading.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+		const startLine = viewportHeight * 0.88;
+		const endLine = viewportHeight * 0.45;
+		const range = startLine - endLine;
+		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
+		const activeCount = Math.ceil(progress * chars.length);
+
+		chars.forEach((char, index) => {
+			char.classList.toggle('active', index < activeCount);
+		});
+	}
+
+	let scrollTicking = false;
+
+	function onTestimonialsScroll() {
+		if (scrollTicking) return;
+		scrollTicking = true;
+		requestAnimationFrame(() => {
+			updateTestimonialsHeadingReveal();
+			scrollTicking = false;
+		});
+	}
+
+	function initTestimonialsHeadingReveal() {
+		const heading = document.getElementById('testimonials-heading');
+		if (!heading || heading.dataset.revealInit === 'true') return;
+
+		heading.dataset.revealInit = 'true';
+
+		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+			wrapLetters(line as HTMLElement);
+		});
+
+		updateTestimonialsHeadingReveal();
+		window.addEventListener('scroll', onTestimonialsScroll, { passive: true });
+		window.addEventListener('resize', updateTestimonialsHeadingReveal, { passive: true });
+	}
+
+	function initTestimonialsMarquee() {
+		const viewport = document.getElementById('testimonials-viewport');
+		const track = document.getElementById('testimonials-track');
+
+		if (!viewport || !track || viewport.dataset.marqueeInit === 'true') return;
+
+		viewport.dataset.marqueeInit = 'true';
+
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const baseSpeed = 0.45;
+		const hoverSpeed = 0.07;
+		let offset = 0;
+		let loopWidth = 0;
+		let isDragging = false;
+		let isHovered = false;
+		let dragStartX = 0;
+		let dragStartOffset = 0;
+		let resumeAt = 0;
+		let rafId = 0;
+		let isVisible = false;
+
+		function normalizeOffset() {
+			if (loopWidth <= 0) return;
+
+			while (offset >= 0) offset -= loopWidth;
+			while (offset < -loopWidth) offset += loopWidth;
+		}
+
+		function applyTransform() {
+			track.style.transform = `translate3d(${offset}px, 0, 0)`;
+		}
+
+		function measureLoop() {
+			loopWidth = track.scrollWidth / 2;
+			normalizeOffset();
+			applyTransform();
+		}
+
+		function tick() {
+			if (isVisible && !isDragging && !reducedMotion && Date.now() >= resumeAt) {
+				const speed = isHovered ? hoverSpeed : baseSpeed;
+				offset += speed;
+				normalizeOffset();
+				applyTransform();
+			}
+
+			if (isVisible || isDragging) {
+				rafId = requestAnimationFrame(tick);
+			} else {
+				rafId = 0;
+				track.style.willChange = '';
+			}
+		}
+
+		function startLoop() {
+			if (!rafId) {
+				track.style.willChange = 'transform';
+				rafId = requestAnimationFrame(tick);
+			}
+		}
+
+		function scheduleResume() {
+			resumeAt = Date.now() + 2000;
+		}
+
+		function onPointerDown(event: PointerEvent) {
+			if (reducedMotion) return;
+
+			isDragging = true;
+			dragStartX = event.clientX;
+			dragStartOffset = offset;
+			resumeAt = Number.POSITIVE_INFINITY;
+			viewport.classList.add('is-dragging');
+			viewport.setPointerCapture(event.pointerId);
+		}
+
+		function onPointerMove(event: PointerEvent) {
+			if (!isDragging) return;
+
+			offset = dragStartOffset + (event.clientX - dragStartX);
+			normalizeOffset();
+			applyTransform();
+			startLoop();
+		}
+
+		function onPointerUp(event: PointerEvent) {
+			if (!isDragging) return;
+
+			isDragging = false;
+			viewport.classList.remove('is-dragging');
+
+			if (viewport.hasPointerCapture(event.pointerId)) {
+				viewport.releasePointerCapture(event.pointerId);
+			}
+
+			scheduleResume();
+		}
+
+		function onMouseEnter() {
+			isHovered = true;
+		}
+
+		function onMouseLeave() {
+			isHovered = false;
+		}
+
+		measureLoop();
+		viewport.addEventListener('pointerdown', onPointerDown);
+		viewport.addEventListener('pointermove', onPointerMove);
+		viewport.addEventListener('pointerup', onPointerUp);
+		viewport.addEventListener('pointercancel', onPointerUp);
+		viewport.addEventListener('mouseenter', onMouseEnter);
+		viewport.addEventListener('mouseleave', onMouseLeave);
+		window.addEventListener('resize', measureLoop, { passive: true });
+
+		const testimonialsSection = document.getElementById('testimonials');
+		if (testimonialsSection) {
+			const visibilityObserver = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						isVisible = entry.isIntersecting;
+						if (isVisible) startLoop();
+					}
+				},
+				{ threshold: 0, rootMargin: '100px 0px' },
+			);
+			visibilityObserver.observe(testimonialsSection);
+		}
+
+		offset = -loopWidth;
+		applyTransform();
+
+		return () => {
+			cancelAnimationFrame(rafId);
+			window.removeEventListener('resize', measureLoop);
+			viewport.removeEventListener('pointerdown', onPointerDown);
+			viewport.removeEventListener('pointermove', onPointerMove);
+			viewport.removeEventListener('pointerup', onPointerUp);
+			viewport.removeEventListener('pointercancel', onPointerUp);
+			viewport.removeEventListener('mouseenter', onMouseEnter);
+			viewport.removeEventListener('mouseleave', onMouseLeave);
+		};
+	}
+
+	function initTestimonialsSection() {
+		initTestimonialsHeadingReveal();
+		initTestimonialsMarquee();
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initTestimonialsSection, { once: true });
+	} else {
+		initTestimonialsSection();
+	}
+
+	document.addEventListener('astro:page-load', initTestimonialsSection);
+</script>

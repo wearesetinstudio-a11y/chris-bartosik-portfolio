@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+	--font-sans: "Fustat", ui-sans-serif, system-ui, sans-serif;
+	--color-setin-bg: #131415;
+	--color-setin-fg: #f5f5f5;
+	--color-setin-muted: #a3a3a3;
+	--color-setin-border: #2a2b2c;
+	--letter-spacing-body: 0;
+	--letter-spacing-ui: -0.1px;
+}
+
+html {
+	scroll-behavior: smooth;
+	background-color: #131415;
+}
+
+body {
+	background-color: #131415;
+	font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+	letter-spacing: var(--letter-spacing-body);
+	@apply text-setin-fg antialiased;
+}
+
+p,
+li,
+blockquote,
+.prose-setin,
+.prose-setin p,
+.hero-description,
+.clients-description,
+.projects-description,
+.testimonials-description,
+.articles-description,
+.contact-description,
+.about-visual__intro,
+.about-studio-intro__body,
+.about-team-member__bio,
+.about-content__body,
+.about-content__body p {
+	letter-spacing: var(--letter-spacing-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+button,
+label,
+.text-ui,
+.hero-headline,
+.about-hero__title,
+.clients-heading,
+.projects-heading,
+.testimonials-heading,
+.articles-heading,
+.contact-heading,
+.about-visual__eyebrow,
+.about-studio-intro__heading,
+.about-team-member__heading,
+.about-content__heading,
+.project-card__title,
+.project-cursor__label,
+.footer-brand,
+.footer-location__label,
+.footer-location__time,
+.section-eyebrow,
+.section-headline {
+	letter-spacing: var(--letter-spacing-ui);
+}
+
+body.intro-active {
+	overflow: hidden;
+}
+
+.prose-setin {
+	@apply text-setin-muted leading-relaxed;
+
+	& h2 {
+		@apply mt-12 mb-4 text-setin-fg text-xl font-medium;
+	}
+
+	& p {
+		@apply mb-4;
+	}
+}
+
+#about-studio-heading .reveal-char {
+	color: rgba(255, 255, 255, 0.15);
+	transition: color 0.35s ease-out;
+}
+
+#about-studio-heading .reveal-char.active {
+	color: rgba(255, 255, 255, 1);
+}
+
+.sygnet-flip-stage {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	perspective: 900px;
+	perspective-origin: center center;
+}
+
+.sygnet-flip-x {
+	display: block;
+	transform: rotateY(0deg);
+	transform-origin: center center;
+	will-change: transform;
+}
+
+.sygnet-flip-x.is-flipping {
+	animation: sygnet-flip-x 1400ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes sygnet-flip-x {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sygnet-flip-x {
+		animation: none !important;
+	}
+}

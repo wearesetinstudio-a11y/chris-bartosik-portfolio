@@ -1,0 +1,258 @@
+---
+import RollingLink from './RollingLink.astro';
+import WorkWithUsButton from './WorkWithUsButton.astro';
+import { articles } from '../data/articles.ts';
+
+interface Props {
+	projectCount?: number;
+	articleCount?: number;
+	waitForIntro?: boolean;
+	theme?: 'default' | 'light-bg';
+}
+
+const {
+	projectCount = 0,
+	articleCount = articles.length,
+	waitForIntro = false,
+	theme = 'default',
+} = Astro.props;
+
+const hasLocalContact =
+	Astro.url.pathname === '/' ||
+	Astro.url.pathname === '/about' ||
+	Astro.url.pathname === '/projects' ||
+	Astro.url.pathname === '/articles' ||
+	/^\/projects\/[^/]+$/.test(Astro.url.pathname);
+
+const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
+const isLightBg = theme === 'light-bg';
+
+const nav = [
+	{ href: '/projects', label: 'Case studies', count: projectCount },
+	{ href: '/about', label: 'About us' },
+	{ href: '/articles', label: 'Articles', count: articleCount },
+];
+
+const headerClass = waitForIntro
+	? 'opacity-0 -translate-y-2 pointer-events-none'
+	: 'opacity-100 translate-y-0';
+---
+
+<header
+	id="site-header"
+	data-wait-intro={waitForIntro ? 'true' : 'false'}
+	data-theme={theme}
+	class:list={[
+		'site-header fixed inset-x-0 top-0 z-50 bg-transparent transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]',
+		isLightBg && 'site-header--light-bg',
+		headerClass,
+	]}
+>
+	<div class="grid h-[100px] w-full grid-cols-[1fr_auto_1fr] items-center px-[60px]">
+		<a
+			href="/"
+			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
+			aria-label="Setin Studio — home"
+		>
+			<div class="site-header__logo-mark flex items-center" aria-hidden="true">
+				<img
+					src="/images/logo-setin.svg"
+					alt=""
+					width="111"
+					height="42"
+					class="site-header__logo-setin h-[28px] w-auto shrink-0"
+				/>
+				<div class="site-header__logo-sygnet-wrap flex shrink-0 items-center justify-center">
+					<img
+						src="/images/logo-sygnet.svg"
+						alt=""
+						width="51"
+						height="48"
+						class="site-header__logo-sygnet h-[30px] w-auto"
+					/>
+				</div>
+				<img
+					src="/images/logo-studio.svg"
+					alt=""
+					width="143"
+					height="42"
+					class="site-header__logo-studio h-[28px] w-auto shrink-0"
+				/>
+			</div>
+		</a>
+
+		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10">
+			{
+				nav.map((item) => (
+					<RollingLink href={item.href} label={item.label} count={item.count} inverted={isLightBg} />
+				))
+			}
+		</nav>
+
+		<div class="flex justify-end">
+			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} />
+		</div>
+	</div>
+</header>
+
+<style is:global>
+	.site-header.header-solid {
+		background-color: #131415;
+	}
+
+	.site-header__logo-mark {
+		gap: 0.5rem;
+		transition: gap 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	}
+
+	.site-header__logo-setin,
+	.site-header__logo-studio {
+		max-width: 9rem;
+		opacity: 1;
+		overflow: hidden;
+		transition:
+			max-width 0.5s cubic-bezier(0.76, 0, 0.24, 1),
+			opacity 0.35s ease,
+			margin 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	}
+
+	.site-header__logo-sygnet-wrap {
+		transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	}
+
+	.site-header.header-logo-compact .site-header__logo-mark {
+		gap: 0;
+	}
+
+	.site-header.header-logo-compact .site-header__logo-setin,
+	.site-header.header-logo-compact .site-header__logo-studio {
+		max-width: 0;
+		opacity: 0;
+		margin-inline: 0;
+	}
+
+	.site-header--light-bg:not(.header-solid) .site-header__logo-mark img {
+		filter: brightness(0);
+	}
+
+	.site-header--light-bg.header-solid .site-header__logo-mark img {
+		filter: none;
+	}
+
+	.site-header--light-bg:not(.header-solid) .rolling-link,
+	.site-header--light-bg:not(.header-solid) .rolling-link span {
+		color: #000000 !important;
+	}
+
+	.site-header--light-bg.header-solid .rolling-link,
+	.site-header--light-bg.header-solid .rolling-link span {
+		color: #f5f5f5 !important;
+	}
+
+	.site-header--light-bg:not(.header-solid) .work-with-us-button,
+	.site-header--light-bg:not(.header-solid) .work-with-us-button span {
+		color: #000000 !important;
+	}
+
+	.site-header--light-bg:not(.header-solid) .work-with-us-button__underline {
+		background-color: #000000 !important;
+	}
+
+	.site-header--light-bg.header-solid .work-with-us-button,
+	.site-header--light-bg.header-solid .work-with-us-button span {
+		color: #f5f5f5 !important;
+	}
+
+	.site-header--light-bg.header-solid .work-with-us-button__underline {
+		background-color: #ffffff !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-header__logo-mark,
+		.site-header__logo-setin,
+		.site-header__logo-studio,
+		.site-header__logo-sygnet-wrap {
+			transition: none !important;
+		}
+	}
+</style>
+
+<script>
+	import { hasCompletedIntro } from '../scripts/introState.ts';
+
+	let headerScrollCleanup: (() => void) | null = null;
+
+	function initHeaderSolidBackground() {
+		headerScrollCleanup?.();
+		headerScrollCleanup = null;
+
+		const header = document.getElementById('site-header');
+		if (!header) return;
+
+		const isLightBg = header.dataset.theme === 'light-bg';
+		const headline = document.getElementById('hero-headline');
+
+		function updateHeaderSolid() {
+			const isLogoCompact = window.scrollY > 40;
+			header.classList.toggle('header-logo-compact', isLogoCompact);
+
+			if (isLightBg) {
+				header.classList.toggle('header-solid', isLogoCompact);
+				return;
+			}
+
+			if (!headline) {
+				header.classList.toggle('header-solid', isLogoCompact);
+				return;
+			}
+
+			const headlineTop = headline.getBoundingClientRect().top;
+			const headerHeight = header.offsetHeight;
+			header.classList.toggle('header-solid', headlineTop <= headerHeight);
+		}
+
+		let ticking = false;
+
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				updateHeaderSolid();
+				ticking = false;
+			});
+		}
+
+		updateHeaderSolid();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', updateHeaderSolid, { passive: true });
+
+		headerScrollCleanup = () => {
+			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('resize', updateHeaderSolid);
+		};
+	}
+
+	initHeaderSolidBackground();
+	document.addEventListener('astro:page-load', initHeaderSolidBackground);
+
+	function initHeaderIntroReveal() {
+		const header = document.getElementById('site-header');
+		if (!header || header.dataset.waitIntro !== 'true') return;
+
+		if (hasCompletedIntro()) {
+			header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+			return;
+		}
+
+		window.addEventListener(
+			'intro-complete',
+			() => {
+				header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+			},
+			{ once: true },
+		);
+	}
+
+	initHeaderIntroReveal();
+	document.addEventListener('astro:page-load', initHeaderIntroReveal);
+</script>

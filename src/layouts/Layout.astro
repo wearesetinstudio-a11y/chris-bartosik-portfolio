@@ -1,0 +1,251 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Setin Studio',
+	description = 'Multidisciplinary studio forging distinct identities, seamless interfaces, and high-performance builds.',
+} = Astro.props;
+
+const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`;
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none" style="background-color: #131415;">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/images/favicons/favicon-dark-mode.svg" />
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/images/favicons/favicon-light-mode.svg"
+			media="(prefers-color-scheme: light)"
+		/>
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/images/favicons/favicon-dark-mode.svg"
+			media="(prefers-color-scheme: dark)"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<title>{pageTitle}</title>
+		<ClientRouter />
+		<style is:inline>
+			html.intro-pending #page-transition-overlay {
+				top: 0;
+				pointer-events: auto;
+			}
+
+			html.intro-pending:not(.intro-revealing) #page-transition-overlay {
+				top: 0 !important;
+			}
+
+			html.intro-pending body {
+				overflow: hidden;
+			}
+
+			html.intro-pending:not(.intro-revealing) body > :not(#page-transition-overlay) {
+				visibility: hidden;
+			}
+		</style>
+		<script is:inline>
+			(function () {
+				var path = window.location.pathname.replace(/\/$/, '') || '/';
+				if (path === '/' || path.endsWith('/index.html')) {
+					document.documentElement.classList.add('intro-pending');
+				}
+			})();
+		</script>
+	</head>
+	<body class="relative flex min-h-screen flex-col bg-[#131415] font-sans text-base text-setin-fg antialiased">
+		<div class="noise-overlay noise-overlay--coarse" aria-hidden="true"></div>
+		<div class="noise-overlay noise-overlay--fine" aria-hidden="true"></div>
+		<div class="noise-scanlines" aria-hidden="true"></div>
+
+		<div
+			id="page-transition-overlay"
+			class="page-transition-overlay pointer-events-none fixed inset-x-0 top-[-100vh] z-[9999] flex h-[100vh] items-center justify-center bg-[#131415]"
+			transition:persist="page-transition"
+			aria-hidden="true"
+		>
+			<div class="sygnet-flip-stage">
+				<img
+					src="/images/logo-sygnet.svg"
+					alt=""
+					width="64"
+					height="64"
+					class="page-transition-overlay__logo sygnet-flip-x h-16 w-auto"
+					decoding="async"
+				/>
+			</div>
+		</div>
+
+		<slot />
+
+		<script>
+			import { initGlobalPreloader } from '../scripts/initGlobalPreloader.ts';
+			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
+
+			initPageTransitionOverlay();
+			initGlobalPreloader();
+			document.addEventListener('astro:page-load', initGlobalPreloader);
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	@keyframes noise-animation {
+		0% {
+			transform: translate(0, 0);
+		}
+		10% {
+			transform: translate(-5%, -5%);
+		}
+		20% {
+			transform: translate(-10%, 10%);
+		}
+		30% {
+			transform: translate(5%, -10%);
+		}
+		40% {
+			transform: translate(-5%, 15%);
+		}
+		50% {
+			transform: translate(-10%, 5%);
+		}
+		60% {
+			transform: translate(10%, 10%);
+		}
+		70% {
+			transform: translate(5%, -5%);
+		}
+		80% {
+			transform: translate(-10%, -10%);
+		}
+		90% {
+			transform: translate(10%, -5%);
+		}
+		100% {
+			transform: translate(0, 0);
+		}
+	}
+
+	@keyframes tv-flicker {
+		0%,
+		100% {
+			opacity: 0.09;
+		}
+		25% {
+			opacity: 0.13;
+		}
+		50% {
+			opacity: 0.07;
+		}
+		75% {
+			opacity: 0.11;
+		}
+	}
+
+	@keyframes slide-in-top {
+		from {
+			top: -100vh;
+		}
+		to {
+			top: 0;
+		}
+	}
+
+	@keyframes slide-out-bottom {
+		from {
+			top: 0;
+		}
+		to {
+			top: 100vh;
+		}
+	}
+
+	.page-transition-overlay.is-active {
+		pointer-events: auto;
+	}
+
+	.page-transition-overlay.is-sliding-in {
+		animation: slide-in-top 900ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+	}
+
+	.page-transition-overlay.is-sliding-out {
+		animation: slide-out-bottom 900ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+	}
+
+	.noise-overlay {
+		position: fixed;
+		top: -50%;
+		left: -50%;
+		right: -50%;
+		bottom: -50%;
+		width: 200%;
+		height: 200%;
+		pointer-events: none;
+	}
+
+	/* Gruba ziarnistość — efekt śniegu na starym TV */
+	.noise-overlay--coarse {
+		z-index: 10;
+		background: transparent
+			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+			repeat 0 0;
+		background-size: 180px 180px;
+		opacity: 0.1;
+		mix-blend-mode: overlay;
+		animation:
+			noise-animation 0.2s steps(2) infinite,
+			tv-flicker 0.16s steps(2) infinite;
+	}
+
+	/* Drobniejszy szum — gęsta taśma filmowa */
+	.noise-overlay--fine {
+		z-index: 11;
+		background: transparent
+			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+			repeat 0 0;
+		background-size: 128px 128px;
+		opacity: 0.07;
+		mix-blend-mode: soft-light;
+		animation: noise-animation 0.12s steps(2) infinite reverse;
+	}
+
+	/* Poziome linie scanline — charakterystyczny wygląd CRT */
+	.noise-scanlines {
+		position: fixed;
+		inset: 0;
+		z-index: 12;
+		pointer-events: none;
+		background: repeating-linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0.08) 0px,
+			rgba(0, 0, 0, 0.08) 1px,
+			transparent 1px,
+			transparent 3px
+		);
+		opacity: 0.35;
+		mix-blend-mode: multiply;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.page-transition-overlay.is-sliding-in,
+		.page-transition-overlay.is-sliding-out {
+			animation: none !important;
+		}
+	}
+</style>

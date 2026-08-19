@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, tags, thumbnail, video } = project.data;
+const label = title.toUpperCase();
+const tagLine = tags.join(' · ').toUpperCase();
+const thumbnailSrc = withPublicAssetVersion(thumbnail);
+---
+
+<a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
+	<div class="project-card__media aspect-[4/5] overflow-hidden bg-[#E8E8E8] md:aspect-[16/10]">
+		{
+			video ? (
+				<video
+					src={video}
+					class="h-full w-full object-cover"
+					autoplay
+					muted
+					loop
+					playsinline
+					preload="metadata"
+					aria-hidden="true"
+				/>
+			) : (
+				<img
+					src={thumbnailSrc}
+					alt={title}
+					width="960"
+					height="600"
+					class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+					loading="lazy"
+				/>
+			)
+		}
+	</div>
+
+	<div class="project-card__meta mt-5 space-y-1">
+		<h3 class="project-card__title text-[1.1rem] font-semibold uppercase leading-none tracking-[0.02em] text-black">
+			{label}
+		</h3>
+		<p class="project-card__tags text-[0.75rem] font-medium uppercase leading-snug tracking-[0.04em] text-black/45">
+			{tagLine}
+		</p>
+	</div>
+</a>

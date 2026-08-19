@@ -1,0 +1,151 @@
+---
+import ProjectInfoRow from './ProjectInfoRow.astro';
+
+interface Props {
+	label?: string;
+	title: string;
+	text: string;
+	graphicSrc: string;
+	graphicType?: 'image' | 'video';
+	graphicAlt: string;
+	rows: { label: string; value: string; isLink?: boolean }[];
+}
+
+const {
+	label = 'Overview',
+	title,
+	text,
+	graphicSrc,
+	graphicType = 'image',
+	graphicAlt,
+	rows,
+} = Astro.props;
+
+const titleChars = title.split('');
+---
+
+<section id="project-overview" class="project-overview relative z-10 bg-white px-[60px] py-20 md:py-28">
+	<div class="grid gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
+		<div class="project-overview__content min-w-0">
+			<p class="project-overview__label">[{label}]</p>
+
+			<h2 id="project-overview-heading" class="project-overview__heading">
+				<span class="project-overview__heading-line" data-reveal-line>
+					{
+						titleChars.map((char) => (
+							<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+						))
+					}
+				</span>
+			</h2>
+
+			<p class="project-overview__text">{text}</p>
+
+			{
+				rows.length > 0 ? (
+					<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
+						<dl>
+							{rows.map((row, index) => (
+								<ProjectInfoRow
+									label={row.label}
+									value={row.value}
+									isLink={row.isLink}
+									isLast={index === rows.length - 1}
+									theme="light"
+								/>
+							))}
+						</dl>
+					</div>
+				) : null
+			}
+		</div>
+
+		<div class="project-overview__visual min-w-0">
+			<div class="project-overview__sticky lg:sticky lg:top-[100px]">
+				<div class="project-overview__frame w-full overflow-hidden bg-white">
+					{
+						graphicType === 'video' ? (
+							<video
+								src={graphicSrc}
+								class="block h-auto w-full"
+								autoplay
+								muted
+								loop
+								playsinline
+								preload="metadata"
+								aria-label={graphicAlt}
+							/>
+						) : (
+							<img
+								src={graphicSrc}
+								alt={graphicAlt}
+								width="720"
+								height="900"
+								class="block h-auto w-full"
+								loading="lazy"
+								decoding="async"
+							/>
+						)
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.project-overview__content {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.project-overview__label {
+		font-size: 1.2rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: #000000;
+	}
+
+	.project-overview__heading {
+		margin-top: 2rem;
+		width: 100%;
+		max-width: 100%;
+		font-size: 2rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		line-height: 1.12;
+		letter-spacing: -0.01em;
+		color: #131415;
+	}
+
+	.project-overview__heading-line {
+		display: inline;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
+	@media (min-width: 768px) {
+		.project-overview__heading {
+			font-size: 2.25rem;
+		}
+	}
+
+	.project-overview__heading :global(.reveal-char) {
+		color: rgba(0, 0, 0, 0.15);
+		transition: color 0.35s ease-out;
+	}
+
+	.project-overview__heading :global(.reveal-char.active) {
+		color: #000000;
+	}
+
+	.project-overview__text {
+		margin-top: 2rem;
+		width: 100%;
+		max-width: 100%;
+		font-size: 1.125rem;
+		line-height: 1.625;
+		color: rgba(0, 0, 0, 0.7);
+	}
+</style>

@@ -1,0 +1,1658 @@
+﻿<!DOCTYPE html><html lang="en" style="background-color: #131415;"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="By stripping away the noise, we delivered an identity that feels like an institutional standard. See More Logistics now possesses a commanding visual presence that aligns perfectly with their operational commitment. Every touchpoint, from physical fleet graphics to technical documentation, reinforces their promise of trust and transparency, giving them the leverage to secure high-value contracts and drive business expansion."><link rel="icon" type="image/svg+xml" href="/images/favicons/favicon-dark-mode.svg"><link rel="icon" type="image/svg+xml" href="/images/favicons/favicon-light-mode.svg" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/images/favicons/favicon-dark-mode.svg" media="(prefers-color-scheme: dark)"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&display=swap" rel="stylesheet"><title>See More Logistics â Setin Studio</title><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/styles/global.css">/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: "Fustat", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --container-sm: 24rem;
+    --container-md: 28rem;
+    --container-lg: 32rem;
+    --container-xl: 36rem;
+    --container-3xl: 48rem;
+    --container-4xl: 56rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --tracking-tight: -0.025em;
+    --leading-snug: 1.375;
+    --leading-relaxed: 1.625;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-setin-fg: #f5f5f5;
+    --color-setin-muted: #a3a3a3;
+    --color-setin-border: #2a2b2c;
+    --letter-spacing-body: 0;
+    --letter-spacing-ui: -0.1px;
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .relative {
+    position: relative;
+  }
+  .static {
+    position: static;
+  }
+  .inset-0 {
+    inset: 0px;
+  }
+  .inset-x-0 {
+    inset-inline: 0px;
+  }
+  .top-0 {
+    top: 0px;
+  }
+  .-bottom-1 {
+    bottom: calc(var(--spacing) * -1);
+  }
+  .bottom-0 {
+    bottom: 0px;
+  }
+  .left-0 {
+    left: 0px;
+  }
+  .z-0 {
+    z-index: 0;
+  }
+  .z-10 {
+    z-index: 10;
+  }
+  .z-20 {
+    z-index: 20;
+  }
+  .z-50 {
+    z-index: 50;
+  }
+  .z-\[1\] {
+    z-index: 1;
+  }
+  .z-\[2\] {
+    z-index: 2;
+  }
+  .z-\[100\] {
+    z-index: 100;
+  }
+  .z-\[9999\] {
+    z-index: 9999;
+  }
+  .container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
+  }
+  .m-0 {
+    margin: 0px;
+  }
+  .-mx-1 {
+    margin-inline: calc(var(--spacing) * -1);
+  }
+  .-my-2 {
+    margin-block: calc(var(--spacing) * -2);
+  }
+  .mt-1 {
+    margin-top: var(--spacing);
+  }
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
+  }
+  .mt-10 {
+    margin-top: calc(var(--spacing) * 10);
+  }
+  .mt-12 {
+    margin-top: calc(var(--spacing) * 12);
+  }
+  .mt-20 {
+    margin-top: calc(var(--spacing) * 20);
+  }
+  .mt-auto {
+    margin-top: auto;
+  }
+  .mb-16 {
+    margin-bottom: calc(var(--spacing) * 16);
+  }
+  .ml-4 {
+    margin-left: calc(var(--spacing) * 4);
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .aspect-\[4\/3\] {
+    aspect-ratio: 4/3;
+  }
+  .aspect-\[4\/5\] {
+    aspect-ratio: 4/5;
+  }
+  .aspect-\[16\/10\] {
+    aspect-ratio: 16/10;
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
+  .h-10 {
+    height: calc(var(--spacing) * 10);
+  }
+  .h-\[1\.5em\] {
+    height: 1.5em;
+  }
+  .h-\[1\.5px\] {
+    height: 1.5px;
+  }
+  .h-\[34px\] {
+    height: 34px;
+  }
+  .h-\[100px\] {
+    height: 100px;
+  }
+  .h-\[400px\] {
+    height: 400px;
+  }
+  .h-\[600px\] {
+    height: 600px;
+  }
+  .h-auto {
+    height: auto;
+  }
+  .h-full {
+    height: 100%;
+  }
+  .min-h-\[48px\] {
+    min-height: 48px;
+  }
+  .min-h-\[96vh\] {
+    min-height: 96vh;
+  }
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
+  }
+  .w-\[20px\] {
+    width: 20px;
+  }
+  .w-\[320px\] {
+    width: 320px;
+  }
+  .w-auto {
+    width: auto;
+  }
+  .w-fit {
+    width: fit-content;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .w-px {
+    width: 1px;
+  }
+  .max-w-3xl {
+    max-width: var(--container-3xl);
+  }
+  .max-w-4xl {
+    max-width: var(--container-4xl);
+  }
+  .max-w-\[9\.5rem\] {
+    max-width: 9.5rem;
+  }
+  .max-w-\[320px\] {
+    max-width: 320px;
+  }
+  .max-w-full {
+    max-width: 100%;
+  }
+  .max-w-lg {
+    max-width: var(--container-lg);
+  }
+  .max-w-md {
+    max-width: var(--container-md);
+  }
+  .max-w-sm {
+    max-width: var(--container-sm);
+  }
+  .max-w-xl {
+    max-width: var(--container-xl);
+  }
+  .min-w-0 {
+    min-width: 0px;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-shrink {
+    flex-shrink: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .grow {
+    flex-grow: 1;
+  }
+  .origin-left {
+    transform-origin: 0;
+  }
+  .-translate-y-2 {
+    --tw-translate-y: calc(var(--spacing) * -2);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-y-0 {
+    --tw-translate-y: 0px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-y-full {
+    --tw-translate-y: 100%;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .scale-x-100 {
+    --tw-scale-x: 100%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .resize {
+    resize: both;
+  }
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-cols-\[1fr_auto_1fr\] {
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .grid-cols-\[120px_1fr\] {
+    grid-template-columns: 120px 1fr;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .items-end {
+    align-items: flex-end;
+  }
+  .items-start {
+    align-items: flex-start;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .justify-end {
+    justify-content: flex-end;
+  }
+  .gap-1 {
+    gap: var(--spacing);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+  .gap-10 {
+    gap: calc(var(--spacing) * 10);
+  }
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
+  }
+  .gap-20 {
+    gap: calc(var(--spacing) * 20);
+  }
+  .gap-\[120px\] {
+    gap: 120px;
+  }
+  :where(.space-y-1 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(var(--spacing) * var(--tw-space-y-reverse));
+    margin-block-end: calc(var(--spacing) * calc(1 - var(--tw-space-y-reverse)));
+  }
+  :where(.space-y-6 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+  }
+  :where(.space-y-8 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
+  }
+  .gap-x-8 {
+    column-gap: calc(var(--spacing) * 8);
+  }
+  .gap-x-10 {
+    column-gap: calc(var(--spacing) * 10);
+  }
+  .gap-y-3 {
+    row-gap: calc(var(--spacing) * 3);
+  }
+  .gap-y-4 {
+    row-gap: calc(var(--spacing) * 4);
+  }
+  .gap-y-12 {
+    row-gap: calc(var(--spacing) * 12);
+  }
+  .gap-y-16 {
+    row-gap: calc(var(--spacing) * 16);
+  }
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  .border-y {
+    border-block-style: var(--tw-border-style);
+    border-block-width: 1px;
+  }
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .border-black\/10 {
+    border-color: color-mix(in srgb, #000 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-black) 10%, transparent);
+    }
+  }
+  .border-setin-border {
+    border-color: var(--color-setin-border);
+  }
+  .border-white\/10 {
+    border-color: color-mix(in srgb, #fff 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-white) 10%, transparent);
+    }
+  }
+  .border-white\/15 {
+    border-color: color-mix(in srgb, #fff 15%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-white) 15%, transparent);
+    }
+  }
+  .bg-\[\#131415\] {
+    background-color: #131415;
+  }
+  .bg-\[\#131415\]\/10 {
+    background-color: color-mix(in oklab, #131415 10%, transparent);
+  }
+  .bg-\[\#131415\]\/15 {
+    background-color: color-mix(in oklab, #131415 15%, transparent);
+  }
+  .bg-\[\#131415\]\/35 {
+    background-color: color-mix(in oklab, #131415 35%, transparent);
+  }
+  .bg-\[\#E8E8E8\] {
+    background-color: #E8E8E8;
+  }
+  .bg-\[\#ECECEC\] {
+    background-color: #ECECEC;
+  }
+  .bg-\[\#F5F5F5\] {
+    background-color: #F5F5F5;
+  }
+  .bg-black {
+    background-color: var(--color-black);
+  }
+  .bg-black\/10 {
+    background-color: color-mix(in srgb, #000 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 10%, transparent);
+    }
+  }
+  .bg-transparent {
+    background-color: transparent;
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  .object-contain {
+    object-fit: contain;
+  }
+  .object-cover {
+    object-fit: cover;
+  }
+  .object-\[center_22\%\] {
+    object-position: center 22%;
+  }
+  .object-\[center_42\%\] {
+    object-position: center 42%;
+  }
+  .object-center {
+    object-position: center;
+  }
+  .object-left {
+    object-position: left;
+  }
+  .px-1 {
+    padding-inline: var(--spacing);
+  }
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
+  }
+  .px-10 {
+    padding-inline: calc(var(--spacing) * 10);
+  }
+  .px-\[60px\] {
+    padding-inline: 60px;
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .py-5 {
+    padding-block: calc(var(--spacing) * 5);
+  }
+  .py-6 {
+    padding-block: calc(var(--spacing) * 6);
+  }
+  .py-10 {
+    padding-block: calc(var(--spacing) * 10);
+  }
+  .py-16 {
+    padding-block: calc(var(--spacing) * 16);
+  }
+  .py-20 {
+    padding-block: calc(var(--spacing) * 20);
+  }
+  .py-\[200px\] {
+    padding-block: 200px;
+  }
+  .pt-10 {
+    padding-top: calc(var(--spacing) * 10);
+  }
+  .pt-24 {
+    padding-top: calc(var(--spacing) * 24);
+  }
+  .pt-28 {
+    padding-top: calc(var(--spacing) * 28);
+  }
+  .pt-\[60px\] {
+    padding-top: 60px;
+  }
+  .pt-\[200px\] {
+    padding-top: 200px;
+  }
+  .pt-\[calc\(200px\+5\.5rem\)\] {
+    padding-top: calc(200px + 5.5rem);
+  }
+  .pb-1\.5 {
+    padding-bottom: calc(var(--spacing) * 1.5);
+  }
+  .pb-14 {
+    padding-bottom: calc(var(--spacing) * 14);
+  }
+  .pb-\[60px\] {
+    padding-bottom: 60px;
+  }
+  .pb-\[80px\] {
+    padding-bottom: 80px;
+  }
+  .pb-\[120px\] {
+    padding-bottom: 120px;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-\[0\.75rem\] {
+    font-size: 0.75rem;
+  }
+  .text-\[1\.1rem\] {
+    font-size: 1.1rem;
+  }
+  .text-\[1\.2rem\] {
+    font-size: 1.2rem;
+  }
+  .text-\[1\.05rem\] {
+    font-size: 1.05rem;
+  }
+  .text-\[1\.6rem\] {
+    font-size: 1.6rem;
+  }
+  .text-\[1rem\] {
+    font-size: 1rem;
+  }
+  .leading-\[1\.08\] {
+    --tw-leading: 1.08;
+    line-height: 1.08;
+  }
+  .leading-\[1\.12\] {
+    --tw-leading: 1.12;
+    line-height: 1.12;
+  }
+  .leading-\[1\.15\] {
+    --tw-leading: 1.15;
+    line-height: 1.15;
+  }
+  .leading-none {
+    --tw-leading: 1;
+    line-height: 1;
+  }
+  .leading-relaxed {
+    --tw-leading: var(--leading-relaxed);
+    line-height: var(--leading-relaxed);
+  }
+  .leading-snug {
+    --tw-leading: var(--leading-snug);
+    line-height: var(--leading-snug);
+  }
+  .font-medium {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .tracking-\[0\.02em\] {
+    --tw-tracking: 0.02em;
+    letter-spacing: 0.02em;
+  }
+  .tracking-\[0\.04em\] {
+    --tw-tracking: 0.04em;
+    letter-spacing: 0.04em;
+  }
+  .tracking-\[0\.12em\] {
+    --tw-tracking: 0.12em;
+    letter-spacing: 0.12em;
+  }
+  .tracking-\[0\.14em\] {
+    --tw-tracking: 0.14em;
+    letter-spacing: 0.14em;
+  }
+  .tracking-tight {
+    --tw-tracking: var(--tracking-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+  .text-\[\#131415\] {
+    color: #131415;
+  }
+  .text-black {
+    color: var(--color-black);
+  }
+  .text-black\/35 {
+    color: color-mix(in srgb, #000 35%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 35%, transparent);
+    }
+  }
+  .text-black\/40 {
+    color: color-mix(in srgb, #000 40%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 40%, transparent);
+    }
+  }
+  .text-black\/45 {
+    color: color-mix(in srgb, #000 45%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 45%, transparent);
+    }
+  }
+  .text-black\/55 {
+    color: color-mix(in srgb, #000 55%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 55%, transparent);
+    }
+  }
+  .text-black\/70 {
+    color: color-mix(in srgb, #000 70%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-black) 70%, transparent);
+    }
+  }
+  .text-setin-fg {
+    color: var(--color-setin-fg);
+  }
+  .text-setin-fg\/55 {
+    color: color-mix(in srgb, #f5f5f5 55%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-setin-fg) 55%, transparent);
+    }
+  }
+  .text-setin-fg\/80 {
+    color: color-mix(in srgb, #f5f5f5 80%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-setin-fg) 80%, transparent);
+    }
+  }
+  .text-setin-muted {
+    color: var(--color-setin-muted);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .text-white\/40 {
+    color: color-mix(in srgb, #fff 40%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-white) 40%, transparent);
+    }
+  }
+  .text-white\/75 {
+    color: color-mix(in srgb, #fff 75%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-white) 75%, transparent);
+    }
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .tabular-nums {
+    --tw-numeric-spacing: tabular-nums;
+    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .decoration-white\/30 {
+    text-decoration-color: color-mix(in srgb, #fff 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      text-decoration-color: color-mix(in oklab, var(--color-white) 30%, transparent);
+    }
+  }
+  .underline-offset-4 {
+    text-underline-offset: 4px;
+  }
+  .antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .opacity-0 {
+    opacity: 0%;
+  }
+  .opacity-100 {
+    opacity: 100%;
+  }
+  .brightness-0 {
+    --tw-brightness: brightness(0%);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .brightness-\[0\.72\] {
+    --tw-brightness: brightness(0.72);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .brightness-\[0\.85\] {
+    --tw-brightness: brightness(0.85);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .contrast-\[1\.08\] {
+    --tw-contrast: contrast(1.08);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .contrast-\[1\.15\] {
+    --tw-contrast: contrast(1.15);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .grayscale {
+    --tw-grayscale: grayscale(100%);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .invert {
+    --tw-invert: invert(100%);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-transform {
+    transition-property: transform, translate, scale, rotate;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .delay-300 {
+    transition-delay: 300ms;
+  }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
+  .duration-500 {
+    --tw-duration: 500ms;
+    transition-duration: 500ms;
+  }
+  .duration-\[1200ms\] {
+    --tw-duration: 1200ms;
+    transition-duration: 1200ms;
+  }
+  .ease-\[cubic-bezier\(0\.16\,1\,0\.3\,1\)\] {
+    --tw-ease: cubic-bezier(0.16,1,0.3,1);
+    transition-timing-function: cubic-bezier(0.16,1,0.3,1);
+  }
+  .ease-\[cubic-bezier\(0\.76\,0\,0\.24\,1\)\] {
+    --tw-ease: cubic-bezier(0.76,0,0.24,1);
+    transition-timing-function: cubic-bezier(0.76,0,0.24,1);
+  }
+  .ease-in {
+    --tw-ease: var(--ease-in);
+    transition-timing-function: var(--ease-in);
+  }
+  .ease-out {
+    --tw-ease: var(--ease-out);
+    transition-timing-function: var(--ease-out);
+  }
+  @media (hover: hover) {
+    .group-hover\:origin-right:is(:where(.group):hover *) {
+      transform-origin: 100%;
+    }
+    .group-hover\:-translate-y-1\/2:is(:where(.group):hover *) {
+      --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+    .group-hover\:scale-x-0:is(:where(.group):hover *) {
+      --tw-scale-x: 0%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+    .group-hover\:scale-\[1\.02\]:is(:where(.group):hover *) {
+      scale: 1.02;
+    }
+    .group-hover\:scale-\[1\.03\]:is(:where(.group):hover *) {
+      scale: 1.03;
+    }
+    .group-hover\:bg-\[\#D6D6D6\]:is(:where(.group):hover *) {
+      background-color: #D6D6D6;
+    }
+    .group-hover\:duration-\[450ms\]:is(:where(.group):hover *) {
+      --tw-duration: 450ms;
+      transition-duration: 450ms;
+    }
+    .group-hover\:ease-out:is(:where(.group):hover *) {
+      --tw-ease: var(--ease-out);
+      transition-timing-function: var(--ease-out);
+    }
+    .hover\:border-white:hover {
+      border-color: var(--color-white);
+    }
+    .hover\:decoration-white:hover {
+      text-decoration-color: var(--color-white);
+    }
+    .hover\:opacity-70:hover {
+      opacity: 70%;
+    }
+  }
+  @media (width >= 40rem) {
+    .sm\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (width >= 48rem) {
+    .md\:mt-16 {
+      margin-top: calc(var(--spacing) * 16);
+    }
+    .md\:mb-20 {
+      margin-bottom: calc(var(--spacing) * 20);
+    }
+    .md\:ml-auto {
+      margin-left: auto;
+    }
+    .md\:block {
+      display: block;
+    }
+    .md\:flex {
+      display: flex;
+    }
+    .md\:aspect-\[5\/6\] {
+      aspect-ratio: 5/6;
+    }
+    .md\:aspect-\[16\/10\] {
+      aspect-ratio: 16/10;
+    }
+    .md\:h-12 {
+      height: calc(var(--spacing) * 12);
+    }
+    .md\:h-\[42px\] {
+      height: 42px;
+    }
+    .md\:max-w-\[540px\] {
+      max-width: 540px;
+    }
+    .md\:max-w-md {
+      max-width: var(--container-md);
+    }
+    .md\:flex-1 {
+      flex: 1;
+    }
+    .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .md\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .md\:grid-cols-\[140px_1fr\] {
+      grid-template-columns: 140px 1fr;
+    }
+    .md\:grid-cols-\[minmax\(120px\,180px\)_1fr\] {
+      grid-template-columns: minmax(120px,180px) 1fr;
+    }
+    .md\:flex-row {
+      flex-direction: row;
+    }
+    .md\:items-end {
+      align-items: flex-end;
+    }
+    .md\:items-start {
+      align-items: flex-start;
+    }
+    .md\:justify-between {
+      justify-content: space-between;
+    }
+    .md\:gap-4 {
+      gap: calc(var(--spacing) * 4);
+    }
+    .md\:gap-8 {
+      gap: calc(var(--spacing) * 8);
+    }
+    .md\:gap-10 {
+      gap: calc(var(--spacing) * 10);
+    }
+    .md\:gap-16 {
+      gap: calc(var(--spacing) * 16);
+    }
+    .md\:gap-20 {
+      gap: calc(var(--spacing) * 20);
+    }
+    .md\:gap-\[160px\] {
+      gap: 160px;
+    }
+    .md\:gap-x-20 {
+      column-gap: calc(var(--spacing) * 20);
+    }
+    .md\:px-10 {
+      padding-inline: calc(var(--spacing) * 10);
+    }
+    .md\:px-14 {
+      padding-inline: calc(var(--spacing) * 14);
+    }
+    .md\:py-6 {
+      padding-block: calc(var(--spacing) * 6);
+    }
+    .md\:py-7 {
+      padding-block: calc(var(--spacing) * 7);
+    }
+    .md\:py-14 {
+      padding-block: calc(var(--spacing) * 14);
+    }
+    .md\:py-20 {
+      padding-block: calc(var(--spacing) * 20);
+    }
+    .md\:py-28 {
+      padding-block: calc(var(--spacing) * 28);
+    }
+    .md\:pt-1 {
+      padding-top: var(--spacing);
+    }
+    .md\:pt-2 {
+      padding-top: calc(var(--spacing) * 2);
+    }
+    .md\:pt-32 {
+      padding-top: calc(var(--spacing) * 32);
+    }
+    .md\:pb-16 {
+      padding-bottom: calc(var(--spacing) * 16);
+    }
+    .md\:pb-20 {
+      padding-bottom: calc(var(--spacing) * 20);
+    }
+    .md\:pb-\[160px\] {
+      padding-bottom: 160px;
+    }
+    .md\:text-3xl {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
+    }
+    .md\:text-4xl {
+      font-size: var(--text-4xl);
+      line-height: var(--tw-leading, var(--text-4xl--line-height));
+    }
+    .md\:text-base {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+    .md\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+    .md\:text-xl {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+    .md\:text-\[1\.05rem\] {
+      font-size: 1.05rem;
+    }
+  }
+  @media (width >= 64rem) {
+    .lg\:sticky {
+      position: sticky;
+    }
+    .lg\:top-\[100px\] {
+      top: 100px;
+    }
+    .lg\:ml-auto {
+      margin-left: auto;
+    }
+    .lg\:w-full {
+      width: 100%;
+    }
+    .lg\:max-w-md {
+      max-width: var(--container-md);
+    }
+    .lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-\[minmax\(0\,22rem\)_minmax\(0\,1fr\)\] {
+      grid-template-columns: minmax(0,22rem) minmax(0,1fr);
+    }
+    .lg\:items-start {
+      align-items: flex-start;
+    }
+    .lg\:gap-10 {
+      gap: calc(var(--spacing) * 10);
+    }
+    .lg\:gap-12 {
+      gap: calc(var(--spacing) * 12);
+    }
+    .lg\:gap-16 {
+      gap: calc(var(--spacing) * 16);
+    }
+    .lg\:gap-20 {
+      gap: calc(var(--spacing) * 20);
+    }
+    .lg\:gap-24 {
+      gap: calc(var(--spacing) * 24);
+    }
+    .lg\:gap-x-14 {
+      column-gap: calc(var(--spacing) * 14);
+    }
+    .lg\:gap-x-24 {
+      column-gap: calc(var(--spacing) * 24);
+    }
+    .lg\:gap-y-14 {
+      row-gap: calc(var(--spacing) * 14);
+    }
+    .lg\:pr-0 {
+      padding-right: 0px;
+    }
+    .lg\:pb-1 {
+      padding-bottom: var(--spacing);
+    }
+    .lg\:text-right {
+      text-align: right;
+    }
+  }
+  @media (width >= 80rem) {
+    .xl\:gap-24 {
+      gap: calc(var(--spacing) * 24);
+    }
+  }
+}
+html {
+  scroll-behavior: smooth;
+  background-color: #131415;
+}
+body {
+  background-color: #131415;
+  font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-setin-fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+p, li, blockquote, .prose-setin, .prose-setin p, .hero-description, .clients-description, .projects-description, .testimonials-description, .articles-description, .contact-description, .about-visual__intro, .about-studio-intro__body, .about-team-member__bio, .about-content__body, .about-content__body p {
+  letter-spacing: var(--letter-spacing-body);
+}
+h1, h2, h3, h4, h5, h6, a, button, label, .text-ui, .hero-headline, .about-hero__title, .clients-heading, .projects-heading, .testimonials-heading, .articles-heading, .contact-heading, .about-visual__eyebrow, .about-studio-intro__heading, .about-team-member__heading, .about-content__heading, .project-card__title, .project-cursor__label, .footer-brand, .footer-location__label, .footer-location__time, .section-eyebrow, .section-headline {
+  letter-spacing: var(--letter-spacing-ui);
+}
+body.intro-active {
+  overflow: hidden;
+}
+.prose-setin {
+  --tw-leading: var(--leading-relaxed);
+  line-height: var(--leading-relaxed);
+  color: var(--color-setin-muted);
+  & h2 {
+    margin-top: calc(var(--spacing) * 12);
+    margin-bottom: calc(var(--spacing) * 4);
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-setin-fg);
+  }
+  & p {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+}
+#about-studio-heading .reveal-char {
+  color: rgba(255, 255, 255, 0.15);
+  transition: color 0.35s ease-out;
+}
+#about-studio-heading .reveal-char.active {
+  color: rgba(255, 255, 255, 1);
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ordinal {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-slashed-zero {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-figure {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-spacing {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-fraction {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-space-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-ordinal: initial;
+      --tw-slashed-zero: initial;
+      --tw-numeric-figure: initial;
+      --tw-numeric-spacing: initial;
+      --tw-numeric-fraction: initial;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+    }
+  }
+}
+</style><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/layouts/Layout.astro?astro&amp;type=style&amp;index=0&amp;lang.css">@keyframes noise-animation {
+		0% {
+			transform: translate(0, 0);
+		}
+		10% {
+			transform: translate(-5%, -5%);
+		}
+		20% {
+			transform: translate(-10%, 10%);
+		}
+		30% {
+			transform: translate(5%, -10%);
+		}
+		40% {
+			transform: translate(-5%, 15%);
+		}
+		50% {
+			transform: translate(-10%, 5%);
+		}
+		60% {
+			transform: translate(10%, 10%);
+		}
+		70% {
+			transform: translate(5%, -5%);
+		}
+		80% {
+			transform: translate(-10%, -10%);
+		}
+		90% {
+			transform: translate(10%, -5%);
+		}
+		100% {
+			transform: translate(0, 0);
+		}
+	}
+
+	@keyframes tv-flicker {
+		0%,
+		100% {
+			opacity: 0.09;
+		}
+		25% {
+			opacity: 0.13;
+		}
+		50% {
+			opacity: 0.07;
+		}
+		75% {
+			opacity: 0.11;
+		}
+	}
+
+	.noise-overlay {
+		position: fixed;
+		top: -50%;
+		left: -50%;
+		right: -50%;
+		bottom: -50%;
+		width: 200%;
+		height: 200%;
+		pointer-events: none;
+	}
+
+	/* Gruba ziarnistoÅÄ â efekt Åniegu na starym TV */
+	.noise-overlay--coarse {
+		z-index: 10;
+		background: transparent
+			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+			repeat 0 0;
+		background-size: 180px 180px;
+		opacity: 0.1;
+		mix-blend-mode: overlay;
+		animation:
+			noise-animation 0.2s steps(2) infinite,
+			tv-flicker 0.16s steps(2) infinite;
+	}
+
+	/* Drobniejszy szum â gÄsta taÅma filmowa */
+	.noise-overlay--fine {
+		z-index: 11;
+		background: transparent
+			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+			repeat 0 0;
+		background-size: 128px 128px;
+		opacity: 0.07;
+		mix-blend-mode: soft-light;
+		animation: noise-animation 0.12s steps(2) infinite reverse;
+	}
+
+	/* Poziome linie scanline â charakterystyczny wyglÄd CRT */
+	.noise-scanlines {
+		position: fixed;
+		inset: 0;
+		z-index: 12;
+		pointer-events: none;
+		background: repeating-linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0.08) 0px,
+			rgba(0, 0, 0, 0.08) 1px,
+			transparent 1px,
+			transparent 3px
+		);
+		opacity: 0.35;
+		mix-blend-mode: multiply;
+	}</style><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/components/Header.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.site-header.header-solid {
+		background-color: #131415;
+	}</style><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/components/projects/ProjectHero.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.project-hero-background {
+		transform: scale(1.12);
+		transform-origin: center 42%;
+	}
+
+	.project-hero__title {
+		font-size: 2rem;
+		font-weight: 600;
+		line-height: 1.18;
+		letter-spacing: -0.01em;
+	}
+
+	@media (min-width: 768px) {
+		.project-hero__title {
+			font-size: 2.75rem;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.project-hero__title {
+			font-size: 3.25rem;
+		}
+	}</style><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/components/projects/ProjectGalleryMedia.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.project-video-noise__layer[data-astro-cid-wsde2fwj] {
+  position: absolute !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+</style><style data-vite-dev-id="C:/Users/PhotoAiD SA/Desktop/setin-studio/src/pages/projects/[slug].astro?astro&amp;type=style&amp;index=0&amp;lang.css">.project-page[data-astro-cid-yq2gsstb] [data-slide-up].is-revealed .slide-up-line {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project-page[data-astro-cid-yq2gsstb] img, .project-page[data-astro-cid-yq2gsstb] video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+</style><script type="module" src="/@vite/client"></script><script type="module" src="/@id/astro/runtime/client/dev-toolbar/entrypoint.js"></script><script>window.__astro_dev_toolbar__ = {"root":"C:\\Users\\PhotoAiD SA\\Desktop\\setin-studio\\","version":"7.2.2","debugInfo":"Astro                    v7.2.2\nNode                     v24.19.0\nSystem                   Windows (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             none"}</script><script type="module" src="/src/styles/global.css"></script><script type="module" src="/src/layouts/Layout.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/components/Header.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/components/projects/ProjectHero.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/components/projects/ProjectGalleryMedia.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/pages/projects/[slug].astro?astro&type=style&index=0&lang.css"></script></head><body class="relative flex min-h-screen flex-col bg-[#131415] font-sans text-base text-setin-fg antialiased"><div class="noise-overlay noise-overlay--coarse" aria-hidden="true"></div><div class="noise-overlay noise-overlay--fine" aria-hidden="true"></div><div class="noise-scanlines" aria-hidden="true"></div><header id="site-header" data-wait-intro="false" class="site-header fixed inset-x-0 top-0 z-50 bg-transparent transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-100 translate-y-0"><div class="grid h-[100px] w-full grid-cols-[1fr_auto_1fr] items-center px-[60px]"><a href="/" class="block w-fit transition-opacity hover:opacity-70" aria-label="Setin Studio â home"><img src="/images/logo-setin.svg" alt="setin" width="111" height="42" class="h-[34px] w-auto"></a><nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10"><a href="/projects" class="rolling-link group relative -mx-1 -my-2 inline-flex flex-col px-1 py-2 text-setin-fg"><div class="flex h-[1.5em] flex-col overflow-hidden"><div class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">Case studies [3]</span><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">Case studies [3]</span></div></div></a><a href="/about" class="rolling-link group relative -mx-1 -my-2 inline-flex flex-col px-1 py-2 text-setin-fg"><div class="flex h-[1.5em] flex-col overflow-hidden"><div class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">About us</span><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">About us</span></div></div></a><a href="/#articles" class="rolling-link group relative -mx-1 -my-2 inline-flex flex-col px-1 py-2 text-setin-fg"><div class="flex h-[1.5em] flex-col overflow-hidden"><div class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">Articles [5]</span><span class="flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg">Articles [5]</span></div></div></a></nav><div class="flex justify-end"><div class="group relative inline-block"><a href="/#contact" class="relative -mx-1 -my-2 block px-1 py-2 text-setin-fg"><div class="flex h-[1.5em] flex-col overflow-hidden"><div class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"><span class="flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase text-setin-fg">Work with us</span><span class="flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase text-setin-fg">Work with us</span></div></div></a><div class="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-100 transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0 bg-white" aria-hidden="true"></div></div></div></div></header><script type="module" src="/src/components/Header.astro?astro&type=script&index=0&lang.ts"></script><main id="project-page" class="project-page relative z-20 flex-1" data-astro-cid-yq2gsstb><section id="project-hero" class="project-hero relative min-h-[96vh] overflow-hidden"><div id="project-hero-visual" class="project-hero-visual pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden bg-[#131415]" aria-hidden="true"><img src="/images/portfolio/see-more/bg.webp" alt="" width="1920" height="1080" class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%] brightness-[0.72] contrast-[1.08] grayscale" loading="eager" decoding="async"><div class="pointer-events-none absolute inset-0 z-[1] bg-[#131415]/35"></div><canvas id="project-hero-noise-filter" class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"></canvas></div><div class="relative z-10 flex min-h-[96vh] items-end px-[60px] pb-14 pt-28 md:pb-20 md:pt-32"><div class="grid w-full grid-cols-1 items-end gap-10 lg:grid-cols-2 lg:gap-16"><div><h1 id="hero-headline" class="project-hero__title max-w-4xl uppercase text-white"><span class="block">A brand that shapes the Panama&#39;s</span><span class="block">logistics trust and innovation</span></h1></div><div class="lg:ml-auto lg:max-w-md lg:text-right"><p class="text-sm uppercase tracking-[0.14em] text-white/40">[Client]</p><p class="mt-3 text-2xl font-medium uppercase leading-[1.08] tracking-tight text-white md:text-4xl">SEE MORE LOGISTICS</p></div></div></div></section><script type="module" src="/src/components/projects/ProjectHero.astro?astro&type=script&index=0&lang.ts"></script><section class="px-[60px] py-10 md:py-14 bg-[#131415]"><div class="flex flex-col gap-8 md:gap-10 lg:gap-12"><div data-slide-up data-slide-up-delay="0" class="overflow-hidden"><div class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/1.webp" alt="See More Logistics â 1" width="1600" height="1000" class="block h-auto w-full" loading="eager" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="50" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/2.1.webp" alt="See More Logistics â 2" width="1600" height="1000" class="block h-auto w-full" loading="eager" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/2.2.webp" alt="See More Logistics â 3" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div></div></section><section class="px-[60px] py-20 md:py-28 bg-white text-[#131415]"><div class="grid gap-10 md:grid-cols-[minmax(120px,180px)_1fr] md:gap-16 lg:gap-24"><div data-slide-up class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-sm uppercase tracking-[0.14em] text-black/35">[Challenges]</p></div><div class="space-y-8"><div class="space-y-6"><div data-slide-up data-slide-up-delay="120" class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-base leading-relaxed text-black/70 md:text-lg">The main obstacle was the lack of visual distinction in the logistics sector. Most operators use dated design tropes that do not inspire corporate or governmental trust. We had to solve for extreme physical scalability, ensuring the system maintains flawless legibility on a small employee ID badge, corporate documentation, and massive cargo trucks traveling at high speeds across the country.</p></div></div></div></div></section><section class="px-[60px] py-10 md:py-14 bg-[#131415]"><div class="flex flex-col gap-8 md:gap-10 lg:gap-12"><div data-slide-up data-slide-up-delay="0" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/3.1.webp" alt="See More Logistics â 3" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/3.2.webp" alt="See More Logistics â 4" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="50" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/4.1.webp" alt="See More Logistics â 5" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/4.2.webp" alt="See More Logistics â 6" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="100" class="overflow-hidden"><div class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/5.webp" alt="See More Logistics â 7" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="150" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/6.1.webp" alt="See More Logistics â 8" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/6.2.webp" alt="See More Logistics â 9" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="200" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/7.1.webp" alt="See More Logistics â 10" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/7.2.webp" alt="See More Logistics â 11" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="200" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/8.1.webp" alt="See More Logistics â 12" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/8.2.webp" alt="See More Logistics â 13" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div></div></section><section class="px-[60px] py-20 md:py-28 bg-[#131415] text-white"><div class="grid gap-10 md:grid-cols-[minmax(120px,180px)_1fr] md:gap-16 lg:gap-24"><div data-slide-up class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-sm uppercase tracking-[0.14em] text-white/40">[Strategy]</p></div><div class="space-y-8"><div data-slide-up data-slide-up-delay="80" class="overflow-hidden"><h2 class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-2xl font-medium uppercase leading-[1.12] tracking-tight text-white md:text-4xl">Engineering structural grids for seamless real-world application</h2></div><div class="space-y-6"><div data-slide-up data-slide-up-delay="120" class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-base leading-relaxed text-white/75 md:text-lg">We abandoned decorative elements to focus entirely on functional design. We developed a strict grid system using mathematical rules from the brandbook to ensure absolute consistency across all physical and digital layouts.</p></div><div data-slide-up data-slide-up-delay="200" class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-base leading-relaxed text-white/75 md:text-lg">The logotype integrates a global icon directly into the typography, anchoring the brand to Panama&#39;s role as a major Latin American transport hub. For the color palette, we selected a combination of deep industrial navy and vibrant electric blue to evoke engineering precision and high visibility. This systematic approach was applied to their internal manifests, employee access cards, and minimalist vehicle wraps, turning their entire operation into a cohesive visual statement.</p></div></div></div></div></section><section class="px-[60px] py-10 md:py-14 bg-[#ECECEC]"><div class="flex flex-col gap-8 md:gap-10 lg:gap-12"><div data-slide-up data-slide-up-delay="0" class="overflow-hidden"><div class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/9.webp" alt="See More Logistics â 9" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="50" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/10.1.webp" alt="See More Logistics â 10" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/10.2.webp" alt="See More Logistics â 11" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div><div data-slide-up data-slide-up-delay="100" class="overflow-hidden"><div class="slide-up-line grid translate-y-full grid-cols-1 gap-8 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:grid-cols-2 md:gap-10"><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/11.1.webp" alt="See More Logistics â 12" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure><figure class="project-gallery__item m-0 w-full" data-astro-cid-wsde2fwj><img src="/images/portfolio/see-more/11.2.webp" alt="See More Logistics â 13" width="1600" height="1000" class="block h-auto w-full" loading="lazy" decoding="async" data-astro-cid-wsde2fwj></figure></div></div></div></section><section class="px-[60px] py-20 md:py-28 bg-white text-[#131415]"><div class="grid gap-10 md:grid-cols-[minmax(120px,180px)_1fr] md:gap-16 lg:gap-24"><div data-slide-up class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-sm uppercase tracking-[0.14em] text-black/35">[Summary]</p></div><div class="space-y-8"><div data-slide-up data-slide-up-delay="80" class="overflow-hidden"><h2 class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-2xl font-medium uppercase leading-[1.12] tracking-tight text-[#131415] md:text-4xl">Establishing an unmistakable visual standard for national logistics</h2></div><div class="space-y-6"><div data-slide-up data-slide-up-delay="120" class="overflow-hidden"><p class="slide-up-line translate-y-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-base leading-relaxed text-black/70 md:text-lg">By stripping away the noise, we delivered an identity that feels like an institutional standard. See More Logistics now possesses a commanding visual presence that aligns perfectly with their operational commitment. Every touchpoint, from physical fleet graphics to technical documentation, reinforces their promise of trust and transparency, giving them the leverage to secure high-value contracts and drive business expansion.</p></div></div></div></div></section></main><footer class="relative z-20 border-t border-setin-border bg-[#131415]"><div class="flex w-full flex-col gap-8 px-[60px] py-10 md:flex-row md:items-end md:justify-between"><div><img src="/images/logo-sygnet.svg" alt="Setin Studio" width="32" height="30" class="footer-brand h-auto w-8"><p class="mt-3 text-[1rem] text-setin-muted">&copy; 2026 Setin Studio</p></div><div class="flex flex-wrap gap-x-10 gap-y-4"><div class="footer-location flex flex-col gap-1"><span class="footer-location__label text-[1rem] uppercase text-setin-muted">Szczecin, PL</span><time class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums" datetime="" data-timezone="Europe/Warsaw">--:--:-- --</time></div><div class="footer-location flex flex-col gap-1"><span class="footer-location__label text-[1rem] uppercase text-setin-muted">Valencia, ES</span><time class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums" datetime="" data-timezone="Europe/Madrid">--:--:-- --</time></div><div class="footer-location flex flex-col gap-1"><span class="footer-location__label text-[1rem] uppercase text-setin-muted">Panama, PA</span><time class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums" datetime="" data-timezone="America/Panama">--:--:-- --</time></div></div></div></footer><script type="module" src="/src/components/Footer.astro?astro&type=script&index=0&lang.ts"></script><script type="module" src="/src/pages/projects/[slug].astro?astro&type=script&index=0&lang.ts"></script></body></html>

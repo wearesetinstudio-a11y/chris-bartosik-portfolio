@@ -1,0 +1,56 @@
+---
+import type { GalleryMediaItem } from '../../utils/getProjectGallery';
+
+interface Props {
+	item: GalleryMediaItem;
+	title: string;
+	index: number;
+}
+
+const { item, title, index } = Astro.props;
+const label = `${title} — ${index + 1}`;
+---
+
+{
+	item.type === 'image' ? (
+		<figure class="project-gallery__item m-0 w-full">
+			<img
+				src={item.src}
+				alt={label}
+				width="1600"
+				height="1000"
+				class="block h-auto w-full"
+				loading={index < 2 ? 'eager' : 'lazy'}
+				decoding="async"
+			/>
+		</figure>
+	) : (
+		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
+			<div class="project-video-noise relative overflow-hidden bg-white">
+				<video
+					src={item.src}
+					class="block h-auto w-full"
+					autoplay
+					muted
+					loop
+					playsinline
+					preload="metadata"
+					aria-label={label}
+				/>
+				<div class="noise-overlay noise-overlay--coarse project-video-noise__layer" aria-hidden="true"></div>
+				<div class="noise-overlay noise-overlay--fine project-video-noise__layer" aria-hidden="true"></div>
+			</div>
+		</figure>
+	)
+}
+
+<style>
+	.project-video-noise__layer {
+		position: absolute !important;
+		inset: 0 !important;
+		top: 0 !important;
+		left: 0 !important;
+		width: 100% !important;
+		height: 100% !important;
+	}
+</style>

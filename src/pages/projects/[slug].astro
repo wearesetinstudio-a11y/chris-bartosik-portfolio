@@ -1,0 +1,239 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ProjectHero from '../../components/projects/ProjectHero.astro';
+import ProjectOverviewSection from '../../components/projects/ProjectOverviewSection.astro';
+import ProjectContentBlock from '../../components/projects/ProjectContentBlock.astro';
+import ProjectGallerySection from '../../components/projects/ProjectGallerySection.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import { getCollection } from 'astro:content';
+import {
+	buildGalleryLayout,
+	getCoverFilename,
+	getOverviewGraphic,
+	resolveProjectFolderName,
+	type GalleryLayoutBlock,
+} from '../../utils/getProjectGallery';
+import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
+import { getSiteCounts } from '../../utils/getSiteCounts.ts';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	const { articleCount } = await getSiteCounts();
+
+	return projects.map((project) => {
+		const folderName = resolveProjectFolderName(project);
+		const coverFilename = getCoverFilename(project.data.thumbnail);
+		const galleryLayout = buildGalleryLayout(folderName, coverFilename);
+
+		return {
+			params: { slug: project.id },
+			props: {
+				project,
+				projectCount: projects.length,
+				articleCount,
+				galleryLayout,
+			},
+		};
+	});
+}
+
+const { project, projectCount, articleCount, galleryLayout } = Astro.props;
+const data = project.data;
+
+const title = data.title ?? 'Project';
+const heroSubtitle = data.heroSubtitle ?? '';
+const heroBackground = data.heroBackground ?? '';
+const client = data.client ?? title;
+const heroImage = withPublicAssetVersion(data.heroImage || heroBackground);
+const year = data.year;
+const logo = data.logo ?? '';
+const service = data.service ?? '';
+const industry = data.industry ?? '';
+const market = data.market ?? '';
+const liveUrl = data.liveUrl ?? '';
+const overviewLabel = data.overviewLabel ?? 'Overview';
+const overviewTitle = data.overviewTitle ?? '';
+const overviewText = data.overviewText ?? '';
+const folderName = resolveProjectFolderName(project);
+const coverFilename = getCoverFilename(data.thumbnail);
+const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
+const overviewGraphicSrc = overviewGraphicItem
+	? withPublicAssetVersion(overviewGraphicItem.src)
+	: withPublicAssetVersion(data.overviewGraphic || logo);
+const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
+const pageGalleryLayout = galleryLayout.filter((block) => block.group !== 1);
+const challengesLabel = data.challengesLabel ?? 'Challenges';
+const challengesText = data.challengesText ?? '';
+const challengesAfterGroup = data.challengesAfterGroup ?? 2;
+const strategyLabel = data.strategyLabel ?? 'Strategy';
+const strategyTitle = data.strategyTitle ?? '';
+const strategyText = data.strategyText ?? '';
+const strategyAfterGroup = data.strategyAfterGroup ?? 8;
+const summaryLabel = data.summaryLabel ?? 'Summary';
+const summaryTitle = data.summaryTitle ?? '';
+const summaryText = data.summaryText ?? '';
+
+const heroLines = (heroSubtitle || title)
+	.split('\n')
+	.map((line) => line.trim())
+	.filter(Boolean);
+
+const infoRows = [
+	service ? { label: 'Service', value: service } : null,
+	industry ? { label: 'Industry', value: industry } : null,
+	market ? { label: 'Market', value: market } : null,
+	year ? { label: 'Year', value: String(year) } : null,
+	liveUrl ? { label: 'Live', value: liveUrl, isLink: true } : null,
+].filter(
+	(row): row is { label: string; value: string; isLink?: boolean } => row !== null,
+);
+
+const pageDescription = summaryText || overviewText || challengesText || heroSubtitle || title;
+
+function splitGalleryByGroup(
+	blocks: GalleryLayoutBlock[],
+	afterGroup: number,
+): { before: GalleryLayoutBlock[]; after: GalleryLayoutBlock[] } {
+	const before = blocks.filter((block) => block.group <= afterGroup);
+	const after = blocks.filter((block) => block.group > afterGroup);
+	return { before, after };
+}
+
+const firstSplit = challengesText
+	? splitGalleryByGroup(pageGalleryLayout, challengesAfterGroup)
+	: { before: pageGalleryLayout, after: [] as GalleryLayoutBlock[] };
+
+const secondSplit = strategyText
+	? splitGalleryByGroup(firstSplit.after, strategyAfterGroup)
+	: { before: firstSplit.after, after: [] as GalleryLayoutBlock[] };
+
+const galleryBeforeCount = firstSplit.before.length;
+const galleryMiddleCount = secondSplit.before.length;
+---
+
+<Layout title={title} description={pageDescription}>
+	<Header projectCount={projectCount} articleCount={articleCount} />
+
+	<main id="project-page" class="project-page relative z-20 flex-1">
+		<ProjectHero heroImage={heroImage} heroLines={heroLines} client={client} />
+
+		<div class="project-page__body relative z-10">
+			<ProjectOverviewSection
+				label={overviewLabel}
+				title={overviewTitle}
+				text={overviewText}
+				graphicSrc={overviewGraphicSrc}
+				graphicType={overviewGraphicType}
+				graphicAlt={client}
+				rows={infoRows}
+			/>
+
+			{
+				firstSplit.before.length > 0 ? (
+					<ProjectGallerySection blocks={firstSplit.before} title={title} startIndex={0} />
+				) : null
+			}
+
+			{
+				challengesText ? (
+					<ProjectContentBlock
+						index={2}
+						label={challengesLabel}
+						text={challengesText}
+						theme="light"
+					/>
+				) : null
+			}
+
+			{
+				secondSplit.before.length > 0 ? (
+					<ProjectGallerySection
+						blocks={secondSplit.before}
+						title={title}
+						startIndex={galleryBeforeCount}
+					/>
+				) : null
+			}
+
+			{
+				strategyText ? (
+					<ProjectContentBlock
+						index={3}
+						label={strategyLabel}
+						title={strategyTitle}
+						text={strategyText}
+						theme="dark"
+						headingId="project-strategy-heading"
+					/>
+				) : null
+			}
+
+			{
+				secondSplit.after.length > 0 ? (
+					<ProjectGallerySection
+						blocks={secondSplit.after}
+						title={title}
+						startIndex={galleryBeforeCount + galleryMiddleCount}
+					/>
+				) : null
+			}
+
+			{
+				summaryText ? (
+					<ProjectContentBlock
+						index={4}
+						label={summaryLabel}
+						title={summaryTitle}
+						text={summaryText}
+						theme="light"
+						headingId="project-summary-heading"
+					/>
+				) : null
+			}
+		</div>
+
+		<ContactSection />
+	</main>
+
+	<Footer />
+
+	<script>
+		import { bootSlideUpReveal } from '../../scripts/initSlideUpReveal.ts';
+		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
+
+		const PROJECT_REVEAL_HEADINGS = [
+			'project-overview-heading',
+			'project-strategy-heading',
+			'project-summary-heading',
+		];
+
+		function initProjectPage() {
+			bootSlideUpReveal();
+			initScrollLetterReveals(PROJECT_REVEAL_HEADINGS);
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initProjectPage, { once: true });
+		} else {
+			initProjectPage();
+		}
+
+		document.addEventListener('astro:page-load', initProjectPage);
+	</script>
+</Layout>
+
+<style>
+	.project-page :global([data-slide-up].is-revealed .slide-up-line) {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.project-page__body :global(img),
+	.project-page__body :global(video) {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>

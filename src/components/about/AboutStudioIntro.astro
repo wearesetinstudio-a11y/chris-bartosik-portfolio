@@ -1,0 +1,125 @@
+<section id="about-studio-intro" class="about-studio-intro bg-[#131415] px-[60px] pt-[200px] pb-[60px]">
+	<div class="grid gap-12 md:grid-cols-2 md:gap-20 lg:gap-24">
+		<h2
+			id="about-studio-heading"
+			class="about-studio-intro__heading max-w-lg uppercase leading-[1.15]"
+		>
+			<span data-reveal-line>Setin Studio is a digital</span>
+			<br />
+			<span data-reveal-line>product studio built on</span>
+			<br />
+			<span data-reveal-line>vision and execution.</span>
+		</h2>
+
+		<div class="about-studio-intro__body leading-relaxed text-setin-muted">
+			<p>
+				As brothers, we have developed a unique collaborative way of working, that allows us to
+				move fast, eliminate friction, and stay completely consistent. Operating as a specialized
+				digital studio, we focus on transforming businesses through strategic branding,
+				user-centric UI/UX design, and premium development.
+			</p>
+			<p class="mt-6">
+				We don't believe in one size and all fits services. Instead, we partner with you to craft
+				custom digital tools, scalable platforms, and brand identities that mean something to your
+				audience and bring measurable value to your business.
+			</p>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.about-studio-intro__heading {
+		font-size: 2rem;
+		font-weight: 500;
+	}
+
+	.about-studio-intro__body {
+		font-size: 1.2rem;
+	}
+</style>
+
+<script>
+	function wrapLetters(element: HTMLElement) {
+		const text = element.textContent ?? '';
+		element.textContent = '';
+
+		for (const char of text) {
+			const span = document.createElement('span');
+			span.className = 'reveal-char';
+			span.textContent = char === ' ' ? '\u00a0' : char;
+			element.appendChild(span);
+		}
+	}
+
+	function updateAboutStudioHeadingReveal() {
+		const heading = document.getElementById('about-studio-heading');
+		if (!heading) return;
+
+		const chars = heading.querySelectorAll('.reveal-char');
+		if (!chars.length) return;
+
+		const rect = heading.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+		const startLine = viewportHeight * 0.88;
+		const endLine = viewportHeight * 0.45;
+		const range = startLine - endLine;
+		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
+		const activeCount = Math.ceil(progress * chars.length);
+
+		chars.forEach((char, index) => {
+			char.classList.toggle('active', index < activeCount);
+		});
+	}
+
+	let scrollTicking = false;
+
+	function onAboutStudioScroll() {
+		if (scrollTicking) return;
+		scrollTicking = true;
+		requestAnimationFrame(() => {
+			updateAboutStudioHeadingReveal();
+			scrollTicking = false;
+		});
+	}
+
+	function initAboutStudioIntro() {
+		const heading = document.getElementById('about-studio-heading');
+		const section = document.getElementById('about-studio-intro');
+
+		if (heading && heading.dataset.revealInit !== 'true') {
+			heading.dataset.revealInit = 'true';
+
+			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+				wrapLetters(line as HTMLElement);
+			});
+
+			window.addEventListener('scroll', onAboutStudioScroll, { passive: true });
+			window.addEventListener('resize', updateAboutStudioHeadingReveal, { passive: true });
+		}
+
+		updateAboutStudioHeadingReveal();
+
+		if (!section || section.dataset.revealObserved === 'true') return;
+
+		section.dataset.revealObserved = 'true';
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) updateAboutStudioHeadingReveal();
+				}
+			},
+			{ threshold: [0, 0.25, 0.5, 0.75, 1] },
+		);
+
+		observer.observe(section);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAboutStudioIntro, { once: true });
+	} else {
+		initAboutStudioIntro();
+	}
+
+	document.addEventListener('astro:page-load', initAboutStudioIntro);
+</script>

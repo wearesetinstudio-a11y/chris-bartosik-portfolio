@@ -1,0 +1,102 @@
+---
+const locations = [
+	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
+	{ label: 'Valencia, ES', timezone: 'Europe/Madrid' },
+	{ label: 'Panama, PA', timezone: 'America/Panama' },
+];
+
+function formatLocationTime(timeZone: string, date = new Date()) {
+	return new Intl.DateTimeFormat('en-US', {
+		hour: 'numeric',
+		minute: '2-digit',
+		second: '2-digit',
+		hour12: true,
+		timeZone,
+	})
+		.format(date)
+		.toUpperCase();
+}
+---
+
+<footer class="relative z-20 border-t border-setin-border bg-[#131415]">
+	<div class="flex w-full flex-col gap-8 px-[60px] py-10 md:flex-row md:items-end md:justify-between">
+		<div>
+			<img
+				src="/images/logo-sygnet.svg"
+				alt="Setin Studio"
+				width="32"
+				height="30"
+				class="footer-brand h-auto w-8"
+			/>
+			<p class="mt-3 text-[1rem] text-setin-muted">
+				&copy; {new Date().getFullYear()} Setin Studio
+			</p>
+		</div>
+
+		<div class="flex flex-wrap gap-x-10 gap-y-4">
+			{
+				locations.map((location) => (
+					<div class="footer-location flex flex-col gap-1">
+						<span class="footer-location__label text-[1rem] uppercase text-setin-muted">{location.label}</span>
+						<time
+							class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums"
+							datetime={new Date().toISOString()}
+							data-timezone={location.timezone}
+						>
+							{formatLocationTime(location.timezone)}
+						</time>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</footer>
+
+<script>
+	let footerClockInterval: ReturnType<typeof window.setInterval> | null = null;
+
+	function initFooterLocationTimes() {
+		if (footerClockInterval !== null) {
+			window.clearInterval(footerClockInterval);
+			footerClockInterval = null;
+		}
+
+		const clocks = document.querySelectorAll<HTMLTimeElement>('.footer-location__time');
+		if (!clocks.length) return;
+
+		const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+		function getFormatter(timeZone: string) {
+			let formatter = formatterCache.get(timeZone);
+			if (!formatter) {
+				formatter = new Intl.DateTimeFormat('en-US', {
+					hour: 'numeric',
+					minute: '2-digit',
+					second: '2-digit',
+					hour12: true,
+					timeZone,
+				});
+				formatterCache.set(timeZone, formatter);
+			}
+			return formatter;
+		}
+
+		function updateClocks() {
+			const now = new Date();
+
+			clocks.forEach((clock) => {
+				const timeZone = clock.dataset.timezone;
+				if (!timeZone) return;
+
+				clock.textContent = getFormatter(timeZone).format(now).toUpperCase();
+				clock.dateTime = now.toISOString();
+			});
+		}
+
+		updateClocks();
+		footerClockInterval = window.setInterval(updateClocks, 1000);
+	}
+
+	initFooterLocationTimes();
+	document.addEventListener('astro:page-load', initFooterLocationTimes);
+</script>

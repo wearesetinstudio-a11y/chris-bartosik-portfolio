@@ -1,0 +1,226 @@
+---
+import WorkWithUsButton from './WorkWithUsButton.astro';
+---
+
+<section id="about" class="about-section relative z-20 bg-[#131415]">
+	<div id="about-visual" class="about-visual relative overflow-hidden">
+		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none absolute inset-x-0">
+			<picture>
+				<source srcset="/images/brothers-intro.webp" type="image/webp" />
+				<img
+					src="/images/brothers-intro.jpg"
+					alt="The two founders of Setin Studio"
+					width="1920"
+					height="1080"
+					class="about-parallax__image h-full w-full object-cover object-[center_22%] grayscale"
+					loading="lazy"
+					decoding="async"
+				/>
+			</picture>
+		</div>
+
+		<canvas
+			id="about-noise-filter"
+			class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
+			aria-hidden="true"
+		></canvas>
+
+		<div
+			class="about-visual__overlay pointer-events-none absolute inset-0 z-[1] bg-[#131415]/10"
+			aria-hidden="true"
+		></div>
+
+		<div
+			class="about-visual__content relative z-10 grid h-[600px] grid-cols-1 items-end gap-8 px-[60px] pb-14 pt-24 md:grid-cols-2 md:gap-16 md:pb-16"
+		>
+			<p class="about-visual__eyebrow">Our story</p>
+			<p class="about-visual__intro max-w-md leading-relaxed text-white md:ml-auto">
+				We are two brothers who turned a shared passion into a studio dedicated to quality. We
+				combine years of global experience to build digital products that truly last.
+			</p>
+		</div>
+	</div>
+
+	<div
+		id="about-content"
+		class="about-content grid gap-12 px-[60px] py-[200px] md:grid-cols-2 md:gap-20"
+	>
+		<h2 id="about-heading" class="about-content__heading max-w-lg uppercase leading-[1.15]">
+			<span data-reveal-line>We believe that a great</span>
+			<br />
+			<span data-reveal-line>brand is built on two things –</span>
+			<br />
+			<span data-reveal-line>a clear vision and a solid</span>
+			<br />
+			<span data-reveal-line>foundation.</span>
+		</h2>
+
+		<div class="about-content__body md:pt-2">
+			<div class="space-y-6 leading-relaxed text-setin-muted">
+				<p>
+					In our studio, we create digital spaces that tell your story. With 15 years of combined
+					experience, we've worked with brands from Poland to the LatAm, helping them stand out.
+				</p>
+				<p>
+					Our work is a mix of two worlds. We look at the human side of your business to understand
+					your goals, and then we use high-end technology to make them real. Because we are
+					brothers, we work as one. This means your project is always consistent, from the first
+					sketch to the final line of code. We are here to help you grow and leave a mark on the
+					digital world.
+				</p>
+			</div>
+
+			<div class="mt-12">
+				<WorkWithUsButton href="/about" label="Read more about us" />
+			</div>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.about-visual {
+		height: 600px;
+	}
+
+	.about-parallax__layer {
+		top: -4%;
+		height: 108%;
+		will-change: transform;
+	}
+
+	.about-parallax__image {
+		transform: scale(1.06);
+		transform-origin: center 22%;
+	}
+
+	.about-visual__eyebrow {
+		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+		font-size: 2.4rem;
+		font-weight: 600;
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: #ffffff;
+	}
+
+	.about-visual__intro {
+		font-size: 1.2rem;
+		font-weight: 500;
+	}
+
+	.about-content__heading {
+		font-size: 2rem;
+		font-weight: 500;
+	}
+
+	.about-content__body {
+		font-size: 1.2rem;
+	}
+
+	#about-heading .reveal-char {
+		color: rgba(255, 255, 255, 0.15);
+		transition: color 0.35s ease-out;
+	}
+
+	#about-heading .reveal-char.active {
+		color: rgba(255, 255, 255, 1);
+	}
+</style>
+
+<script>
+	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
+
+	function wrapLetters(element: HTMLElement) {
+		const text = element.textContent ?? '';
+		element.textContent = '';
+
+		for (const char of text) {
+			const span = document.createElement('span');
+			span.className = 'reveal-char';
+			span.textContent = char === ' ' ? '\u00a0' : char;
+			element.appendChild(span);
+		}
+	}
+
+	function updateAboutHeadingReveal() {
+		const heading = document.getElementById('about-heading');
+		if (!heading) return;
+
+		const chars = heading.querySelectorAll('.reveal-char');
+		if (!chars.length) return;
+
+		const rect = heading.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+		const startLine = viewportHeight * 0.88;
+		const endLine = viewportHeight * 0.45;
+		const range = startLine - endLine;
+		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
+		const activeCount = Math.ceil(progress * chars.length);
+
+		chars.forEach((char, index) => {
+			char.classList.toggle('active', index < activeCount);
+		});
+	}
+
+	function initAboutParallax() {
+		const visual = document.getElementById('about-visual');
+		const layer = document.getElementById('about-parallax-layer');
+		if (!visual || !layer || visual.dataset.parallaxInit === 'true') return;
+
+		visual.dataset.parallaxInit = 'true';
+
+		const PARALLAX_SPEED = 0.16;
+		const MAX_SHIFT_RATIO = 0.045;
+
+		function updateParallax() {
+			const containerHeight = visual.offsetHeight;
+			const maxShift = containerHeight * MAX_SHIFT_RATIO;
+			const scrollOffset = -visual.getBoundingClientRect().top;
+			const rawOffset = scrollOffset * PARALLAX_SPEED;
+			const offset = Math.max(-maxShift * 0.2, Math.min(maxShift * 0.55, rawOffset));
+
+			layer.style.transform = `translate3d(0, ${offset}px, 0)`;
+		}
+
+		let ticking = false;
+
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				updateParallax();
+				updateAboutHeadingReveal();
+				ticking = false;
+			});
+		}
+
+		updateParallax();
+		updateAboutHeadingReveal();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', () => {
+			updateParallax();
+			updateAboutHeadingReveal();
+		}, { passive: true });
+	}
+
+	function initAboutSection() {
+		const heading = document.getElementById('about-heading');
+
+		if (heading && heading.dataset.revealInit !== 'true') {
+			heading.dataset.revealInit = 'true';
+			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+				wrapLetters(line as HTMLElement);
+			});
+		}
+
+		initAboutParallax();
+		initCinemaPureNoise('about-noise-filter', { observeElementId: 'about-visual' });
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAboutSection, { once: true });
+	} else {
+		initAboutSection();
+	}
+
+	document.addEventListener('astro:page-load', initAboutSection);
+</script>
