@@ -10,6 +10,7 @@
 	--letter-spacing-ui: -0.1px;
 	--page-gutter: 16px;
 	--section-padding-y: 100px;
+	--body-text-size: 1.2rem;
 }
 
 @media (width >= 768px) {
@@ -19,17 +20,23 @@
 	}
 }
 
+@media (max-width: 767px) {
+	:root {
+		--body-text-size: 1.05rem;
+	}
+}
+
 html {
 	scroll-behavior: smooth;
 	background-color: #131415;
-	overflow-x: hidden;
+	overflow-x: clip;
 }
 
 body {
 	background-color: #131415;
 	font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
 	letter-spacing: var(--letter-spacing-body);
-	overflow-x: hidden;
+	overflow-x: clip;
 	max-width: 100%;
 	@apply text-setin-fg antialiased;
 }
@@ -49,8 +56,12 @@ blockquote,
 .about-studio-intro__body,
 .about-team-member__bio,
 .about-content__body,
-.about-content__body p {
+.about-content__body p,
+.project-overview__text,
+.project-content-block__text,
+.testimonial-card__quote {
 	letter-spacing: var(--letter-spacing-body);
+	font-size: var(--body-text-size);
 }
 
 h1,

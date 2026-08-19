@@ -42,7 +42,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 				aria-hidden="true"
 			></canvas>
 
-			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-10 lg:grid-cols-2 lg:gap-16">
+			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
 				<div class="min-w-0 w-full">
 					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
 						<div class="hero-reveal-mask">
@@ -131,8 +131,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 	.hero-reveal-mask {
 		display: block;
-		overflow-x: visible;
-		overflow-y: hidden;
+		overflow: hidden;
 		padding-top: 0.08em;
 	}
 
@@ -147,16 +146,13 @@ const { projectCount, articleCount } = await getSiteCounts();
 		}
 
 		.hero-reveal-mask {
-			display: inline;
+			display: block;
+			overflow: hidden;
 		}
 
 		.hero-reveal-line {
-			display: inline;
+			display: block;
 			white-space: normal;
-		}
-
-		.hero-reveal-mask + .hero-reveal-mask::before {
-			content: ' ';
 		}
 	}
 
@@ -173,7 +169,6 @@ const { projectCount, articleCount } = await getSiteCounts();
 	}
 
 	.hero-description {
-		font-size: 1.2rem;
 		font-weight: 500;
 		line-height: 1.625;
 		color: #ffffff;

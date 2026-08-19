@@ -10,6 +10,8 @@ const { project } = Astro.props;
 const { title, thumbnail, video } = project.data;
 const label = title.toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
+const titleLineClass =
+	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
 ---
 
 <a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
@@ -40,8 +42,15 @@ const thumbnailSrc = withPublicAssetVersion(thumbnail);
 	</div>
 
 	<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
-		<h3 class="project-card__title min-w-0 text-[1.4rem] font-semibold uppercase leading-none tracking-[0.02em] text-black">
-			{label}
+		<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
+			<span class="flex h-[1.5em] flex-col overflow-hidden">
+				<span
+					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
+				>
+					<span class={titleLineClass}>{label}</span>
+					<span class={titleLineClass}>{label}</span>
+				</span>
+			</span>
 		</h3>
 
 		<img
@@ -57,7 +66,13 @@ const thumbnailSrc = withPublicAssetVersion(thumbnail);
 
 <style is:global>
 	.project-card__title {
-		font-size: 1.4rem;
+		font-size: 1.2rem;
 		font-weight: 600;
+	}
+
+	@media (min-width: 768px) {
+		.project-card__title {
+			font-size: 1.4rem;
+		}
 	}
 </style>
