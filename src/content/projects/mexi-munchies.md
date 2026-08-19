@@ -2,10 +2,10 @@
 title: Mexi Munchies
 client: Mexi Munchies
 tags: ['Branding', 'Visual Identity', 'Webflow']
-thumbnail: '/images/portfolio/mexi-munchies/cover.webp'
+thumbnail: '/images/video-and-images/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
 order: 5
-heroImage: '/images/portfolio/mexi-munchies/bg.webp'
+heroImage: '/images/video-and-images/mexi-munchies/bg.webp'
 heroSubtitle: |-
   A youthful brand identity built to
   carry culture, flavor, and energy

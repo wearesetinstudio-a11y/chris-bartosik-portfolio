@@ -10,6 +10,7 @@ const { project } = Astro.props;
 const { title, thumbnail, video } = project.data;
 const label = title.toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
+const videoSrc = video ? withPublicAssetVersion(video) : '';
 const titleLineClass =
 	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
 ---
@@ -19,7 +20,7 @@ const titleLineClass =
 		{
 			video ? (
 				<video
-					src={video}
+					src={videoSrc}
 					class="block h-auto w-full object-contain md:h-full md:object-cover"
 					autoplay
 					muted
