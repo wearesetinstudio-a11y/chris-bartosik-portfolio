@@ -1,13 +1,17 @@
+const initializedCanvases = new WeakSet<HTMLCanvasElement>();
+
 export function initCinemaPureNoise(
 	canvasId: string,
 	options: { observeElementId?: string } = {},
 ): void {
 	const canvas = document.getElementById(canvasId) as HTMLCanvasElement | null;
-	if (!canvas) return;
+	if (!canvas || initializedCanvases.has(canvas)) return;
 
 	const ctx = canvas.getContext('2d');
 	const container = canvas.parentElement;
 	if (!ctx || !container) return;
+
+	initializedCanvases.add(canvas);
 
 	const isMobile = window.matchMedia('(max-width: 767px)').matches;
 	const NOISE_DENSITY = isMobile ? 0.028 : 0.052;
@@ -15,8 +19,8 @@ export function initCinemaPureNoise(
 	const BASE_OPACITY = 0.17;
 	const MAX_NOISE_WIDTH = isMobile ? 640 : 1100;
 	const MAX_NOISE_HEIGHT = isMobile ? 420 : 700;
-	const TOTAL_BUFFERS = isMobile ? 3 : 6;
-	const FRAME_INTERVAL = isMobile ? 140 : 100;
+	const TOTAL_BUFFERS = isMobile ? 4 : 6;
+	const FRAME_INTERVAL = isMobile ? 180 : 140;
 
 	let dpr = window.devicePixelRatio || 1;
 	let noiseBuffers: HTMLCanvasElement[] = [];

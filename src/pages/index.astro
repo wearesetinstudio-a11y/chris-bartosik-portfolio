@@ -73,7 +73,8 @@ const { projectCount, articleCount } = await getSiteCounts();
 		<script>
 			import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
 
-			initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
+			let heroStackHidden = false;
+			let heroSyncFrame = 0;
 
 			function syncHeroBackgroundStack() {
 				const hero = document.getElementById('hero-section');
@@ -81,12 +82,35 @@ const { projectCount, articleCount } = await getSiteCounts();
 				if (!hero || !stack) return;
 
 				const heroBottom = hero.getBoundingClientRect().bottom;
-				stack.classList.toggle('is-hidden', heroBottom <= 0);
+
+				if (!heroStackHidden && heroBottom < -64) {
+					heroStackHidden = true;
+					stack.classList.add('is-hidden');
+					document.documentElement.classList.remove('hero-cinema-active');
+				} else if (heroStackHidden && heroBottom > 0) {
+					heroStackHidden = false;
+					stack.classList.remove('is-hidden');
+					document.documentElement.classList.add('hero-cinema-active');
+				}
 			}
 
+			function scheduleHeroBackgroundSync() {
+				if (heroSyncFrame) return;
+				heroSyncFrame = window.requestAnimationFrame(() => {
+					syncHeroBackgroundStack();
+					heroSyncFrame = 0;
+				});
+			}
+
+			initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
+			document.documentElement.classList.add('hero-cinema-active');
 			syncHeroBackgroundStack();
-			window.addEventListener('scroll', syncHeroBackgroundStack, { passive: true });
-			document.addEventListener('astro:page-load', syncHeroBackgroundStack);
+			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
+			window.addEventListener('resize', scheduleHeroBackgroundSync, { passive: true });
+			document.addEventListener('astro:page-load', () => {
+				document.documentElement.classList.add('hero-cinema-active');
+				scheduleHeroBackgroundSync();
+			});
 		</script>
 
 		<ClientsSection />
@@ -154,6 +178,12 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 	.hero-background-stack__noise {
 		z-index: 2;
+		opacity: 0.85;
+	}
+
+	html.hero-cinema-active .noise-overlay--coarse,
+	html.hero-cinema-active .noise-overlay--fine {
+		opacity: 0;
 	}
 
 	.hero-headline {
