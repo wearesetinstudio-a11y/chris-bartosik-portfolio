@@ -10,7 +10,7 @@ export type GalleryMediaItem =
 
 export type GalleryLayoutBlock =
 	| { kind: 'full'; item: GalleryMediaItem; group: number }
-	| { kind: 'grid'; items: GalleryMediaItem[]; group: number };
+	| { kind: 'grid'; items: GalleryMediaItem[]; group: number; leadFull?: boolean };
 
 type ParsedMediaFile = GalleryMediaItem & {
 	group: number;
@@ -126,19 +126,26 @@ export function buildGalleryLayout(
 			const parts = files.filter((file) => file.part !== null);
 			const singles = files.filter((file) => file.part === null);
 
+			if (parts.length > 0) {
+				const items = [
+					...singles.map((single) => toMediaItem(folderName, single.filename, single.type)),
+					...parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
+				];
+
+				layout.push({
+					kind: 'grid',
+					group,
+					items,
+					leadFull: singles.length > 0,
+				});
+				continue;
+			}
+
 			for (const single of singles) {
 				layout.push({
 					kind: 'full',
 					group,
 					item: toMediaItem(folderName, single.filename, single.type),
-				});
-			}
-
-			if (parts.length > 0) {
-				layout.push({
-					kind: 'grid',
-					group,
-					items: parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
 				});
 			}
 		}

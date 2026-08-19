@@ -38,7 +38,11 @@ let mediaIndex = startIndex;
 					<div
 						class:list={[
 							'project-gallery__row project-gallery__row--grid',
-							gridItems.length === 3 ? 'project-gallery__row--grid-3' : 'project-gallery__row--grid-2',
+							block.leadFull && 'project-gallery__row--lead-full',
+							!block.leadFull &&
+								(gridItems.length === 3
+									? 'project-gallery__row--grid-3'
+									: 'project-gallery__row--grid-2'),
 						]}
 					>
 						{gridItems.map(({ item, index }) => (
@@ -107,6 +111,36 @@ let mediaIndex = startIndex;
 	@media (min-width: 768px) {
 		.project-gallery__row--grid-3 {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.project-gallery__row--lead-full {
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 768px) {
+		.project-gallery__row--lead-full {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.project-gallery__row--lead-full > :global(:first-child) {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.project-gallery {
+			padding-block: 0;
+		}
+
+		.project-gallery__stack,
+		.project-gallery__row--grid {
+			gap: 2rem;
+		}
+
+		.project-gallery__row :global(.project-gallery__item img),
+		.project-gallery__row :global(.project-gallery__item video) {
+			vertical-align: top;
 		}
 	}
 </style>

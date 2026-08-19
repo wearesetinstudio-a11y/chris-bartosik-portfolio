@@ -43,18 +43,18 @@ const { projectCount, articleCount } = await getSiteCounts();
 			></canvas>
 
 			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-10 lg:grid-cols-2 lg:gap-16">
-				<div class="min-w-0">
-					<h1 id="hero-headline" class="hero-headline uppercase text-setin-fg">
-						<div class="hero-reveal-mask block">
+				<div class="min-w-0 w-full">
+					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
+						<div class="hero-reveal-mask">
 							<span
-								class="hero-reveal-line block translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
 							>
 								Digital legacies
 							</span>
 						</div>
-						<div class="hero-reveal-mask block">
+						<div class="hero-reveal-mask">
 							<span
-								class="hero-reveal-line block translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
 							>
 								for the outliers
 							</span>
@@ -130,9 +130,34 @@ const { projectCount, articleCount } = await getSiteCounts();
 	}
 
 	.hero-reveal-mask {
+		display: block;
 		overflow-x: visible;
 		overflow-y: hidden;
 		padding-top: 0.08em;
+	}
+
+	.hero-reveal-line {
+		display: block;
+	}
+
+	@media (max-width: 767px) {
+		.hero-headline {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.hero-reveal-mask {
+			display: inline;
+		}
+
+		.hero-reveal-line {
+			display: inline;
+			white-space: normal;
+		}
+
+		.hero-reveal-mask + .hero-reveal-mask::before {
+			content: ' ';
+		}
 	}
 
 	@media (min-width: 768px) {

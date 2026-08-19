@@ -52,6 +52,15 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	</div>
 </footer>
 
+<style is:global>
+	@media (max-width: 767px) {
+		.footer-location__label,
+		.footer-location__time {
+			font-size: 0.8rem;
+		}
+	}
+</style>
+
 <script>
 	let footerClockInterval: ReturnType<typeof window.setInterval> | null = null;
 
