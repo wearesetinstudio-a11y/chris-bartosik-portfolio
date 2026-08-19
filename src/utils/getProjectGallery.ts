@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm']);
 const DEFAULT_EXCLUDED = new Set(['bg.webp']);
-const PROJECT_MEDIA_DIR = 'video-and-images';
+const PROJECT_MEDIA_DIR = 'portfolio';
 
 function isVideoExtension(extension: string): boolean {
 	return extension === '.mp4' || extension === '.webm';
@@ -59,7 +59,7 @@ function toMediaItem(folderName: string, filename: string, type: 'image' | 'vide
 	return {
 		type,
 		filename,
-		src: `/images/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
+		src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
 	};
 }
 
@@ -68,7 +68,7 @@ export function getProjectGalleryFiles(
 	coverFilename = 'cover.webp',
 	excludedFilenames: string[] = [],
 ): GalleryMediaItem[] {
-	const portfolioDir = join(process.cwd(), 'public', 'images', PROJECT_MEDIA_DIR, folderName);
+	const portfolioDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folderName);
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
@@ -93,7 +93,7 @@ export function buildGalleryLayout(
 	coverFilename = 'cover.webp',
 	excludedFilenames: string[] = [],
 ): GalleryLayoutBlock[] {
-	const portfolioDir = join(process.cwd(), 'public', 'images', PROJECT_MEDIA_DIR, folderName);
+	const portfolioDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folderName);
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
@@ -106,7 +106,7 @@ export function buildGalleryLayout(
 				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
 				return {
 					...parsed,
-					src: `/images/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
+					src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
 					type: isVideoExtension(extension) ? ('video' as const) : ('image' as const),
 				};
 			})

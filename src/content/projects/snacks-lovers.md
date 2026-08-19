@@ -2,22 +2,22 @@
 title: Snacks Lovers
 client: Snacks Lovers
 tags: ['Branding', 'Visual Identity', 'Webflow']
-thumbnail: '/images/video-and-images/snacks-lovers/snacks-lovers-cover.webp'
+thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
 order: 3
-heroImage: '/images/video-and-images/snacks-lovers/bg.webp'
+heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-
   A brand built for sweet craziness
   and fearless snack culture
 overviewLabel: 'Overview'
 overviewTitle: 'Turning playful energy into a scalable brand system'
 overviewText: 'Snacks Lovers needed an identity that could match the bold personality of their products without losing clarity across packaging, digital touchpoints, and retail environments. We built a flexible visual language that feels loud, joyful, and unmistakably ownable.'
-overviewGraphic: '/images/logos/snacks-lovers.svg'
+overviewGraphic: '/logos/snacks-lovers.svg'
 service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Food & Beverage'
 market: 'Panama'
 year: 2025
-logo: '/images/logos/snacks-lovers.svg'
+logo: '/logos/snacks-lovers.svg'
 challengesAfterGroup: 2
 strategyAfterGroup: 8
 challengesLabel: 'Challenges'

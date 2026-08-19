@@ -2,10 +2,10 @@
 title: Warszewicz
 client: Warszewicz
 tags: ['Brand Identity', 'Art Direction', 'Print']
-thumbnail: '/images/video-and-images/warszewicz/cover.webp'
+thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
 order: 6
-heroImage: '/images/video-and-images/warszewicz/bg.webp'
+heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: 'A refined identity shaped by detail, contrast, and editorial restraint'
 overviewTitle: 'Precision in every composition'
 overviewText: 'Warszewicz required a brand language that felt elevated and deliberate — rooted in craft, but flexible enough to move across print, digital, and campaign environments. We developed a cohesive system where typography, spacing, and imagery work together with quiet confidence.'

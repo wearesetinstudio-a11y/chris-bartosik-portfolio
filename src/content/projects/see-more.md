@@ -2,24 +2,24 @@
 title: See More Logistics
 client: See More Logistics
 tags: ['Branding', 'Visual Identity', 'Webflow']
-thumbnail: '/images/video-and-images/see-more/cover.webm'
+thumbnail: '/portfolio/see-more/cover.webm'
 folderName: 'see-more'
 order: 2
-video: '/images/video-and-images/see-more/cover.webm'
-heroImage: '/images/video-and-images/see-more/bg.webp'
+video: '/portfolio/see-more/cover.webm'
+heroImage: '/portfolio/see-more/bg.webp'
 heroSubtitle: |-
   A brand that shapes the Panama's
   logistics trust and innovation
 overviewLabel: 'Overview'
 overviewTitle: 'Moving national cargo with absolute clarity'
 overviewText: 'See More Logistics needed a visual identity that matched their physical presence on Panamanian roads. The local logistics market often relies on generic, literal imagery that fails to communicate modern reliability or professionalism. We built a functional brand system that positions them as an institutional authority, allowing regional business owners and government contractors to experience true operational confidence.'
-overviewGraphic: '/images/logos/see-more.svg'
+overviewGraphic: '/logos/see-more.svg'
 service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Industrial Logistics'
 market: 'Panama'
 year: 2026
 liveUrl: 'seemorelogistics.com'
-logo: '/images/logos/see-more.svg'
+logo: '/logos/see-more.svg'
 challengesAfterGroup: 2
 strategyAfterGroup: 8
 challengesLabel: 'Challenges'

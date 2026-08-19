@@ -2,22 +2,22 @@
 title: Mexi Munchies
 client: Mexi Munchies
 tags: ['Branding', 'Visual Identity', 'Webflow']
-thumbnail: '/images/video-and-images/mexi-munchies/cover.webp'
+thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
 order: 5
-heroImage: '/images/video-and-images/mexi-munchies/bg.webp'
+heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: |-
   A youthful brand identity built to
   carry culture, flavor, and energy
 overviewLabel: 'Overview'
 overviewTitle: 'Showing the world what MexiMunchies is all about'
 overviewText: 'Mexi Munchies needed a brand that felt as vibrant and approachable as the products themselves — youthful, confident, and unmistakably Latin American. We built a visual system that translates that energy across packaging, digital touchpoints, and campaign assets without losing clarity at scale.'
-overviewGraphic: '/images/logos/meximunchies.svg'
+overviewGraphic: '/logos/meximunchies.svg'
 service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Food & Beverage'
 market: 'Panama'
 year: 2024
-logo: '/images/logos/meximunchies.svg'
+logo: '/logos/meximunchies.svg'
 challengesAfterGroup: 2
 strategyAfterGroup: 5
 challengesLabel: 'Challenges'

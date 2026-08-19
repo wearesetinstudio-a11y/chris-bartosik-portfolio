@@ -1,7 +1,6 @@
 ---
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
-import { articles } from '../data/articles.ts';
 
 interface Props {
 	projectCount?: number;
@@ -12,7 +11,7 @@ interface Props {
 
 const {
 	projectCount = 0,
-	articleCount = articles.length,
+	articleCount = 0,
 	waitForIntro = false,
 	theme = 'default',
 } = Astro.props;
@@ -22,6 +21,7 @@ const hasLocalContact =
 	Astro.url.pathname === '/about' ||
 	Astro.url.pathname === '/projects' ||
 	Astro.url.pathname === '/articles' ||
+	Astro.url.pathname.startsWith('/articles/') ||
 	/^\/projects\/[^/]+$/.test(Astro.url.pathname);
 
 const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
@@ -56,7 +56,7 @@ const headerClass = waitForIntro
 		>
 			<div class="site-header__logo-mark flex items-center" aria-hidden="true">
 				<img
-					src="/images/logo-setin.svg"
+					src="/logo-setin.svg"
 					alt=""
 					width="111"
 					height="42"
@@ -64,7 +64,7 @@ const headerClass = waitForIntro
 				/>
 				<div class="site-header__logo-sygnet-wrap flex shrink-0 items-center justify-center">
 					<img
-						src="/images/logo-sygnet.svg"
+						src="/logo-sygnet.svg"
 						alt=""
 						width="51"
 						height="48"
@@ -72,7 +72,7 @@ const headerClass = waitForIntro
 					/>
 				</div>
 				<img
-					src="/images/logo-studio.svg"
+					src="/logo-studio.svg"
 					alt=""
 					width="143"
 					height="42"

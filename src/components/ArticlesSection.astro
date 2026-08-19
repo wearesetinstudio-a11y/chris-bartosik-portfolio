@@ -1,14 +1,15 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
-import { articles } from '../data/articles.ts';
+import { getSortedArticles } from '../utils/getArticles.ts';
 
 interface Props {
 	standalone?: boolean;
 }
 
 const { standalone = false } = Astro.props;
-const featuredArticles = articles.slice(0, 3);
-const displayedArticles = standalone ? articles : featuredArticles;
+const allArticles = await getSortedArticles();
+const featuredArticles = allArticles.slice(0, 3);
+const displayedArticles = standalone ? allArticles : featuredArticles;
 ---
 
 <section
@@ -35,7 +36,7 @@ const displayedArticles = standalone ? articles : featuredArticles;
 					<div class="mt-8">
 						<WorkWithUsButton
 							href="/articles"
-							label={`View more articles [${articles.length}]`}
+							label={`View more articles [${allArticles.length}]`}
 							variant="dark"
 						/>
 					</div>
@@ -47,10 +48,10 @@ const displayedArticles = standalone ? articles : featuredArticles;
 	<div class="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
 		{
 			displayedArticles.map((article) => (
-				<a href={`/articles/${article.slug}`} class="article-card group block">
+				<a href={`/articles/${article.id}`} class="article-card group block">
 					<div class="article-card__image aspect-[4/3] overflow-hidden bg-[#F5F5F5]">
 						<img
-							src={article.image}
+							src={article.data.coverImage}
 							alt=""
 							width="640"
 							height="480"
@@ -58,7 +59,7 @@ const displayedArticles = standalone ? articles : featuredArticles;
 							loading="lazy"
 						/>
 					</div>
-					<h3 class="article-card__title mt-5 text-black">{article.title}</h3>
+					<h3 class="article-card__title mt-5 text-black">{article.data.title}</h3>
 				</a>
 			))
 		}

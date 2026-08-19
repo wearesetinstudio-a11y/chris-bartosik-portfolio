@@ -1,8 +1,10 @@
 import { getCollection } from 'astro:content';
-import { articles } from '../data/articles.ts';
 
 export async function getSiteCounts() {
-	const projects = await getCollection('projects');
+	const [projects, articles] = await Promise.all([
+		getCollection('projects'),
+		getCollection('articles'),
+	]);
 
 	return {
 		projectCount: projects.length,
