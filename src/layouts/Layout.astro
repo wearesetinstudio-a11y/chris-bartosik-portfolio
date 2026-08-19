@@ -70,9 +70,11 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 		</script>
 	</head>
 	<body class="relative flex min-h-screen max-w-[100vw] flex-col overflow-x-clip bg-[#131415] font-sans text-base text-setin-fg antialiased">
-		<div class="noise-overlay noise-overlay--coarse" aria-hidden="true"></div>
-		<div class="noise-overlay noise-overlay--fine" aria-hidden="true"></div>
-		<div class="noise-scanlines" aria-hidden="true"></div>
+		<div class="noise-stack" aria-hidden="true">
+			<div class="noise-overlay noise-overlay--coarse"></div>
+			<div class="noise-overlay noise-overlay--fine"></div>
+			<div class="noise-scanlines"></div>
+		</div>
 
 		<div
 			id="page-transition-overlay"
@@ -188,12 +190,19 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 		animation: slide-out-bottom 900ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
 	}
 
-	.noise-overlay {
+	.noise-stack {
 		position: fixed;
+		inset: 0;
+		z-index: 10;
+		overflow: hidden;
+		pointer-events: none;
+		isolation: isolate;
+	}
+
+	.noise-overlay {
+		position: absolute;
 		top: -50%;
 		left: -50%;
-		right: -50%;
-		bottom: -50%;
 		width: 200%;
 		height: 200%;
 		pointer-events: none;
@@ -227,7 +236,7 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 
 	/* Poziome linie scanline — charakterystyczny wygląd CRT */
 	.noise-scanlines {
-		position: fixed;
+		position: absolute;
 		inset: 0;
 		z-index: 12;
 		pointer-events: none;

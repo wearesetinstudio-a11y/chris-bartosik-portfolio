@@ -17,31 +17,28 @@ const { projectCount, articleCount } = await getSiteCounts();
 ---
 
 <Layout>
-	<video
-		src="/hero-background.mp4"
-		class="hero-background-video pointer-events-none fixed inset-0 z-0 h-full w-full max-w-[100vw] object-cover object-center brightness-[0.85] contrast-[1.15] grayscale"
-		autoplay
-		muted
-		loop
-		playsinline
-		preload="auto"
-		aria-hidden="true"
-	>
-		<source src="/hero-background.mp4" type="video/mp4" />
-	</video>
+	<div id="hero-background-stack" class="hero-background-stack pointer-events-none" aria-hidden="true">
+		<video
+			src="/hero-background.mp4"
+			class="hero-background-video absolute inset-0 h-full w-full object-cover object-center brightness-[0.85] contrast-[1.15] grayscale"
+			autoplay
+			muted
+			loop
+			playsinline
+			preload="auto"
+		>
+			<source src="/hero-background.mp4" type="video/mp4" />
+		</video>
 
-	<div class="pointer-events-none fixed inset-0 z-[1] bg-[#131415]/15"></div>
+		<div class="hero-background-stack__tint absolute inset-0 bg-[#131415]/15"></div>
+
+		<canvas id="cinema-pure-noise-filter" class="hero-background-stack__noise absolute inset-0 block h-full w-full"></canvas>
+	</div>
 
 	<Header projectCount={projectCount} articleCount={articleCount} waitForIntro={true} />
 
 	<main class="relative z-20 flex-1">
-		<section id="hero-section" class="relative flex min-h-[96vh] flex-col justify-end overflow-x-hidden px-[var(--page-gutter)] pb-[80px] pt-28">
-			<canvas
-				id="cinema-pure-noise-filter"
-				class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
-				aria-hidden="true"
-			></canvas>
-
+		<section id="hero-section" class="relative flex min-h-[100dvh] flex-col justify-end px-[var(--page-gutter)] pb-[80px] pt-28">
 			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
 				<div class="min-w-0 w-full">
 					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
@@ -77,6 +74,19 @@ const { projectCount, articleCount } = await getSiteCounts();
 			import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
 
 			initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
+
+			function syncHeroBackgroundStack() {
+				const hero = document.getElementById('hero-section');
+				const stack = document.getElementById('hero-background-stack');
+				if (!hero || !stack) return;
+
+				const heroBottom = hero.getBoundingClientRect().bottom;
+				stack.classList.toggle('is-hidden', heroBottom <= 0);
+			}
+
+			syncHeroBackgroundStack();
+			window.addEventListener('scroll', syncHeroBackgroundStack, { passive: true });
+			document.addEventListener('astro:page-load', syncHeroBackgroundStack);
 		</script>
 
 		<ClientsSection />
@@ -119,9 +129,31 @@ const { projectCount, articleCount } = await getSiteCounts();
 </Layout>
 
 <style is:global>
+	.hero-background-stack {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		width: 100%;
+		height: 100vh;
+		height: 100dvh;
+		background-color: #131415;
+		transition: opacity 0.35s ease, visibility 0.35s ease;
+	}
+
+	.hero-background-stack.is-hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	.hero-background-video {
 		transform: scale(1.48);
 		transform-origin: center center;
+		will-change: transform;
+	}
+
+	.hero-background-stack__noise {
+		z-index: 2;
 	}
 
 	.hero-headline {
