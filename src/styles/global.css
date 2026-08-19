@@ -8,17 +8,27 @@
 	--color-setin-border: #2a2b2c;
 	--letter-spacing-body: 0;
 	--letter-spacing-ui: -0.1px;
+	--page-gutter: 16px;
+}
+
+@media (width >= 768px) {
+	:root {
+		--page-gutter: 60px;
+	}
 }
 
 html {
 	scroll-behavior: smooth;
 	background-color: #131415;
+	overflow-x: hidden;
 }
 
 body {
 	background-color: #131415;
 	font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
 	letter-spacing: var(--letter-spacing-body);
+	overflow-x: hidden;
+	max-width: 100%;
 	@apply text-setin-fg antialiased;
 }
 

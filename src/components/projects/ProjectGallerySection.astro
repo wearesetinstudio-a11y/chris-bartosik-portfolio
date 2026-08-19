@@ -13,7 +13,7 @@ const { blocks, title, startIndex = 0 } = Astro.props;
 let mediaIndex = startIndex;
 ---
 
-<section class="project-gallery px-[60px] py-12 md:py-16">
+<section class="project-gallery px-[var(--page-gutter)] py-12 md:py-16">
 	<div class="project-gallery__stack">
 		{
 			blocks.map((block) => {

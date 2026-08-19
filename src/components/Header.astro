@@ -48,7 +48,7 @@ const headerClass = waitForIntro
 		headerClass,
 	]}
 >
-	<div class="grid h-[100px] w-full grid-cols-[1fr_auto_1fr] items-center px-[60px]">
+	<div class="grid h-[100px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:grid-cols-[1fr_auto_1fr]">
 		<a
 			href="/"
 			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
@@ -81,7 +81,7 @@ const headerClass = waitForIntro
 			</div>
 		</a>
 
-		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10">
+		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10" aria-label="Main">
 			{
 				nav.map((item) => (
 					<RollingLink href={item.href} label={item.label} count={item.count} inverted={isLightBg} />
@@ -89,11 +89,52 @@ const headerClass = waitForIntro
 			}
 		</nav>
 
-		<div class="flex justify-end">
+		<div class="hidden justify-end md:flex">
 			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} />
 		</div>
+
+		<button
+			type="button"
+			id="mobile-nav-toggle"
+			class="mobile-nav-toggle relative -mr-1 flex h-10 w-10 flex-col items-end justify-center gap-[5px] md:hidden"
+			aria-expanded="false"
+			aria-controls="mobile-nav-panel"
+			aria-label="Open menu"
+		>
+			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
+			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
+		</button>
 	</div>
 </header>
+
+<div
+	id="mobile-nav-panel"
+	class="mobile-nav-panel pointer-events-none fixed inset-x-0 top-0 z-40 flex h-[100dvh] translate-y-[-100%] flex-col bg-[#131415] px-[var(--page-gutter)] pt-[100px] pb-10 opacity-0"
+	aria-hidden="true"
+>
+	<nav class="flex flex-col gap-8" aria-label="Mobile">
+		{
+			nav.map((item) => {
+				const text =
+					item.count !== undefined ? `${item.label} [${item.count}]` : item.label;
+
+				return (
+					<a
+						href={item.href}
+						class="mobile-nav-link text-[1.05rem] font-semibold uppercase leading-none text-setin-fg"
+						data-mobile-nav-link
+					>
+						{text}
+					</a>
+				);
+			})
+		}
+	</nav>
+
+	<div class="mt-auto pt-12" data-mobile-nav-link>
+		<WorkWithUsButton href={workWithUsHref} />
+	</div>
+</div>
 
 <style is:global>
 	.site-header.header-solid {
@@ -167,11 +208,61 @@ const headerClass = waitForIntro
 		background-color: #ffffff !important;
 	}
 
+	.mobile-nav-toggle {
+		color: #f5f5f5;
+		transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+	}
+
+	.mobile-nav-toggle__line {
+		display: block;
+		width: 20px;
+		height: 1.5px;
+		background-color: currentColor;
+		transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+	}
+
+	.site-header--light-bg:not(.header-solid) .mobile-nav-toggle {
+		color: #000000;
+	}
+
+	.site-header--light-bg.header-solid .mobile-nav-toggle,
+	.site-header:not(.site-header--light-bg) .mobile-nav-toggle {
+		color: #f5f5f5;
+	}
+
+	.mobile-nav-toggle.is-open {
+		transform: translateY(10px);
+	}
+
+	.mobile-nav-toggle.is-open .mobile-nav-toggle__line {
+		transform: translateY(4px);
+	}
+
+	.mobile-nav-panel {
+		transition:
+			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
+			opacity 0.35s ease;
+		will-change: transform;
+	}
+
+	.mobile-nav-panel.is-open {
+		pointer-events: auto;
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	body.mobile-nav-open {
+		overflow: hidden;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.site-header__logo-mark,
 		.site-header__logo-setin,
 		.site-header__logo-studio,
-		.site-header__logo-sygnet-wrap {
+		.site-header__logo-sygnet-wrap,
+		.mobile-nav-toggle,
+		.mobile-nav-toggle__line,
+		.mobile-nav-panel {
 			transition: none !important;
 		}
 	}
@@ -181,6 +272,7 @@ const headerClass = waitForIntro
 	import { hasCompletedIntro } from '../scripts/introState.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
+	let mobileNavCleanup: (() => void) | null = null;
 
 	function initHeaderSolidBackground() {
 		headerScrollCleanup?.();
@@ -232,8 +324,61 @@ const headerClass = waitForIntro
 		};
 	}
 
-	initHeaderSolidBackground();
-	document.addEventListener('astro:page-load', initHeaderSolidBackground);
+	function closeMobileNav() {
+		const toggle = document.getElementById('mobile-nav-toggle');
+		const panel = document.getElementById('mobile-nav-panel');
+
+		if (!toggle || !panel) return;
+
+		toggle.classList.remove('is-open');
+		toggle.setAttribute('aria-expanded', 'false');
+		toggle.setAttribute('aria-label', 'Open menu');
+		panel.classList.remove('is-open');
+		panel.setAttribute('aria-hidden', 'true');
+		document.body.classList.remove('mobile-nav-open');
+	}
+
+	function initMobileNav() {
+		mobileNavCleanup?.();
+		mobileNavCleanup = null;
+
+		const toggle = document.getElementById('mobile-nav-toggle');
+		const panel = document.getElementById('mobile-nav-panel');
+
+		if (!toggle || !panel) {
+			closeMobileNav();
+			return;
+		}
+
+		const onToggleClick = () => {
+			const isOpen = toggle.classList.toggle('is-open');
+			panel.classList.toggle('is-open', isOpen);
+			panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+			toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+			document.body.classList.toggle('mobile-nav-open', isOpen);
+		};
+
+		const onPanelClick = (event: Event) => {
+			const target = event.target as HTMLElement | null;
+			if (target?.closest('[data-mobile-nav-link]')) closeMobileNav();
+		};
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') closeMobileNav();
+		};
+
+		toggle.addEventListener('click', onToggleClick);
+		panel.addEventListener('click', onPanelClick);
+		window.addEventListener('keydown', onKeyDown);
+
+		mobileNavCleanup = () => {
+			toggle.removeEventListener('click', onToggleClick);
+			panel.removeEventListener('click', onPanelClick);
+			window.removeEventListener('keydown', onKeyDown);
+			closeMobileNav();
+		};
+	}
 
 	function initHeaderIntroReveal() {
 		const header = document.getElementById('site-header');
@@ -253,6 +398,15 @@ const headerClass = waitForIntro
 		);
 	}
 
-	initHeaderIntroReveal();
-	document.addEventListener('astro:page-load', initHeaderIntroReveal);
+	function initHeader() {
+		initHeaderSolidBackground();
+		initMobileNav();
+		initHeaderIntroReveal();
+	}
+
+	initHeader();
+	document.addEventListener('astro:page-load', () => {
+		closeMobileNav();
+		initHeader();
+	});
 </script>
