@@ -81,7 +81,10 @@ label,
 }
 
 @media (max-width: 767px) {
-	.hero-headline,
+	.hero-headline {
+		font-size: clamp(1.875rem, 10.2vw, 2.4rem);
+	}
+
 	.about-hero__title {
 		font-size: 2.4rem;
 	}
