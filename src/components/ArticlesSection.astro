@@ -14,15 +14,15 @@ const displayedArticles = standalone ? articles : featuredArticles;
 <section
 	id="articles"
 	class:list={[
-		'relative z-20 bg-white px-[var(--page-gutter)] py-[200px]',
-		standalone && 'pt-[calc(200px+5.5rem)]',
+		'relative z-20 bg-white px-[var(--page-gutter)] py-[var(--section-padding-y)]',
+		standalone && 'pt-[calc(var(--section-padding-y)+5.5rem)]',
 	]}
 >
 	<div class="mb-16 grid gap-8 md:mb-20 md:grid-cols-2 md:items-start md:gap-16">
 		<h2 id="articles-heading" class="articles-heading max-w-md uppercase leading-[1.15]">
-			<span data-reveal-line>Inside the</span>
+			<span data-reveal-line>Inside</span>
 			<br />
-			<span data-reveal-line>process</span>
+			<span data-reveal-line>the process</span>
 		</h2>
 
 		<div class="md:ml-auto md:max-w-md">
@@ -68,7 +68,6 @@ const displayedArticles = standalone ? articles : featuredArticles;
 <style is:global>
 	.articles-heading {
 		font-size: 2rem;
-		font-weight: 500;
 		color: #000000;
 	}
 

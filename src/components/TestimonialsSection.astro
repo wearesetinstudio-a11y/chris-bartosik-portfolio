@@ -45,7 +45,7 @@ const testimonials = [
 const loopTestimonials = [...testimonials, ...testimonials];
 ---
 
-<section id="testimonials" class="relative z-20 bg-[#F5F5F5] px-[var(--page-gutter)] py-[200px] lg:pr-0">
+<section id="testimonials" class="relative z-20 bg-[#F5F5F5] px-[var(--page-gutter)] py-[var(--section-padding-y)] lg:pr-0">
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
@@ -96,7 +96,6 @@ const loopTestimonials = [...testimonials, ...testimonials];
 <style is:global>
 	.testimonials-heading {
 		font-size: 2rem;
-		font-weight: 500;
 		color: #000000;
 	}
 

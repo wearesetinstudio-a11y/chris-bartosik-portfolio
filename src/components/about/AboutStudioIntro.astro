@@ -1,17 +1,13 @@
-<section id="about-studio-intro" class="about-studio-intro bg-[#131415] px-[var(--page-gutter)] pt-[200px] pb-[60px]">
-	<div class="grid gap-12 md:grid-cols-2 md:gap-20 lg:gap-24">
+<section id="about-studio-intro" class="about-studio-intro bg-[#131415] px-[var(--page-gutter)] pt-[var(--section-padding-y)] pb-[60px]">
+	<div class="grid min-w-0 gap-8 md:grid-cols-2 md:gap-20 lg:gap-24">
 		<h2
 			id="about-studio-heading"
-			class="about-studio-intro__heading max-w-lg uppercase leading-[1.15]"
+			class="about-studio-intro__heading min-w-0 w-full max-w-full uppercase leading-[1.15] md:max-w-lg"
 		>
-			<span data-reveal-line>Setin Studio is a digital</span>
-			<br />
-			<span data-reveal-line>product studio built on</span>
-			<br />
-			<span data-reveal-line>vision and execution.</span>
+			<span data-reveal-line>Setin Studio is a digital product studio built on vision and execution.</span>
 		</h2>
 
-		<div class="about-studio-intro__body leading-relaxed text-setin-muted">
+		<div class="about-studio-intro__body min-w-0 leading-relaxed text-setin-muted">
 			<p>
 				As brothers, we have developed a unique collaborative way of working, that allows us to
 				move fast, eliminate friction, and stay completely consistent. Operating as a specialized
@@ -29,24 +25,41 @@
 
 <style is:global>
 	.about-studio-intro__heading {
-		font-size: 2rem;
-		font-weight: 500;
+		overflow-wrap: break-word;
+		line-height: 1.15;
+		max-width: 100%;
+	}
+
+	@media (max-width: 767px) {
+		.about-studio-intro__heading {
+			font-size: 1.8rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.about-studio-intro__heading {
+			font-size: 2rem;
+		}
 	}
 
 	.about-studio-intro__body {
 		font-size: 1.2rem;
+		max-width: 100%;
+		overflow-wrap: break-word;
 	}
 </style>
 
 <script>
 	function wrapLetters(element: HTMLElement) {
+		if (element.querySelector('.reveal-char')) return;
+
 		const text = element.textContent ?? '';
 		element.textContent = '';
 
 		for (const char of text) {
 			const span = document.createElement('span');
 			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
+			span.textContent = char === ' ' ? ' ' : char;
 			element.appendChild(span);
 		}
 	}
@@ -86,15 +99,16 @@
 		const heading = document.getElementById('about-studio-heading');
 		const section = document.getElementById('about-studio-intro');
 
-		if (heading && heading.dataset.revealInit !== 'true') {
-			heading.dataset.revealInit = 'true';
-
+		if (heading) {
 			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
 				wrapLetters(line as HTMLElement);
 			});
 
-			window.addEventListener('scroll', onAboutStudioScroll, { passive: true });
-			window.addEventListener('resize', updateAboutStudioHeadingReveal, { passive: true });
+			if (heading.dataset.scrollReady !== 'true') {
+				heading.dataset.scrollReady = 'true';
+				window.addEventListener('scroll', onAboutStudioScroll, { passive: true });
+				window.addEventListener('resize', updateAboutStudioHeadingReveal, { passive: true });
+			}
 		}
 
 		updateAboutStudioHeadingReveal();

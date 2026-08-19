@@ -7,19 +7,18 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, tags, thumbnail, video } = project.data;
+const { title, thumbnail, video } = project.data;
 const label = title.toUpperCase();
-const tagLine = tags.join(' · ').toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 ---
 
 <a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
-	<div class="project-card__media aspect-[4/5] overflow-hidden bg-[#E8E8E8] md:aspect-[16/10]">
+	<div class="project-card__media overflow-hidden bg-[#E8E8E8] md:aspect-[16/10]">
 		{
 			video ? (
 				<video
 					src={video}
-					class="h-full w-full object-cover"
+					class="block h-auto w-full object-contain md:h-full md:object-cover"
 					autoplay
 					muted
 					loop
@@ -33,19 +32,32 @@ const thumbnailSrc = withPublicAssetVersion(thumbnail);
 					alt={title}
 					width="960"
 					height="600"
-					class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+					class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02] md:h-full md:object-cover"
 					loading="lazy"
 				/>
 			)
 		}
 	</div>
 
-	<div class="project-card__meta mt-5 space-y-1">
-		<h3 class="project-card__title text-[1.1rem] font-semibold uppercase leading-none tracking-[0.02em] text-black">
+	<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
+		<h3 class="project-card__title min-w-0 text-[1.4rem] font-semibold uppercase leading-none tracking-[0.02em] text-black">
 			{label}
 		</h3>
-		<p class="project-card__tags text-[0.75rem] font-medium uppercase leading-snug tracking-[0.04em] text-black/45">
-			{tagLine}
-		</p>
+
+		<img
+			src="/images/icons/arrow.svg"
+			alt=""
+			width="20"
+			height="16"
+			class="project-card__arrow w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+			aria-hidden="true"
+		/>
 	</div>
 </a>
+
+<style is:global>
+	.project-card__title {
+		font-size: 1.4rem;
+		font-weight: 600;
+	}
+</style>

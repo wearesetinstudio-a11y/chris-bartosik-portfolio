@@ -3,26 +3,35 @@ interface Props {
 	href?: string;
 	label?: string;
 	variant?: 'light' | 'dark';
+	size?: 'default' | 'large';
 }
 
-const { href = '/#contact', label = 'Work with us', variant = 'light' } = Astro.props;
+const { href = '/#contact', label = 'Work with us', variant = 'light', size = 'default' } = Astro.props;
 
 const isDark = variant === 'dark';
 const textColor = isDark ? 'text-black' : 'text-setin-fg';
 const underlineColor = isDark ? 'bg-black' : 'bg-white';
-const lineClass = `flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase ${textColor}`;
+const textSize = size === 'large' ? 'text-[2rem]' : 'text-[1.2rem]';
+const lineClass = `flex h-[1.5em] items-center leading-[1.15] ${textSize} font-semibold uppercase ${textColor}`;
+const isStatic = size === 'large';
 ---
 
 <div class="work-with-us-button group relative inline-block">
 	<a href={href} class={`relative -mx-1 -my-2 block px-1 py-2 ${textColor}`}>
-		<div class="flex h-[1.5em] flex-col overflow-hidden">
-			<div
-				class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
-			>
+		{
+			isStatic ? (
 				<span class={lineClass}>{label}</span>
-				<span class={lineClass}>{label}</span>
-			</div>
-		</div>
+			) : (
+				<div class="flex h-[1.5em] flex-col overflow-hidden">
+					<div
+						class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
+					>
+						<span class={lineClass}>{label}</span>
+						<span class={lineClass}>{label}</span>
+					</div>
+				</div>
+			)
+		}
 	</a>
 
 	<div

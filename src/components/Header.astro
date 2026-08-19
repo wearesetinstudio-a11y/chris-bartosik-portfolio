@@ -28,7 +28,7 @@ const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
 const isLightBg = theme === 'light-bg';
 
 const nav = [
-	{ href: '/projects', label: 'Case studies', count: projectCount },
+	{ href: '/projects', label: 'Projects', count: projectCount },
 	{ href: '/about', label: 'About us' },
 	{ href: '/articles', label: 'Articles', count: articleCount },
 ];
@@ -48,7 +48,7 @@ const headerClass = waitForIntro
 		headerClass,
 	]}
 >
-	<div class="grid h-[100px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:grid-cols-[1fr_auto_1fr]">
+	<div class="grid h-[72px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:h-[100px] md:grid-cols-[1fr_auto_1fr]">
 		<a
 			href="/"
 			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
@@ -109,30 +109,32 @@ const headerClass = waitForIntro
 
 <div
 	id="mobile-nav-panel"
-	class="mobile-nav-panel pointer-events-none fixed inset-x-0 top-0 z-40 flex h-[100dvh] translate-y-[-100%] flex-col bg-[#131415] px-[var(--page-gutter)] pt-[100px] pb-10 opacity-0"
+	class="mobile-nav-panel fixed inset-x-0 top-0 z-[45] flex h-[100dvh] flex-col justify-center bg-[#131415] px-[var(--page-gutter)] md:hidden"
 	aria-hidden="true"
 >
-	<nav class="flex flex-col gap-8" aria-label="Mobile">
-		{
-			nav.map((item) => {
-				const text =
-					item.count !== undefined ? `${item.label} [${item.count}]` : item.label;
+	<div class="mobile-nav-panel__content flex w-full flex-col gap-10">
+		<nav class="flex flex-col gap-8" aria-label="Mobile">
+			{
+				nav.map((item) => {
+					const text =
+						item.count !== undefined ? `${item.label} [${item.count}]` : item.label;
 
-				return (
-					<a
-						href={item.href}
-						class="mobile-nav-link text-[1.05rem] font-semibold uppercase leading-none text-setin-fg"
-						data-mobile-nav-link
-					>
-						{text}
-					</a>
-				);
-			})
-		}
-	</nav>
+					return (
+						<a
+							href={item.href}
+							class="mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg"
+							data-mobile-nav-link
+						>
+							{text}
+						</a>
+					);
+				})
+			}
+		</nav>
 
-	<div class="mt-auto pt-12" data-mobile-nav-link>
-		<WorkWithUsButton href={workWithUsHref} />
+		<div class="mobile-nav-panel__cta" data-mobile-nav-link>
+			<WorkWithUsButton href={workWithUsHref} size="large" />
+		</div>
 	</div>
 </div>
 
@@ -209,16 +211,21 @@ const headerClass = waitForIntro
 	}
 
 	.mobile-nav-toggle {
+		position: relative;
+		z-index: 50;
 		color: #f5f5f5;
-		transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+		transition: gap 0.6s cubic-bezier(0.76, 0, 0.24, 1);
 	}
 
 	.mobile-nav-toggle__line {
 		display: block;
-		width: 20px;
-		height: 1.5px;
+		width: 48px;
+		height: 2px;
 		background-color: currentColor;
-		transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+		transition:
+			transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+			opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+		will-change: transform, opacity;
 	}
 
 	.site-header--light-bg:not(.header-solid) .mobile-nav-toggle {
@@ -231,17 +238,32 @@ const headerClass = waitForIntro
 	}
 
 	.mobile-nav-toggle.is-open {
-		transform: translateY(10px);
+		gap: 0;
 	}
 
-	.mobile-nav-toggle.is-open .mobile-nav-toggle__line {
-		transform: translateY(4px);
+	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:first-child {
+		transform: translateY(3.5px);
+	}
+
+	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:last-child {
+		transform: translateY(-3.5px);
+		opacity: 0;
+	}
+
+	.mobile-nav-panel__cta .work-with-us-button span {
+		font-size: 2rem;
+		line-height: 1.15;
 	}
 
 	.mobile-nav-panel {
+		pointer-events: none;
+		transform: translateY(-100%);
+		opacity: 0;
+		visibility: hidden;
 		transition:
 			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease;
+			opacity 0.35s ease,
+			visibility 0s linear 0.55s;
 		will-change: transform;
 	}
 
@@ -249,6 +271,11 @@ const headerClass = waitForIntro
 		pointer-events: auto;
 		transform: translateY(0);
 		opacity: 1;
+		visibility: visible;
+		transition:
+			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
+			opacity 0.35s ease,
+			visibility 0s linear 0s;
 	}
 
 	body.mobile-nav-open {

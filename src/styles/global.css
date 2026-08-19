@@ -9,11 +9,13 @@
 	--letter-spacing-body: 0;
 	--letter-spacing-ui: -0.1px;
 	--page-gutter: 16px;
+	--section-padding-y: 100px;
 }
 
 @media (width >= 768px) {
 	:root {
 		--page-gutter: 60px;
+		--section-padding-y: 200px;
 	}
 }
 
@@ -63,6 +65,49 @@ label,
 .text-ui,
 .hero-headline,
 .about-hero__title,
+.project-hero__title {
+	font-weight: 600;
+}
+
+@media (max-width: 767px) {
+	.hero-headline,
+	.about-hero__title {
+		font-size: 2.4rem;
+	}
+}
+
+.clients-heading,
+.projects-heading,
+.testimonials-heading,
+.articles-heading,
+.contact-heading,
+.about-content__heading,
+.about-studio-intro__heading,
+.about-visual__eyebrow,
+.project-content-block__heading,
+.project-overview__heading,
+.section-headline {
+	font-weight: 600;
+}
+
+.project-card__title {
+	font-weight: 600;
+}
+
+@media (max-width: 767px) {
+	.clients-heading,
+	.projects-heading,
+	.testimonials-heading,
+	.articles-heading,
+	.contact-heading,
+	.about-content__heading,
+	.about-studio-intro__heading,
+	.project-content-block__heading,
+	.project-overview__heading,
+	.section-headline {
+		font-size: 1.8rem;
+	}
+}
 .clients-heading,
 .projects-heading,
 .testimonials-heading,

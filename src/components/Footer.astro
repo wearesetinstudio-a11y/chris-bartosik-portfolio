@@ -33,10 +33,10 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			</p>
 		</div>
 
-		<div class="flex flex-wrap gap-x-10 gap-y-4">
+		<div class="footer-locations grid w-full grid-cols-3 gap-x-1 gap-y-4 md:flex md:w-auto md:flex-wrap md:gap-x-10">
 			{
 				locations.map((location) => (
-					<div class="footer-location flex flex-col gap-1">
+					<div class="footer-location flex min-w-0 flex-col gap-1">
 						<span class="footer-location__label text-[1rem] uppercase text-setin-muted">{location.label}</span>
 						<time
 							class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums"

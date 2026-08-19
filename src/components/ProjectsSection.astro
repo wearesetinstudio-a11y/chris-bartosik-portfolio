@@ -15,8 +15,8 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 <section
 	id="work"
 	class:list={[
-		'relative z-20 px-[var(--page-gutter)] py-[200px]',
-		standalone ? 'bg-white pt-[calc(200px+5.5rem)]' : 'bg-[#F5F5F5]',
+		'relative z-20 px-[var(--page-gutter)] py-[var(--section-padding-y)]',
+		standalone ? 'bg-white pt-[calc(var(--section-padding-y)+5.5rem)]' : 'bg-[#F5F5F5]',
 	]}
 >
 	<div class="mb-16 grid gap-8 md:mb-20 md:grid-cols-2 md:gap-16">
@@ -29,7 +29,7 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		</p>
 	</div>
 
-	<div class="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2">
 		{displayedProjects.map((project) => <ProjectCard project={project} />)}
 		{!standalone && <SeeAllProjectsCard count={projects.length} />}
 	</div>
@@ -45,7 +45,6 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 <style is:global>
 	.projects-heading {
 		font-size: 2rem;
-		font-weight: 500;
 		color: #000000;
 	}
 
@@ -107,6 +106,16 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 	body[data-project-cursor-init='true'] .project-card__cursor-target {
 		cursor: none;
 	}
+
+	@media (max-width: 767px) {
+		.project-cursor {
+			display: none !important;
+		}
+
+		body[data-project-cursor-init='true'] .project-card__cursor-target {
+			cursor: auto;
+		}
+	}
 </style>
 
 <script>
@@ -114,6 +123,12 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		const workSection = document.getElementById('work');
 		if (!workSection) {
 			delete document.body.dataset.projectCursorInit;
+			return;
+		}
+
+		if (window.matchMedia('(max-width: 767px)').matches) {
+			delete document.body.dataset.projectCursorInit;
+			workSection.dataset.projectCursorReady = 'true';
 			return;
 		}
 
