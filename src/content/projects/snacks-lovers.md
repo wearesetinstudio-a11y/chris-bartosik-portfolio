@@ -11,7 +11,7 @@ heroSubtitle: |-
   and fearless snack culture
 overviewLabel: 'Overview'
 overviewTitle: 'Turning playful energy into a scalable brand system'
-overviewText: 'Snacks Lovers needed an identity that could match the bold personality of their products without losing clarity across packaging, digital touchpoints, and retail environments. We built a flexible visual language that feels loud, joyful, and unmistakably ownable.'
+overviewText: 'Snacks Lovers needed an identity that could match the bold personality of their products without losing clarity across packaging, digital touchpoints, and retail environments. I designed and developed a functional brand system that feels loud, joyful, and unmistakably ownable.'
 overviewGraphic: '/logos/snacks-lovers.svg'
 service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Food & Beverage'
@@ -25,7 +25,7 @@ challengesText: 'The category is crowded with generic snack branding that relies
 strategyLabel: 'Strategy'
 strategyTitle: 'Designing a visual rhythm as bold as the product'
 strategyText: |-
-  We anchored the identity in a strong logotype and a modular graphic system that can stretch from social content to physical packaging without losing impact.
+  I anchored the identity in a strong logotype and a modular graphic system that can stretch from social content to physical packaging without losing impact.
 
   Color, typography, and layout rules were built to support rapid campaign production while keeping the brand instantly recognizable in competitive retail environments.
 summaryLabel: 'Summary'

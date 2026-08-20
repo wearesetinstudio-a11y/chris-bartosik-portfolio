@@ -1,3 +1,7 @@
+---
+import { t } from '../../utils/i18n.ts';
+---
+
 <section id="about-hero" class="about-hero relative min-h-[68vh] overflow-hidden md:min-h-[96vh]">
 	<div id="about-hero-visual" class="about-hero-visual absolute inset-0 overflow-hidden">
 		<div
@@ -5,10 +9,9 @@
 			class="about-hero-parallax__layer pointer-events-none absolute inset-x-0"
 		>
 			<picture>
-				<source srcset="/brothers-intro.webp" type="image/webp" />
 				<img
-					src="/brothers-intro.webp"
-					alt="The two founders of Setin Studio"
+					src="/chris.webp"
+					alt="Chris Bartosik"
 					width="1920"
 					height="1080"
 					class="about-hero-parallax__image h-full w-full object-cover object-[center_22%] grayscale"
@@ -35,15 +38,17 @@
 			<div class="block overflow-hidden">
 				<span
 					class="hero-reveal-line block translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+					data-i18n="aboutPage.line1"
 				>
-					Two brothers,
+					{t('aboutPage.line1', 'en')}
 				</span>
 			</div>
 			<div class="block overflow-hidden">
 				<span
 					class="hero-reveal-line block translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+					data-i18n="aboutPage.line2"
 				>
-					one vision
+					{t('aboutPage.line2', 'en')}
 				</span>
 			</div>
 		</h1>

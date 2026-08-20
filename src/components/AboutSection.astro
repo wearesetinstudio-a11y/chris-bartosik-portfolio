@@ -1,15 +1,15 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
+import { t } from '../utils/i18n.ts';
 ---
 
 <section id="about" class="about-section relative z-20 bg-[#131415]">
 	<div id="about-visual" class="about-visual relative overflow-hidden">
 		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none absolute inset-x-0">
 			<picture>
-				<source srcset="/brothers-intro.webp" type="image/webp" />
 				<img
-					src="/brothers-intro.webp"
-					alt="The two founders of Setin Studio"
+					src="/chris.webp"
+					alt="Chris Bartosik"
 					width="1920"
 					height="1080"
 					class="about-parallax__image h-full w-full object-cover object-[center_22%] grayscale"
@@ -33,10 +33,9 @@ import WorkWithUsButton from './WorkWithUsButton.astro';
 		<div
 			class="about-visual__content relative z-10 flex h-[420px] flex-col justify-end gap-6 px-[var(--page-gutter)] pb-10 pt-20 md:grid md:h-[600px] md:grid-cols-2 md:items-end md:gap-16 md:pb-16 md:pt-24"
 		>
-			<p class="about-visual__eyebrow">Our story</p>
-			<p class="about-visual__intro max-w-md leading-relaxed text-white md:ml-auto">
-				We are two brothers who turned a shared passion into a studio dedicated to quality. We
-				combine years of global experience to build digital products that truly last.
+			<p class="about-visual__eyebrow" data-i18n="about.eyebrow">{t('about.eyebrow', 'en')}</p>
+			<p class="about-visual__intro max-w-md leading-relaxed text-white md:ml-auto" data-i18n="about.intro">
+				{t('about.intro', 'en')}
 			</p>
 		</div>
 	</div>
@@ -46,28 +45,23 @@ import WorkWithUsButton from './WorkWithUsButton.astro';
 		class="about-content grid min-w-0 gap-6 px-[var(--page-gutter)] py-[var(--section-padding-y)] md:grid-cols-2 md:gap-20"
 	>
 		<h2 id="about-heading" class="about-content__heading min-w-0 w-full max-w-full uppercase leading-[1.15] md:max-w-lg">
-			<span data-reveal-line>
-				We believe that a great brand is built on two things – a clear vision and a solid foundation.
+			<span data-reveal-line data-i18n="about.heading">
+				{t('about.heading', 'en')}
 			</span>
 		</h2>
 
 		<div class="about-content__body min-w-0 md:pt-2">
 			<div class="space-y-6 leading-relaxed text-setin-muted">
-				<p>
-					In our studio, we create digital spaces that tell your story. With 15 years of combined
-					experience, we've worked with brands from Poland to the LatAm, helping them stand out.
+				<p data-i18n="about.body1">
+					{t('about.body1', 'en')}
 				</p>
-				<p>
-					Our work is a mix of two worlds. We look at the human side of your business to understand
-					your goals, and then we use high-end technology to make them real. Because we are
-					brothers, we work as one. This means your project is always consistent, from the first
-					sketch to the final line of code. We are here to help you grow and leave a mark on the
-					digital world.
+				<p data-i18n="about.body2">
+					{t('about.body2', 'en')}
 				</p>
 			</div>
 
 			<div class="mt-12">
-				<WorkWithUsButton href="/about" label="Read more about us" />
+				<WorkWithUsButton href="/about" label={t('about.readMore', 'en')} i18nKey="about.readMore" />
 			</div>
 		</div>
 	</div>
@@ -162,8 +156,13 @@ import WorkWithUsButton from './WorkWithUsButton.astro';
 <script>
 	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
 
+	import { t } from '../utils/i18n.ts';
+
 	function wrapLetters(element: HTMLElement) {
 		if (element.querySelector('.reveal-char')) return;
+
+		const key = element.dataset.i18n;
+		if (key) element.textContent = t(key);
 
 		const text = element.textContent ?? '';
 		element.textContent = '';

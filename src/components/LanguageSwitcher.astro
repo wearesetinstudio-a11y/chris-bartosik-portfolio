@@ -1,0 +1,81 @@
+---
+import { LOCALES, localeMeta } from '../utils/i18n.ts';
+---
+
+<div class="lang-switcher flex items-center gap-3" role="group" aria-label="Language">
+	{
+		LOCALES.map((locale, index) => (
+			<>
+				{index > 0 && <span class="lang-switcher__sep" aria-hidden="true">/</span>}
+				<button
+					type="button"
+					class="lang-switcher__btn"
+					data-locale-option={locale}
+					aria-label={localeMeta[locale].label}
+				>
+					{localeMeta[locale].label}
+				</button>
+			</>
+		))
+	}
+</div>
+
+<style>
+	.lang-switcher__btn {
+		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		line-height: 1;
+		text-transform: uppercase;
+		color: currentColor;
+		opacity: 0.38;
+		transition: opacity 0.25s ease;
+	}
+
+	.lang-switcher__btn:hover,
+	.lang-switcher__btn:focus-visible,
+	.lang-switcher__btn.is-active {
+		opacity: 1;
+	}
+
+	.lang-switcher__sep {
+		font-size: 0.72rem;
+		letter-spacing: 0;
+		opacity: 0.22;
+	}
+</style>
+
+<script>
+	import { getLocale, isLocale, setLocale } from '../utils/i18n.ts';
+
+	function syncLanguageSwitcher() {
+		const current = getLocale();
+
+		document.querySelectorAll<HTMLButtonElement>('[data-locale-option]').forEach((button) => {
+			const locale = button.dataset.localeOption;
+			button.classList.toggle('is-active', locale === current);
+			button.setAttribute('aria-pressed', locale === current ? 'true' : 'false');
+		});
+	}
+
+	function initLanguageSwitcher() {
+		document.querySelectorAll<HTMLButtonElement>('[data-locale-option]').forEach((button) => {
+			if (button.dataset.bound === 'true') return;
+			button.dataset.bound = 'true';
+
+			button.addEventListener('click', () => {
+				const locale = button.dataset.localeOption;
+				if (!isLocale(locale) || locale === getLocale()) return;
+				setLocale(locale);
+				window.location.reload();
+			});
+		});
+
+		syncLanguageSwitcher();
+	}
+
+	initLanguageSwitcher();
+	document.addEventListener('astro:page-load', initLanguageSwitcher);
+	document.addEventListener('i18n-applied', syncLanguageSwitcher);
+</script>

@@ -1,6 +1,9 @@
 ---
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import LogoMark from './LogoMark.astro';
+import { t } from '../utils/i18n.ts';
 
 interface Props {
 	projectCount?: number;
@@ -28,9 +31,9 @@ const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
 const isLightBg = theme === 'light-bg';
 
 const nav = [
-	{ href: '/projects', label: 'Projects', count: projectCount },
-	{ href: '/about', label: 'About us' },
-	{ href: '/articles', label: 'Articles', count: articleCount },
+	{ href: '/projects', label: t('nav.projects', 'en'), count: projectCount, i18nKey: 'nav.projects' },
+	{ href: '/about', label: t('nav.about', 'en'), i18nKey: 'nav.about' },
+	{ href: '/articles', label: t('nav.articles', 'en'), count: articleCount, i18nKey: 'nav.articles' },
 ];
 
 const headerClass = waitForIntro
@@ -52,45 +55,31 @@ const headerClass = waitForIntro
 		<a
 			href="/"
 			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
-			aria-label="Setin Studio — home"
+			aria-label={t('nav.homeAria', 'en')}
+			data-i18n-aria="nav.homeAria"
 		>
 			<div class="site-header__logo-mark flex items-center" aria-hidden="true">
-				<img
-					src="/logo-setin.svg"
-					alt=""
-					width="111"
-					height="42"
-					class="site-header__logo-setin h-[28px] w-auto shrink-0"
-				/>
-				<div class="site-header__logo-sygnet-wrap flex shrink-0 items-center justify-center">
-					<img
-						src="/logo-sygnet.svg"
-						alt=""
-						width="51"
-						height="48"
-						class="site-header__logo-sygnet h-[30px] w-auto"
-					/>
-				</div>
-				<img
-					src="/logo-studio.svg"
-					alt=""
-					width="143"
-					height="42"
-					class="site-header__logo-studio h-[28px] w-auto shrink-0"
-				/>
+				<LogoMark size="nav" />
 			</div>
 		</a>
 
 		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10" aria-label="Main">
 			{
 				nav.map((item) => (
-					<RollingLink href={item.href} label={item.label} count={item.count} inverted={isLightBg} />
+					<RollingLink
+						href={item.href}
+						label={item.label}
+						count={item.count}
+						inverted={isLightBg}
+						i18nKey={item.i18nKey}
+					/>
 				))
 			}
 		</nav>
 
-		<div class="hidden justify-end md:flex">
-			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} />
+		<div class="hidden items-center justify-end gap-8 md:flex">
+			<LanguageSwitcher />
+			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
 		</div>
 
 		<button
@@ -99,7 +88,8 @@ const headerClass = waitForIntro
 			class="mobile-nav-toggle relative -mr-1 flex h-10 w-10 flex-col items-end justify-center gap-[5px] md:hidden"
 			aria-expanded="false"
 			aria-controls="mobile-nav-panel"
-			aria-label="Open menu"
+			aria-label={t('nav.openMenu', 'en')}
+			data-i18n-aria="nav.openMenu"
 		>
 			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
 			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
@@ -124,6 +114,8 @@ const headerClass = waitForIntro
 							href={item.href}
 							class="mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg"
 							data-mobile-nav-link
+							data-i18n={item.i18nKey}
+							data-i18n-count={item.count}
 						>
 							{text}
 						</a>
@@ -132,8 +124,9 @@ const headerClass = waitForIntro
 			}
 		</nav>
 
-		<div class="mobile-nav-panel__cta" data-mobile-nav-link>
-			<WorkWithUsButton href={workWithUsHref} size="large" />
+		<div class="mobile-nav-panel__cta flex flex-col items-start gap-10" data-mobile-nav-link>
+			<LanguageSwitcher />
+			<WorkWithUsButton href={workWithUsHref} size="large" i18nKey="cta.workWithMe" />
 		</div>
 	</div>
 </div>
@@ -143,43 +136,25 @@ const headerClass = waitForIntro
 		background-color: #131415;
 	}
 
-	.site-header__logo-mark {
-		gap: 0.5rem;
-		transition: gap 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	.site-header__logo-text {
+		white-space: nowrap;
 	}
 
-	.site-header__logo-setin,
-	.site-header__logo-studio {
-		max-width: 9rem;
-		opacity: 1;
-		overflow: hidden;
-		transition:
-			max-width 0.5s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			margin 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	.site-header--light-bg:not(.header-solid) .site-header__logo-text {
+		color: #000000;
 	}
 
-	.site-header__logo-sygnet-wrap {
-		transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+	.site-header--light-bg.header-solid .site-header__logo-text {
+		color: #f5f5f5;
 	}
 
-	.site-header.header-logo-compact .site-header__logo-mark {
-		gap: 0;
+	.site-header--light-bg:not(.header-solid) .lang-switcher {
+		color: #000000;
 	}
 
-	.site-header.header-logo-compact .site-header__logo-setin,
-	.site-header.header-logo-compact .site-header__logo-studio {
-		max-width: 0;
-		opacity: 0;
-		margin-inline: 0;
-	}
-
-	.site-header--light-bg:not(.header-solid) .site-header__logo-mark img {
-		filter: brightness(0);
-	}
-
-	.site-header--light-bg.header-solid .site-header__logo-mark img {
-		filter: none;
+	.site-header--light-bg.header-solid .lang-switcher,
+	.site-header:not(.site-header--light-bg) .lang-switcher {
+		color: #f5f5f5;
 	}
 
 	.site-header--light-bg:not(.header-solid) .rolling-link,
@@ -210,8 +185,9 @@ const headerClass = waitForIntro
 		background-color: #ffffff !important;
 	}
 
-	body.mobile-nav-open .site-header--light-bg .site-header__logo-mark img {
-		filter: none;
+	body.mobile-nav-open .site-header--light-bg .site-header__logo-text,
+	body.mobile-nav-open .site-header--light-bg .lang-switcher {
+		color: #f5f5f5;
 	}
 
 	body.mobile-nav-open .site-header--light-bg .mobile-nav-toggle {
@@ -300,10 +276,6 @@ const headerClass = waitForIntro
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.site-header__logo-mark,
-		.site-header__logo-setin,
-		.site-header__logo-studio,
-		.site-header__logo-sygnet-wrap,
 		.mobile-nav-toggle,
 		.mobile-nav-toggle__line,
 		.mobile-nav-panel {
@@ -314,6 +286,7 @@ const headerClass = waitForIntro
 
 <script>
 	import { hasCompletedIntro } from '../scripts/introState.ts';
+	import { t } from '../utils/i18n.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
 	let mobileNavCleanup: (() => void) | null = null;
@@ -357,8 +330,6 @@ const headerClass = waitForIntro
 
 		function updateHeaderSolid() {
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
-			const isLogoCompact = window.scrollY > 40;
-			header.classList.toggle('header-logo-compact', isLogoCompact && !menuOpen);
 
 			if (menuOpen) {
 				header.classList.add('header-solid');
@@ -366,12 +337,12 @@ const headerClass = waitForIntro
 			}
 
 			if (isLightBg) {
-				header.classList.toggle('header-solid', isLogoCompact);
+				header.classList.toggle('header-solid', window.scrollY > 40);
 				return;
 			}
 
 			if (!headline) {
-				header.classList.toggle('header-solid', isLogoCompact);
+				header.classList.toggle('header-solid', window.scrollY > 40);
 				return;
 			}
 
@@ -411,7 +382,8 @@ const headerClass = waitForIntro
 
 		toggle.classList.remove('is-open');
 		toggle.setAttribute('aria-expanded', 'false');
-		toggle.setAttribute('aria-label', 'Open menu');
+		toggle.setAttribute('aria-label', t('nav.openMenu'));
+		toggle.dataset.i18nAria = 'nav.openMenu';
 		panel.classList.remove('is-open');
 		panel.setAttribute('aria-hidden', 'true');
 		unlockBodyScroll();
@@ -435,7 +407,8 @@ const headerClass = waitForIntro
 			panel.classList.toggle('is-open', isOpen);
 			panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
 			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-			toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+			toggle.setAttribute('aria-label', isOpen ? t('nav.closeMenu') : t('nav.openMenu'));
+			toggle.dataset.i18nAria = isOpen ? 'nav.closeMenu' : 'nav.openMenu';
 
 			if (isOpen) {
 				lockBodyScroll();

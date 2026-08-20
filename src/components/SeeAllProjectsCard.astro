@@ -1,4 +1,6 @@
 ---
+import { t } from '../utils/i18n.ts';
+
 interface Props {
 	count: number;
 	href?: string;
@@ -6,7 +8,7 @@ interface Props {
 
 const { count, href = '/projects' } = Astro.props;
 
-const label = `See all projects [${count}]`;
+const label = `${t('work.seeAll', 'en')} [${count}]`;
 const lineClass =
 	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-semibold uppercase text-black md:text-[1.6rem]';
 ---
@@ -20,8 +22,8 @@ const lineClass =
 				<span
 					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
 				>
-					<span class={lineClass}>{label}</span>
-					<span class={lineClass}>{label}</span>
+					<span class={lineClass} data-i18n="work.seeAll" data-i18n-count={count}>{label}</span>
+					<span class={lineClass} data-i18n="work.seeAll" data-i18n-count={count}>{label}</span>
 				</span>
 			</span>
 

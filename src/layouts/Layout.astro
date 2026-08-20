@@ -1,18 +1,20 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import { t } from '../utils/i18n.ts';
 
 interface Props {
 	title?: string;
 	description?: string;
 }
 
+const brandName = t('meta.title', 'en');
 const {
-	title = 'Setin Studio',
-	description = 'Multidisciplinary studio forging distinct identities, seamless interfaces, and high-performance builds.',
+	title = brandName,
+	description = t('meta.description', 'en'),
 } = Astro.props;
 
-const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`;
+const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 ---
 
 <!doctype html>
@@ -81,26 +83,26 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 			aria-hidden="true"
 		>
 			<div class="sygnet-flip-stage">
-				<img
-					src="/logo-sygnet.svg"
-					alt=""
-					width="64"
-					height="64"
-					class="page-transition-overlay__logo sygnet-flip-x h-16 w-auto"
-					decoding="async"
-				/>
+				<p class="preloader-name sygnet-flip-x" aria-label="Chris Bartosik">
+					<span class="preloader-name__plain">CHRI</span><span class="preloader-name__glitch" data-text="S BAR">S BAR</span><span class="preloader-name__plain">TOSIK</span>
+				</p>
 			</div>
 		</div>
 
 		<slot />
 
 		<script>
+			import { initI18n } from '../scripts/initI18n.ts';
 			import { initGlobalPreloader } from '../scripts/initGlobalPreloader.ts';
 			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
 
+			initI18n();
 			initPageTransitionOverlay();
 			initGlobalPreloader();
-			document.addEventListener('astro:page-load', initGlobalPreloader);
+			document.addEventListener('astro:page-load', () => {
+				initI18n();
+				initGlobalPreloader();
+			});
 		</script>
 	</body>
 </html>

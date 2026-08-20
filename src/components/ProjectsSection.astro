@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
 import SeeAllProjectsCard from './SeeAllProjectsCard.astro';
+import { t } from '../utils/i18n.ts';
 
 interface Props {
 	projects: CollectionEntry<'projects'>[];
@@ -21,11 +22,10 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 >
 	<div class="mb-10 grid gap-6 md:mb-20 md:grid-cols-2 md:gap-16">
 		<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
-			<span data-reveal-line>Our work</span>
+			<span data-reveal-line data-i18n="work.heading">{t('work.heading', 'en')}</span>
 		</h2>
-		<p class="projects-description max-w-md leading-relaxed text-black/55 md:ml-auto">
-			Explore our latest work transforming complex visions into seamless digital experiences. Proven
-			solutions, built to lead and engineered to endure.
+		<p class="projects-description max-w-md leading-relaxed text-black/55 md:ml-auto" data-i18n="work.description">
+			{t('work.description', 'en')}
 		</p>
 	</div>
 
@@ -233,7 +233,14 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		);
 	}
 
+	import { t } from '../utils/i18n.ts';
+
 	function wrapLetters(element: HTMLElement) {
+		const key = element.dataset.i18n;
+		if (key) element.textContent = t(key);
+
+		if (element.querySelector('.reveal-char')) return;
+
 		const text = element.textContent ?? '';
 		element.textContent = '';
 

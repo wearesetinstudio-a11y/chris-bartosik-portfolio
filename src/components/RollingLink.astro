@@ -4,9 +4,10 @@ interface Props {
 	label: string;
 	count?: number;
 	inverted?: boolean;
+	i18nKey?: string;
 }
 
-const { href, label, count, inverted = false } = Astro.props;
+const { href, label, count, inverted = false, i18nKey } = Astro.props;
 const text = count !== undefined ? `${label} [${count}]` : label;
 
 const lineClass = inverted
@@ -25,8 +26,8 @@ const lineClass = inverted
 		<div
 			class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
 		>
-			<span class={lineClass}>{text}</span>
-			<span class={lineClass}>{text}</span>
+			<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>{text}</span>
+			<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>{text}</span>
 		</div>
 	</div>
 </a>

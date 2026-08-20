@@ -1,6 +1,8 @@
 ---
+import { t } from '../utils/i18n.ts';
+
 const emailHref =
-	'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
+	'mailto:wearesetinstudio@gmail.com?subject=Hello%20Chris!%20:)';
 
 const socialLinks = [
 	{
@@ -30,12 +32,11 @@ const socialLinks = [
 	<div class="grid gap-20 lg:grid-cols-2 lg:items-start lg:gap-24">
 		<div class="flex flex-col">
 			<h2 id="contact-heading" class="contact-heading max-w-md uppercase leading-[1.15] text-setin-fg">
-				<span data-reveal-line>Start your legacy</span>
+				<span data-reveal-line data-i18n="contact.heading">{t('contact.heading', 'en')}</span>
 			</h2>
 
-			<p class="contact-description mt-6 max-w-md leading-relaxed text-setin-fg/55">
-				Every great brand begins with a single conversation. Whether you're building from the ground
-				up or redefining your edge, let's create something that lasts.
+			<p class="contact-description mt-6 max-w-md leading-relaxed text-setin-fg/55" data-i18n="contact.description">
+				{t('contact.description', 'en')}
 			</p>
 
 			<div id="contact-email-wrap" class="contact-email-cta-wrap mt-10">
@@ -49,13 +50,15 @@ const socialLinks = [
 							<span class="contact-email-cta__roll-inner flex flex-col">
 								<span
 									class="contact-email-cta__label-line contact-email-cta__label-line--default flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
+									data-i18n="contact.sendEmail"
 								>
-									Send us e-mail
+									{t('contact.sendEmail', 'en')}
 								</span>
 								<span
 									class="contact-email-cta__label-line contact-email-cta__label-line--hover flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
+									data-i18n="contact.sendEmail"
 								>
-									Send us e-mail
+									{t('contact.sendEmail', 'en')}
 								</span>
 							</span>
 						</span>
@@ -218,7 +221,12 @@ const socialLinks = [
 </style>
 
 <script>
+	import { t } from '../utils/i18n.ts';
+
 	function wrapLetters(element: HTMLElement) {
+		const key = element.dataset.i18n;
+		if (key) element.textContent = t(key);
+
 		const text = element.textContent ?? '';
 		element.textContent = '';
 

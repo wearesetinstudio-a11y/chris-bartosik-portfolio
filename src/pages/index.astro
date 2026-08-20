@@ -10,6 +10,7 @@ import ArticlesSection from '../components/ArticlesSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { t } from '../utils/i18n.ts';
 
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
@@ -41,19 +42,35 @@ const { projectCount, articleCount } = await getSiteCounts();
 		<section id="hero-section" class="relative flex min-h-[100dvh] flex-col justify-end px-[var(--page-gutter)] pb-[80px] pt-28">
 			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
 				<div class="min-w-0 w-full">
+					<p
+						class="hero-eyebrow mb-5 text-[0.7rem] font-medium uppercase tracking-widest text-white/40"
+						data-i18n="hero.eyebrow"
+					>
+						{t('hero.eyebrow', 'en')}
+					</p>
 					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
 						<div class="hero-reveal-mask">
 							<span
 								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+								data-i18n="hero.line1"
 							>
-								Digital legacies
+								{t('hero.line1', 'en')}
 							</span>
 						</div>
 						<div class="hero-reveal-mask">
 							<span
 								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+								data-i18n="hero.line2"
 							>
-								for the outliers
+								{t('hero.line2', 'en')}
+							</span>
+						</div>
+						<div class="hero-reveal-mask">
+							<span
+								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+								data-i18n="hero.line3"
+							>
+								{t('hero.line3', 'en')}
 							</span>
 						</div>
 					</h1>
@@ -62,9 +79,9 @@ const { projectCount, articleCount } = await getSiteCounts();
 				<div class="block overflow-hidden lg:ml-auto lg:pb-1">
 					<p
 						class="hero-description hero-reveal-desc max-w-sm translate-y-full transform opacity-0 transition-all delay-300 duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+						data-i18n="hero.description"
 					>
-						Rooted in heritage. Built for the future. A multidisciplinary studio forging distinct
-						identities, seamless interfaces, and high-performance builds.
+						{t('hero.description', 'en')}
 					</p>
 				</div>
 			</div>
@@ -236,7 +253,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 		.hero-headline {
 			width: 70vw;
 			max-width: 70vw;
-			font-size: 3.8rem;
+			font-size: clamp(2.35rem, 4.1vw, 3.8rem);
 		}
 
 		.hero-headline .hero-reveal-line {

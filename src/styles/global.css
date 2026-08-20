@@ -82,7 +82,7 @@ label,
 
 @media (max-width: 767px) {
 	.hero-headline {
-		font-size: clamp(1.875rem, 10.2vw, 2.4rem);
+		font-size: clamp(1.5rem, 7.6vw, 2.2rem);
 	}
 
 	.about-hero__title {
@@ -194,8 +194,110 @@ body.intro-active {
 	}
 }
 
+.preloader-name {
+	margin: 0;
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	white-space: nowrap;
+	font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+	font-size: clamp(1.35rem, 3.6vw, 2.15rem);
+	font-weight: 600;
+	letter-spacing: 0.22em;
+	line-height: 1;
+	text-transform: uppercase;
+	color: #f5f5f5;
+}
+
+.preloader-name__glitch {
+	position: relative;
+	display: inline-block;
+}
+
+.preloader-name__glitch::before,
+.preloader-name__glitch::after {
+	content: attr(data-text);
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	overflow: hidden;
+	color: #f5f5f5;
+	background-color: #131415;
+}
+
+html.intro-pending .preloader-name__glitch::before,
+.page-transition-overlay.is-active .preloader-name__glitch::before,
+.sygnet-flip-x.is-flipping .preloader-name__glitch::before {
+	text-shadow: -2px 0 rgba(255, 255, 255, 0.55);
+	animation: preloader-glitch-a 1.15s infinite linear alternate-reverse;
+}
+
+html.intro-pending .preloader-name__glitch::after,
+.page-transition-overlay.is-active .preloader-name__glitch::after,
+.sygnet-flip-x.is-flipping .preloader-name__glitch::after {
+	text-shadow: 2px 0 rgba(180, 180, 180, 0.7);
+	animation: preloader-glitch-b 0.9s infinite linear alternate-reverse;
+}
+
+@keyframes preloader-glitch-a {
+	0% {
+		transform: translate(0, 0);
+		clip-path: inset(0 0 68% 0);
+	}
+	20% {
+		transform: translate(-3px, 1px);
+		clip-path: inset(12% 0 42% 0);
+	}
+	40% {
+		transform: translate(3px, -1px);
+		clip-path: inset(38% 0 18% 0);
+	}
+	60% {
+		transform: translate(-2px, 0);
+		clip-path: inset(8% 0 58% 0);
+	}
+	80% {
+		transform: translate(2px, 1px);
+		clip-path: inset(52% 0 8% 0);
+	}
+	100% {
+		transform: translate(0, 0);
+		clip-path: inset(0 0 68% 0);
+	}
+}
+
+@keyframes preloader-glitch-b {
+	0% {
+		transform: translate(0, 0);
+		clip-path: inset(62% 0 0 0);
+	}
+	25% {
+		transform: translate(3px, -1px);
+		clip-path: inset(28% 0 36% 0);
+	}
+	50% {
+		transform: translate(-3px, 1px);
+		clip-path: inset(48% 0 12% 0);
+	}
+	75% {
+		transform: translate(2px, 0);
+		clip-path: inset(18% 0 48% 0);
+	}
+	100% {
+		transform: translate(0, 0);
+		clip-path: inset(62% 0 0 0);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.sygnet-flip-x {
+		animation: none !important;
+	}
+
+	.preloader-name__glitch::before,
+	.preloader-name__glitch::after {
+		content: none;
 		animation: none !important;
 	}
 }

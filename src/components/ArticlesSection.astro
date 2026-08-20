@@ -1,6 +1,7 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import { getSortedArticles } from '../utils/getArticles.ts';
+import { t } from '../utils/i18n.ts';
 
 interface Props {
 	standalone?: boolean;
@@ -21,23 +22,24 @@ const displayedArticles = standalone ? allArticles : featuredArticles;
 >
 	<div class="mb-16 grid gap-6 md:mb-20 md:grid-cols-2 md:items-start md:gap-16">
 		<h2 id="articles-heading" class="articles-heading max-w-md uppercase leading-[1.15]">
-			<span data-reveal-line>Inside</span>
+			<span data-reveal-line data-i18n="articles.line1">{t('articles.line1', 'en')}</span>
 			<br />
-			<span data-reveal-line>the process</span>
+			<span data-reveal-line data-i18n="articles.line2">{t('articles.line2', 'en')}</span>
 		</h2>
 
 		<div class="md:ml-auto md:max-w-md">
-			<p class="articles-description leading-relaxed text-black/55">
-				We're opening our internal documentation to showcase the systems, technical shifts, and
-				strategic decisions that drive our studio.
+			<p class="articles-description leading-relaxed text-black/55" data-i18n="articles.description">
+				{t('articles.description', 'en')}
 			</p>
 			{
 				!standalone && (
 					<div class="mt-8">
 						<WorkWithUsButton
 							href="/articles"
-							label={`View more articles [${allArticles.length}]`}
+							label={`${t('articles.viewMore', 'en')} [${allArticles.length}]`}
 							variant="dark"
+							i18nKey="articles.viewMore"
+							count={allArticles.length}
 						/>
 					</div>
 				)
@@ -89,7 +91,12 @@ const displayedArticles = standalone ? allArticles : featuredArticles;
 </style>
 
 <script>
+	import { t } from '../utils/i18n.ts';
+
 	function wrapLetters(element: HTMLElement) {
+		const key = element.dataset.i18n;
+		if (key) element.textContent = t(key);
+
 		const text = element.textContent ?? '';
 		element.textContent = '';
 

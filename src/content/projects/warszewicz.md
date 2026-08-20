@@ -8,7 +8,7 @@ order: 6
 heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: 'A refined identity shaped by detail, contrast, and editorial restraint'
 overviewTitle: 'Precision in every composition'
-overviewText: 'Warszewicz required a brand language that felt elevated and deliberate — rooted in craft, but flexible enough to move across print, digital, and campaign environments. We developed a cohesive system where typography, spacing, and imagery work together with quiet confidence.'
+overviewText: 'Warszewicz required a brand language that felt elevated and deliberate — rooted in craft, but flexible enough to move across print, digital, and campaign environments. I designed and developed a functional brand system where typography, spacing, and imagery work together with quiet confidence.'
 service: 'Brand Identity, Art Direction, Print Design'
 industry: 'Creative Studio'
 market: 'Poland'

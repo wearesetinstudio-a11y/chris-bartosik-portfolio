@@ -5,11 +5,12 @@ import Footer from '../../components/Footer.astro';
 import ArticlesSection from '../../components/ArticlesSection.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
+import { t } from '../../utils/i18n.ts';
 
 const { projectCount, articleCount } = await getSiteCounts();
 ---
 
-<Layout title="Articles" description="Inside the process — articles and insights from Setin Studio.">
+<Layout title={t('articles.pageTitle', 'en')} description={t('articles.pageDescription', 'en')}>
 	<Header theme="light-bg" projectCount={projectCount} articleCount={articleCount} />
 
 	<main class="flex-1">

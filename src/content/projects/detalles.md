@@ -8,7 +8,7 @@ order: 4
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'
 overviewTitle: 'Crafted with intention'
-overviewText: 'Detalles required an identity that felt crafted and intentional — equal parts editorial and commercial. We delivered a cohesive brand language spanning logo, typography, and print collateral, giving the studio a distinct voice in a crowded market.'
+overviewText: 'Detalles required an identity that felt crafted and intentional — equal parts editorial and commercial. I designed and developed a functional brand system spanning logo, typography, and print collateral, giving the studio a distinct voice in a crowded market.'
 overviewGraphic: '/logos/detalles.svg'
 service: 'Brand Identity, Print Design, Art Direction'
 industry: 'Creative Studio'
