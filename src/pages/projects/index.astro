@@ -9,11 +9,11 @@ import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { t } from '../../utils/i18n.ts';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 ---
 
 <Layout title={t('work.pageTitle', 'en')} description={t('work.pageDescription', 'en')}>
-	<Header theme="light-bg" projectCount={projectCount} articleCount={articleCount} />
+	<Header theme="light-bg" projectCount={projectCount} />
 
 	<main class="flex-1">
 		<ProjectsSection projects={projects} standalone />

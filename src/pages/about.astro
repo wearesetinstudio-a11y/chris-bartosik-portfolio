@@ -10,7 +10,7 @@ import ContactSection from '../components/ContactSection.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { t } from '../utils/i18n.ts';
 
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 
 const teamMembers = [
 	{
@@ -31,7 +31,7 @@ const teamMembers = [
 	title={t('about.pageTitle', 'en')}
 	description={t('about.pageDescription', 'en')}
 >
-	<Header projectCount={projectCount} articleCount={articleCount} />
+	<Header projectCount={projectCount} />
 
 	<main class="relative z-20 flex-1">
 		<AboutHero />

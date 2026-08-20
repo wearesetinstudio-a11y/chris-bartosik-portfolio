@@ -18,7 +18,6 @@ export const dictionary = {
 		nav: {
 			projects: 'Projects',
 			about: 'About me',
-			articles: 'Articles',
 			openMenu: 'Open menu',
 			closeMenu: 'Close menu',
 			homeAria: 'Chris Bartosik — home',
@@ -73,15 +72,6 @@ export const dictionary = {
 			introBody2:
 				'I do not believe in one-size-fits-all services. Instead, I partner with you to craft custom digital tools, scalable platforms, and brand identities that mean something to your audience and bring measurable value to your business.',
 		},
-		articles: {
-			line1: 'Inside',
-			line2: 'the process',
-			description:
-				'I am opening my internal documentation to showcase the systems, technical shifts, and strategic decisions that drive my practice.',
-			viewMore: 'View more articles',
-			pageTitle: 'Articles',
-			pageDescription: 'Inside the process — articles and insights from Chris Bartosik.',
-		},
 		contact: {
 			heading: 'Start your legacy',
 			description:
@@ -101,7 +91,6 @@ export const dictionary = {
 		nav: {
 			projects: 'Projekty',
 			about: 'O mnie',
-			articles: 'Artykuły',
 			openMenu: 'Otwórz menu',
 			closeMenu: 'Zamknij menu',
 			homeAria: 'Chris Bartosik — strona główna',
@@ -156,15 +145,6 @@ export const dictionary = {
 			introBody2:
 				'Nie wierzę w usługi „jeden rozmiar dla wszystkich”. Zamiast tego partneruję z Tobą, by tworzyć szyte na miarę narzędzia cyfrowe, skalowalne platformy i tożsamości marek, które coś znaczą dla odbiorców i wnoszą mierzalną wartość do biznesu.',
 		},
-		articles: {
-			line1: 'Wewnątrz',
-			line2: 'procesu',
-			description:
-				'Otwieram swoją wewnętrzną dokumentację, by pokazać systemy, przesunięcia techniczne i decyzje strategiczne, które napędzają moją praktykę.',
-			viewMore: 'Więcej artykułów',
-			pageTitle: 'Artykuły',
-			pageDescription: 'Wewnątrz procesu — artykuły i wnioski Chrisa Bartosika.',
-		},
 		contact: {
 			heading: 'Zacznij swoją spuściznę',
 			description:
@@ -184,7 +164,6 @@ export const dictionary = {
 		nav: {
 			projects: 'Proyectos',
 			about: 'Sobre mí',
-			articles: 'Artículos',
 			openMenu: 'Abrir menú',
 			closeMenu: 'Cerrar menú',
 			homeAria: 'Chris Bartosik — inicio',
@@ -238,15 +217,6 @@ export const dictionary = {
 				'Trabajo de forma independiente, rápido, sin fricción y con total consistencia. Me enfoco en transformar negocios a través de branding estratégico, diseño UI/UX y desarrollo premium.',
 			introBody2:
 				'No creo en servicios de talla única. En su lugar, trabajo contigo para crear herramientas digitales a medida, plataformas escalables e identidades de marca que significan algo para tu audiencia y aportan valor medible a tu negocio.',
-		},
-		articles: {
-			line1: 'Dentro',
-			line2: 'del proceso',
-			description:
-				'Abro mi documentación interna para mostrar los sistemas, los cambios técnicos y las decisiones estratégicas que impulsan mi práctica.',
-			viewMore: 'Ver más artículos',
-			pageTitle: 'Artículos',
-			pageDescription: 'Dentro del proceso — artículos e ideas de Chris Bartosik.',
 		},
 		contact: {
 			heading: 'Empieza tu legado',

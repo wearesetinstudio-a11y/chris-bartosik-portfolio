@@ -1,6 +1,5 @@
 ---
 import ProjectInfoRow from './ProjectInfoRow.astro';
-import ProjectRelatedArticles from './ProjectRelatedArticles.astro';
 
 interface Props {
 	label?: string;
@@ -10,7 +9,6 @@ interface Props {
 	graphicType?: 'image' | 'video';
 	graphicAlt: string;
 	rows: { label: string; value: string; isLink?: boolean }[];
-	relatedArticles?: { slug: string; title: string }[];
 }
 
 const {
@@ -21,7 +19,6 @@ const {
 	graphicType = 'image',
 	graphicAlt,
 	rows,
-	relatedArticles = [],
 } = Astro.props;
 
 const titleChars = title.split('');
@@ -45,30 +42,19 @@ const titleChars = title.split('');
 			<p class="project-overview__text">{text}</p>
 
 			{
-				rows.length > 0 || relatedArticles.length > 0 ? (
-					<div
-						class:list={[
-							'mt-12 overflow-hidden border-t border-black/10 md:mt-16',
-							relatedArticles.length === 0 && 'border-b border-black/10',
-						]}
-					>
-						{
-							rows.length > 0 || relatedArticles.length > 0 ? (
-								<dl class="m-0">
-									{rows.map((row, index) => (
-										<ProjectInfoRow
-											label={row.label}
-											value={row.value}
-											isLink={row.isLink}
-											isLast={index === rows.length - 1 && relatedArticles.length === 0}
-											theme="light"
-										/>
-									))}
-
-									<ProjectRelatedArticles articles={relatedArticles} />
-								</dl>
-							) : null
-						}
+				rows.length > 0 ? (
+					<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
+						<dl class="m-0">
+							{rows.map((row, index) => (
+								<ProjectInfoRow
+									label={row.label}
+									value={row.value}
+									isLink={row.isLink}
+									isLast={index === rows.length - 1}
+									theme="light"
+								/>
+							))}
+						</dl>
 					</div>
 				) : null
 			}

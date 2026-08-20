@@ -3,7 +3,6 @@ import { t } from '../utils/i18n.ts';
 
 const locations = [
 	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
-	{ label: 'Valencia, ES', timezone: 'Europe/Madrid' },
 	{ label: 'Panama, PA', timezone: 'America/Panama' },
 ];
 
@@ -31,7 +30,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			</p>
 		</div>
 
-		<div class="footer-locations grid w-full grid-cols-3 gap-x-1 gap-y-4 md:flex md:w-auto md:flex-wrap md:gap-x-10">
+		<div class="footer-locations grid w-full grid-cols-2 gap-x-1 gap-y-4 md:flex md:w-auto md:flex-wrap md:gap-x-10">
 			{
 				locations.map((location) => (
 					<div class="footer-location flex min-w-0 flex-col gap-1">

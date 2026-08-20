@@ -7,14 +7,12 @@ import { t } from '../utils/i18n.ts';
 
 interface Props {
 	projectCount?: number;
-	articleCount?: number;
 	waitForIntro?: boolean;
 	theme?: 'default' | 'light-bg';
 }
 
 const {
 	projectCount = 0,
-	articleCount = 0,
 	waitForIntro = false,
 	theme = 'default',
 } = Astro.props;
@@ -23,8 +21,6 @@ const hasLocalContact =
 	Astro.url.pathname === '/' ||
 	Astro.url.pathname === '/about' ||
 	Astro.url.pathname === '/projects' ||
-	Astro.url.pathname === '/articles' ||
-	Astro.url.pathname.startsWith('/articles/') ||
 	/^\/projects\/[^/]+$/.test(Astro.url.pathname);
 
 const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
@@ -33,7 +29,6 @@ const isLightBg = theme === 'light-bg';
 const nav = [
 	{ href: '/projects', label: t('nav.projects', 'en'), count: projectCount, i18nKey: 'nav.projects' },
 	{ href: '/about', label: t('nav.about', 'en'), i18nKey: 'nav.about' },
-	{ href: '/articles', label: t('nav.articles', 'en'), count: articleCount, i18nKey: 'nav.articles' },
 ];
 
 const headerClass = waitForIntro
