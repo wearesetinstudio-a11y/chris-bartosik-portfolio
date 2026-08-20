@@ -19,13 +19,23 @@ import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
+	const [projects, articles] = await Promise.all([
+		getCollection('projects'),
+		getCollection('articles'),
+	]);
 	const { articleCount } = await getSiteCounts();
 
 	return projects.map((project) => {
 		const folderName = resolveProjectFolderName(project);
 		const coverFilename = getCoverFilename(project.data.thumbnail);
 		const galleryLayout = buildGalleryLayout(folderName, coverFilename);
+		const relatedArticles = articles
+			.filter((article) => article.data.relatedProject === project.id)
+			.sort((a, b) => a.data.order - b.data.order)
+			.map((article) => ({
+				slug: article.id,
+				title: article.data.title,
+			}));
 
 		return {
 			params: { slug: project.id },
@@ -34,12 +44,13 @@ export async function getStaticPaths() {
 				projectCount: projects.length,
 				articleCount,
 				galleryLayout,
+				relatedArticles,
 			},
 		};
 	});
 }
 
-const { project, projectCount, articleCount, galleryLayout } = Astro.props;
+const { project, projectCount, articleCount, galleryLayout, relatedArticles } = Astro.props;
 const data = project.data;
 
 const title = data.title ?? 'Project';
@@ -128,6 +139,7 @@ const galleryMiddleCount = secondSplit.before.length;
 				graphicType={overviewGraphicType}
 				graphicAlt={client}
 				rows={infoRows}
+				relatedArticles={relatedArticles}
 			/>
 
 			{
