@@ -131,8 +131,8 @@ export function buildGalleryLayout(
 			const parts = files.filter((file) => file.part !== null);
 			const singles = files.filter((file) => file.part === null);
 
-			// Emit the unnumbered file (e.g. 2.webp) as its own full row so sections
-			// can insert between it and the paired frames (2.1 / 2.2).
+			// Emit the unnumbered file (e.g. 2.webp) as its own full row, then
+			// paired frames (2.1 / 2.2) as a grid — sections insert after the whole group.
 			for (const single of singles) {
 				layout.push({
 					kind: 'full',

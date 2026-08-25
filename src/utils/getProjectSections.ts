@@ -10,7 +10,7 @@ export type ProjectSectionFields = {
 
 export type ProjectSection = ProjectSectionFields & {
 	theme?: ProjectSectionTheme;
-	/** Insert after this gallery group's lead frame (e.g. 2 → after 2.webp, before 2.1/2.2). */
+	/** Insert after this full gallery group (e.g. 2 → after 2.webp + 2.1/2.2). */
 	afterGroup?: number;
 };
 
@@ -112,7 +112,9 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 		resolved = legacy.slice(0, 8);
 	}
 
-	// Re-index + re-theme after filter; keep Summary sections last (trailing)
+	// Re-index + re-theme after filter; keep Summary sections last (trailing).
+	// Default rhythm without explicit afterGroup:
+	// group 2 → section 0 → group 3 → section 1 → … → remaining gallery → Summary
 	const content = resolved.filter((section) => !isSummaryLabel(section.label));
 	const summaries = resolved.filter((section) => isSummaryLabel(section.label));
 	const ordered = [...content, ...summaries].slice(0, 8);
@@ -121,7 +123,9 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 		...section,
 		index,
 		theme: themeForSectionIndex(index),
-		afterGroup: isSummaryLabel(section.label) ? undefined : section.afterGroup,
+		afterGroup: isSummaryLabel(section.label)
+			? undefined
+			: section.afterGroup ?? index + 2,
 	}));
 }
 

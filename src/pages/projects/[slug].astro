@@ -115,31 +115,16 @@ const pageDescription =
 	heroSubtitle ||
 	title;
 
-function splitGalleryAfterGroupLead(
+function splitGalleryAfterGroup(
 	blocks: GalleryLayoutBlock[],
 	afterGroup: number,
 ): { before: GalleryLayoutBlock[]; after: GalleryLayoutBlock[] } {
 	const before: GalleryLayoutBlock[] = [];
 	const after: GalleryLayoutBlock[] = [];
-	let passedTargetLead = false;
 
 	for (const block of blocks) {
-		if (block.group < afterGroup) {
-			before.push(block);
-			continue;
-		}
-
-		if (block.group > afterGroup) {
-			after.push(block);
-			continue;
-		}
-
-		if (!passedTargetLead) {
-			before.push(block);
-			passedTargetLead = true;
-		} else {
-			after.push(block);
-		}
+		if (block.group <= afterGroup) before.push(block);
+		else after.push(block);
 	}
 
 	return { before, after };
@@ -148,7 +133,7 @@ function splitGalleryAfterGroupLead(
 const pageSegments = buildProjectPageSegments(
 	pageGalleryLayout,
 	projectSections,
-	splitGalleryAfterGroupLead,
+	splitGalleryAfterGroup,
 );
 
 let galleryMediaCursor = 0;
