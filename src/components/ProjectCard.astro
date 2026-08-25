@@ -11,23 +11,26 @@ interface Props {
 
 const { project, basePath = '/projects' } = Astro.props;
 const { title, client, thumbnail, video, comingSoon = false, tags, categories = [] } = project.data;
-const label = title.toUpperCase();
-const category = tags[0] ?? '';
+const copy = buildProjectCopyBundle(project.data);
+const label = (copy.en.title ?? title).toUpperCase();
+const category = copy.en.category ?? tags[0] ?? '';
 const categoriesAttr = categories.join(',');
 const clientSlug = client
 	.toLowerCase()
 	.replace(/[^a-z0-9]+/g, '-')
 	.replace(/^-|-$/g, '');
-const categoryCopy = buildProjectCopyBundle(project.data);
-const categoryMap =
-	category &&
-	(categoryCopy.pl.category !== category || categoryCopy.pa.category !== category)
-		? JSON.stringify({
-				en: category,
-				pl: categoryCopy.pl.category ?? category,
-				pa: categoryCopy.pa.category ?? category,
-			})
-		: undefined;
+const titleMap = JSON.stringify({
+	en: copy.en.title ?? title,
+	pl: copy.pl.title ?? title,
+	pa: copy.pa.title ?? title,
+});
+const categoryMap = category
+	? JSON.stringify({
+			en: category,
+			pl: copy.pl.category ?? category,
+			pa: copy.pa.category ?? category,
+		})
+	: undefined;
 const thumbnailSrc = thumbnail ? withPublicAssetVersion(thumbnail) : '';
 const videoSrc = video ? withPublicAssetVersion(video) : '';
 const Tag = comingSoon ? 'div' : 'a';
@@ -82,8 +85,8 @@ const Tag = comingSoon ? 'div' : 'a';
 			<h3 class="project-card__title min-w-0 font-semibold uppercase tracking-[0.02em] text-black">
 				<span class="project-card__title-roll">
 					<span class="project-card__title-track">
-						<span class="project-card__title-line">{label}</span>
-						<span class="project-card__title-line" aria-hidden="true">{label}</span>
+						<span class="project-card__title-line" data-locale-copy={titleMap}>{label}</span>
+						<span class="project-card__title-line" aria-hidden="true" data-locale-copy={titleMap}>{label}</span>
 					</span>
 				</span>
 			</h3>
