@@ -38,59 +38,91 @@ type LegacySectionSource = {
 	summaryText?: string;
 };
 
-function normalizeTheme(theme: unknown): ProjectSectionTheme {
-	if (theme === 'dark' || theme === 'muted' || theme === 'light') return theme;
-	return 'light';
+/** Fixed rhythm after overview: dark → light → muted → dark → … */
+const SECTION_THEME_CYCLE: ProjectSectionTheme[] = ['dark', 'light', 'muted'];
+
+function themeForSectionIndex(index: number): ProjectSectionTheme {
+	return SECTION_THEME_CYCLE[index % SECTION_THEME_CYCLE.length];
+}
+
+function isSummaryLabel(label: string): boolean {
+	return /summar|podsum|resultado|resumen/i.test(label);
+}
+
+function stripLabelBrackets(label: string): string {
+	return label.replace(/^\[\s*/, '').replace(/\s*\]$/, '').replace(/\s*\}$/, '').trim();
 }
 
 /** Prefer explicit `sections` (max 8). Fall back to legacy challenge/strategy/summary fields. */
 export function resolveProjectSections(data: LegacySectionSource): ResolvedProjectSection[] {
+	let resolved: ResolvedProjectSection[] = [];
+
 	if (data.sections && data.sections.length > 0) {
-		return data.sections.slice(0, 8).map((section, index) => ({
-			index,
-			label: section.label?.trim() ?? '',
-			title: section.title?.trim() ?? '',
-			text: section.text?.trim() ?? '',
-			theme: normalizeTheme(section.theme),
-			afterGroup: section.afterGroup,
-		})).filter((section) => section.label || section.title || section.text);
+		resolved = data.sections
+			.slice(0, 8)
+			.map((section, index) => {
+				const label = stripLabelBrackets(section.label?.trim() ?? '');
+				const isSummary = isSummaryLabel(label);
+				return {
+					index,
+					label,
+					title: section.title?.trim() ?? '',
+					text: section.text?.trim() ?? '',
+					theme: themeForSectionIndex(index),
+					// Summary is always trailing (after the full gallery)
+					afterGroup: isSummary ? undefined : section.afterGroup,
+				};
+			})
+			.filter((section) => section.label || section.title || section.text);
+	} else {
+		const legacy: ResolvedProjectSection[] = [];
+
+		if (data.challengesTitle || data.challengesText) {
+			legacy.push({
+				index: 0,
+				label: stripLabelBrackets(data.challengesLabel?.trim() || 'Challenges'),
+				title: data.challengesTitle?.trim() ?? '',
+				text: data.challengesText?.trim() ?? '',
+				theme: themeForSectionIndex(0),
+				afterGroup: data.challengesAfterGroup ?? 2,
+			});
+		}
+
+		if (data.strategyTitle || data.strategyText) {
+			legacy.push({
+				index: legacy.length,
+				label: stripLabelBrackets(data.strategyLabel?.trim() || 'Strategy'),
+				title: data.strategyTitle?.trim() ?? '',
+				text: data.strategyText?.trim() ?? '',
+				theme: themeForSectionIndex(legacy.length),
+				afterGroup: data.strategyAfterGroup ?? 8,
+			});
+		}
+
+		if (data.summaryTitle || data.summaryText) {
+			legacy.push({
+				index: legacy.length,
+				label: stripLabelBrackets(data.summaryLabel?.trim() || 'Summary'),
+				title: data.summaryTitle?.trim() ?? '',
+				text: data.summaryText?.trim() ?? '',
+				theme: themeForSectionIndex(legacy.length),
+			});
+		}
+
+		resolved = legacy.slice(0, 8);
 	}
 
-	const legacy: ResolvedProjectSection[] = [];
+	// Re-index + re-theme after filter; keep Summary sections last (trailing)
+	const content = resolved.filter((section) => !isSummaryLabel(section.label));
+	const summaries = resolved.filter((section) => isSummaryLabel(section.label));
+	const ordered = [...content, ...summaries].slice(0, 8);
 
-	if (data.challengesTitle || data.challengesText) {
-		legacy.push({
-			index: 0,
-			label: data.challengesLabel?.trim() || 'Challenges',
-			title: data.challengesTitle?.trim() ?? '',
-			text: data.challengesText?.trim() ?? '',
-			theme: 'dark',
-			afterGroup: data.challengesAfterGroup ?? 2,
-		});
-	}
-
-	if (data.strategyTitle || data.strategyText) {
-		legacy.push({
-			index: legacy.length,
-			label: data.strategyLabel?.trim() || 'Strategy',
-			title: data.strategyTitle?.trim() ?? '',
-			text: data.strategyText?.trim() ?? '',
-			theme: 'muted',
-			afterGroup: data.strategyAfterGroup ?? 8,
-		});
-	}
-
-	if (data.summaryTitle || data.summaryText) {
-		legacy.push({
-			index: legacy.length,
-			label: data.summaryLabel?.trim() || 'Summary',
-			title: data.summaryTitle?.trim() ?? '',
-			text: data.summaryText?.trim() ?? '',
-			theme: 'light',
-		});
-	}
-
-	return legacy.slice(0, 8);
+	return ordered.map((section, index) => ({
+		...section,
+		index,
+		theme: themeForSectionIndex(index),
+		afterGroup: isSummaryLabel(section.label) ? undefined : section.afterGroup,
+	}));
 }
 
 export function mergeSectionCopy(

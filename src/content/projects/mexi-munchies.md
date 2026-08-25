@@ -6,11 +6,12 @@ categories: ['branding', 'development']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
 order: 6
+comingSoon: true
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: |-
   A youthful brand identity built to
   carry culture, flavor, and energy
-overviewLabel: 'Overview'
+overviewLabel: ''
 overviewTitle: 'Showing the world what MexiMunchies is all about'
 overviewText: 'Mexi Munchies needed a brand that felt as vibrant and approachable as the products themselves — youthful, confident, and unmistakably Latin American. I designed and developed a functional brand system that translates that energy across packaging, digital touchpoints, and campaign assets without losing clarity at scale.'
 overviewGraphic: '/logos/meximunchies.svg'

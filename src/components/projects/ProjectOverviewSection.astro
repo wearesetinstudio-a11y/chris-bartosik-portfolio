@@ -32,7 +32,15 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 	<div class="project-overview__grid grid gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
 		<div class="project-overview__content min-w-0">
 			<p class="project-overview__label">
-				[<span class="project-overview__label-text" data-i18n={labelKey}>{label}</span>]
+				[
+				<span
+					class="project-overview__label-text"
+					data-project-field="overviewLabel"
+					data-i18n={labelKey}
+				>
+					{label}
+				</span>
+				]
 			</p>
 
 			<h2 id="project-overview-heading" class="project-overview__heading" data-project-field="overviewTitle">

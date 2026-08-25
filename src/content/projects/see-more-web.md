@@ -10,7 +10,7 @@ order: 3
 video: '/portfolio/see-more-web/cover.webm'
 heroImage: '/portfolio/see-more-web/bg.webp'
 logo: '/logos/see-more.svg'
-comingSoon: false
+comingSoon: true
 year: 2026
 heroSubtitle: 'An interactive Webflow platform built for Panamanian logistics'
 service: 'UX/UI Design, Webflow Development, Rive Motion'

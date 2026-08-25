@@ -7,12 +7,13 @@ categories: ['branding']
 thumbnail: '/portfolio/see-more-rebranding/cover.webm'
 folderName: 'see-more-rebranding'
 order: 2
+comingSoon: true
 video: '/portfolio/see-more-rebranding/cover.webm'
 heroImage: '/portfolio/see-more-rebranding/bg.webp'
 heroSubtitle: |-
   A brand that shapes the Panama's
   logistics trust and innovation
-overviewLabel: 'Overview'
+overviewLabel: ''
 overviewTitle: 'Moving national cargo with absolute clarity'
 overviewText: 'See More Logistics needed a visual identity that matched their physical presence on Panamanian roads. The local logistics market often relies on generic, literal imagery that fails to communicate modern reliability or professionalism. I designed and developed a functional brand system that positions them as an institutional authority, allowing regional business owners and government contractors to experience true operational confidence.'
 overviewGraphic: '/logos/see-more.svg'

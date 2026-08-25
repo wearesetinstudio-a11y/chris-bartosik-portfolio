@@ -172,6 +172,16 @@ export function applyProjectCopy(locale: Locale) {
 			return;
 		}
 
+		if (key === 'overviewLabel') {
+			const next = (typeof value === 'string' ? value : '').trim();
+			if (next) {
+				element.textContent = next;
+			} else if (element.hasAttribute('data-i18n')) {
+				/* i18n layer fills Overview / Kontekst / Descripción */
+			}
+			return;
+		}
+
 		if (typeof value !== 'string' || value === '') {
 			if (key === 'client') {
 				element.textContent = '';

@@ -62,7 +62,9 @@ const liveLabel = data.liveLabel ?? '';
 const liveUrl = data.liveUrl ?? '';
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
-const overviewLabel = t('project.overview', 'en');
+const customOverviewLabel = (data.overviewLabel ?? '').trim();
+const overviewLabel = customOverviewLabel || t('project.overview', 'en');
+const overviewUsesI18nDefault = !customOverviewLabel;
 const overviewTitle = data.overviewTitle ?? '';
 const overviewText = data.overviewText ?? '';
 const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
@@ -180,7 +182,7 @@ const revealHeadingIds = [
 				showOverview ? (
 					<ProjectOverviewSection
 						label={overviewLabel}
-						labelKey="project.overview"
+						labelKey={overviewUsesI18nDefault ? 'project.overview' : undefined}
 						title={overviewTitle}
 						text={overviewText}
 						graphicSrc={overviewGraphicSrc}

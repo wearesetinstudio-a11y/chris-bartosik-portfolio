@@ -9,7 +9,7 @@ folderName: 'wcr-krakow'
 video: '/portfolio/wcr-krakow/cover.webm'
 heroImage: '/portfolio/wcr-krakow/bg.webp'
 logo: '/logos/wcr-krakow.svg'
-comingSoon: false
+comingSoon: true
 order: 8
 heroSubtitle: 'Military social media visual campaign'
 service: 'Social media campaign'

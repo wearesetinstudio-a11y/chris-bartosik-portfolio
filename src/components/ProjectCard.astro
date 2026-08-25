@@ -201,6 +201,21 @@ const Tag = comingSoon ? 'div' : 'a';
 		cursor: none;
 	}
 
+	.project-card--soon .project-card__media img,
+	.project-card--soon .project-card__media video {
+		filter: grayscale(0.55) brightness(0.92);
+		opacity: 0.72;
+	}
+
+	.project-card--soon .project-card__title,
+	.project-card--soon .project-card__category {
+		opacity: 0.55;
+	}
+
+	.project-card--soon .project-card__arrow {
+		opacity: 0.35;
+	}
+
 	.project-card__soon-cursor {
 		display: none;
 	}

@@ -16,6 +16,7 @@ export type ProjectCopyFields = {
 	market?: string;
 	tools?: string;
 	liveLabel?: string;
+	overviewLabel?: string;
 	overviewTitle?: string;
 	overviewText?: string;
 	challengesTitle?: string;
@@ -38,6 +39,7 @@ type ProjectCopySource = {
 	market?: string;
 	tools?: string;
 	liveLabel?: string;
+	overviewLabel?: string;
 	overviewTitle?: string;
 	overviewText?: string;
 	challengesTitle?: string;
@@ -80,6 +82,7 @@ export function buildProjectCopyBundle(data: ProjectCopySource): ProjectCopyBund
 		market: data.market ?? '',
 		tools: data.tools ?? '',
 		liveLabel: data.liveLabel ?? '',
+		overviewLabel: data.overviewLabel ?? '',
 		overviewTitle: data.overviewTitle ?? '',
 		overviewText: data.overviewText ?? '',
 		challengesTitle: data.challengesTitle ?? '',

@@ -6,11 +6,12 @@ categories: ['branding', 'development']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
 order: 4
+comingSoon: true
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-
   A brand built for sweet craziness
   and fearless snack culture
-overviewLabel: 'Overview'
+overviewLabel: ''
 overviewTitle: 'Turning playful energy into a scalable brand system'
 overviewText: 'Snacks Lovers needed an identity that could match the bold personality of their products without losing clarity across packaging, digital touchpoints, and retail environments. I designed and developed a functional brand system that feels loud, joyful, and unmistakably ownable.'
 overviewGraphic: '/logos/snacks-lovers.svg'

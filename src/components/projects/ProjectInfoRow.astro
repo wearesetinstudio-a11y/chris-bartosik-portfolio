@@ -68,20 +68,32 @@ const linkClass =
 <style is:global>
 	.project-info-row__label {
 		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
-		font-size: var(--label-text-size);
+		font-size: 0.85rem;
 		font-weight: 600;
 		letter-spacing: var(--label-text-tracking);
-		line-height: var(--body-text-lh);
+		line-height: 1.35;
 		text-transform: uppercase;
 	}
 
 	.project-info-row__value {
 		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
-		font-size: var(--body-text-size);
+		font-size: 0.85rem;
 		font-weight: 500;
 		letter-spacing: 0;
-		line-height: var(--body-text-lh);
+		line-height: 1.4;
 		text-transform: uppercase;
 		margin: 0;
+	}
+
+	@media (min-width: 768px) {
+		.project-info-row__label {
+			font-size: var(--label-text-size);
+			line-height: var(--body-text-lh);
+		}
+
+		.project-info-row__value {
+			font-size: var(--body-text-size);
+			line-height: var(--body-text-lh);
+		}
 	}
 </style>
