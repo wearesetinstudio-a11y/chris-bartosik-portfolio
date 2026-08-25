@@ -243,7 +243,7 @@ const headerClass = waitForIntro
 	}
 
 	body.mobile-nav-open #site-header {
-		background-color: #131415;
+		background-color: transparent;
 		transition-property: transform, opacity;
 	}
 
@@ -551,7 +551,7 @@ const headerClass = waitForIntro
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
 
 			if (menuOpen) {
-				header.classList.add('header-solid');
+				header.classList.remove('header-solid');
 				return;
 			}
 

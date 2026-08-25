@@ -6,8 +6,11 @@ const TRAIL_RADIUS_Y = 22;
 const TRAIL_MAX = 36;
 const SAMPLE_GAP_PX = 4;
 const HEADLINE_MIN_PX = 18;
+const MOBILE_FIT_WIDTH_TOLERANCE_PX = 8;
 
 let cleanupHeroHeadlineBlur: (() => void) | null = null;
+let cachedMobileHeadlineFit: { fontSize: number; width: number } | null = null;
+const headlineBaselineCache = new WeakMap<HTMLElement, number>();
 
 function parseSpacing(value: string, fontSize: number) {
 	if (!value || value === 'normal') return 0;
@@ -17,6 +20,9 @@ function parseSpacing(value: string, fontSize: number) {
 }
 
 function measureBaseline(el: HTMLElement) {
+	const cached = headlineBaselineCache.get(el);
+	if (cached !== undefined) return cached;
+
 	const probe = document.createElement('span');
 	probe.setAttribute('aria-hidden', 'true');
 	probe.style.cssText =
@@ -25,7 +31,9 @@ function measureBaseline(el: HTMLElement) {
 	const elRect = el.getBoundingClientRect();
 	const probeRect = probe.getBoundingClientRect();
 	el.removeChild(probe);
-	return probeRect.top - elRect.top;
+	const baseline = probeRect.top - elRect.top;
+	headlineBaselineCache.set(el, baseline);
+	return baseline;
 }
 
 function isMobileHeadline() {
@@ -46,21 +54,29 @@ function getHeadlineLines(headline: HTMLElement) {
 	);
 }
 
-function fitHeroHeadline(headline: HTMLElement) {
+function fitHeroHeadline(headline: HTMLElement, force = false) {
 	const desk = headline.querySelector<HTMLElement>('[data-hero-headline-desk]');
 	const mob = headline.querySelector<HTMLElement>('[data-hero-headline-mob]');
 	const mobile = isMobileHeadline();
 	if (desk) desk.setAttribute('aria-hidden', mobile ? 'true' : 'false');
 	if (mob) mob.setAttribute('aria-hidden', mobile ? 'false' : 'true');
 
-	headline.style.fontSize = '';
-	const maxPx = parseFloat(getComputedStyle(headline).fontSize);
-	if (!Number.isFinite(maxPx) || maxPx <= 0) return;
-
 	const lines = getHeadlineLines(headline);
 	if (!lines.length || headline.clientWidth < 8) return;
 
 	const width = headline.clientWidth;
+
+	if (mobile && !force && cachedMobileHeadlineFit) {
+		if (Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX) {
+			headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+			return;
+		}
+	}
+
+	headline.style.fontSize = '';
+	const maxPx = parseFloat(getComputedStyle(headline).fontSize);
+	if (!Number.isFinite(maxPx) || maxPx <= 0) return;
+
 	const fits = () => lines.every((line) => line.scrollWidth <= width + 1);
 
 	let lo = HEADLINE_MIN_PX;
@@ -81,6 +97,12 @@ function fitHeroHeadline(headline: HTMLElement) {
 	}
 
 	headline.style.fontSize = `${best}px`;
+
+	if (mobile) {
+		cachedMobileHeadlineFit = { fontSize: best, width };
+	} else {
+		cachedMobileHeadlineFit = null;
+	}
 }
 
 export function initHeroHeadlineGlitch() {
@@ -95,14 +117,27 @@ export function initHeroHeadlineGlitch() {
 	cleanupHeroHeadlineBlur = null;
 
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		fitHeroHeadline(headline);
-		const onResizeOnly = () => fitHeroHeadline(headline);
+		fitHeroHeadline(headline, true);
+		const onResizeOnly = () => {
+			if (isMobileHeadline()) {
+				const width = headline.clientWidth;
+				if (
+					cachedMobileHeadlineFit &&
+					Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX
+				) {
+					headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+					return;
+				}
+			}
+			fitHeroHeadline(headline, true);
+		};
 		window.addEventListener('resize', onResizeOnly, { passive: true });
 		document.addEventListener('i18n-applied', onResizeOnly);
 		cleanupHeroHeadlineBlur = () => {
 			window.removeEventListener('resize', onResizeOnly);
 			document.removeEventListener('i18n-applied', onResizeOnly);
 			headline.style.fontSize = '';
+			cachedMobileHeadlineFit = null;
 		};
 		return;
 	}
@@ -130,6 +165,9 @@ export function initHeroHeadlineGlitch() {
 	let cssH = 0;
 	let dpr = 1;
 	let sourceReady = false;
+	let trailActive = false;
+	let lastObservedWidth = 0;
+	let lastObservedHeight = 0;
 
 	function clearOverlay() {
 		if (!cssW || !cssH) return;
@@ -138,8 +176,6 @@ export function initHeroHeadlineGlitch() {
 	}
 
 	function paintSource() {
-		fitHeroHeadline(headline);
-
 		const rect = headline.getBoundingClientRect();
 		if (rect.width < 8 || rect.height < 8) {
 			sourceReady = false;
@@ -157,8 +193,6 @@ export function initHeroHeadlineGlitch() {
 		source.height = Math.max(1, Math.ceil(cssH * dpr));
 		canvas!.width = source.width;
 		canvas!.height = source.height;
-		canvas!.style.width = `${cssW}px`;
-		canvas!.style.height = `${cssH}px`;
 
 		sourceCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 		sourceCtx.clearRect(0, 0, cssW, cssH);
@@ -240,10 +274,12 @@ export function initHeroHeadlineGlitch() {
 
 		if (!trail.length || !headline.isConnected) {
 			clearOverlay();
+			trailActive = false;
 			rafId = 0;
 			return;
 		}
 
+		trailActive = true;
 		if (!sourceReady) paintSource();
 		if (!sourceReady) {
 			rafId = window.requestAnimationFrame(paint);
@@ -302,35 +338,84 @@ export function initHeroHeadlineGlitch() {
 		ensureLoop();
 	}
 
-	function rebuild() {
+	function rebuild(refit = false) {
 		sourceReady = false;
+		for (const line of getHeadlineLines(headline)) {
+			headlineBaselineCache.delete(line);
+		}
+		if (refit || !isMobileHeadline()) {
+			fitHeroHeadline(headline, refit);
+		} else if (cachedMobileHeadlineFit) {
+			headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+		}
 		paintSource();
 		clearOverlay();
 	}
 
-	void document.fonts.ready.then(rebuild);
-	window.addEventListener('intro-revealing', rebuild, { once: true });
+	function onLayoutChange(refit = false) {
+		if (refit || !isMobileHeadline()) {
+			rebuild(true);
+			return;
+		}
 
-	const resizeObserver = new ResizeObserver(rebuild);
+		const width = headline.clientWidth;
+		if (
+			cachedMobileHeadlineFit &&
+			Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX
+		) {
+			rebuild(false);
+			return;
+		}
+
+		rebuild(true);
+	}
+
+	void document.fonts.ready.then(() => onLayoutChange(true));
+	window.addEventListener('intro-revealing', () => onLayoutChange(true), { once: true });
+
+	const resizeObserver = new ResizeObserver((entries) => {
+		if (trailActive) return;
+
+		const entry = entries[0];
+		if (!entry) return;
+
+		const { width, height } = entry.contentRect;
+		if (
+			Math.abs(width - lastObservedWidth) < 2 &&
+			Math.abs(height - lastObservedHeight) < 2
+		) {
+			return;
+		}
+
+		lastObservedWidth = width;
+		lastObservedHeight = height;
+		onLayoutChange(false);
+	});
 	resizeObserver.observe(headline);
 
 	headline.addEventListener('pointermove', onPointerMove, { passive: true });
 	headline.addEventListener('pointerleave', onPointerLeave, { passive: true });
-	document.addEventListener('i18n-applied', rebuild);
-	window.addEventListener('resize', rebuild);
+	const onI18nApplied = () => onLayoutChange(true);
+	const onWindowResize = () => onLayoutChange(false);
+
+	document.addEventListener('i18n-applied', onI18nApplied);
+	window.addEventListener('resize', onWindowResize);
 
 	cleanupHeroHeadlineBlur = () => {
 		window.cancelAnimationFrame(rafId);
 		rafId = 0;
 		trail.length = 0;
 		sourceReady = false;
+		trailActive = false;
+		lastObservedWidth = 0;
+		lastObservedHeight = 0;
 		resizeObserver.disconnect();
 		headline.removeEventListener('pointermove', onPointerMove);
 		headline.removeEventListener('pointerleave', onPointerLeave);
-		document.removeEventListener('i18n-applied', rebuild);
-		window.removeEventListener('resize', rebuild);
-		window.removeEventListener('intro-revealing', rebuild);
+		document.removeEventListener('i18n-applied', onI18nApplied);
+		window.removeEventListener('resize', onWindowResize);
 		canvas?.remove();
 		headline.style.fontSize = '';
+		cachedMobileHeadlineFit = null;
 	};
 }

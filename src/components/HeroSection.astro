@@ -280,6 +280,8 @@ const panamaTime = formatPanamaTimeLabel();
 		line-height: 1.08;
 		letter-spacing: -0.03em;
 		max-width: 100%;
+		isolation: isolate;
+		contain: layout style;
 	}
 
 	.hero-headline-mobile {
@@ -288,10 +290,14 @@ const panamaTime = formatPanamaTimeLabel();
 
 	.hero-headline__hover-glitch {
 		position: absolute;
-		left: 0;
-		top: 0;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		pointer-events: none;
 		z-index: 3;
+		overflow: hidden;
+		contain: strict;
+		transform: translateZ(0);
 	}
 
 	.hero-reveal-mask {
