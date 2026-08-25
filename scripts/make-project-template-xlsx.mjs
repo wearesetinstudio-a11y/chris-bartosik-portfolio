@@ -2,159 +2,128 @@ import ExcelJS from 'exceljs';
 
 const MAX_SECTIONS = 8;
 
+/** Human-facing rows only — gallery/hero assets come from folder files automatically. */
 const ROWS = [
 	{
-		section: 'Meta / pliki',
+		section: 'Start',
 		key: 'slug',
-		notes: 'Nazwa pliku, np. epic-realty → src/content/projects/epic-realty.md',
+		notes: 'Nazwa pliku projektu, np. epic-realty (→ epic-realty.md). Tylko EN.',
 	},
 	{
-		section: 'Meta / pliki',
+		section: 'Start',
 		key: 'folderName',
-		notes: 'Folder grafik: public/portfolio/{folderName}/',
+		notes: 'Folder grafik: public/portfolio/{folderName}/. Zdjęcia bierze strona sama. Tylko EN.',
 	},
 	{
-		section: 'Meta / pliki',
+		section: 'Start',
 		key: 'order',
-		notes: 'Kolejność na liście (liczba). Mniejsza = wyżej.',
+		notes: 'Kolejność na liście (1, 2, 3…). Mniejsza = wyżej. Tylko EN.',
 	},
 	{
-		section: 'Meta / pliki',
+		section: 'Start',
 		key: 'comingSoon',
-		notes: 'true / false',
+		notes: 'true = Coming soon (wyszarzone), false = aktywny. Tylko EN.',
 	},
 	{
-		section: 'Meta / pliki',
-		key: 'thumbnail',
-		notes: 'np. /portfolio/folder/cover.webp lub cover.webm / cover.mp4',
-	},
-	{
-		section: 'Meta / pliki',
-		key: 'video',
-		notes: 'Opcjonalne wideo na karcie',
-	},
-	{
-		section: 'Meta / pliki',
-		key: 'heroImage',
-		notes: 'Tło hero, np. /portfolio/folder/bg.webp',
-	},
-	{
-		section: 'Meta / pliki',
-		key: 'logo',
-		notes: 'Opcjonalnie /logos/….svg',
-	},
-	{
-		section: 'Meta / pliki',
-		key: 'overviewGraphic',
-		notes: 'Opcjonalnie — bez tego bierze 1.webp z folderu',
-	},
-	{
-		section: 'Karta / Card',
-		key: 'title',
-		notes: 'Nazwa na liście i stronie. Marki zwykle bez tłumaczenia.',
-	},
-	{
-		section: 'Karta / Card',
-		key: 'tags.0',
-		notes: 'Kategoria pod tytułem na karcie (tłumacz).',
-	},
-	{
-		section: 'Karta / Card',
+		section: 'Start',
 		key: 'categories',
-		notes: 'Filtry: ux-ui, motion, ai-engineering, development, branding (po przecinku). Nie tłumacz.',
+		notes: 'Filtry strony: ux-ui, motion, ai-engineering, development, branding (po przecinku). Tylko EN.',
+	},
+	{
+		section: 'Karta',
+		key: 'title',
+		notes: 'Tytuł na liście projektów i w przeglądarce.',
+	},
+	{
+		section: 'Karta',
+		key: 'category',
+		notes: 'Krótka kategoria pod tytułem (np. Rebranding). Tłumacz w PL/ES jeśli trzeba.',
 	},
 	{
 		section: 'Hero',
 		key: 'client',
-		notes: 'Nazwa klienta. Zwykle bez tłumaczenia. Na stronie i tak CAPS.',
+		notes: 'Nazwa klienta. Zwykle bez tłumaczenia.',
 	},
 	{
 		section: 'Hero',
 		key: 'clientLabel',
-		notes: 'Tekst w [ … ] — wpisz bez nawiasów, np. Client. Puste = domyślne UI.',
+		notes: 'Etykieta nad klientem, bez [ ]. Puste = domyślne Client / Klient / Cliente.',
 	},
 	{
 		section: 'Hero',
 		key: 'heroSubtitle',
-		notes: 'Zachowaj łamanie linii (Enter = nowa linia na stronie).',
+		notes: 'Podtytuł pod klientem. Enter = nowa linia na stronie.',
 	},
 	{
-		section: 'Info row',
+		section: 'Info',
 		key: 'service',
-		notes: 'Puste = ukryte. Na stronie CAPS.',
+		notes: 'Puste = ukryte na stronie.',
 	},
 	{
-		section: 'Info row',
+		section: 'Info',
 		key: 'industry',
-		notes: 'Puste = ukryte. Na stronie CAPS.',
+		notes: 'Puste = ukryte na stronie.',
 	},
 	{
-		section: 'Info row',
+		section: 'Info',
 		key: 'market',
-		notes: 'Puste = ukryte. Na stronie CAPS.',
+		notes: 'Puste = ukryte na stronie.',
 	},
 	{
-		section: 'Info row',
+		section: 'Info',
 		key: 'tools',
-		notes: 'Puste = ukryte. Na stronie CAPS.',
+		notes: 'Puste = ukryte na stronie.',
 	},
 	{
-		section: 'Info row',
+		section: 'Info',
 		key: 'year',
-		notes: 'Rok, np. 2025. Nie tłumacz.',
+		notes: 'Rok, np. 2025. Tylko EN.',
 	},
 	{
 		section: 'Live',
 		key: 'liveLabel',
-		notes: 'Podkreślony napis linku. Tłumacz.',
+		notes: 'Tekst linku (jeśli jest live). Puste = bez linku.',
 	},
 	{
 		section: 'Live',
 		key: 'liveUrl',
-		notes: 'URL — tylko EN, bez tłumaczenia.',
+		notes: 'Adres URL. Tylko EN. Puste = bez linku.',
 	},
 	{
-		section: 'Overview / Kontekst',
+		section: 'Overview',
 		key: 'overviewLabel',
-		notes: 'Tekst w [ … ] bez nawiasów. Puste = Overview/Kontekst/Descripción. Overview zawsze light.',
+		notes: 'Etykieta bez [ ]. Puste = Overview / Kontekst / Descripción.',
 	},
 	{
-		section: 'Overview / Kontekst',
+		section: 'Overview',
 		key: 'overviewTitle',
-		notes: 'Nagłówek. Na stronie CAPS.',
+		notes: 'Nagłówek bloku overview.',
 	},
 	{
-		section: 'Overview / Kontekst',
+		section: 'Overview',
 		key: 'overviewText',
-		notes: 'Treść. Puste linie = nowe akapity. Bez CAPS.',
+		notes: 'Treść. Pusta linia = nowy akapit.',
 	},
 ];
 
 for (let i = 0; i < MAX_SECTIONS; i += 1) {
 	const n = String(i + 1).padStart(2, '0');
 	const section = `Sekcja ${n}`;
-	const themeHint = ['dark', 'light', 'muted'][i % 3];
 	ROWS.push(
 		{
 			section,
 			key: `sections.${i}.label`,
-			notes: `Bez [ ]. Na stronie CAPS. Theme auto: ${themeHint}. Summary = zawsze ostatnia (bez afterGroup).`,
+			notes: 'Etykieta bez [ ], np. Challenge / Wyzwanie. Puste = sekcja nieużywana.',
 		},
 		{
 			section,
 			key: `sections.${i}.title`,
-			notes: 'Nagłówek. Na stronie CAPS.',
+			notes: 'Nagłówek sekcji.',
 		},
 		{
 			section,
 			key: `sections.${i}.text`,
-			notes: 'Treść. Listy: - **Tytuł**: opis. Bez CAPS.',
-		},
-		{
-			section,
-			key: `sections.${i}.afterGroup`,
-			notes:
-				'Tylko EN. Po której grupie galerii wstawić (np. 2 = po 2.webp). Puste = na końcu. Summary zostaw puste.',
+			notes: 'Treść. Listy: - **Tytuł**: opis. Puste = sekcja nieużywana.',
 		},
 	);
 }
@@ -185,38 +154,53 @@ info.getRow(1).font = { bold: true, size: 16 };
 info.addRow([]);
 info.addRow(['Jak używać']);
 info.getRow(3).font = { bold: true, size: 12 };
-info.addRow(['1. Skopiuj ten plik i nazwij go np. Epic Realty.xlsx (jeden plik = jeden projekt).']);
-info.addRow(['2. W karcie „Projekt” uzupełnij kolumny EN, PL i ES (jedna tabela).']);
-info.addRow(['3. Wyślij mi plik albo wrzuć do public/portfolio/{folderName}/.']);
+info.addRow(['1. Skopiuj plik i nazwij np. Epic Realty.xlsx (jeden Excel = jeden projekt).']);
+info.addRow(['2. W karcie „Projekt” uzupełnij EN, PL i ES — tylko teksty.']);
+info.addRow(['3. Wrzuć grafiki do public/portfolio/{folderName}/ (cover, bg, 1.webp, 2.webp…).']);
+info.addRow(['4. Wyślij mi Excel albo wrzuć go do tego folderu — ja wciągam treści.']);
 info.addRow([]);
-info.addRow(['Zasady']);
-info.getRow(8).font = { bold: true, size: 12 };
+info.addRow(['Co jest automatyczne (nie wpisujesz w Excelu)']);
+info.getRow(9).font = { bold: true, size: 12 };
 info.addRow([
-	'Theme sekcji jest automatyczne (1=dark, 2=light, 3=muted, potem znowu dark…). Overview zawsze light. Nie wpisujesz theme.',
+	'Zdjęcia i wideo: cover.webp/mp4, bg.webp, 1.webp (overview), 2.webp / 2.1+2.2… — strona czyta je z folderu. Nie ma pól afterGroup / ścieżek grafik.',
 ]);
 info.addRow([
-	'Summary / Podsumowanie / Resultado zawsze na końcu — zostaw afterGroup puste. CAPS na stronie robi CSS (label, tytuły, info) — możesz pisać normalnie.',
+	'Układ i kolory sekcji: theme idzie automatycznie (dark → light → muted). Overview zawsze jasny. Sekcja Summary / Podsumowanie / Resultado zawsze na końcu.',
 ]);
 info.addRow([
-	'Labeli clientLabel / overviewLabel / sections.*.label nie otaczaj nawiasami [ ] — strona dodaje je sama. liveUrl, year, categories, afterGroup tylko w EN.',
+	'CAPS (etykiety, tytuły, info) robi CSS na stronie — w Excelu pisz normalnie. Nawiasów [ ] przy labelach nie dopisuj.',
 ]);
-for (const r of [4, 5, 6, 9, 10, 11]) {
+info.addRow([]);
+info.addRow(['Pola tylko EN (żółte i tak wypełnij w kolumnie EN)']);
+info.getRow(14).font = { bold: true, size: 12 };
+info.addRow(['slug, folderName, order, comingSoon, categories, year, liveUrl.']);
+for (const r of [4, 5, 6, 7, 10, 11, 12, 15]) {
 	info.getRow(r).alignment = { wrapText: true, vertical: 'top' };
-	info.getRow(r).height = 36;
+	info.getRow(r).height = 40;
 }
 
 const sheet = workbook.addWorksheet('Projekt', {
 	views: [{ state: 'frozen', ySplit: 1 }],
 });
 sheet.columns = [
-	{ header: 'Sekcja', key: 'section', width: 22 },
-	{ header: 'Klucz (nie zmieniaj)', key: 'key', width: 26 },
+	{ header: 'Sekcja', key: 'section', width: 14 },
+	{ header: 'Pole', key: 'key', width: 22 },
 	{ header: 'EN', key: 'en', width: 56 },
 	{ header: 'PL', key: 'pl', width: 56 },
 	{ header: 'ES', key: 'es', width: 56 },
-	{ header: 'Uwagi', key: 'notes', width: 44 },
+	{ header: 'Uwagi', key: 'notes', width: 52 },
 ];
 styleHeader(sheet.getRow(1));
+
+const enOnly = new Set([
+	'slug',
+	'folderName',
+	'order',
+	'comingSoon',
+	'categories',
+	'year',
+	'liveUrl',
+]);
 
 ROWS.forEach((field, index) => {
 	const row = sheet.addRow({
@@ -228,13 +212,18 @@ ROWS.forEach((field, index) => {
 		notes: field.notes,
 	});
 	row.alignment = { wrapText: true, vertical: 'top' };
-	row.height = Math.min(64, Math.max(24, Math.ceil(field.notes.length / 48) * 16));
+	row.height = Math.min(72, Math.max(24, Math.ceil(field.notes.length / 52) * 16));
 	row.getCell(1).fill = grey;
 	row.getCell(2).fill = grey;
 	const body = index % 2 === 0 ? white : stripe;
 	row.getCell(3).fill = yellow;
-	row.getCell(4).fill = body;
-	row.getCell(5).fill = body;
+	if (enOnly.has(field.key)) {
+		row.getCell(4).fill = grey;
+		row.getCell(5).fill = grey;
+	} else {
+		row.getCell(4).fill = body;
+		row.getCell(5).fill = body;
+	}
 	row.getCell(6).fill = grey;
 });
 
@@ -246,20 +235,21 @@ sheet.autoFilter = {
 const checklist = workbook.addWorksheet('Grafiki', {
 	views: [{ showGridLines: false }],
 });
-checklist.getColumn(1).width = 40;
-checklist.getColumn(2).width = 40;
-checklist.addRow(['Plik w public/portfolio/{folderName}/', 'Notatka']);
+checklist.getColumn(1).width = 48;
+checklist.getColumn(2).width = 44;
+checklist.addRow(['Wrzucasz do folderu projektu', 'Co robi']);
 styleHeader(checklist.getRow(1));
-for (const file of [
-	'cover.webp / cover.webm / cover.mp4',
-	'bg.webp (hero)',
-	'1.webp (overview)',
-	'2.webp, 3.webp… (full)',
-	'2.1 + 2.2, 3.1 + 3.2… (pary)',
-	'ten Excel w folderze (opcjonalnie)',
+for (const [file, note] of [
+	['cover.webp / cover.webm / cover.mp4', 'Okładka na liście projektów'],
+	['bg.webp', 'Tło hero na stronie projektu'],
+	['1.webp', 'Grafika przy Overview (opcjonalnie)'],
+	['2.webp, 3.webp, 4.webp…', 'Pełne kadry w galerii (kolejność = numer)'],
+	['2.1.webp + 2.2.webp…', 'Pary pod pełnym kadrem o tym samym numerze'],
+	['ten Excel (opcjonalnie)', 'Żebym mógł wciągnąć teksty z folderu'],
 ]) {
-	const row = checklist.addRow([file, '']);
-	row.getCell(2).fill = yellow;
+	const row = checklist.addRow([file, note]);
+	row.alignment = { wrapText: true, vertical: 'top' };
+	row.height = 28;
 }
 
 const outName = 'Chris-Bartosik-projekt-SZABLON.xlsx';
@@ -270,4 +260,4 @@ try {
 } catch {
 	// optional
 }
-console.log(`wrote ${outName} (${ROWS.length} rows, single Projekt sheet)`);
+console.log(`wrote ${outName} (${ROWS.length} rows — texts + start meta only)`);

@@ -1,16 +1,17 @@
 # Szablon projektu (Excel)
 
-**Plik:** `templates/Chris-Bartosik-projekt-SZABLON.xlsx` (+ kopia na Desktopie)
+**Plik:** `templates/Chris-Bartosik-projekt-SZABLON.xlsx` (+ kopia w root i na Desktopie)
 
-Jedna karta **Projekt** z kolumnami **EN | PL | ES**.
+Jedna karta **Projekt**: kolumny **EN | PL | ES** — tylko teksty + kilka pól startowych.
 
-## Zasady systemowe
+## Automatyczne (nie ma w Excelu)
 
-- **Theme** — automatyczne: 1. dark → 2. light → 3. muted → powtórz. Overview zawsze light.
-- **Summary** — zawsze na końcu (zostaw `afterGroup` puste).
-- **CAPS** — na stronie robi CSS (label, tytuły, info, klient). W Excelu możesz pisać normalnie.
-- **Label** — bez nawiasów `[ ]` (strona je dodaje).
+- **Grafiki** — z folderu `public/portfolio/{folderName}/` (cover, bg, 1.webp, 2.webp…).
+- **Theme** — dark → light → muted (Overview zawsze light).
+- **Summary / Podsumowanie / Resultado** — zawsze na końcu.
+- **CAPS** — CSS na stronie; w Excelu pisz normalnie.
+- **Label** — bez `[ ]` (strona dodaje).
 
 ## Po wypełnieniu
 
-Wyślij Excel albo wrzuć do `public/portfolio/{folderName}/` i napisz mi, żebym wciągnął.
+Wrzuć Excel + grafiki do folderu projektu i napisz, żebym wciągnął.
