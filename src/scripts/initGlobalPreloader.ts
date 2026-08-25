@@ -8,6 +8,7 @@ import {
 	setIntroRevealing,
 	setIntroSequenceRunning,
 } from './introState.ts';
+import { isMobileNavNavigationActive } from './mobileNavPanel.ts';
 import {
 	animateIntroCover,
 	animatePageTransitionReveal,
@@ -59,6 +60,15 @@ async function runIntroSequence() {
 export function initGlobalPreloader() {
 	if (!document.getElementById('hero-section')) {
 		clearIntroPending();
+		return;
+	}
+
+	if (isMobileNavNavigationActive()) {
+		clearIntroPending();
+		const overlay = getPageTransitionOverlay();
+		if (overlay) resetPageTransitionOverlay(overlay);
+		markIntroComplete();
+		dispatchIntroComplete();
 		return;
 	}
 

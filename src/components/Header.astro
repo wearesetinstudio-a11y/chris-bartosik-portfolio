@@ -97,10 +97,19 @@ const headerClass = waitForIntro
 
 <div
 	id="mobile-nav-panel"
-	class="mobile-nav-panel fixed inset-x-0 top-0 z-[45] flex h-[100dvh] flex-col justify-center bg-[#131415] px-[var(--page-gutter)] md:hidden"
+	class="mobile-nav-panel fixed inset-0 z-[45] md:hidden"
+	transition:persist="mobile-nav"
 	aria-hidden="true"
 >
-	<div class="mobile-nav-panel__content flex w-full flex-col gap-10">
+	<div class="mobile-nav-bars" aria-hidden="true">
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+	</div>
+
+	<div class="mobile-nav-panel__content flex w-full flex-col gap-10 px-[var(--page-gutter)]">
 		<nav class="flex flex-col gap-8" aria-label={t('nav.mobile', 'en')} data-i18n-aria="nav.mobile">
 			{
 				nav.map((item) => (
@@ -233,6 +242,16 @@ const headerClass = waitForIntro
 		color: #f5f5f5;
 	}
 
+	body.mobile-nav-open #site-header {
+		background-color: #131415;
+		transition-property: transform, opacity;
+	}
+
+	body.mobile-nav-open #site-header .site-header__logo-link,
+	body.mobile-nav-open #site-header .site-header__logo-mark .logo-mark img {
+		transition: none;
+	}
+
 	.header-mobile-tools {
 		pointer-events: auto;
 	}
@@ -284,30 +303,111 @@ const headerClass = waitForIntro
 		line-height: 1.15;
 	}
 
+	@keyframes mobile-nav-bar-cover {
+		from {
+			transform: translateY(-100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes mobile-nav-bar-reveal {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(-100%);
+		}
+	}
+
 	.mobile-nav-panel {
 		pointer-events: none;
-		transform: translateY(-100%);
-		opacity: 0;
 		visibility: hidden;
 		overflow: hidden;
 		overscroll-behavior: none;
 		touch-action: none;
-		transition:
-			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			visibility 0s linear 0.55s;
-		will-change: transform;
 	}
 
 	.mobile-nav-panel.is-open {
 		pointer-events: auto;
-		transform: translateY(0);
-		opacity: 1;
 		visibility: visible;
-		transition:
-			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			visibility 0s linear 0s;
+	}
+
+	.mobile-nav-bars {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		inset: 0;
+	}
+
+	.mobile-nav-bar {
+		flex: 1 1 20%;
+		height: 100%;
+		background-color: #131415;
+		transform: translateY(-100%);
+		will-change: transform;
+	}
+
+	.mobile-nav-bar:nth-child(1) {
+		--bar-delay: 0ms;
+		--bar-reveal-delay: 300ms;
+	}
+
+	.mobile-nav-bar:nth-child(2) {
+		--bar-delay: 75ms;
+		--bar-reveal-delay: 225ms;
+	}
+
+	.mobile-nav-bar:nth-child(3) {
+		--bar-delay: 150ms;
+		--bar-reveal-delay: 150ms;
+	}
+
+	.mobile-nav-bar:nth-child(4) {
+		--bar-delay: 225ms;
+		--bar-reveal-delay: 75ms;
+	}
+
+	.mobile-nav-bar:nth-child(5) {
+		--bar-delay: 300ms;
+		--bar-reveal-delay: 0ms;
+	}
+
+	.mobile-nav-panel.is-covered .mobile-nav-bar {
+		transform: translateY(0);
+	}
+
+	.mobile-nav-panel.is-covering .mobile-nav-bar {
+		animation: mobile-nav-bar-cover 900ms cubic-bezier(0.85, 0, 0.15, 1) both;
+		animation-delay: var(--bar-delay);
+	}
+
+	.mobile-nav-panel.is-revealing .mobile-nav-bar {
+		animation: mobile-nav-bar-reveal 900ms cubic-bezier(0.85, 0, 0.15, 1) both;
+		animation-delay: var(--bar-reveal-delay);
+	}
+
+	.mobile-nav-panel.is-revealing .mobile-nav-panel__content,
+	.mobile-nav-panel.is-content-hidden .mobile-nav-panel__content {
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.mobile-nav-panel__content {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		justify-content: center;
+		pointer-events: none;
+	}
+
+	.mobile-nav-panel.is-content-ready .mobile-nav-panel__content {
+		pointer-events: auto;
 	}
 
 	.mobile-nav-panel .mobile-nav-link,
@@ -316,14 +416,13 @@ const headerClass = waitForIntro
 		transform: translateX(-1.75rem);
 	}
 
-	.mobile-nav-panel.is-open .mobile-nav-link,
-	.mobile-nav-panel.is-open .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-open.is-covered .mobile-nav-link,
+	.mobile-nav-panel.is-open.is-covered .mobile-nav-panel__cta {
 		transition:
 			opacity 0.35s ease,
 			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	/* Enter: first → last */
 	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link,
 	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__cta {
 		opacity: 1;
@@ -350,24 +449,29 @@ const headerClass = waitForIntro
 		transition-delay: 220ms;
 	}
 
-	/* Exit: last → first */
-	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link,
+	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__cta {
+		opacity: 0;
+		transform: translateX(-1.75rem);
+	}
+
+	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__cta {
 		transition-delay: 0ms;
 	}
 
-	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(4) {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link:nth-child(4) {
 		transition-delay: 55ms;
 	}
 
-	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(3) {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link:nth-child(3) {
 		transition-delay: 110ms;
 	}
 
-	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(2) {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link:nth-child(2) {
 		transition-delay: 165ms;
 	}
 
-	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(1) {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link:nth-child(1) {
 		transition-delay: 220ms;
 	}
 
@@ -380,13 +484,27 @@ const headerClass = waitForIntro
 	@media (prefers-reduced-motion: reduce) {
 		.mobile-nav-toggle,
 		.mobile-nav-toggle__line,
-		.mobile-nav-panel,
+		.mobile-nav-panel.is-covering .mobile-nav-bar,
+		.mobile-nav-panel.is-revealing .mobile-nav-bar,
 		.mobile-nav-panel .mobile-nav-link,
 		.mobile-nav-panel .mobile-nav-panel__cta {
 			transition: none !important;
+			animation: none !important;
 			transition-delay: 0ms !important;
-			transform: none !important;
+		}
+
+		.mobile-nav-panel.is-covered .mobile-nav-bar {
+			transform: translateY(0);
+		}
+
+		.mobile-nav-panel:not(.is-covered):not(.is-open) .mobile-nav-bar {
+			transform: translateY(-100%);
+		}
+
+		.mobile-nav-panel .mobile-nav-link,
+		.mobile-nav-panel .mobile-nav-panel__cta {
 			opacity: 1 !important;
+			transform: none !important;
 		}
 	}
 </style>
@@ -394,49 +512,28 @@ const headerClass = waitForIntro
 <script>
 	import { hasCompletedIntro } from '../scripts/introState.ts';
 	import { initLogoWave } from '../scripts/preloaderWave.ts';
+	import {
+		forceCloseMobileNav,
+		getMobileNavHashLink,
+		isMobileNavNavigationActive,
+		navigateMobileNavToHash,
+		registerMobileNavStateListener,
+		setMobileNavOpen,
+	} from '../scripts/mobileNavPanel.ts';
 	import { t } from '../utils/i18n.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
 	let syncHeaderAppearance: (() => void) | null = null;
-	let lockedScrollY = 0;
-	let mobileNavContentTimer = 0;
 
 	type MobileNavWindow = Window &
 		typeof globalThis & {
 			__mobileNavBound?: boolean;
 		};
 
-	function restoreScroll(scrollY: number) {
-		const html = document.documentElement;
-		const previousBehavior = html.style.scrollBehavior;
-		html.style.scrollBehavior = 'auto';
-		window.scrollTo(0, scrollY);
-		html.style.scrollBehavior = previousBehavior;
-	}
-
-	function lockBodyScroll() {
-		lockedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
-		document.body.classList.add('mobile-nav-open');
-		document.body.style.position = 'fixed';
-		document.body.style.top = `-${lockedScrollY}px`;
-		document.body.style.left = '0';
-		document.body.style.right = '0';
-		document.body.style.width = '100%';
-	}
-
-	function unlockBodyScroll() {
-		if (!document.body.classList.contains('mobile-nav-open')) return;
-
-		const scrollY = lockedScrollY;
-		document.body.classList.remove('mobile-nav-open');
-		document.documentElement.classList.remove('mobile-nav-open');
-		document.body.style.position = '';
-		document.body.style.top = '';
-		document.body.style.left = '';
-		document.body.style.right = '';
-		document.body.style.width = '';
-		restoreScroll(scrollY);
-	}
+	const navLabels = () => ({
+		open: t('nav.openMenu'),
+		close: t('nav.closeMenu'),
+	});
 
 	function initHeaderSolidBackground() {
 		headerScrollCleanup?.();
@@ -496,61 +593,6 @@ const headerClass = waitForIntro
 		syncHeaderAppearance = updateHeaderSolid;
 	}
 
-	function setMobileNavOpen(isOpen: boolean) {
-		const toggle = document.getElementById('mobile-nav-toggle');
-		const panel = document.getElementById('mobile-nav-panel');
-
-		if (!toggle || !panel) return;
-
-		window.clearTimeout(mobileNavContentTimer);
-
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-		toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-		toggle.setAttribute('aria-label', isOpen ? t('nav.closeMenu') : t('nav.openMenu'));
-		toggle.dataset.i18nAria = isOpen ? 'nav.closeMenu' : 'nav.openMenu';
-		panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-
-		if (isOpen) {
-			toggle.classList.add('is-open');
-			panel.classList.add('is-open');
-			panel.classList.remove('is-content-ready');
-			lockBodyScroll();
-
-			mobileNavContentTimer = window.setTimeout(
-				() => {
-					if (panel.classList.contains('is-open')) {
-						panel.classList.add('is-content-ready');
-					}
-				},
-				reduceMotion ? 0 : 560,
-			);
-		} else {
-			toggle.classList.remove('is-open');
-			const hadContent = panel.classList.contains('is-content-ready');
-			panel.classList.remove('is-content-ready');
-
-			const finishClose = () => {
-				panel.classList.remove('is-open');
-				unlockBodyScroll();
-				syncHeaderAppearance?.();
-			};
-
-			if (reduceMotion || !panel.classList.contains('is-open') || !hadContent) {
-				finishClose();
-			} else {
-				// Wait for reverse item stagger, then slide panel up
-				mobileNavContentTimer = window.setTimeout(finishClose, 650);
-			}
-		}
-
-		syncHeaderAppearance?.();
-	}
-
-	function closeMobileNav() {
-		setMobileNavOpen(false);
-	}
-
 	function initMobileNav() {
 		const navWindow = window as MobileNavWindow;
 		if (navWindow.__mobileNavBound) return;
@@ -560,20 +602,24 @@ const headerClass = waitForIntro
 			const target = event.target as HTMLElement | null;
 			if (!target) return;
 
-			if (target.closest('#mobile-nav-toggle')) {
-				const toggle = document.getElementById('mobile-nav-toggle');
-				const isOpen = toggle?.classList.contains('is-open') === true;
-				setMobileNavOpen(!isOpen);
+			const hashLink = getMobileNavHashLink(event.target);
+			if (hashLink) {
+				event.preventDefault();
+				event.stopPropagation();
+				void navigateMobileNavToHash(hashLink.hash);
 				return;
 			}
 
-			if (target.closest('#mobile-nav-panel [data-mobile-nav-link]')) {
-				closeMobileNav();
+			if (target.closest('#mobile-nav-toggle')) {
+				const toggle = document.getElementById('mobile-nav-toggle');
+				const isOpen = toggle?.classList.contains('is-open') === true;
+				setMobileNavOpen(!isOpen, navLabels());
+				return;
 			}
-		});
+		}, true);
 
 		window.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape') closeMobileNav();
+			if (event.key === 'Escape') setMobileNavOpen(false, navLabels());
 		});
 	}
 
@@ -597,6 +643,7 @@ const headerClass = waitForIntro
 	}
 
 	function initHeader() {
+		registerMobileNavStateListener(() => syncHeaderAppearance?.());
 		initHeaderSolidBackground();
 		initMobileNav();
 		initHeaderIntroReveal();
@@ -605,7 +652,9 @@ const headerClass = waitForIntro
 
 	initHeader();
 	document.addEventListener('astro:page-load', () => {
-		closeMobileNav();
+		if (!isMobileNavNavigationActive()) {
+			forceCloseMobileNav();
+		}
 		initHeader();
 	});
 </script>

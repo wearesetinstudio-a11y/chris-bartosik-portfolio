@@ -3,29 +3,38 @@ import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
 
 interface Props {
 	size?: 'nav' | 'intro';
+	handOnly?: boolean;
 }
 
-const { size = 'nav' } = Astro.props;
+const { size = 'nav', handOnly = false } = Astro.props;
 const isIntro = size === 'intro';
 const nameSrc = withPublicAssetVersion('/chris-name-logo.svg');
 const handSrc = withPublicAssetVersion('/chris-hand-logo.svg');
 ---
 
 <span
-	class:list={['logo-mark', isIntro ? 'logo-mark--intro' : 'logo-mark--nav']}
+	class:list={[
+		'logo-mark',
+		isIntro ? 'logo-mark--intro' : 'logo-mark--nav',
+		handOnly && 'logo-mark--hand-only',
+	]}
 	aria-hidden="true"
 >
-	<img
-		src={nameSrc}
-		alt=""
-		width="146"
-		height="51"
-		class="logo-mark__name"
-		data-overlay-chris={isIntro ? 'true' : undefined}
-		id={isIntro ? 'overlay-chris-name' : undefined}
-		decoding="async"
-	/>
-	{isIntro && (
+	{
+		!(isIntro && handOnly) && (
+			<img
+				src={nameSrc}
+				alt=""
+				width="146"
+				height="51"
+				class="logo-mark__name"
+				data-overlay-chris={isIntro ? 'true' : undefined}
+				id={isIntro ? 'overlay-chris-name' : undefined}
+				decoding="async"
+			/>
+		)
+	}
+	{isIntro && !handOnly && (
 		<span class="logo-mark__page is-hidden" data-overlay-page id="overlay-page-name"></span>
 	)}
 	<img

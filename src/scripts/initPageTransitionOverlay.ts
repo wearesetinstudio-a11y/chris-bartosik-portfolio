@@ -1,8 +1,13 @@
 import { hasCompletedIntro, isIntroSequenceRunning } from './introState.ts';
 import {
+	completeMobileNavNavigation,
+	isMobileNavLink,
+	isMobileNavNavigationActive,
+	prepareMobileNavNavigation,
+} from './mobileNavPanel.ts';
+import {
 	animatePageTransitionCover,
 	animatePageTransitionReveal,
-	applyOverlayDestination,
 	getPageTransitionOverlay,
 	hrefFromUnknown,
 	resetPageTransitionOverlay,
@@ -76,15 +81,13 @@ export function initPageTransitionOverlay() {
 			if (event.button !== 0) return;
 			if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-			const overlay = getPageTransitionOverlay();
-			if (!overlay) return;
+		const overlay = getPageTransitionOverlay();
+		if (!overlay) return;
 
-			const destination = destinationFromLink(
-				(event.target as Element | null)?.closest('a') ?? null,
-			);
-			if (!destination) return;
-
-			applyOverlayDestination(overlay, destination);
+		const destination = destinationFromLink(
+			(event.target as Element | null)?.closest('a') ?? null,
+		);
+		if (!destination) return;
 		},
 		true,
 	);
@@ -95,6 +98,21 @@ export function initPageTransitionOverlay() {
 		const destination = destinationFromEvent(prepEvent);
 
 		cleanupIntroState();
+
+		const source =
+			destination.source instanceof Element
+				? destination.source
+				: destination.source
+					? (destination.source as Element)
+					: null;
+
+		if (isMobileNavLink(source) && document.getElementById('mobile-nav-panel')?.classList.contains('is-covered')) {
+			prepEvent.loader = async () => {
+				await prepareMobileNavNavigation();
+				await defaultLoader();
+			};
+			return;
+		}
 
 		if (getPhase() !== 'idle' || isIntroSequenceRunning()) {
 			prepEvent.loader = defaultLoader;
@@ -118,6 +136,11 @@ export function initPageTransitionOverlay() {
 
 	document.addEventListener('astro:after-swap', () => {
 		cleanupIntroState();
+
+		if (isMobileNavNavigationActive()) {
+			void completeMobileNavNavigation();
+			return;
+		}
 
 		if (getPhase() !== 'covered') return;
 

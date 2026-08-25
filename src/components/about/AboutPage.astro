@@ -130,30 +130,13 @@ const job2Items = [
 
 	.about-page__role {
 		margin: 0 0 1.25rem;
-		font-size: 1.45rem;
+		font-size: var(--label-text-size);
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		line-height: 1;
+		letter-spacing: var(--label-text-tracking);
+		line-height: 1.2;
 		text-transform: uppercase;
 		color: rgba(255, 255, 255, 0.45);
 		overflow-wrap: break-word;
-	}
-
-	@media (min-width: 768px) {
-		.about-page__role {
-			font-size: 1.15rem;
-			letter-spacing: 0.06em;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.about-page__role {
-			font-size: 1.45rem;
-			font-weight: 600;
-			line-height: 1;
-			letter-spacing: 0.08em;
-			text-transform: uppercase;
-		}
 	}
 
 	.about-page__photo {
@@ -295,11 +278,6 @@ const job2Items = [
 		.about-page {
 			padding-top: calc(4.5rem + 100px);
 			padding-bottom: 160px;
-		}
-
-		.about-page__role {
-			font-size: 1.15rem;
-			letter-spacing: 0.06em;
 		}
 
 		.about-page__job {

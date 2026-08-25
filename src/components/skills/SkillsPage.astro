@@ -265,8 +265,15 @@ const hasSkillsMedia = skillsWithMedia.length > 0;
 		grid-template-columns: minmax(0, 1fr);
 		gap: 2.5rem;
 		align-items: start;
+		box-sizing: border-box;
+		width: 100%;
 		padding: calc(72px + 60px) var(--page-gutter) 60px;
 		background-color: #131415;
+	}
+
+	.skills-page__sticky,
+	.skills-page__content {
+		min-width: 0;
 	}
 
 	.skills-page__heading,
@@ -369,7 +376,7 @@ const hasSkillsMedia = skillsWithMedia.length > 0;
 	.skills-block__intro,
 	.skills-block__body {
 		margin: 1.15rem 0 0;
-		max-width: 40rem;
+		max-width: none;
 		font-size: var(--body-text-size);
 		font-weight: 500;
 		line-height: var(--body-text-lh);
@@ -467,7 +474,7 @@ const hasSkillsMedia = skillsWithMedia.length > 0;
 
 	@media (min-width: 1024px) {
 		.skills-page {
-			grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 			gap: 4.5rem 4.5rem;
 		}
 

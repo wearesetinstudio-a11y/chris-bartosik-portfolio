@@ -1,6 +1,6 @@
 import { prefersReducedMotion, wait, waitForAnimation } from './sygnetFlipAnimation.ts';
 
-export const HAND_WAVE_MS = 1600;
+export const HAND_WAVE_MS = 800;
 
 function getHand(root: ParentNode): HTMLElement | null {
 	return root.querySelector<HTMLElement>('.logo-mark__hand');
@@ -29,8 +29,9 @@ export async function playHandWave(overlay: HTMLElement): Promise<void> {
 	hand.classList.add('is-waving');
 
 	await waitForAnimation(hand, 'preloader-wave', HAND_WAVE_MS);
+
 	resetHandWave(overlay);
-	await wait(220);
+	await wait(120);
 }
 
 export function waveLogoHand(hand: HTMLElement) {

@@ -296,6 +296,14 @@ body.intro-active {
 	gap: 0.55rem;
 }
 
+.logo-mark--intro.logo-mark--hand-only {
+	justify-content: center;
+}
+
+.logo-mark--intro.logo-mark--hand-only .logo-mark__hand {
+	height: clamp(3rem, 8vw, 4.75rem);
+}
+
 .logo-mark--intro .logo-mark__name {
 	height: clamp(2.15rem, 5.6vw, 3.35rem);
 }
@@ -343,33 +351,24 @@ body.intro-active {
 }
 
 .logo-mark__hand.is-waving {
-	animation: preloader-wave 1600ms ease-in-out;
+	animation: preloader-wave 800ms ease-in-out;
 }
 
 @keyframes preloader-wave {
 	0% {
 		transform: rotate(0deg);
 	}
-	12% {
+	20% {
 		transform: rotate(18deg);
 	}
-	24% {
+	40% {
 		transform: rotate(-12deg);
 	}
-	36% {
+	60% {
 		transform: rotate(20deg);
 	}
-	48% {
+	80% {
 		transform: rotate(-10deg);
-	}
-	62% {
-		transform: rotate(14deg);
-	}
-	76% {
-		transform: rotate(-6deg);
-	}
-	88% {
-		transform: rotate(8deg);
 	}
 	100% {
 		transform: rotate(0deg);
