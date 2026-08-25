@@ -24,23 +24,47 @@ function parseListItem(raw: string): { title: string; body: string } {
 
 /** Parse project section copy into paragraphs and `- **Title:** body` lists. */
 export function parseProjectCopyBlocks(text: string): ProjectCopyBlock[] {
-	return text
-		.split(/\n\s*\n/)
-		.map((part) => part.trim())
-		.filter(Boolean)
-		.map((chunk) => {
-			const lines = chunk
-				.split('\n')
-				.map((line) => line.trim())
-				.filter(Boolean);
+	const lines = String(text || '')
+		.replace(/\r\n/g, '\n')
+		.replace(/\r/g, '\n')
+		.split('\n');
 
-			if (lines.length > 0 && lines.every((line) => /^[-*]\s+/.test(line))) {
-				return {
-					type: 'list' as const,
-					items: lines.map((line) => parseListItem(line.replace(/^[-*]\s+/, ''))),
-				};
-			}
+	const blocks: ProjectCopyBlock[] = [];
+	let paragraphLines: string[] = [];
+	let listItems: { title: string; body: string }[] = [];
 
-			return { type: 'paragraph' as const, text: chunk };
-		});
+	const flushParagraph = () => {
+		const value = paragraphLines.join('\n').trim();
+		if (value) blocks.push({ type: 'paragraph', text: value });
+		paragraphLines = [];
+	};
+
+	const flushList = () => {
+		if (listItems.length > 0) blocks.push({ type: 'list', items: listItems });
+		listItems = [];
+	};
+
+	for (const raw of lines) {
+		const line = raw.trim();
+
+		if (!line) {
+			// Blank lines separate paragraphs; keep a list open so `- a\n\n- b` stays one list.
+			if (listItems.length > 0) continue;
+			flushParagraph();
+			continue;
+		}
+
+		if (/^[-*]\s+/.test(line)) {
+			flushParagraph();
+			listItems.push(parseListItem(line.replace(/^[-*]\s+/, '')));
+			continue;
+		}
+
+		flushList();
+		paragraphLines.push(line);
+	}
+
+	flushParagraph();
+	flushList();
+	return blocks;
 }
