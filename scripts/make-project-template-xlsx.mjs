@@ -123,7 +123,7 @@ for (let i = 0; i < MAX_SECTIONS; i += 1) {
 		{
 			section,
 			key: `sections.${i}.text`,
-			notes: 'Treść. Listy: - **Tytuł**: opis. Puste = sekcja nieużywana.',
+			notes: 'Treść. Pusta linia = nowy akapit. Puste pole = sekcja nieużywana.',
 		},
 	);
 }
