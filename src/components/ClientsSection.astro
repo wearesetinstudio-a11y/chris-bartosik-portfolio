@@ -2,26 +2,27 @@
 import { t } from '../utils/i18n.ts';
 
 const clients = [
+	{ name: 'PhotoAiD', src: '/logos/photoaid.svg', height: 34 },
 	{ name: 'Epic Realty', src: '/logos/epic-realty.svg', height: 34 },
 	{ name: 'See More Logistics', src: '/logos/see-more.svg', height: 42 },
 	{ name: 'Snacks Lovers', src: '/logos/snacks-lovers.svg', height: 48 },
-	{ name: 'Detalles', src: '/logos/detalles.svg', height: 34 },
+	{ name: 'Mi Pronto', src: '/logos/detalles.svg', height: 34 },
 	{ name: 'Avendin', src: '/logos/avendin.svg', height: 27 },
 	{ name: 'Andrea Vega', src: '/logos/andrea-vega.svg', height: 48 },
 	{ name: 'NRV Control Systems', src: '/logos/nrv.svg', height: 38 },
 	{ name: 'Mexi Munchies', src: '/logos/meximunchies.svg', height: 48 },
-	{ name: 'TRG Abogada', src: '/logos/trg.svg', height: 48 },
+	{ name: 'WCR Kraków', src: '/logos/wcr-krakow.svg', height: 48 },
 ];
 ---
 
-<section id="clients-section" class="relative z-20 bg-[#131415] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
+<section id="clients-section" class="relative z-20 bg-[#131415] px-[var(--page-gutter)] pt-10 pb-[60px] md:pt-[60px] md:pb-[120px]">
 	<div class="grid gap-6 md:grid-cols-2 md:gap-16">
-		<h2 id="clients-heading" class="clients-heading max-w-sm uppercase leading-[1.15]">
+		<h2 id="clients-heading" class="clients-heading uppercase leading-[1.15]">
 			<span data-reveal-line data-i18n="clients.line1">{t('clients.line1', 'en')}</span>
 			<br />
 			<span data-reveal-line data-i18n="clients.line2">{t('clients.line2', 'en')}</span>
 		</h2>
-		<p class="clients-description max-w-md leading-relaxed md:ml-auto" data-i18n="clients.description">
+		<p class="clients-description max-w-md md:ml-auto" data-i18n="clients.description">
 			{t('clients.description', 'en')}
 		</p>
 	</div>
@@ -32,14 +33,14 @@ const clients = [
 	>
 		{
 			clients.map((client) => (
-				<div class="client-logo-item flex min-h-[48px] items-center">
+				<div class="client-logo-item flex min-h-[48px] items-center justify-center">
 					<img
 						src={client.src}
 						alt={client.name}
 						width="200"
 						height={client.height}
-						style={`max-height: ${client.height}px`}
-						class="h-auto w-auto max-w-full object-contain object-left brightness-0 invert"
+						style={`height: ${client.height}px; width: auto;`}
+						class="max-w-full object-contain object-center brightness-0 invert"
 						loading="lazy"
 					/>
 				</div>
@@ -50,12 +51,31 @@ const clients = [
 
 <style is:global>
 	.clients-heading {
-		font-size: 2rem;
+		font-size: 1.4rem;
 		line-height: 1.15;
 	}
 
+	.clients-heading [data-reveal-line] {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
 	.clients-description {
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5;
 		color: #ffffff;
+	}
+
+	@media (min-width: 768px) {
+		.clients-heading {
+			font-size: 2rem;
+		}
+
+		.clients-description {
+			font-size: 1.1rem;
+			line-height: 1.55;
+		}
 	}
 
 	#clients-heading .reveal-char {
@@ -70,6 +90,8 @@ const clients = [
 	.client-logo-item {
 		opacity: 0;
 		transform: translateY(8px);
+		user-select: none;
+		-webkit-user-select: none;
 		transition:
 			opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
 			transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
@@ -79,24 +101,25 @@ const clients = [
 		opacity: 1;
 		transform: translateY(0);
 	}
+
+	.client-logo-item img {
+		opacity: 0.7;
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-user-drag: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.client-logo-item:hover img {
+		opacity: 1;
+	}
 </style>
 
 <script>
-	import { t } from '../utils/i18n.ts';
+	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
 
 	function wrapLetters(element: HTMLElement) {
-		const key = element.dataset.i18n;
-		if (key) element.textContent = t(key);
-
-		const text = element.textContent ?? '';
-		element.textContent = '';
-
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
-			element.appendChild(span);
-		}
+		wrapRevealLetters(element);
 	}
 
 	function updateHeadingReveal() {

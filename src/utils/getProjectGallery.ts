@@ -22,7 +22,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4)$/i;
+const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm)$/i;
 
 export function getCoverFilename(thumbnail: string): string {
 	return thumbnail.split('/').pop() ?? 'cover.webp';
@@ -131,26 +131,21 @@ export function buildGalleryLayout(
 			const parts = files.filter((file) => file.part !== null);
 			const singles = files.filter((file) => file.part === null);
 
-			if (parts.length > 0) {
-				const items = [
-					...singles.map((single) => toMediaItem(folderName, single.filename, single.type)),
-					...parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
-				];
-
-				layout.push({
-					kind: 'grid',
-					group,
-					items,
-					leadFull: singles.length > 0,
-				});
-				continue;
-			}
-
+			// Emit the unnumbered file (e.g. 2.webp) as its own full row so sections
+			// can insert between it and the paired frames (2.1 / 2.2).
 			for (const single of singles) {
 				layout.push({
 					kind: 'full',
 					group,
 					item: toMediaItem(folderName, single.filename, single.type),
+				});
+			}
+
+			if (parts.length > 0) {
+				layout.push({
+					kind: 'grid',
+					group,
+					items: parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
 				});
 			}
 		}

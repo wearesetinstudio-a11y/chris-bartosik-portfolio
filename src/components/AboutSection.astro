@@ -4,63 +4,35 @@ import { t } from '../utils/i18n.ts';
 ---
 
 <section id="about" class="about-section relative z-20 bg-[#131415]">
-	<div id="about-visual" class="about-visual relative overflow-hidden">
-		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none absolute inset-x-0">
-			<picture>
-				<img
-					src="/chris.webp"
-					alt="Chris Bartosik"
-					width="1920"
-					height="1080"
-					class="about-parallax__image h-full w-full object-cover object-[center_22%] grayscale"
-					loading="lazy"
-					decoding="async"
-				/>
-			</picture>
-		</div>
-
-		<canvas
-			id="about-noise-filter"
-			class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
-			aria-hidden="true"
-		></canvas>
-
-		<div
-			class="about-visual__overlay pointer-events-none absolute inset-0 z-[1] bg-[#131415]/10"
-			aria-hidden="true"
-		></div>
-
-		<div
-			class="about-visual__content relative z-10 flex h-[420px] flex-col justify-end gap-6 px-[var(--page-gutter)] pb-10 pt-20 md:grid md:h-[600px] md:grid-cols-2 md:items-end md:gap-16 md:pb-16 md:pt-24"
-		>
-			<p class="about-visual__eyebrow" data-i18n="about.eyebrow">{t('about.eyebrow', 'en')}</p>
-			<p class="about-visual__intro max-w-md leading-relaxed text-white md:ml-auto" data-i18n="about.intro">
-				{t('about.intro', 'en')}
+	<div class="about-layout">
+		<div class="about-sticky">
+			<p id="about-kicker" class="about-kicker">
+				<span data-i18n="about.kickerBefore">{t('about.kickerBefore', 'en')}</span>
+				<span class="about-kicker__photo" aria-hidden="true">
+					<img
+						src="/chris.webp"
+						alt=""
+						width="160"
+						height="160"
+						loading="lazy"
+						decoding="async"
+					/>
+				</span>
+				<span data-i18n="about.kickerAfter">{t('about.kickerAfter', 'en')}</span>
 			</p>
 		</div>
-	</div>
 
-	<div
-		id="about-content"
-		class="about-content grid min-w-0 gap-6 px-[var(--page-gutter)] py-[var(--section-padding-y)] md:grid-cols-2 md:gap-20"
-	>
-		<h2 id="about-heading" class="about-content__heading min-w-0 w-full max-w-full uppercase leading-[1.15] md:max-w-lg">
-			<span data-reveal-line data-i18n="about.heading">
-				{t('about.heading', 'en')}
-			</span>
-		</h2>
+		<div class="about-copy">
+			<h2 id="about-heading" class="about-content__heading uppercase">
+				<span data-reveal-line data-i18n="about.heading">{t('about.heading', 'en')}</span>
+			</h2>
 
-		<div class="about-content__body min-w-0 md:pt-2">
-			<div class="space-y-6 leading-relaxed text-setin-muted">
-				<p data-i18n="about.body1">
-					{t('about.body1', 'en')}
-				</p>
-				<p data-i18n="about.body2">
-					{t('about.body2', 'en')}
-				</p>
+			<div class="about-content__body">
+				<p data-i18n="about.body1">{t('about.body1', 'en')}</p>
+				<p data-i18n="about.body2">{t('about.body2', 'en')}</p>
 			</div>
 
-			<div class="mt-12">
+			<div class="about-copy__cta">
 				<WorkWithUsButton href="/about" label={t('about.readMore', 'en')} i18nKey="about.readMore" />
 			</div>
 		</div>
@@ -68,79 +40,68 @@ import { t } from '../utils/i18n.ts';
 </section>
 
 <style is:global>
-	.about-visual {
-		height: 420px;
+	.about-section {
+		padding: var(--section-padding-y) var(--page-gutter);
 	}
 
-	@media (min-width: 768px) {
-		.about-visual {
-			height: 600px;
-		}
+	.about-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 3rem;
+		align-items: start;
 	}
 
-	.about-parallax__layer {
-		top: -4%;
-		height: 108%;
-		will-change: transform;
+	.about-sticky {
+		align-self: start;
 	}
 
-	.about-parallax__image {
-		transform: scale(1.06);
-		transform-origin: center 22%;
-	}
-
-	@media (max-width: 767px) {
-		.about-parallax__layer {
-			top: 0;
-			height: 100%;
-		}
-
-		.about-parallax__image {
-			object-fit: cover;
-			object-position: center 8%;
-			transform: scale(1);
-			transform-origin: center 8%;
-		}
-	}
-
-	.about-visual__eyebrow {
-		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
-		font-size: 2.4rem;
+	.about-kicker {
+		--about-photo: 0;
+		display: flex;
+		align-items: center;
+		margin: 0;
+		font-size: 1.45rem;
 		font-weight: 600;
-		line-height: 1.2;
+		line-height: 1;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: #ffffff;
+		white-space: nowrap;
 	}
 
-	.about-visual__intro {
-		color: #ffffff;
+	.about-kicker__photo {
+		display: block;
+		width: calc(var(--about-photo) * 6rem);
+		height: 6rem;
+		margin-inline: calc(var(--about-photo) * 0.85rem);
+		overflow: hidden;
+		opacity: var(--about-photo);
+		flex-shrink: 0;
+		will-change: width, margin, opacity;
+	}
+
+	.about-kicker__photo img {
+		display: block;
+		width: 6rem;
+		height: 6rem;
+		object-fit: cover;
+		object-position: center 18%;
+		filter: grayscale(1);
+	}
+
+	.about-copy {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		max-width: 38rem;
 	}
 
 	.about-content__heading {
-		overflow-wrap: break-word;
+		font-size: 1.4rem;
+		font-weight: 600;
 		line-height: 1.15;
-		max-width: 100%;
-	}
-
-	@media (max-width: 767px) {
-		.about-content__heading {
-			font-size: 1.8rem;
-		}
-
-		#about-heading [data-reveal-line] {
-			white-space: normal;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.about-content__heading {
-			font-size: 2rem;
-		}
-	}
-
-	.about-content__body {
-		max-width: 100%;
-		overflow-wrap: break-word;
+		letter-spacing: var(--letter-spacing-ui);
+		color: #ffffff;
 	}
 
 	#about-heading .reveal-char {
@@ -151,28 +112,121 @@ import { t } from '../utils/i18n.ts';
 	#about-heading .reveal-char.active {
 		color: rgba(255, 255, 255, 1);
 	}
+
+	.about-content__body {
+		display: flex;
+		flex-direction: column;
+		gap: 1.35rem;
+		margin-top: 2rem;
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.about-content__body,
+	.about-content__body p {
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		letter-spacing: 0;
+	}
+
+	.about-copy__cta {
+		margin-top: 2.75rem;
+	}
+
+	@media (min-width: 768px) {
+		.about-layout {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+			gap: 4rem;
+		}
+
+		.about-sticky {
+			position: sticky;
+			top: calc(100px + 1.5rem);
+		}
+
+		.about-content__heading {
+			font-size: 2rem;
+		}
+
+		.about-content__body,
+		.about-content__body p {
+			font-size: 1.1rem;
+			line-height: 1.55;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.about-kicker {
+			font-size: 1.15rem;
+			letter-spacing: 0.06em;
+			white-space: nowrap;
+			flex-wrap: nowrap;
+			max-width: 100%;
+			overflow: hidden;
+		}
+
+		.about-kicker__photo,
+		.about-kicker__photo img {
+			height: 4.5rem;
+		}
+
+		.about-kicker__photo {
+			width: calc(var(--about-photo) * 4.5rem);
+		}
+
+		.about-kicker__photo img {
+			width: 4.5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.about-kicker {
+			--about-photo: 1;
+		}
+
+		.about-kicker__photo {
+			transition: none;
+		}
+	}
 </style>
 
 <script>
-	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
+	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
 
-	import { t } from '../utils/i18n.ts';
+	function easePhoto(value: number) {
+		return value * value * (3 - 2 * value);
+	}
 
-	function wrapLetters(element: HTMLElement) {
-		if (element.querySelector('.reveal-char')) return;
+	function updateAboutKicker() {
+		const section = document.getElementById('about');
+		const kicker = document.getElementById('about-kicker');
+		if (!section || !kicker) return;
 
-		const key = element.dataset.i18n;
-		if (key) element.textContent = t(key);
+		const photo = kicker.querySelector<HTMLElement>('.about-kicker__photo');
+		const before = kicker.querySelector<HTMLElement>('[data-i18n="about.kickerBefore"]');
+		const after = kicker.querySelector<HTMLElement>('[data-i18n="about.kickerAfter"]');
 
-		const text = element.textContent ?? '';
-		element.textContent = '';
+		let progress = 1;
 
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? ' ' : char;
-			element.appendChild(span);
+		if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			const rect = section.getBoundingClientRect();
+			const start = window.innerHeight * 0.78;
+			const end = window.innerHeight * 0.32;
+			const raw = (start - rect.top) / Math.max(start - end, 1);
+			progress = easePhoto(Math.min(1, Math.max(0, raw)));
 		}
+
+		if (photo && before && after) {
+			const photoMax = photo.getBoundingClientRect().height || parseFloat(getComputedStyle(photo).height);
+			const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+			const extraPerUnit = photoMax + 0.85 * rem * 2;
+			const textWidth = before.getBoundingClientRect().width + after.getBoundingClientRect().width;
+			const available = kicker.clientWidth - textWidth - 2;
+			const maxProgress = extraPerUnit > 0 ? Math.max(0, available / extraPerUnit) : 1;
+			progress = Math.min(progress, maxProgress);
+		}
+
+		kicker.style.setProperty('--about-photo', progress.toFixed(4));
 	}
 
 	function updateAboutHeadingReveal() {
@@ -195,58 +249,41 @@ import { t } from '../utils/i18n.ts';
 		});
 	}
 
-	function initAboutParallax() {
-		const visual = document.getElementById('about-visual');
-		const layer = document.getElementById('about-parallax-layer');
-		if (!visual || !layer || visual.dataset.parallaxInit === 'true') return;
+	function wrapAboutHeadingLetters() {
+		const heading = document.getElementById('about-heading');
+		if (!heading) return;
 
-		visual.dataset.parallaxInit = 'true';
+		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+			wrapRevealLetters(line as HTMLElement);
+		});
 
-		const PARALLAX_SPEED = 0.16;
-		const MAX_SHIFT_RATIO = 0.045;
+		updateAboutHeadingReveal();
+	}
 
-		function updateParallax() {
-			const containerHeight = visual.offsetHeight;
-			const maxShift = containerHeight * MAX_SHIFT_RATIO;
-			const scrollOffset = -visual.getBoundingClientRect().top;
-			const rawOffset = scrollOffset * PARALLAX_SPEED;
-			const offset = Math.max(-maxShift * 0.2, Math.min(maxShift * 0.55, rawOffset));
+	function initAboutSection() {
+		const section = document.getElementById('about');
+		if (!section) return;
 
-			layer.style.transform = `translate3d(0, ${offset}px, 0)`;
-		}
+		wrapAboutHeadingLetters();
+		updateAboutKicker();
+
+		if (section.dataset.aboutInit === 'true') return;
+		section.dataset.aboutInit = 'true';
 
 		let ticking = false;
 
 		function onScroll() {
 			if (ticking) return;
 			ticking = true;
-			requestAnimationFrame(() => {
-				updateParallax();
+			window.requestAnimationFrame(() => {
+				updateAboutKicker();
 				updateAboutHeadingReveal();
 				ticking = false;
 			});
 		}
 
-		updateParallax();
-		updateAboutHeadingReveal();
 		window.addEventListener('scroll', onScroll, { passive: true });
-		window.addEventListener('resize', () => {
-			updateParallax();
-			updateAboutHeadingReveal();
-		}, { passive: true });
-	}
-
-	function initAboutSection() {
-		const heading = document.getElementById('about-heading');
-
-		if (heading) {
-			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-				wrapLetters(line as HTMLElement);
-			});
-		}
-
-		initAboutParallax();
-		initCinemaPureNoise('about-noise-filter', { observeElementId: 'about-visual' });
+		window.addEventListener('resize', onScroll, { passive: true });
 	}
 
 	if (document.readyState === 'loading') {
@@ -256,4 +293,8 @@ import { t } from '../utils/i18n.ts';
 	}
 
 	document.addEventListener('astro:page-load', initAboutSection);
+	document.addEventListener('i18n-applied', () => {
+		wrapAboutHeadingLetters();
+		updateAboutKicker();
+	});
 </script>

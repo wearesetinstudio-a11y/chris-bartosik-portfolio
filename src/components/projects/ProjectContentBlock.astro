@@ -1,52 +1,131 @@
 ---
+import { parseProjectCopyBlocks } from '../../utils/parseProjectCopyBlocks.ts';
+
 interface Props {
 	index: number;
-	label: string;
+	label?: string;
 	title?: string;
-	text: string;
-	theme?: 'dark' | 'light';
+	titleField?: string;
+	text?: string;
+	textField?: string;
+	theme?: 'dark' | 'light' | 'muted';
 	headingId?: string;
+	sectionIndex?: number;
 }
 
-const { index, label, title = '', text, theme = 'light', headingId = '' } = Astro.props;
+const {
+	index,
+	label = '',
+	title = '',
+	titleField,
+	text = '',
+	textField,
+	theme = 'light',
+	headingId = '',
+	sectionIndex,
+} = Astro.props;
 
 const titleChars = title.split('');
-const paragraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
+const contentBlocks = parseProjectCopyBlocks(text);
 const resolvedHeadingId = headingId || (title ? `project-section-${index}-heading` : '');
+const hasLabel = Boolean(label.trim());
+const hasTitle = Boolean(title.trim());
+const hasText = contentBlocks.length > 0;
+const hasBody = hasTitle || hasText;
 ---
 
-<section
-	class:list={[
-		'project-content-block px-[var(--page-gutter)] py-20 md:py-28',
-		theme === 'dark' ? 'project-content-block--dark' : 'project-content-block--light',
-	]}
->
-	<div class="project-content-block__grid">
-		<p class="project-content-block__label">[{index}] {label}</p>
-
-		<div class="project-content-block__body min-w-0">
-			{
-				title ? (
-					<h2 id={resolvedHeadingId} class="project-content-block__heading">
-						<span class="project-content-block__heading-line" data-reveal-line>
-							{titleChars.map((char) => (
-								<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
-							))}
-						</span>
-					</h2>
-				) : null
-			}
-
-			<div class:list={['project-content-block__paragraphs', title ? 'project-content-block__paragraphs--with-title' : '']}>
+{
+	hasLabel || hasBody ? (
+		<section
+			class:list={[
+				'project-content-block px-[var(--page-gutter)] project-content-block--stacked',
+				theme === 'dark'
+					? 'project-content-block--dark'
+					: theme === 'muted'
+						? 'project-content-block--muted'
+						: 'project-content-block--light',
+			]}
+			data-project-section={sectionIndex ?? index}
+		>
+			<div
+				class:list={[
+					'project-content-block__grid project-content-block__grid--stacked',
+					!hasLabel && 'project-content-block__grid--no-label',
+				]}
+			>
 				{
-					paragraphs.map((paragraph) => (
-						<p class="project-content-block__text">{paragraph}</p>
-					))
+					hasLabel ? (
+						<p class="project-content-block__label">
+							[
+							<span
+								class="project-content-block__label-text"
+								data-project-section-field="label"
+							>
+								{label}
+							</span>
+							]
+						</p>
+					) : null
+				}
+
+				{
+					hasBody ? (
+						<div class="project-content-block__body">
+							{hasTitle ? (
+								<h2
+									id={resolvedHeadingId}
+									class="project-content-block__heading"
+									data-project-section-field="title"
+									data-project-field={titleField}
+								>
+									<span class="project-content-block__heading-line" data-reveal-line>
+										{titleChars.map((char) => (
+											<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+										))}
+									</span>
+								</h2>
+							) : null}
+
+							{hasText ? (
+								<div
+									class:list={[
+										'project-content-block__copy',
+										hasTitle ? 'project-content-block__copy--with-title' : '',
+									]}
+									data-project-section-field="text"
+									data-project-field={textField}
+									data-project-paragraphs={textField || sectionIndex != null ? 'true' : undefined}
+									data-paragraph-class="project-content-block__text"
+								>
+									{contentBlocks.map((block) =>
+										block.type === 'list' ? (
+											<ul class="project-content-block__list">
+												{block.items.map((item) => (
+													<li>
+														{item.title ? (
+															<>
+																<strong>{item.title}:</strong>
+																{item.body ? ` ${item.body}` : ''}
+															</>
+														) : (
+															item.body
+														)}
+													</li>
+												))}
+											</ul>
+										) : (
+											<p class="project-content-block__text">{block.text}</p>
+										),
+									)}
+								</div>
+							) : null}
+						</div>
+					) : null
 				}
 			</div>
-		</div>
-	</div>
-</section>
+		</section>
+	) : null
+}
 
 <style>
 	.project-content-block--light {
@@ -54,79 +133,114 @@ const resolvedHeadingId = headingId || (title ? `project-section-${index}-headin
 		color: #131415;
 	}
 
+	.project-content-block--muted {
+		background: #fafafa;
+		color: #131415;
+	}
+
 	.project-content-block--dark {
-		background: #131415;
+		background: #1c1c1c;
 		color: #ffffff;
+	}
+
+	.project-content-block--stacked {
+		container-type: inline-size;
+		padding-block: 7rem;
+	}
+
+	@media (min-width: 768px) {
+		.project-content-block--stacked {
+			padding-block: 10rem;
+		}
 	}
 
 	.project-content-block__grid {
 		display: grid;
-		gap: 2rem;
+		gap: 2.5rem;
 	}
 
 	@media (min-width: 1024px) {
-		.project-content-block__grid {
-			grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
+		.project-content-block--stacked .project-content-block__grid,
+		.project-content-block__grid--stacked {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 65%);
 			column-gap: 5rem;
 			row-gap: 0;
 			align-items: start;
 		}
+
+		.project-content-block--stacked .project-content-block__grid--no-label {
+			grid-template-columns: minmax(0, 65%);
+			justify-content: end;
+		}
+
+		.project-content-block--stacked .project-content-block__body {
+			width: 100%;
+			max-width: none;
+			min-width: 0;
+			justify-self: stretch;
+		}
 	}
 
 	@media (min-width: 1280px) {
-		.project-content-block__grid {
+		.project-content-block--stacked .project-content-block__grid,
+		.project-content-block__grid--stacked {
 			column-gap: 6rem;
 		}
 	}
 
 	.project-content-block__label {
-		font-size: 1.2rem;
+		margin: 0;
+		font-size: var(--label-text-size);
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.14em;
+		letter-spacing: 0;
 		line-height: 1.2;
+		white-space: nowrap;
 	}
 
-	.project-content-block--light .project-content-block__label {
-		color: #000000;
+	.project-content-block__label-text {
+		letter-spacing: var(--label-text-tracking);
+	}
+
+	.project-content-block--light .project-content-block__label,
+	.project-content-block--muted .project-content-block__label {
+		color: rgba(0, 0, 0, 0.4);
 	}
 
 	.project-content-block--dark .project-content-block__label {
-		color: #ffffff;
+		color: rgba(255, 255, 255, 0.4);
 	}
 
 	.project-content-block__heading {
-		font-size: 1.8rem;
+		margin: 0;
+		font-size: var(--heading-h2-size);
 		font-weight: 600;
 		text-transform: uppercase;
-		line-height: 1.12;
-		letter-spacing: -0.01em;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
 		color: transparent;
-	}
-
-	@media (min-width: 768px) {
-		.project-content-block__heading {
-			font-size: 2.25rem;
-		}
 	}
 
 	.project-content-block__heading-line {
 		display: inline;
 		white-space: normal;
-		overflow-wrap: anywhere;
+		overflow-wrap: break-word;
+		word-break: normal;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char) {
+	.project-content-block--light .project-content-block__heading :global(.reveal-char),
+	.project-content-block--muted .project-content-block__heading :global(.reveal-char) {
 		color: rgba(0, 0, 0, 0.15);
 		transition: color 0.35s ease-out;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char.active) {
+	.project-content-block--light .project-content-block__heading :global(.reveal-char.active),
+	.project-content-block--muted .project-content-block__heading :global(.reveal-char.active) {
 		color: #000000;
 	}
 
 	.project-content-block--dark .project-content-block__heading :global(.reveal-char) {
-		color: rgba(255, 255, 255, 0.15);
+		color: rgba(255, 255, 255, 0.18);
 		transition: color 0.35s ease-out;
 	}
 
@@ -134,25 +248,57 @@ const resolvedHeadingId = headingId || (title ? `project-section-${index}-headin
 		color: #ffffff;
 	}
 
-	.project-content-block__paragraphs {
+	.project-content-block__copy {
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
 	}
 
-	.project-content-block__paragraphs--with-title {
+	.project-content-block__copy--with-title {
 		margin-top: 1.5rem;
 	}
 
-	.project-content-block__text {
-		line-height: 1.625;
-	}
-
-	.project-content-block--light .project-content-block__text {
+	.project-content-block--light .project-content-block__copy,
+	.project-content-block--muted .project-content-block__copy {
 		color: rgba(0, 0, 0, 0.7);
 	}
 
-	.project-content-block--dark .project-content-block__text {
-		color: rgba(255, 255, 255, 0.75);
+	.project-content-block--dark .project-content-block__copy {
+		color: rgba(255, 255, 255, 0.72);
+	}
+
+	.project-content-block__copy :global(p),
+	.project-content-block__text {
+		margin: 0;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		letter-spacing: 0;
+		color: inherit;
+	}
+
+	.project-content-block__list {
+		margin: 0;
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		color: inherit;
+	}
+
+	.project-content-block__list li {
+		padding-left: 0.25rem;
+	}
+
+	.project-content-block__list :global(strong) {
+		font-weight: 700;
+		color: #131415;
+	}
+
+	.project-content-block--dark .project-content-block__list :global(strong) {
+		color: #ffffff;
 	}
 </style>

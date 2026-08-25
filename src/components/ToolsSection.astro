@@ -1,0 +1,184 @@
+---
+import { t } from '../utils/i18n.ts';
+
+const tools = [
+	{ name: 'Figma', src: '/logos-tools/figma.svg' },
+	{ name: 'Rive', src: '/logos-tools/rive.svg' },
+	{ name: 'Affinity', src: '/logos-tools/affinity.svg' },
+	{ name: 'Cursor', src: '/logos-tools/cursor.svg' },
+	{ name: 'Webflow', src: '/logos-tools/webflow.svg' },
+	{ name: 'Adobe', src: '/logos-tools/adobe.svg' },
+	{ name: 'Claude', src: '/logos-tools/claude.svg' },
+	{ name: 'Google Analytics', src: '/logos-tools/google-analythics.svg' },
+];
+---
+
+<section class="tools-section" aria-label={t('tools.heading', 'en')} data-i18n-aria="tools.heading">
+	<div class="tools-section__label">
+		<p class="tools-section__heading">
+			<span data-i18n="tools.line1">{t('tools.line1', 'en')}</span>
+			<span data-i18n="tools.line2">{t('tools.line2', 'en')}</span>
+		</p>
+		<span class="tools-section__rule" aria-hidden="true"></span>
+	</div>
+
+	<div class="tools-section__marquee" aria-hidden="true">
+		<div class="tools-section__track">
+			{
+				[0, 1].map((copy) => (
+					<div class="tools-section__group">
+						{tools.map((tool) => (
+							<img
+								src={tool.src}
+								alt=""
+								class="tools-section__logo"
+								loading="lazy"
+								decoding="async"
+							/>
+						))}
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.tools-section {
+		display: flex;
+		align-items: center;
+		background-color: #131415;
+		padding: 60px 0 60px var(--page-gutter);
+		overflow: hidden;
+	}
+
+	.tools-section__label {
+		position: relative;
+		z-index: 2;
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: 1.35rem;
+		padding-right: 1.5rem;
+		background-color: #131415;
+	}
+
+	.tools-section__heading {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		font-size: 0.78rem;
+		font-weight: 600;
+		line-height: 1.28;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.55);
+		white-space: nowrap;
+	}
+
+	.tools-section__heading span:empty {
+		display: none;
+	}
+
+	.tools-section__rule {
+		display: block;
+		width: 1px;
+		height: 2.15rem;
+		background-color: rgba(255, 255, 255, 0.22);
+		flex-shrink: 0;
+	}
+
+	.tools-section__marquee {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 100%);
+	}
+
+	.tools-section__track {
+		display: flex;
+		width: max-content;
+		animation: tools-marquee 42s linear infinite;
+	}
+
+	.tools-section__group {
+		display: flex;
+		align-items: center;
+		gap: 3.5rem;
+		padding-right: 3.5rem;
+	}
+
+	.tools-section__logo {
+		display: block;
+		height: 1.7rem;
+		width: auto;
+		opacity: 0.7;
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-user-drag: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.tools-section__logo:hover {
+		opacity: 1;
+	}
+
+	@keyframes tools-marquee {
+		from {
+			transform: translate3d(0, 0, 0);
+		}
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.tools-section {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 1.15rem;
+			padding: 60px 0 40px;
+		}
+
+		.tools-section__label {
+			padding: 0 var(--page-gutter);
+			background-color: transparent;
+		}
+
+		.tools-section__rule {
+			display: none;
+		}
+
+		.tools-section__heading {
+			flex-direction: row;
+			justify-content: center;
+			gap: 0.4em;
+			width: 100%;
+			font-size: 0.68rem;
+			font-weight: 500;
+			letter-spacing: 0.1em;
+			white-space: nowrap;
+			text-align: center;
+		}
+
+		.tools-section__marquee {
+			width: 100%;
+			mask-image: none;
+		}
+
+		.tools-section__group {
+			gap: 2.4rem;
+			padding-right: 2.4rem;
+		}
+
+		.tools-section__logo {
+			height: 1.4rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.tools-section__track {
+			animation: none;
+		}
+	}
+</style>

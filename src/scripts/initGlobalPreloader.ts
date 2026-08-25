@@ -42,6 +42,7 @@ async function runIntroSequence() {
 		await animateIntroCover();
 		markIntroComplete();
 		setIntroRevealing();
+		window.dispatchEvent(new CustomEvent('intro-revealing'));
 		await animatePageTransitionReveal();
 	} catch {
 		clearIntroPending();

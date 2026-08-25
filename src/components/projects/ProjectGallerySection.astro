@@ -13,7 +13,7 @@ const { blocks, title, startIndex = 0 } = Astro.props;
 let mediaIndex = startIndex;
 ---
 
-<section class="project-gallery px-[var(--page-gutter)] py-12 md:py-16">
+<section class="project-gallery px-[var(--page-gutter)]">
 	<div class="project-gallery__stack">
 		{
 			blocks.map((block) => {
@@ -58,24 +58,13 @@ let mediaIndex = startIndex;
 <style>
 	.project-gallery {
 		background: #ffffff;
+		padding-block: 0;
 	}
 
 	.project-gallery__stack {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
-	}
-
-	@media (min-width: 768px) {
-		.project-gallery__stack {
-			gap: 2.5rem;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.project-gallery__stack {
-			gap: 3rem;
-		}
+		gap: var(--page-gutter);
 	}
 
 	.project-gallery__row--full,
@@ -85,13 +74,7 @@ let mediaIndex = startIndex;
 
 	.project-gallery__row--grid {
 		display: grid;
-		gap: 2rem;
-	}
-
-	@media (min-width: 768px) {
-		.project-gallery__row--grid {
-			gap: 2.5rem;
-		}
+		gap: var(--page-gutter);
 	}
 
 	.project-gallery__row--grid-2 {
@@ -129,15 +112,6 @@ let mediaIndex = startIndex;
 	}
 
 	@media (max-width: 767px) {
-		.project-gallery {
-			padding-block: 0;
-		}
-
-		.project-gallery__stack,
-		.project-gallery__row--grid {
-			gap: 2rem;
-		}
-
 		.project-gallery__row :global(.project-gallery__item img),
 		.project-gallery__row :global(.project-gallery__item video) {
 			vertical-align: top;

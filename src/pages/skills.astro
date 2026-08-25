@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SkillsPage from '../components/skills/SkillsPage.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { t } from '../utils/i18n.ts';
+
+const { projectCount } = await getSiteCounts();
+---
+
+<Layout
+	title={t('skills.pageTitle', 'en')}
+	titleKey="skills.pageTitle"
+	description={t('skills.pageDescription', 'en')}
+	descriptionKey="skills.pageDescription"
+>
+	<Header projectCount={projectCount} />
+
+	<main class="relative z-20 flex-1">
+		<SkillsPage />
+		<ContactSection />
+	</main>
+
+	<Footer />
+</Layout>

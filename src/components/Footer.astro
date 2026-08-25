@@ -1,9 +1,36 @@
 ---
+import ChrisLogo from './ChrisLogo.astro';
+import RollingLink from './RollingLink.astro';
+import { getCollection } from 'astro:content';
 import { t } from '../utils/i18n.ts';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
 
 const locations = [
 	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
 	{ label: 'Panama, PA', timezone: 'America/Panama' },
+	{ label: 'New York, US', timezone: 'America/New_York' },
+];
+
+const FOOTER_PREVIEW = 3;
+const handSrc = withPublicAssetVersion('/chris-hand-logo.svg');
+
+const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const projectPreview = allProjects.slice(0, FOOTER_PREVIEW);
+const projectsRemaining = Math.max(0, allProjects.length - projectPreview.length);
+
+const sitemap = [
+	{ href: '/', label: t('nav.home', 'en'), i18nKey: 'nav.home' },
+	{ href: '/skills', label: t('nav.skills', 'en'), i18nKey: 'nav.skills' },
+	{ href: '/projects', label: t('nav.projects', 'en'), i18nKey: 'nav.projects' },
+	{ href: '/about', label: t('nav.about', 'en'), i18nKey: 'nav.about' },
+];
+
+const skillLinks = [
+	{ href: '/skills#product-ux-ui', label: t('hero.pillar1', 'en'), i18nKey: 'hero.pillar1' },
+	{ href: '/skills#interactive-motion', label: t('hero.pillar2', 'en'), i18nKey: 'hero.pillar2' },
+	{ href: '/skills#generative-ai', label: t('hero.pillar4', 'en'), i18nKey: 'hero.pillar4' },
+	{ href: '/skills#no-code-handoff', label: t('hero.pillar3', 'en'), i18nKey: 'hero.pillar3' },
 ];
 
 function formatLocationTime(timeZone: string, date = new Date()) {
@@ -19,42 +46,321 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 }
 ---
 
-<footer class="relative z-20 border-t border-setin-border bg-[#131415]">
-	<div class="flex w-full flex-col gap-8 px-[var(--page-gutter)] py-10 md:flex-row md:items-end md:justify-between">
-		<div>
-			<p class="footer-brand text-[1.05rem] font-semibold uppercase tracking-[0.14em] text-setin-fg">
-				{t('brand.name', 'en')}
-			</p>
-			<p class="footer-copyright mt-3 text-[1rem] text-setin-muted">
-				&copy; {new Date().getFullYear()} {t('brand.name', 'en')}
-			</p>
-		</div>
+<footer class="site-footer relative z-20 border-t border-white/15 bg-[#131415]">
+	<div class="site-footer__main px-[var(--page-gutter)] py-[80px] md:py-[120px]">
+		<div class="site-footer__grid">
+			<div class="site-footer__brand">
+				<a
+					href="/"
+					class="site-footer__logo block w-fit select-none transition-opacity hover:opacity-70"
+					aria-label={t('nav.homeAria', 'en')}
+					data-i18n-aria="nav.homeAria"
+				>
+					<ChrisLogo size="nav" />
+				</a>
 
-		<div class="footer-locations grid w-full grid-cols-2 gap-x-1 gap-y-4 md:flex md:w-auto md:flex-wrap md:gap-x-10">
-			{
-				locations.map((location) => (
-					<div class="footer-location flex min-w-0 flex-col gap-1">
-						<span class="footer-location__label text-[1rem] uppercase text-setin-muted">{location.label}</span>
-						<time
-							class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums"
-							datetime={new Date().toISOString()}
-							data-timezone={location.timezone}
-						>
-							{formatLocationTime(location.timezone)}
-						</time>
-					</div>
-				))
-			}
+				<div class="site-footer__locations">
+					{
+						locations.map((location) => (
+							<div class="site-footer__location">
+								<span class="site-footer__location-label uppercase">{location.label}</span>
+								<time
+									class="site-footer__location-time uppercase tabular-nums"
+									datetime={new Date().toISOString()}
+									data-timezone={location.timezone}
+								>
+									{formatLocationTime(location.timezone)}
+								</time>
+							</div>
+						))
+					}
+				</div>
+			</div>
+
+			<nav class="site-footer__col" aria-label={t('footer.sitemap', 'en')} data-i18n-aria="footer.sitemap">
+				<p class="site-footer__col-title uppercase" data-i18n="footer.sitemap">
+					{t('footer.sitemap', 'en')}
+				</p>
+				<ul class="site-footer__list">
+					{
+						sitemap.map((item) => (
+							<li>
+								<RollingLink
+									href={item.href}
+									label={item.label}
+									i18nKey={item.i18nKey}
+									variant="footer"
+								/>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<nav class="site-footer__col" aria-label={t('nav.skills', 'en')} data-i18n-aria="nav.skills">
+				<p class="site-footer__col-title uppercase" data-i18n="nav.skills">
+					{t('nav.skills', 'en')}
+				</p>
+				<ul class="site-footer__list">
+					{
+						skillLinks.map((item) => (
+							<li>
+								<RollingLink
+									href={item.href}
+									label={item.label}
+									i18nKey={item.i18nKey}
+									variant="footer"
+								/>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<nav class="site-footer__col" aria-label={t('nav.projects', 'en')} data-i18n-aria="nav.projects">
+				<p class="site-footer__col-title uppercase" data-i18n="nav.projects">
+					{t('nav.projects', 'en')}
+				</p>
+				<ul class="site-footer__list">
+					{
+						projectPreview.map((project) => (
+							<li>
+								<RollingLink
+									href={project.data.comingSoon ? '/projects' : `/projects/${project.id}`}
+									label={project.data.client}
+									variant="footer"
+								/>
+							</li>
+						))
+					}
+					<li>
+						<RollingLink
+							href="/projects"
+							label={t('footer.viewAll', 'en')}
+							i18nKey="footer.viewAll"
+							count={projectsRemaining > 0 ? projectsRemaining : undefined}
+							countStyle="plus"
+							variant="footer"
+							underlined
+						/>
+					</li>
+				</ul>
+			</nav>
 		</div>
+	</div>
+
+	<div class="site-footer__bar">
+		<p class="site-footer__rights uppercase" data-i18n="footer.rights">
+			{t('footer.rights', 'en')}
+		</p>
+		<p class="site-footer__credit uppercase" data-i18n="footer.credit">
+			{t('footer.credit', 'en')}
+		</p>
+		<img
+			src={handSrc}
+			alt=""
+			width="52"
+			height="55"
+			class="site-footer__hand"
+			aria-hidden="true"
+			decoding="async"
+		/>
 	</div>
 </footer>
 
 <style is:global>
-	@media (max-width: 767px) {
-		.footer-copyright,
-		.footer-location__label,
-		.footer-location__time {
-			font-size: 0.8rem;
+	.site-footer__grid {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		min-width: 0;
+	}
+
+	.site-footer__brand {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding-bottom: 1.75rem;
+	}
+
+	.site-footer__locations {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.75rem 1rem;
+	}
+
+	.site-footer__location {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		min-width: 0;
+	}
+
+	.site-footer__location-label,
+	.site-footer__location-time,
+	.site-footer__col-title,
+	.site-footer__rights,
+	.site-footer__credit {
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+	}
+
+	.site-footer__list .rolling-link--footer {
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+	}
+
+	.site-footer__location-label,
+	.site-footer__location-time,
+	.site-footer__col-title,
+	.site-footer__rights,
+	.site-footer__credit {
+		color: rgba(245, 245, 245, 0.45);
+	}
+
+	.site-footer__col {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		padding: 1.35rem 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.site-footer__col:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.site-footer__col-title {
+		margin: 0;
+	}
+
+	.site-footer__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.site-footer__bar {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-template-areas:
+			'credit hand'
+			'rights hand';
+		align-items: end;
+		column-gap: 1rem;
+		row-gap: 0.35rem;
+		padding: 40px var(--page-gutter);
+		background-color: #1a1b1c;
+	}
+
+	.site-footer__credit {
+		grid-area: credit;
+		margin: 0;
+	}
+
+	.site-footer__rights {
+		grid-area: rights;
+		margin: 0;
+	}
+
+	.site-footer__hand {
+		grid-area: hand;
+		display: block;
+		width: auto;
+		height: 1.55rem;
+		opacity: 0.38;
+		filter: brightness(0) invert(1);
+	}
+
+	@media (min-width: 768px) {
+		.site-footer__grid {
+			--footer-col-gap: 3rem;
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			align-items: start;
+			justify-content: stretch;
+			width: 100%;
+			column-gap: var(--footer-col-gap);
+			row-gap: 0;
+		}
+
+		.site-footer__brand,
+		.site-footer__col {
+			position: relative;
+			width: auto;
+			max-width: none;
+			min-width: 0;
+			padding: 0;
+			border: 0;
+			min-height: 100%;
+		}
+
+		.site-footer__brand {
+			padding-bottom: 0;
+		}
+
+		.site-footer__brand::after,
+		.site-footer__col:not(:last-child)::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: calc(var(--footer-col-gap) / -2);
+			bottom: 0;
+			width: 1px;
+			transform: translateX(50%);
+			background-color: rgba(255, 255, 255, 0.12);
+		}
+
+		.site-footer__locations {
+			display: flex;
+			flex-direction: column;
+			gap: 0.85rem;
+		}
+
+		.site-footer__col {
+			border-top: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.site-footer__col:last-child {
+			border-bottom: 0;
+		}
+
+		.site-footer__location-label,
+		.site-footer__location-time,
+		.site-footer__col-title,
+		.site-footer__list .rolling-link--footer,
+		.site-footer__rights,
+		.site-footer__credit {
+			font-size: 0.75rem;
+		}
+
+		.site-footer__bar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1.5rem;
+			padding: 40px var(--page-gutter);
+		}
+
+		.site-footer__credit {
+			flex: 1 1 auto;
+			text-align: center;
+		}
+
+		.site-footer__rights {
+			flex: 0 0 auto;
+			text-align: left;
+		}
+
+		.site-footer__hand {
+			flex: 0 0 auto;
+			height: 1.45rem;
 		}
 	}
 </style>
@@ -68,7 +374,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			footerClockInterval = null;
 		}
 
-		const clocks = document.querySelectorAll<HTMLTimeElement>('.footer-location__time');
+		const clocks = document.querySelectorAll<HTMLTimeElement>('.site-footer__location-time');
 		if (!clocks.length) return;
 
 		const formatterCache = new Map<string, Intl.DateTimeFormat>();

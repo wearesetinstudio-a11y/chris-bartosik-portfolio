@@ -1,6 +1,13 @@
+let slideUpObserver: IntersectionObserver | null = null;
+let slideUpTimers: number[] = [];
+
 export function initSlideUpReveal(root: ParentNode = document) {
 	const targets = root.querySelectorAll<HTMLElement>('[data-slide-up]');
 	if (!targets.length) return;
+
+	slideUpObserver?.disconnect();
+	slideUpTimers.forEach((id) => window.clearTimeout(id));
+	slideUpTimers = [];
 
 	const revealClass = 'is-revealed';
 
@@ -8,9 +15,11 @@ export function initSlideUpReveal(root: ParentNode = document) {
 		if (element.classList.contains(revealClass)) return;
 
 		const delay = Number(element.dataset.slideUpDelay ?? 0);
-		window.setTimeout(() => {
-			element.classList.add(revealClass);
-		}, delay);
+		slideUpTimers.push(
+			window.setTimeout(() => {
+				element.classList.add(revealClass);
+			}, delay),
+		);
 	}
 
 	function isInViewport(element: HTMLElement) {
@@ -18,12 +27,12 @@ export function initSlideUpReveal(root: ParentNode = document) {
 		return rect.top < window.innerHeight * 0.98 && rect.bottom > 0;
 	}
 
-	const observer = new IntersectionObserver(
+	slideUpObserver = new IntersectionObserver(
 		(entries) => {
 			for (const entry of entries) {
 				if (!entry.isIntersecting) continue;
 				revealElement(entry.target as HTMLElement);
-				observer.unobserve(entry.target);
+				slideUpObserver?.unobserve(entry.target);
 			}
 		},
 		{
@@ -38,7 +47,7 @@ export function initSlideUpReveal(root: ParentNode = document) {
 			return;
 		}
 
-		observer.observe(target);
+		slideUpObserver?.observe(target);
 	});
 }
 

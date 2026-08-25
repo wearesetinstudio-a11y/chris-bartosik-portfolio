@@ -1,0 +1,328 @@
+---
+import WorkWithUsButton from '../WorkWithUsButton.astro';
+import { t } from '../../utils/i18n.ts';
+
+const job2Items = [
+	'aboutPage.job2Item1',
+	'aboutPage.job2Item2',
+	'aboutPage.job2Item3',
+	'aboutPage.job2Item4',
+	'aboutPage.job2Item5',
+] as const;
+---
+
+<section class="about-page">
+	<aside class="about-page__sticky">
+		<p class="about-page__role" data-i18n="aboutPage.role">{t('aboutPage.role', 'en')}</p>
+		<div class="about-page__photo">
+			<img
+				src="/chris.webp"
+				alt="Chris Bartosik"
+				data-i18n-alt="brand.name"
+				width="1104"
+				height="1364"
+				class="about-page__image"
+				decoding="async"
+			/>
+		</div>
+	</aside>
+
+	<div class="about-page__content">
+		<h1 class="about-page__heading uppercase" data-i18n="aboutPage.heading">
+			{t('aboutPage.heading', 'en')}
+		</h1>
+
+		<p class="about-page__body about-page__intro" data-i18n="aboutPage.intro">
+			{t('aboutPage.intro', 'en')}
+		</p>
+
+		<div class="about-page__timeline">
+			<h2 class="about-page__timeline-heading uppercase" data-i18n="aboutPage.timelineHeading">
+				{t('aboutPage.timelineHeading', 'en')}
+			</h2>
+
+			<article class="about-page__job">
+				<div class="about-page__job-meta">
+					<p class="about-page__job-date" data-i18n="aboutPage.job1Date">{t('aboutPage.job1Date', 'en')}</p>
+					<img
+						src="/logos/neruron.webp"
+						alt="NeuroN Foundation"
+						width="160"
+						height="80"
+						class="about-page__job-logo about-page__job-logo--neuron"
+					/>
+				</div>
+				<div class="about-page__job-copy">
+					<h3 class="about-page__job-title uppercase" data-i18n="aboutPage.job1Title">
+						{t('aboutPage.job1Title', 'en')}
+					</h3>
+					<p class="about-page__body" data-i18n="aboutPage.job1Body">{t('aboutPage.job1Body', 'en')}</p>
+				</div>
+			</article>
+
+			<article class="about-page__job">
+				<div class="about-page__job-meta">
+					<p class="about-page__job-date" data-i18n="aboutPage.job2Date">{t('aboutPage.job2Date', 'en')}</p>
+					<img
+						src="/logos/photoaid.svg"
+						alt="PhotoAiD"
+						width="147"
+						height="25"
+						class="about-page__job-logo about-page__job-logo--photoaid"
+					/>
+				</div>
+				<div class="about-page__job-copy">
+					<h3 class="about-page__job-title uppercase" data-i18n="aboutPage.job2Title">
+						{t('aboutPage.job2Title', 'en')}
+					</h3>
+					<p class="about-page__body" data-i18n="aboutPage.job2Body">{t('aboutPage.job2Body', 'en')}</p>
+					<ul class="about-page__list">
+						{
+							job2Items.map((key) => (
+								<li data-i18n={key}>{t(key, 'en')}</li>
+							))
+						}
+					</ul>
+					<div class="about-page__cta">
+						<WorkWithUsButton
+							href="/projects?filter=photoaid"
+							label={t('aboutPage.seeMore', 'en')}
+							i18nKey="aboutPage.seeMore"
+						/>
+					</div>
+				</div>
+			</article>
+
+			<article class="about-page__job">
+				<div class="about-page__job-meta">
+					<p class="about-page__job-date" data-i18n="aboutPage.job3Date">{t('aboutPage.job3Date', 'en')}</p>
+				</div>
+				<div class="about-page__job-copy">
+					<h3 class="about-page__job-title uppercase" data-i18n="aboutPage.job3Title">
+						{t('aboutPage.job3Title', 'en')}
+					</h3>
+					<p class="about-page__body" data-i18n="aboutPage.job3Body">{t('aboutPage.job3Body', 'en')}</p>
+					<div class="about-page__cta">
+						<WorkWithUsButton href="/projects" label={t('aboutPage.exploreWork', 'en')} i18nKey="aboutPage.exploreWork" />
+					</div>
+				</div>
+			</article>
+		</div>
+
+		<p class="about-page__body" data-i18n="aboutPage.close1">{t('aboutPage.close1', 'en')}</p>
+		<p class="about-page__body" data-i18n="aboutPage.close2">{t('aboutPage.close2', 'en')}</p>
+
+		<div class="about-page__cta about-page__cta--meeting">
+			<WorkWithUsButton href="#contact" label={t('aboutPage.meeting', 'en')} i18nKey="aboutPage.meeting" />
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.about-page {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.5rem;
+		align-items: start;
+		padding: calc(72px + 60px) var(--page-gutter) 60px;
+		background-color: #131415;
+	}
+
+	.about-page__role {
+		margin: 0 0 1.25rem;
+		font-size: 1.45rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		line-height: 1;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.45);
+		overflow-wrap: break-word;
+	}
+
+	@media (min-width: 768px) {
+		.about-page__role {
+			font-size: 1.15rem;
+			letter-spacing: 0.06em;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.about-page__role {
+			font-size: 1.45rem;
+			font-weight: 600;
+			line-height: 1;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+	}
+
+	.about-page__photo {
+		width: min(100%, 420px);
+		aspect-ratio: 1;
+		overflow: hidden;
+	}
+
+	.about-page__image {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 18%;
+		filter: grayscale(1);
+	}
+
+	.about-page__heading {
+		margin: 0;
+		font-size: var(--heading-h2-size);
+		font-weight: 600;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
+		color: #ffffff;
+		overflow-wrap: break-word;
+	}
+
+	.about-page__body,
+	.about-page__list li {
+		margin: 0;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		letter-spacing: 0;
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.about-page__intro {
+		margin-top: 2rem;
+	}
+
+	.about-page__timeline {
+		margin: 4.5rem 0;
+	}
+
+	.about-page__timeline-heading {
+		margin: 0 0 2.5rem;
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: var(--label-text-tracking);
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: #ffffff;
+	}
+
+	.about-page__job {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1rem 2.5rem;
+		padding: 2rem 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.16);
+	}
+
+	.about-page__job:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+	}
+
+	.about-page__job-date {
+		margin: 0;
+		font-size: 1.45rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		line-height: 1;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.45);
+	}
+
+	@media (min-width: 768px) {
+		.about-page__job-date {
+			font-size: 1.15rem;
+			letter-spacing: 0.06em;
+		}
+	}
+
+	.about-page__job-logo {
+		display: block;
+		width: auto;
+		margin-top: 0.85rem;
+		object-fit: contain;
+		object-position: left center;
+	}
+
+	.about-page__job-logo--neuron {
+		height: 42px;
+	}
+
+	.about-page__job-logo--photoaid {
+		height: 22px;
+	}
+
+	.about-page__job-title {
+		margin: 0 0 0.85rem;
+		font-size: 1.05rem;
+		font-weight: 600;
+		letter-spacing: var(--letter-spacing-ui);
+		line-height: 1.25;
+		text-transform: uppercase;
+		color: #ffffff;
+	}
+
+	.about-page__list {
+		margin: 1rem 0 0;
+		padding-left: 1.35rem;
+		list-style: disc;
+		list-style-position: outside;
+	}
+
+	.about-page__list li::marker {
+		color: rgba(255, 255, 255, 0.68);
+	}
+
+	.about-page__list li + li {
+		margin-top: 0.35rem;
+	}
+
+	.about-page__content > .about-page__body + .about-page__body {
+		margin-top: 1.5rem;
+	}
+
+	.about-page__cta {
+		margin-top: 1.5rem;
+	}
+
+	.about-page__cta--meeting {
+		margin-top: 2.5rem;
+	}
+
+	@media (min-width: 768px) {
+		.about-page {
+			padding-top: calc(4.5rem + 100px);
+			padding-bottom: 160px;
+		}
+
+		.about-page__role {
+			font-size: 1.15rem;
+			letter-spacing: 0.06em;
+		}
+
+		.about-page__job {
+			grid-template-columns: minmax(140px, 0.32fr) minmax(0, 1fr);
+			align-items: start;
+			padding: 2.5rem 0;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.about-page {
+			grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+			gap: 4.5rem 4rem;
+		}
+
+		.about-page__sticky {
+			position: sticky;
+			top: calc(100px + 1.5rem);
+			align-self: start;
+		}
+
+		.about-page__photo {
+			width: 100%;
+		}
+	}
+</style>

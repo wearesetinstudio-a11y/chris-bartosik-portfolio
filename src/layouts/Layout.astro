@@ -1,41 +1,40 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import ChrisLogo from '../components/ChrisLogo.astro';
 import { t } from '../utils/i18n.ts';
 
 interface Props {
 	title?: string;
+	titleKey?: string;
 	description?: string;
+	descriptionKey?: string;
 }
 
 const brandName = t('meta.title', 'en');
 const {
 	title = brandName,
+	titleKey = title === brandName ? 'meta.title' : undefined,
 	description = t('meta.description', 'en'),
+	descriptionKey = title === brandName ? 'meta.description' : undefined,
 } = Astro.props;
 
 const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none" style="background-color: #131415;">
+<html
+	lang="en"
+	data-title-key={titleKey}
+	data-description-key={descriptionKey}
+	transition:animate="none"
+	style="background-color: #131415;"
+>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
-		<link rel="icon" type="image/svg+xml" href="/favicons/favicon-dark-mode.svg" />
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href="/favicons/favicon-light-mode.svg"
-			media="(prefers-color-scheme: light)"
-		/>
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href="/favicons/favicon-dark-mode.svg"
-			media="(prefers-color-scheme: dark)"
-		/>
+		<link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -68,6 +67,10 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				if (path === '/' || path.endsWith('/index.html')) {
 					document.documentElement.classList.add('intro-pending');
 				}
+				try {
+					var locale = window.localStorage.getItem('portfolio-locale');
+					if (locale) document.documentElement.dataset.locale = locale;
+				} catch (e) {}
 			})();
 		</script>
 	</head>
@@ -82,26 +85,41 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			transition:persist="page-transition"
 			aria-hidden="true"
 		>
-			<div class="sygnet-flip-stage">
-				<p class="preloader-name sygnet-flip-x" aria-label="Chris Bartosik">
-					<span class="preloader-name__plain">CHRI</span><span class="preloader-name__glitch" data-text="S BAR">S BAR</span><span class="preloader-name__plain">TOSIK</span>
-				</p>
-			</div>
+			<ChrisLogo size="intro" />
 		</div>
 
 		<slot />
+
+		<div
+			id="site-cursor"
+			class="site-cursor"
+			transition:persist="site-cursor"
+			aria-hidden="true"
+		>
+			<span class="site-cursor__glow"></span>
+			<span class="site-cursor__dot"></span>
+		</div>
 
 		<script>
 			import { initI18n } from '../scripts/initI18n.ts';
 			import { initGlobalPreloader } from '../scripts/initGlobalPreloader.ts';
 			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
+			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
+			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
+			import { initHandParticles } from '../scripts/initHandParticles.ts';
 
 			initI18n();
 			initPageTransitionOverlay();
 			initGlobalPreloader();
+			initSiteCursor();
+			initHeroParticles();
+			initHandParticles();
 			document.addEventListener('astro:page-load', () => {
 				initI18n();
 				initGlobalPreloader();
+				initSiteCursor();
+				initHeroParticles();
+				initHandParticles();
 			});
 		</script>
 	</body>

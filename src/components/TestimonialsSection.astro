@@ -1,42 +1,49 @@
 ---
+import { t } from '../utils/i18n.ts';
+
 const testimonials = [
 	{
-		quote:
-			'I am more than pleased with the result. Our website has gone from being merely informative to becoming a true representation of who we are as a company.',
+		quoteKey: 'testimonials.quote1',
+		quote: t('testimonials.quote1', 'en'),
+		roleKey: 'testimonials.role1',
 		name: 'Nedelka Velasco',
-		role: 'CEO of NRV',
+		role: t('testimonials.role1', 'en'),
 		logo: '/logos/nrv.svg',
 		logoHeight: 38,
 	},
 	{
-		quote:
-			"The way the guys built our new Webflow site moved See more to finally show our clients a professional side we're actually proud of.",
+		quoteKey: 'testimonials.quote2',
+		quote: t('testimonials.quote2', 'en'),
+		roleKey: 'testimonials.role2',
 		name: 'Karen Núñez',
-		role: 'CEO of See More Logistics',
+		role: t('testimonials.role2', 'en'),
 		logo: '/logos/see-more.svg',
 		logoHeight: 42,
 	},
 	{
-		quote:
-			'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
+		quoteKey: 'testimonials.quote3',
+		quote: t('testimonials.quote3', 'en'),
+		roleKey: 'testimonials.role3',
 		name: 'Thays Ríos Gun',
-		role: 'Owner of TRG',
+		role: t('testimonials.role3', 'en'),
 		logo: '/logos/trg.svg',
 		logoHeight: 48,
 	},
 	{
-		quote:
-			'The fresh look and energy provided by the brothers allowed us to show the world what MexiMunchies is all about.',
+		quoteKey: 'testimonials.quote4',
+		quote: t('testimonials.quote4', 'en'),
+		roleKey: 'testimonials.role4',
 		name: 'Andrea Vega Alvarado',
-		role: 'Founder of Mexi Munchies',
+		role: t('testimonials.role4', 'en'),
 		logo: '/logos/meximunchies.svg',
 		logoHeight: 48,
 	},
 	{
-		quote:
-			'A total transformation. The guys provided the strategic branding we needed to stand out on market and connect with our audience.',
+		quoteKey: 'testimonials.quote5',
+		quote: t('testimonials.quote5', 'en'),
+		roleKey: 'testimonials.role5',
 		name: 'Sergio Vega Alvarado',
-		role: 'Founder of Snacks Lovers PTY',
+		role: t('testimonials.role5', 'en'),
 		logo: '/logos/snacks-lovers.svg',
 		logoHeight: 48,
 	},
@@ -49,12 +56,12 @@ const loopTestimonials = [...testimonials, ...testimonials];
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
-				<span data-reveal-line>What they say</span>
+				<span data-reveal-line data-i18n="testimonials.line1">{t('testimonials.line1', 'en')}</span>
 				<br />
-				<span data-reveal-line>about the setin</span>
+				<span data-reveal-line data-i18n="testimonials.line2">{t('testimonials.line2', 'en')}</span>
 			</h2>
-			<p class="testimonials-description mt-6 max-w-md leading-relaxed text-black/55">
-				Every digital landmark we create is a result of deep trust and precise execution.
+			<p class="testimonials-description mt-6 max-w-md" data-i18n="testimonials.description">
+				{t('testimonials.description', 'en')}
 			</p>
 		</div>
 
@@ -64,7 +71,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 					{
 						loopTestimonials.map((testimonial, index) => (
 							<article class="testimonial-card" data-testimonial-index={index % testimonials.length}>
-								<p class="testimonial-card__quote">{testimonial.quote}</p>
+								<p class="testimonial-card__quote" data-i18n={testimonial.quoteKey}>{testimonial.quote}</p>
 
 								<div class="testimonial-card__footer mt-auto pt-10">
 									<img
@@ -81,7 +88,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 									/>
 									<div>
 										<p class="testimonial-card__name uppercase">{testimonial.name}</p>
-										<p class="testimonial-card__role mt-1 uppercase">{testimonial.role}</p>
+										<p class="testimonial-card__role mt-1 uppercase" data-i18n={testimonial.roleKey}>{testimonial.role}</p>
 									</div>
 								</div>
 							</article>
@@ -95,8 +102,32 @@ const loopTestimonials = [...testimonials, ...testimonials];
 
 <style is:global>
 	.testimonials-heading {
-		font-size: 2rem;
+		font-size: 1.4rem;
+		line-height: 1.15;
 		color: #000000;
+	}
+
+	.testimonials-heading [data-reveal-line] {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.testimonials-description {
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5;
+		color: rgba(0, 0, 0, 0.55);
+	}
+
+	@media (min-width: 768px) {
+		.testimonials-heading {
+			font-size: 2rem;
+		}
+
+		.testimonials-description {
+			font-size: 1.1rem;
+			line-height: 1.55;
+		}
 	}
 
 	#testimonials-heading .reveal-char {
@@ -105,7 +136,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 	}
 
 	#testimonials-heading .reveal-char.active {
-		color: #000000;
+		color: rgba(0, 0, 0, 1);
 	}
 
 	.testimonials-scroll__viewport {
@@ -200,16 +231,10 @@ const loopTestimonials = [...testimonials, ...testimonials];
 </style>
 
 <script>
-	function wrapLetters(element: HTMLElement) {
-		const text = element.textContent ?? '';
-		element.textContent = '';
+	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
 
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
-			element.appendChild(span);
-		}
+	function wrapLetters(element: HTMLElement) {
+		wrapRevealLetters(element);
 	}
 
 	function updateTestimonialsHeadingReveal() {

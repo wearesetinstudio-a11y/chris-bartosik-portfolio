@@ -1,18 +1,21 @@
 ---
 import ProjectInfoRow from './ProjectInfoRow.astro';
+import { t } from '../../utils/i18n.ts';
 
 interface Props {
 	label?: string;
+	labelKey?: string;
 	title: string;
 	text: string;
 	graphicSrc: string;
 	graphicType?: 'image' | 'video';
 	graphicAlt: string;
-	rows: { label: string; value: string; isLink?: boolean }[];
+	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
 }
 
 const {
-	label = 'Overview',
+	label = t('project.overview', 'en'),
+	labelKey = 'project.overview',
 	title,
 	text,
 	graphicSrc,
@@ -22,14 +25,17 @@ const {
 } = Astro.props;
 
 const titleChars = title.split('');
+const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
 ---
 
 <section id="project-overview" class="project-overview relative z-10 bg-white px-[var(--page-gutter)] py-20 md:py-28">
 	<div class="project-overview__grid grid gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
 		<div class="project-overview__content min-w-0">
-			<p class="project-overview__label">[{label}]</p>
+			<p class="project-overview__label">
+				[<span class="project-overview__label-text" data-i18n={labelKey}>{label}</span>]
+			</p>
 
-			<h2 id="project-overview-heading" class="project-overview__heading">
+			<h2 id="project-overview-heading" class="project-overview__heading" data-project-field="overviewTitle">
 				<span class="project-overview__heading-line" data-reveal-line>
 					{
 						titleChars.map((char) => (
@@ -39,7 +45,18 @@ const titleChars = title.split('');
 				</span>
 			</h2>
 
-			<p class="project-overview__text">{text}</p>
+			<div
+				class="project-overview__text-wrap"
+				data-project-field="overviewText"
+				data-project-paragraphs="true"
+				data-paragraph-class="project-overview__text"
+			>
+				{
+					overviewParagraphs.map((paragraph) => (
+						<p class="project-overview__text">{paragraph}</p>
+					))
+				}
+			</div>
 
 			{
 				rows.length > 0 ? (
@@ -48,8 +65,12 @@ const titleChars = title.split('');
 							{rows.map((row, index) => (
 								<ProjectInfoRow
 									label={row.label}
+									labelKey={row.labelKey}
 									value={row.value}
+									href={row.href}
 									isLink={row.isLink}
+									underlined={row.underlined}
+									fieldKey={row.fieldKey}
 									isLast={index === rows.length - 1}
 									theme="light"
 								/>
@@ -100,22 +121,27 @@ const titleChars = title.split('');
 	}
 
 	.project-overview__label {
-		font-size: 1.2rem;
+		font-size: var(--label-text-size);
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		color: #000000;
+		letter-spacing: 0;
+		line-height: 1.2;
+		color: rgba(0, 0, 0, 0.4);
+	}
+
+	.project-overview__label-text {
+		letter-spacing: var(--label-text-tracking);
 	}
 
 	.project-overview__heading {
 		margin-top: 2rem;
 		width: 100%;
 		max-width: 100%;
-		font-size: 1.8rem;
+		font-size: var(--heading-h2-size);
 		font-weight: 600;
 		text-transform: uppercase;
-		line-height: 1.12;
-		letter-spacing: -0.01em;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
 		color: #131415;
 	}
 
@@ -123,12 +149,6 @@ const titleChars = title.split('');
 		display: inline;
 		white-space: normal;
 		overflow-wrap: anywhere;
-	}
-
-	@media (min-width: 768px) {
-		.project-overview__heading {
-			font-size: 2.25rem;
-		}
 	}
 
 	.project-overview__heading :global(.reveal-char) {
@@ -140,12 +160,24 @@ const titleChars = title.split('');
 		color: #000000;
 	}
 
-	.project-overview__text {
+	.project-overview__text-wrap {
 		margin-top: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		color: rgba(0, 0, 0, 0.7);
+	}
+
+	.project-overview__text-wrap :global(p),
+	.project-overview__text {
 		width: 100%;
 		max-width: 100%;
-		line-height: 1.625;
-		color: rgba(0, 0, 0, 0.7);
+		margin: 0;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		letter-spacing: 0;
+		color: inherit;
 	}
 
 	@media (min-width: 1024px) {

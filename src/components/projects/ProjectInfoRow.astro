@@ -1,41 +1,87 @@
 ---
 interface Props {
 	label: string;
+	labelKey?: string;
 	value: string;
+	href?: string;
 	isLink?: boolean;
+	underlined?: boolean;
+	fieldKey?: string;
 	isLast?: boolean;
 	theme?: 'dark' | 'light';
 }
 
-const { label, value, isLink = false, isLast = false, theme = 'dark' } = Astro.props;
+const {
+	label,
+	labelKey,
+	value,
+	href = '',
+	isLink = false,
+	underlined = false,
+	fieldKey,
+	isLast = false,
+	theme = 'dark',
+} = Astro.props;
+
+const linkHref = href || (isLink ? value : '');
+const showLink = Boolean(linkHref);
+const resolvedHref = linkHref.startsWith('http') ? linkHref : `https://${linkHref}`;
 
 const labelClass =
 	theme === 'dark'
-		? 'text-sm uppercase tracking-[0.12em] text-white/40 md:text-base'
-		: 'text-sm uppercase tracking-[0.12em] text-black/40 md:text-base';
+		? 'project-info-row__label font-semibold text-white/40'
+		: 'project-info-row__label font-semibold text-black/40';
 
 const valueClass =
 	theme === 'dark'
-		? 'text-right text-base font-medium uppercase leading-snug tracking-[0.02em] text-white md:text-xl'
-		: 'text-right text-base font-medium uppercase leading-snug tracking-[0.02em] text-[#131415] md:text-xl';
+		? 'project-info-row__value text-right text-white'
+		: 'project-info-row__value text-right text-[#131415]';
+
+const linkClass =
+	theme === 'dark'
+		? 'underline decoration-white/50 underline-offset-4 transition-colors hover:decoration-white'
+		: 'underline decoration-[#131415] underline-offset-4 transition-colors hover:opacity-70';
 ---
 
 <div
 	class:list={[
-		'grid grid-cols-[120px_1fr] items-start gap-6 py-5 md:grid-cols-[140px_1fr] md:gap-10 md:py-6',
+		'project-info-row grid grid-cols-[120px_1fr] items-baseline gap-6 py-5 md:grid-cols-[140px_1fr] md:gap-10 md:py-6',
 		!isLast && (theme === 'dark' ? 'border-b border-white/10' : 'border-b border-black/10'),
 	]}
 >
-	<dt class={labelClass}>{label}</dt>
+	<dt class={labelClass} data-i18n={labelKey}>{label}</dt>
 	<dd class={valueClass}>
 		{
-			isLink ? (
-				<a href={value.startsWith('http') ? value : `https://${value}`} class="underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white" target="_blank" rel="noreferrer">
-					{value.replace(/^https?:\/\//, '')}
+			showLink ? (
+				<a href={resolvedHref} class={linkClass} target="_blank" rel="noreferrer" data-project-field={fieldKey}>
+					{value}
 				</a>
+			) : underlined ? (
+				<span class={linkClass} data-project-field={fieldKey}>{value}</span>
 			) : (
-				value
+				<span data-project-field={fieldKey}>{value}</span>
 			)
 		}
 	</dd>
 </div>
+
+<style is:global>
+	.project-info-row__label {
+		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: var(--label-text-tracking);
+		line-height: var(--body-text-lh);
+		text-transform: uppercase;
+	}
+
+	.project-info-row__value {
+		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		letter-spacing: 0;
+		line-height: var(--body-text-lh);
+		text-transform: uppercase;
+		margin: 0;
+	}
+</style>

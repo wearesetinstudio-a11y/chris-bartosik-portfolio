@@ -1,14 +1,11 @@
 ---
+import ChrisLogo from './ChrisLogo.astro';
+
 interface Props {
 	size?: 'intro' | 'nav';
 }
 
 const { size = 'nav' } = Astro.props;
-
-const textClass =
-	size === 'intro'
-		? 'preloader-name'
-		: 'site-header__logo-text font-sans text-[1.05rem] font-semibold uppercase leading-6 tracking-[0.14em] text-setin-fg';
 ---
 
-<span class:list={[textClass, size === 'nav' && 'flex h-6 items-center']}>Chris Bartosik</span>
+<ChrisLogo size={size} />

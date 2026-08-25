@@ -1,10 +1,12 @@
 ---
-import { LOCALES, localeMeta } from '../utils/i18n.ts';
+import { localeMeta, type Locale } from '../utils/i18n.ts';
+
+const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 ---
 
-<div class="lang-switcher flex items-center gap-3" role="group" aria-label="Language">
+<div class="lang-switcher flex items-center gap-3" role="group" aria-label="Language" data-i18n-aria="nav.language">
 	{
-		LOCALES.map((locale, index) => (
+		switcherLocales.map((locale, index) => (
 			<>
 				{index > 0 && <span class="lang-switcher__sep" aria-hidden="true">/</span>}
 				<button
@@ -48,6 +50,14 @@ import { LOCALES, localeMeta } from '../utils/i18n.ts';
 
 <script>
 	import { getLocale, isLocale, setLocale } from '../utils/i18n.ts';
+	import { applyLocale } from '../scripts/initI18n.ts';
+	import { isIntroSequenceRunning } from '../scripts/introState.ts';
+	import {
+		animatePageTransitionCover,
+		animatePageTransitionReveal,
+	} from '../scripts/pageTransitionPanel.ts';
+
+	let switchingLocale = false;
 
 	function syncLanguageSwitcher() {
 		const current = getLocale();
@@ -59,6 +69,33 @@ import { LOCALES, localeMeta } from '../utils/i18n.ts';
 		});
 	}
 
+	async function switchLocale(locale: ReturnType<typeof getLocale>) {
+		if (switchingLocale) return;
+		if (locale === getLocale()) return;
+
+		switchingLocale = true;
+		setLocale(locale);
+
+		try {
+			if (document.body.classList.contains('mobile-nav-open')) {
+				document.getElementById('mobile-nav-toggle')?.click();
+			}
+
+			if (!isIntroSequenceRunning()) {
+				await animatePageTransitionCover({ href: window.location.href, source: null });
+			}
+
+			applyLocale(locale);
+			syncLanguageSwitcher();
+
+			if (!isIntroSequenceRunning()) {
+				await animatePageTransitionReveal();
+			}
+		} finally {
+			switchingLocale = false;
+		}
+	}
+
 	function initLanguageSwitcher() {
 		document.querySelectorAll<HTMLButtonElement>('[data-locale-option]').forEach((button) => {
 			if (button.dataset.bound === 'true') return;
@@ -66,9 +103,8 @@ import { LOCALES, localeMeta } from '../utils/i18n.ts';
 
 			button.addEventListener('click', () => {
 				const locale = button.dataset.localeOption;
-				if (!isLocale(locale) || locale === getLocale()) return;
-				setLocale(locale);
-				window.location.reload();
+				if (!isLocale(locale)) return;
+				void switchLocale(locale);
 			});
 		});
 

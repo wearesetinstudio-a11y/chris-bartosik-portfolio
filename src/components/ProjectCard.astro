@@ -1,79 +1,271 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
+import { t } from '../utils/i18n.ts';
+import { buildProjectCopyBundle } from '../utils/getProjectCopy.ts';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
+	basePath?: string;
 }
 
-const { project } = Astro.props;
-const { title, thumbnail, video } = project.data;
+const { project, basePath = '/projects' } = Astro.props;
+const { title, client, thumbnail, video, comingSoon = false, tags, categories = [] } = project.data;
 const label = title.toUpperCase();
-const thumbnailSrc = withPublicAssetVersion(thumbnail);
+const category = tags[0] ?? '';
+const categoriesAttr = categories.join(',');
+const clientSlug = client
+	.toLowerCase()
+	.replace(/[^a-z0-9]+/g, '-')
+	.replace(/^-|-$/g, '');
+const categoryCopy = buildProjectCopyBundle(project.data);
+const categoryMap =
+	category &&
+	(categoryCopy.pl.category !== category || categoryCopy.pa.category !== category)
+		? JSON.stringify({
+				en: category,
+				pl: categoryCopy.pl.category ?? category,
+				pa: categoryCopy.pa.category ?? category,
+			})
+		: undefined;
+const thumbnailSrc = thumbnail ? withPublicAssetVersion(thumbnail) : '';
 const videoSrc = video ? withPublicAssetVersion(video) : '';
-const titleLineClass =
-	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
+const Tag = comingSoon ? 'div' : 'a';
 ---
 
-<a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
+<Tag
+	href={comingSoon ? undefined : `${basePath}/${project.id}`}
+	class:list={['project-card', 'project-card__cursor-target', 'group', 'block', comingSoon && 'project-card--soon']}
+	data-coming-soon={comingSoon ? 'true' : undefined}
+	data-categories={categoriesAttr || undefined}
+	data-project-id={project.id}
+	data-client={clientSlug || undefined}
+	data-transition-label={comingSoon ? undefined : client}
+>
 	<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
 		{
 			video ? (
 				<video
 					src={videoSrc}
-					class="block h-auto w-full object-contain"
-					autoplay
+					class="project-card__video block h-full w-full object-cover"
 					muted
 					loop
+					autoplay
 					playsinline
-					preload="metadata"
+					preload="auto"
 					aria-hidden="true"
 				/>
-			) : (
+			) : thumbnailSrc ? (
 				<img
 					src={thumbnailSrc}
 					alt={title}
 					width="960"
 					height="600"
-					class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+					class="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 					loading="lazy"
 				/>
-			)
+			) : null
+		}
+		{
+			comingSoon ? (
+				<div class="project-card__soon-cursor" aria-hidden="true">
+					<span class="project-card__soon-cursor-dot">
+						<span data-i18n="project.comingSoon">{t('project.comingSoon', 'en')}</span>
+					</span>
+				</div>
+			) : null
 		}
 	</div>
 
-	<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
-		<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
-			<span class="flex h-[1.5em] flex-col overflow-hidden">
-				<span
-					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
-				>
-					<span class={titleLineClass}>{label}</span>
-					<span class={titleLineClass}>{label}</span>
+	<div class="project-card__meta mt-3 flex items-end justify-between gap-4">
+		<div class="min-w-0">
+			<h3 class="project-card__title min-w-0 font-semibold uppercase tracking-[0.02em] text-black">
+				<span class="project-card__title-roll">
+					<span class="project-card__title-track">
+						<span class="project-card__title-line">{label}</span>
+						<span class="project-card__title-line" aria-hidden="true">{label}</span>
+					</span>
 				</span>
-			</span>
-		</h3>
-
+			</h3>
+			{
+				category ? (
+					<p class="project-card__category" data-locale-copy={categoryMap}>{category}</p>
+				) : null
+			}
+		</div>
 		<img
 			src="/icons/arrow.svg"
 			alt=""
 			width="20"
 			height="16"
-			class="project-card__arrow w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+			class="project-card__arrow"
 			aria-hidden="true"
 		/>
 	</div>
-</a>
+</Tag>
 
 <style is:global>
+	.project-card__media {
+		position: relative;
+		aspect-ratio: var(--project-cover-aspect);
+		width: 100%;
+	}
+
+	.project-card__media img,
+	.project-card__media video {
+		position: absolute;
+		inset: 0;
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+	}
+
 	.project-card__title {
-		font-size: 1.2rem;
+		font-size: 1.05rem;
 		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	.project-card__title-roll {
+		display: block;
+		overflow: hidden;
+	}
+
+	.project-card__title-track {
+		display: block;
+		transition: transform 0.3s ease-in;
+	}
+
+	.project-card__title-line {
+		display: block;
+		line-height: 1.25;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.project-card__title-roll {
+			height: 1.25em;
+		}
+
+		.project-card__title-line {
+			height: 1.25em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.project-card:hover .project-card__title-track,
+		.project-card:focus-visible .project-card__title-track {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.project-card__title-line[aria-hidden='true'] {
+			display: none;
+		}
+
+		.project-card__title-track {
+			transform: none;
+		}
+	}
+
+	.project-card__category {
+		margin-top: 0.2rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		line-height: 1;
+		text-transform: uppercase;
+		color: rgba(0, 0, 0, 0.45);
+	}
+
+	.project-card__arrow {
+		display: block;
+		width: auto;
+		height: 0.95rem;
+		flex-shrink: 0;
+		align-self: flex-end;
+		filter: brightness(0);
+		transform: rotate(-45deg);
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.project-card:hover .project-card__arrow,
+	.project-card:focus-visible .project-card__arrow {
+		transform: rotate(0deg) translateX(2px);
+	}
+
+	.project-card--soon {
+		cursor: none;
+	}
+
+	.project-card__soon-cursor {
+		display: none;
+	}
+
+	@media (max-width: 767px) {
+		.project-card--soon {
+			cursor: auto;
+		}
+
+		.project-card__soon-cursor {
+			position: absolute;
+			inset: 0;
+			z-index: 2;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: none;
+			opacity: 0;
+			visibility: hidden;
+			transition:
+				opacity 0.22s ease-out,
+				visibility 0s linear 0.22s;
+		}
+
+		.project-card--soon.is-soon-active .project-card__soon-cursor {
+			opacity: 1;
+			visibility: visible;
+			transition:
+				opacity 0.22s ease-out,
+				visibility 0s linear 0s;
+		}
+
+		.project-card__soon-cursor-dot {
+			display: flex;
+			width: 7.5rem;
+			height: 7.5rem;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			border-radius: 9999px;
+			background-color: #ffffff;
+			padding: 0.7rem;
+			text-align: center;
+			font-size: 1.2rem;
+			font-weight: 800;
+			line-height: 1.05;
+			text-transform: uppercase;
+			color: #18191b;
+			white-space: normal;
+			transform: scale(0.88);
+			transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.project-card--soon.is-soon-active .project-card__soon-cursor-dot {
+			transform: scale(1);
+		}
 	}
 
 	@media (min-width: 768px) {
 		.project-card__title {
-			font-size: 1.4rem;
+			font-size: 1.22rem;
+		}
+
+		.project-card__arrow {
+			height: 1.3rem;
 		}
 	}
 </style>

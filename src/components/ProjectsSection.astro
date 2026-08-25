@@ -11,32 +11,69 @@ interface Props {
 
 const { projects, standalone = false } = Astro.props;
 const displayedProjects = standalone ? projects : projects.slice(0, 5);
+
+const projectFilters = [
+	{ id: 'all', labelKey: 'work.filterAll' as const },
+	{ id: 'ux-ui', labelKey: 'work.filterUxUi' as const },
+	{ id: 'motion', labelKey: 'work.filterMotion' as const },
+	{ id: 'ai-engineering', labelKey: 'work.filterAi' as const },
+	{ id: 'development', labelKey: 'work.filterDev' as const },
+	{ id: 'branding', labelKey: 'work.filterBranding' as const },
+	{ id: 'photoaid', labelKey: 'work.filterPhotoaid' as const },
+] as const;
 ---
 
 <section
 	id="work"
 	class:list={[
-		'relative z-20 px-[var(--page-gutter)] py-[var(--section-padding-y)]',
-		standalone ? 'bg-white pt-[calc(var(--section-padding-y)+5.5rem)]' : 'bg-[#F5F5F5]',
+		'relative z-20 px-[var(--page-gutter)]',
+		standalone
+			? 'bg-[#F5F5F5] pt-[calc(72px+60px)] pb-[var(--section-padding-y)] md:pt-[calc(100px+4.5rem)]'
+			: 'bg-[#F5F5F5] py-[var(--section-padding-y)]',
 	]}
 >
-	<div class="mb-10 grid gap-6 md:mb-20 md:grid-cols-2 md:gap-16">
-		<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
-			<span data-reveal-line data-i18n="work.heading">{t('work.heading', 'en')}</span>
+	<div
+		class:list={[
+			'grid gap-6 md:grid-cols-2 md:gap-16',
+			standalone ? 'mb-8 md:mb-12' : 'mb-10 md:mb-20',
+		]}
+	>
+		<h2 id="projects-heading" class="projects-heading uppercase leading-[1.15]">
+			<span data-reveal-line data-i18n="work.line1">{t('work.line1', 'en')}</span>
+			<br />
+			<span data-reveal-line data-i18n="work.line2">{t('work.line2', 'en')}</span>
 		</h2>
-		<p class="projects-description max-w-md leading-relaxed text-black/55 md:ml-auto" data-i18n="work.description">
+		<p class="projects-description max-w-md md:ml-auto" data-i18n="work.description">
 			{t('work.description', 'en')}
 		</p>
 	</div>
 
-	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2">
+	{
+		standalone && (
+			<div class="projects-filters mb-10 md:mb-20" data-projects-filters role="group" aria-label={t('work.pageTitle', 'en')}>
+				{projectFilters.map((filter, index) => (
+					<button
+						type="button"
+						class:list={['projects-filters__btn', index === 0 && 'is-active']}
+						data-project-filter={filter.id}
+						data-i18n={filter.labelKey}
+						aria-pressed={index === 0 ? 'true' : 'false'}
+					>
+						{t(filter.labelKey, 'en')}
+					</button>
+				))}
+			</div>
+		)
+	}
+
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3" data-projects-grid>
 		{displayedProjects.map((project) => <ProjectCard project={project} />)}
-		{!standalone && <SeeAllProjectsCard count={projects.length} />}
+		{!standalone && <SeeAllProjectsCard count={projects.length} href="/projects" />}
 	</div>
 
 	<div id="project-cursor" class="project-cursor pointer-events-none fixed z-[200]" aria-hidden="true">
 		<span class="project-cursor__label">
-			view
+			<span class="project-cursor__text" data-i18n="project.view">{t('project.view', 'en')}</span>
 			<span class="project-cursor__line"></span>
 		</span>
 	</div>
@@ -44,8 +81,88 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 
 <style is:global>
 	.projects-heading {
-		font-size: 2rem;
+		font-size: 1.4rem;
+		line-height: 1.15;
 		color: #000000;
+	}
+
+	.projects-heading [data-reveal-line] {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.projects-description {
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5;
+		color: rgba(0, 0, 0, 0.55);
+	}
+
+	.projects-filters {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: flex-end;
+		gap: 0.75rem 1rem;
+		overflow-x: auto;
+		padding-bottom: 0.15rem;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.projects-filters::-webkit-scrollbar {
+		display: none;
+	}
+
+	.projects-filters__btn {
+		flex: 0 0 auto;
+		margin: 0;
+		padding: 0 0 0.2rem;
+		border: 0;
+		border-bottom: 1.5px solid rgba(0, 0, 0, 0.18);
+		border-radius: 0;
+		background: transparent;
+		cursor: pointer;
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: #000000;
+		transition: color 0.2s ease, border-color 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.projects-filters__btn:hover {
+		color: rgba(0, 0, 0, 0.7);
+	}
+
+	.projects-filters__btn.is-active {
+		color: #f54100;
+		border-bottom-color: #f54100;
+	}
+
+	.project-card.is-filter-hidden {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.projects-heading {
+			font-size: 2rem;
+		}
+
+		.projects-description {
+			font-size: 1.1rem;
+			line-height: 1.55;
+		}
+
+		.projects-filters {
+			gap: 1.5rem 2rem;
+		}
+
+		.projects-filters__btn {
+			font-size: 0.85rem;
+			padding-bottom: 0.25rem;
+		}
 	}
 
 	#projects-heading .reveal-char {
@@ -85,12 +202,28 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		text-align: center;
 		gap: 0.125rem;
 		font-size: 1.2rem;
 		font-weight: 800;
 		line-height: 1;
 		text-transform: uppercase;
 		color: #18191b;
+	}
+
+	.project-cursor__text {
+		text-align: center;
+	}
+
+	.project-cursor.is-coming-soon .project-cursor__text {
+		max-width: 5.4rem;
+		line-height: 1.05;
+		white-space: normal;
+	}
+
+	.project-cursor.is-coming-soon .project-cursor__line {
+		display: none;
 	}
 
 	.project-cursor__line {
@@ -115,6 +248,86 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 </style>
 
 <script>
+	import { t } from '../utils/i18n.ts';
+	import { initProjectCardVideos } from '../scripts/initProjectCardVideos.ts';
+	import { initProjectsFilter } from '../scripts/initProjectsFilter.ts';
+
+	function isComingSoonCard(card: Element) {
+		return card.hasAttribute('data-coming-soon') || card.classList.contains('project-card--soon');
+	}
+
+	function applyCursorLabel(cursor: HTMLElement, comingSoon: boolean) {
+		const text = cursor.querySelector<HTMLElement>('.project-cursor__text');
+		cursor.classList.toggle('is-coming-soon', comingSoon);
+
+		if (!text) return;
+
+		text.textContent = comingSoon ? t('project.comingSoon') : t('project.view');
+		text.dataset.i18n = comingSoon ? 'project.comingSoon' : 'project.view';
+	}
+	function initMobileComingSoonCursor(workSection: HTMLElement) {
+		const soonCards = workSection.querySelectorAll<HTMLElement>('[data-coming-soon]');
+		if (!soonCards.length) return;
+
+		workSection.dataset.projectCursorReady = 'true';
+		delete document.body.dataset.projectCursorInit;
+
+		let activeCard: HTMLElement | null = null;
+		let dismissBound = false;
+
+		function hideSoon() {
+			if (!activeCard) return;
+			activeCard.classList.remove('is-soon-active');
+			activeCard = null;
+			unbindDismiss();
+		}
+
+		function onDismiss() {
+			hideSoon();
+		}
+
+		function bindDismiss() {
+			if (dismissBound) return;
+			dismissBound = true;
+			window.addEventListener('scroll', onDismiss, { passive: true });
+			window.addEventListener('pointerdown', onPointerDown, { capture: true });
+		}
+
+		function unbindDismiss() {
+			if (!dismissBound) return;
+			dismissBound = false;
+			window.removeEventListener('scroll', onDismiss);
+			window.removeEventListener('pointerdown', onPointerDown, { capture: true });
+		}
+
+		function onPointerDown(event: Event) {
+			const target = event.target;
+			if (!(target instanceof Node) || !activeCard) return;
+			if (activeCard.contains(target)) return;
+			hideSoon();
+		}
+
+		soonCards.forEach((card) => {
+			card.addEventListener('click', (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+
+				if (activeCard === card) {
+					hideSoon();
+					return;
+				}
+
+				if (activeCard) {
+					activeCard.classList.remove('is-soon-active');
+				}
+
+				activeCard = card;
+				card.classList.add('is-soon-active');
+				bindDismiss();
+			});
+		});
+	}
+
 	function initProjectCursor() {
 		const workSection = document.getElementById('work');
 		if (!workSection) {
@@ -122,16 +335,15 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 			return;
 		}
 
-		if (window.matchMedia('(max-width: 767px)').matches) {
-			delete document.body.dataset.projectCursorInit;
-			workSection.dataset.projectCursorReady = 'true';
-			return;
-		}
-
 		if (workSection.dataset.projectCursorReady === 'true') return;
 
 		const cursor = document.getElementById('project-cursor');
 		if (!cursor) return;
+
+		if (window.matchMedia('(max-width: 767px)').matches) {
+			initMobileComingSoonCursor(workSection);
+			return;
+		}
 
 		const cards = workSection.querySelectorAll('.project-card__cursor-target');
 		if (!cards.length) return;
@@ -203,6 +415,7 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 				(event) => {
 					const mouseEvent = event as MouseEvent;
 					activeCard = card;
+					applyCursorLabel(cursor, isComingSoonCard(card));
 					showCursor(mouseEvent.clientX, mouseEvent.clientY);
 				},
 				{ passive: true },
@@ -233,23 +446,10 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		);
 	}
 
-	import { t } from '../utils/i18n.ts';
+	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
 
 	function wrapLetters(element: HTMLElement) {
-		const key = element.dataset.i18n;
-		if (key) element.textContent = t(key);
-
-		if (element.querySelector('.reveal-char')) return;
-
-		const text = element.textContent ?? '';
-		element.textContent = '';
-
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
-			element.appendChild(span);
-		}
+		wrapRevealLetters(element);
 	}
 
 	function updateProjectsHeadingReveal() {
@@ -285,9 +485,7 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 
 	function initProjectsHeadingReveal() {
 		const heading = document.getElementById('projects-heading');
-		if (!heading || heading.dataset.revealInit === 'true') return;
-
-		heading.dataset.revealInit = 'true';
+		if (!heading) return;
 
 		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
 			wrapLetters(line as HTMLElement);
@@ -295,20 +493,22 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 
 		updateProjectsHeadingReveal();
 
-		const scrollWindow = window as Window & { __setinProjectsScrollReady?: boolean };
-		if (scrollWindow.__setinProjectsScrollReady) return;
+		if (heading.dataset.revealInit === 'true') return;
+		heading.dataset.revealInit = 'true';
 
-		scrollWindow.__setinProjectsScrollReady = true;
 		window.addEventListener('scroll', onProjectsScroll, { passive: true });
 		window.addEventListener('resize', updateProjectsHeadingReveal, { passive: true });
 	}
 
 	function initProjectsSection() {
+		initProjectsFilter();
 		initProjectCursor();
 		initProjectsHeadingReveal();
+		initProjectCardVideos();
 	}
 
 	document.addEventListener('astro:page-load', initProjectsSection);
+	document.addEventListener('i18n-applied', initProjectsHeadingReveal);
 
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', initProjectsSection, { once: true });

@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ToolsSection from '../components/ToolsSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import ClientsSection from '../components/ClientsSection.astro';
 import AboutSection from '../components/AboutSection.astro';
@@ -9,7 +11,6 @@ import TestimonialsSection from '../components/TestimonialsSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
-import { t } from '../utils/i18n.ts';
 
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
@@ -17,118 +18,40 @@ const { projectCount } = await getSiteCounts();
 ---
 
 <Layout>
-	<div id="hero-background-stack" class="hero-background-stack pointer-events-none" aria-hidden="true">
-		<video
-			src="/hero-background.mp4"
-			class="hero-background-video absolute inset-0 h-full w-full object-cover object-center brightness-[0.85] contrast-[1.15] grayscale"
-			autoplay
-			muted
-			loop
-			playsinline
-			preload="auto"
-		>
-			<source src="/hero-background.mp4" type="video/mp4" />
-		</video>
-
-		<div class="hero-background-stack__tint absolute inset-0 bg-[#131415]/15"></div>
-
-		<canvas id="cinema-pure-noise-filter" class="hero-background-stack__noise absolute inset-0 block h-full w-full"></canvas>
-	</div>
-
 	<Header projectCount={projectCount} waitForIntro={true} />
 
 	<main class="relative z-20 flex-1">
-		<section id="hero-section" class="relative flex min-h-[100dvh] flex-col justify-end px-[var(--page-gutter)] pb-[80px] pt-28">
-			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
-				<div class="min-w-0 w-full">
-					<p
-						class="hero-eyebrow mb-5 text-[0.7rem] font-medium uppercase tracking-widest text-white/40"
-						data-i18n="hero.eyebrow"
-					>
-						{t('hero.eyebrow', 'en')}
-					</p>
-					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
-						<div class="hero-reveal-mask">
-							<span
-								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-								data-i18n="hero.line1"
-							>
-								{t('hero.line1', 'en')}
-							</span>
-						</div>
-						<div class="hero-reveal-mask">
-							<span
-								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-								data-i18n="hero.line2"
-							>
-								{t('hero.line2', 'en')}
-							</span>
-						</div>
-						<div class="hero-reveal-mask">
-							<span
-								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-								data-i18n="hero.line3"
-							>
-								{t('hero.line3', 'en')}
-							</span>
-						</div>
-					</h1>
-				</div>
-
-				<div class="block overflow-hidden lg:ml-auto lg:pb-1">
-					<p
-						class="hero-description hero-reveal-desc max-w-sm translate-y-full transform opacity-0 transition-all delay-300 duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-						data-i18n="hero.description"
-					>
-						{t('hero.description', 'en')}
-					</p>
-				</div>
-			</div>
-		</section>
+		<HeroSection />
 
 		<script>
-			import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
+			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
+			import { initHeroTime } from '../scripts/initHeroTime.ts';
+			import { initHeroDescriptionLines } from '../scripts/splitHeroDescription.ts';
+			import { initHeroGlitch } from '../scripts/initHeroGlitch.ts';
+			import { initHeroCtaTilt } from '../scripts/initHeroCtaTilt.ts';
+			import { initHeroBadgeStreak } from '../scripts/initHeroBadgeStreak.ts';
+			import { initHeroHeadlineGlitch } from '../scripts/initHeroHeadlineGlitch.ts';
 
-			let heroStackHidden = false;
-			let heroSyncFrame = 0;
-
-			function syncHeroBackgroundStack() {
-				const hero = document.getElementById('hero-section');
-				const stack = document.getElementById('hero-background-stack');
-				if (!hero || !stack) return;
-
-				const heroBottom = hero.getBoundingClientRect().bottom;
-
-				if (!heroStackHidden && heroBottom < -64) {
-					heroStackHidden = true;
-					stack.classList.add('is-hidden');
-					document.documentElement.classList.remove('hero-cinema-active');
-				} else if (heroStackHidden && heroBottom > 0) {
-					heroStackHidden = false;
-					stack.classList.remove('is-hidden');
-					document.documentElement.classList.add('hero-cinema-active');
-				}
+			function initHeroInteractions() {
+				initHeroParticles();
+				initHeroGlitch();
+				initHeroHeadlineGlitch();
+				initHeroCtaTilt();
+				initHeroBadgeStreak();
 			}
 
-			function scheduleHeroBackgroundSync() {
-				if (heroSyncFrame) return;
-				heroSyncFrame = window.requestAnimationFrame(() => {
-					syncHeroBackgroundStack();
-					heroSyncFrame = 0;
-				});
-			}
+			initHeroDescriptionLines();
+			initHeroInteractions();
+			initHeroTime();
 
-			initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
-			document.documentElement.classList.add('hero-cinema-active');
-			syncHeroBackgroundStack();
-			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
-			window.addEventListener('resize', scheduleHeroBackgroundSync, { passive: true });
 			document.addEventListener('astro:page-load', () => {
-				initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
-				document.documentElement.classList.add('hero-cinema-active');
-				scheduleHeroBackgroundSync();
+				initHeroDescriptionLines();
+				initHeroInteractions();
+				initHeroTime();
 			});
 		</script>
+
+		<ToolsSection />
 
 		<ClientsSection />
 
@@ -142,125 +65,4 @@ const { projectCount } = await getSiteCounts();
 	</main>
 
 	<Footer />
-
-	<script>
-		import { hasCompletedIntro } from '../scripts/introState.ts';
-
-		function initHeroSlideUpReveal() {
-			function revealHeroText() {
-				document.querySelectorAll('.hero-reveal-line, .hero-reveal-desc').forEach((element) => {
-					element.classList.remove('translate-y-full', 'opacity-0');
-					element.classList.add('translate-y-0', 'opacity-100');
-				});
-			}
-
-			if (hasCompletedIntro()) {
-				revealHeroText();
-				return;
-			}
-
-			window.addEventListener('intro-complete', revealHeroText, { once: true });
-		}
-
-		initHeroSlideUpReveal();
-		document.addEventListener('astro:page-load', initHeroSlideUpReveal);
-	</script>
 </Layout>
-
-<style is:global>
-	.hero-background-stack {
-		position: fixed;
-		inset: 0;
-		z-index: 0;
-		overflow: hidden;
-		width: 100%;
-		height: 100vh;
-		height: 100dvh;
-		background-color: #131415;
-		transition: opacity 0.35s ease, visibility 0.35s ease;
-	}
-
-	.hero-background-stack.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	.hero-background-video {
-		transform: scale(1.48);
-		transform-origin: center center;
-		will-change: transform;
-	}
-
-	.hero-background-stack__noise {
-		z-index: 2;
-		opacity: 0.85;
-		mix-blend-mode: overlay;
-	}
-
-	@media (max-width: 767px) {
-		.hero-background-stack__noise {
-			opacity: 0.95;
-		}
-
-		html.hero-cinema-active .noise-overlay--coarse {
-			opacity: 0.035;
-		}
-	}
-
-	html.hero-cinema-active .noise-overlay--coarse,
-	html.hero-cinema-active .noise-overlay--fine {
-		opacity: 0;
-	}
-
-	.hero-headline {
-		font-weight: 700;
-		line-height: 1.3;
-	}
-
-	.hero-reveal-mask {
-		display: block;
-		overflow: hidden;
-		padding-top: 0.08em;
-	}
-
-	.hero-reveal-line {
-		display: block;
-	}
-
-	@media (max-width: 767px) {
-		.hero-headline {
-			width: 100%;
-			max-width: 100%;
-		}
-
-		.hero-reveal-mask {
-			display: block;
-			width: 100%;
-			overflow: hidden;
-		}
-
-		.hero-reveal-line {
-			display: block;
-			width: 100%;
-			white-space: nowrap;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.hero-headline {
-			width: 70vw;
-			max-width: 70vw;
-			font-size: clamp(2.35rem, 4.1vw, 3.8rem);
-		}
-
-		.hero-headline .hero-reveal-line {
-			white-space: nowrap;
-		}
-	}
-
-	.hero-description {
-		font-weight: 500;
-		line-height: 1.625;
-		color: #ffffff;
-	}
-</style>

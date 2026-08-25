@@ -2,9 +2,10 @@
 title: Snacks Lovers
 client: Snacks Lovers
 tags: ['Branding', 'Visual Identity', 'Webflow']
+categories: ['branding', 'development']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
-order: 3
+order: 4
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-
   A brand built for sweet craziness

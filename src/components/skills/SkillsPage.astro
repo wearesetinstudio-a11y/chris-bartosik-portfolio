@@ -1,0 +1,520 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import WorkWithUsButton from '../WorkWithUsButton.astro';
+import { t } from '../../utils/i18n.ts';
+
+type SkillTool = { name: string; src: string };
+type SkillFeature = { titleKey: string; bodyKey: string };
+type SkillMedia = { src: string; type: 'image' | 'video' };
+
+const MEDIA_EXTENSIONS = [
+	{ ext: '.webm', type: 'video' as const },
+	{ ext: '.mp4', type: 'video' as const },
+	{ ext: '.webp', type: 'image' as const },
+	{ ext: '.png', type: 'image' as const },
+	{ ext: '.jpg', type: 'image' as const },
+	{ ext: '.jpeg', type: 'image' as const },
+];
+
+function resolveSkillMedia(index: string): SkillMedia | undefined {
+	const dir = path.join(process.cwd(), 'public', 'skills');
+	if (!fs.existsSync(dir)) return undefined;
+
+	for (const { ext, type } of MEDIA_EXTENSIONS) {
+		const filename = `${index}${ext}`;
+		if (fs.existsSync(path.join(dir, filename))) {
+			return { src: `/skills/${filename}`, type };
+		}
+	}
+
+	return undefined;
+}
+
+const skills: {
+	id: string;
+	index: string;
+	titleKey: string;
+	introKey: string;
+	features: SkillFeature[];
+	tools: SkillTool[];
+	media?: SkillMedia;
+}[] = [
+	{
+		id: 'product-ux-ui',
+		index: '01',
+		titleKey: 'hero.pillar1',
+		introKey: 'skills.s1Intro',
+		features: [
+			{ titleKey: 'skills.s1F1Title', bodyKey: 'skills.s1F1Body' },
+			{ titleKey: 'skills.s1F2Title', bodyKey: 'skills.s1F2Body' },
+			{ titleKey: 'skills.s1F3Title', bodyKey: 'skills.s1F3Body' },
+		],
+		tools: [
+			{ name: 'Figma', src: '/logos-tools/figma.svg' },
+			{ name: 'Rive', src: '/logos-tools/rive.svg' },
+			{ name: 'Claude', src: '/logos-tools/claude.svg' },
+			{ name: 'Google Analytics', src: '/logos-tools/google-analythics.svg' },
+		],
+		media: resolveSkillMedia('01'),
+	},
+	{
+		id: 'interactive-motion',
+		index: '02',
+		titleKey: 'hero.pillar2',
+		introKey: 'skills.s2Intro',
+		features: [
+			{ titleKey: 'skills.s2F1Title', bodyKey: 'skills.s2F1Body' },
+			{ titleKey: 'skills.s2F2Title', bodyKey: 'skills.s2F2Body' },
+			{ titleKey: 'skills.s2F3Title', bodyKey: 'skills.s2F3Body' },
+		],
+		tools: [
+			{ name: 'Figma', src: '/logos-tools/figma.svg' },
+			{ name: 'Rive', src: '/logos-tools/rive.svg' },
+			{ name: 'After Effects', src: '/logos-tools/after-effects.svg' },
+			{ name: 'Cavalry', src: '/logos-tools/cavalry.svg' },
+		],
+		media: resolveSkillMedia('02'),
+	},
+	{
+		id: 'generative-ai',
+		index: '03',
+		titleKey: 'hero.pillar4',
+		introKey: 'skills.s3Intro',
+		features: [
+			{ titleKey: 'skills.s3F1Title', bodyKey: 'skills.s3F1Body' },
+			{ titleKey: 'skills.s3F2Title', bodyKey: 'skills.s3F2Body' },
+			{ titleKey: 'skills.s3F3Title', bodyKey: 'skills.s3F3Body' },
+		],
+		tools: [
+			{ name: 'Figma', src: '/logos-tools/figma.svg' },
+			{ name: 'Cursor', src: '/logos-tools/cursor.svg' },
+			{ name: 'Claude', src: '/logos-tools/claude.svg' },
+		],
+		media: resolveSkillMedia('03'),
+	},
+	{
+		id: 'no-code-handoff',
+		index: '04',
+		titleKey: 'hero.pillar3',
+		introKey: 'skills.s4Intro',
+		features: [
+			{ titleKey: 'skills.s4F1Title', bodyKey: 'skills.s4F1Body' },
+			{ titleKey: 'skills.s4F2Title', bodyKey: 'skills.s4F2Body' },
+			{ titleKey: 'skills.s4F3Title', bodyKey: 'skills.s4F3Body' },
+		],
+		tools: [
+			{ name: 'Figma', src: '/logos-tools/figma.svg' },
+			{ name: 'Cursor', src: '/logos-tools/cursor.svg' },
+			{ name: 'Claude', src: '/logos-tools/claude.svg' },
+			{ name: 'Webflow', src: '/logos-tools/webflow.svg' },
+		],
+		media: resolveSkillMedia('04'),
+	},
+];
+
+const skillsWithMedia = skills.filter((skill) => skill.media);
+const hasSkillsMedia = skillsWithMedia.length > 0;
+---
+
+<section class="skills-page" data-skills-page>
+	<aside class="skills-page__sticky">
+		<h1 class="skills-page__heading">
+			<span data-i18n="skills.headingLine1">{t('skills.headingLine1', 'en')}</span>
+			<span data-i18n="skills.headingLine2">{t('skills.headingLine2', 'en')}</span>
+			<span data-i18n="skills.headingLine3">{t('skills.headingLine3', 'en')}</span>
+		</h1>
+
+		{
+			hasSkillsMedia && (
+				<div class="skills-page__media" data-skills-media>
+					{skillsWithMedia.map((skill, index) => (
+						<div
+							class:list={['skills-page__media-layer', index === 0 && 'is-active']}
+							data-skills-layer={skill.id}
+						>
+							{skill.media?.type === 'video' ? (
+								<video
+									src={skill.media.src}
+									muted
+									loop
+									playsinline
+									preload="metadata"
+									aria-hidden="true"
+								/>
+							) : (
+								<img src={skill.media?.src} alt="" width="800" height="800" decoding="async" />
+							)}
+						</div>
+					))}
+				</div>
+			)
+		}
+	</aside>
+
+	<div class="skills-page__content">
+		<div class="skills-page__aligner" aria-hidden="true">
+			<span data-i18n="skills.headingLine1">{t('skills.headingLine1', 'en')}</span>
+			<span data-i18n="skills.headingLine2">{t('skills.headingLine2', 'en')}</span>
+			<span data-i18n="skills.headingLine3">{t('skills.headingLine3', 'en')}</span>
+		</div>
+		{
+			skills.map((skill, index) => (
+				<article
+					id={skill.id}
+					class="skills-block"
+					data-skills-block={skill.id}
+				>
+					{skill.media && (
+						<div class="skills-block__media">
+							{skill.media.type === 'video' ? (
+								<video
+									src={skill.media.src}
+									muted
+									loop
+									playsinline
+									preload="metadata"
+									aria-hidden="true"
+								/>
+							) : (
+								<img
+									src={skill.media.src}
+									alt=""
+									width="800"
+									height="800"
+									loading={index === 0 ? 'eager' : 'lazy'}
+									decoding="async"
+								/>
+							)}
+						</div>
+					)}
+
+					<h2 class="skills-block__title">
+						<span class="skills-block__index">{skill.index} /</span>
+						<span data-i18n={skill.titleKey}>{t(skill.titleKey, 'en')}</span>
+					</h2>
+
+					<p class="skills-block__intro" data-i18n={skill.introKey}>
+						{t(skill.introKey, 'en')}
+					</p>
+
+					<div class="skills-block__features">
+						{skill.features.map((feature) => (
+							<div class="skills-block__feature">
+								<h3 class="skills-block__label uppercase" data-i18n={feature.titleKey}>
+									{t(feature.titleKey, 'en')}
+								</h3>
+								<p class="skills-block__body" data-i18n={feature.bodyKey}>
+									{t(feature.bodyKey, 'en')}
+								</p>
+							</div>
+						))}
+					</div>
+
+					<div class="skills-block__tools">
+						<p class="skills-block__tools-label uppercase" data-i18n="skills.tools">
+							{t('skills.tools', 'en')}
+						</p>
+						<div class="skills-block__tools-row">
+							{skill.tools.map((tool) => (
+								<img
+									src={tool.src}
+									alt={tool.name}
+									class="skills-block__tool"
+									loading="lazy"
+									decoding="async"
+								/>
+							))}
+						</div>
+					</div>
+
+					{index === skills.length - 1 && (
+						<div class="skills-block__cta">
+							<WorkWithUsButton
+								href="#contact"
+								label={t('aboutPage.meeting', 'en')}
+								i18nKey="aboutPage.meeting"
+							/>
+						</div>
+					)}
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<script>
+	import { initSkillsMedia } from '../../scripts/initSkillsMedia.ts';
+
+	function boot() {
+		initSkillsMedia();
+	}
+
+	document.addEventListener('astro:page-load', boot);
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', boot, { once: true });
+	} else {
+		boot();
+	}
+</script>
+
+<style is:global>
+	.skills-page {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.5rem;
+		align-items: start;
+		padding: calc(72px + 60px) var(--page-gutter) 60px;
+		background-color: #131415;
+	}
+
+	.skills-page__heading,
+	.skills-page__aligner {
+		display: flex;
+		flex-direction: column;
+		margin: 0 0 1.35rem;
+		font-size: var(--heading-h2-size);
+		font-weight: 600;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
+		text-transform: uppercase;
+		color: #ffffff;
+	}
+
+	.skills-page__heading span:empty,
+	.skills-page__aligner span:empty {
+		display: none;
+	}
+
+	.skills-page__aligner {
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.skills-page__media {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1;
+		max-width: min(100%, calc(100svh - 13rem));
+		overflow: hidden;
+		background-color: #ffffff;
+	}
+
+	.skills-page__media-layer {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.55s ease, visibility 0.55s ease;
+	}
+
+	.skills-page__media-layer.is-active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.skills-page__media-layer img,
+	.skills-page__media-layer video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.skills-block {
+		scroll-margin-top: calc(72px + 1.25rem);
+		padding: 0 0 5.5rem;
+	}
+
+	.skills-block__media {
+		display: none;
+		width: 100%;
+		aspect-ratio: 1;
+		margin: 0 0 1.5rem;
+		overflow: hidden;
+		background-color: #ffffff;
+	}
+
+	.skills-block__media img,
+	.skills-block__media video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.skills-block:last-child {
+		padding-bottom: 0;
+	}
+
+	.skills-block__title {
+		margin: 0;
+		font-size: var(--heading-h2-size);
+		font-weight: 600;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
+		text-transform: uppercase;
+		color: #ffffff;
+		overflow-wrap: break-word;
+	}
+
+	.skills-block__index {
+		margin-right: 0.35em;
+		font-weight: 400;
+		color: rgba(255, 255, 255, 0.38);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.skills-block__intro,
+	.skills-block__body {
+		margin: 1.15rem 0 0;
+		max-width: 40rem;
+		font-size: var(--body-text-size);
+		font-weight: 500;
+		line-height: var(--body-text-lh);
+		letter-spacing: 0;
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.skills-block__features {
+		display: grid;
+		gap: 1.65rem;
+		margin-top: 2.15rem;
+	}
+
+	.skills-block__label {
+		margin: 0;
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: var(--label-text-tracking);
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.42);
+	}
+
+	.skills-block__body {
+		margin-top: 0.45rem;
+		color: #ffffff;
+	}
+
+	.skills-block__tools {
+		margin-top: 2.35rem;
+	}
+
+	.skills-block__tools-label {
+		margin: 0 0 1rem;
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: var(--label-text-tracking);
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.42);
+	}
+
+	.skills-block__tools-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.5rem 2rem;
+	}
+
+	.skills-block__tool {
+		display: block;
+		height: 1.45rem;
+		width: auto;
+		opacity: 0.88;
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-user-drag: none;
+	}
+
+	.skills-block__cta {
+		margin-top: 4.5rem;
+	}
+
+	@media (min-width: 768px) {
+		.skills-page {
+			padding-top: calc(4.5rem + 100px);
+			padding-bottom: 160px;
+		}
+
+		.skills-page__heading,
+		.skills-page__aligner,
+		.skills-block__title {
+			font-size: var(--heading-h2-size);
+		}
+
+		.skills-block__intro,
+		.skills-block__body {
+			font-size: var(--body-text-size);
+			line-height: var(--body-text-lh);
+		}
+
+		.skills-block {
+			scroll-margin-top: calc(100px + 1.5rem);
+			padding-bottom: 8.5rem;
+		}
+
+		.skills-block__tools-row {
+			gap: 1.75rem 2.5rem;
+		}
+
+		.skills-block__tool {
+			height: 1.65rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.skills-page {
+			grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+			gap: 4.5rem 4.5rem;
+		}
+
+		.skills-page__sticky {
+			position: sticky;
+			top: calc(100px + 1.5rem);
+			align-self: start;
+		}
+
+		.skills-page__media {
+			width: min(100%, calc(100svh - 14.5rem));
+			max-height: calc(100svh - 14.5rem);
+		}
+	}
+
+	@media (max-width: 1023px) {
+		.skills-page__aligner {
+			display: none;
+		}
+
+		.skills-page__heading {
+			margin-bottom: 0.9rem;
+		}
+
+		.skills-page__heading span {
+			overflow-wrap: break-word;
+		}
+
+		.skills-page__media {
+			display: none;
+		}
+
+		.skills-block__media {
+			display: block;
+		}
+
+		.skills-block__tool {
+			max-width: calc(50% - 0.75rem);
+			height: 1.3rem;
+			object-fit: contain;
+			object-position: left center;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.skills-page__media-layer {
+			transition: none;
+		}
+	}
+</style>

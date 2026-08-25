@@ -1,10 +1,11 @@
 ---
 title: Warszewicz
 client: Warszewicz
-tags: ['Brand Identity', 'Art Direction', 'Print']
+tags: ['AI Video Generation', 'Art Direction', 'Print']
+categories: ['branding', 'ai-engineering']
 thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
-order: 6
+order: 7
 heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: 'A refined identity shaped by detail, contrast, and editorial restraint'
 overviewTitle: 'Precision in every composition'

@@ -1,17 +1,29 @@
-export function wrapRevealLetters(element: HTMLElement) {
-	if (element.querySelector('.reveal-char')) return;
+import { t } from '../utils/i18n.ts';
 
-	const text = (element.textContent ?? '').trim();
+export function wrapRevealLetters(element: HTMLElement) {
+	const key = element.dataset.i18n;
+	const text = ((key ? t(key) : element.textContent) ?? '').replace(/\s+/g, ' ').trim();
 	if (!text) return;
 
 	element.textContent = '';
 
-	for (const char of text) {
-		const span = document.createElement('span');
-		span.className = 'reveal-char';
-		span.textContent = char === ' ' ? ' ' : char;
-		element.appendChild(span);
-	}
+	const words = text.split(' ');
+	words.forEach((word, index) => {
+		const wordEl = document.createElement('span');
+		wordEl.className = 'reveal-word';
+
+		for (const char of word) {
+			const span = document.createElement('span');
+			span.className = 'reveal-char';
+			span.textContent = char;
+			wordEl.appendChild(span);
+		}
+
+		element.appendChild(wordEl);
+		if (index < words.length - 1) {
+			element.appendChild(document.createTextNode(' '));
+		}
+	});
 }
 
 export function initScrollLetterReveal(
@@ -69,9 +81,7 @@ export function initScrollLetterReveals(
 			if (!heading) continue;
 
 			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-				if (!line.querySelector('.reveal-char')) {
-					wrapRevealLetters(line as HTMLElement);
-				}
+				wrapRevealLetters(line as HTMLElement);
 			});
 		}
 

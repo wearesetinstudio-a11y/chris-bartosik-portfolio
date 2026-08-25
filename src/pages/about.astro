@@ -2,59 +2,25 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import AboutHero from '../components/about/AboutHero.astro';
-import AboutStudioIntro from '../components/about/AboutStudioIntro.astro';
-import AboutTeamMember from '../components/about/AboutTeamMember.astro';
+import AboutPage from '../components/about/AboutPage.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { t } from '../utils/i18n.ts';
 
 const { projectCount } = await getSiteCounts();
-
-const teamMembers = [
-	{
-		name: 'Chris Bartosik',
-		role: 'Design Engineer & Developer',
-		bio: "I have spent years working with brands from Panama, Spain, and Poland — from visual identities to high-performance web experiences. I believe design is not just about colors; it's about making a business trustworthy, fast, and easy for customers to understand. I write the code that carries that vision.",
-		imageSrc: '/chris.webp',
-		imageAlt: 'Chris Bartosik, design engineer and developer',
-		links: [
-			{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/krzysztof-bartosik-a98855226' },
-			{ label: 'Instagram', href: 'https://www.instagram.com/bartosik_k?igsh=emRqd2VqZGNzZWFp' },
-		],
-	},
-];
 ---
 
 <Layout
 	title={t('about.pageTitle', 'en')}
+	titleKey="about.pageTitle"
 	description={t('about.pageDescription', 'en')}
+	descriptionKey="about.pageDescription"
 >
 	<Header projectCount={projectCount} />
 
 	<main class="relative z-20 flex-1">
-		<AboutHero />
-		<AboutStudioIntro />
-
-		<section class="about-team bg-[#131415] px-[var(--page-gutter)] pt-[60px] pb-[120px] md:pb-[160px]">
-			<div class="flex flex-col gap-[120px] md:gap-[160px]">
-				{
-					teamMembers.map((member, index) => (
-						<AboutTeamMember
-							name={member.name}
-							role={member.role}
-							bio={member.bio}
-							imageSrc={member.imageSrc}
-							imageAlt={member.imageAlt}
-							links={member.links}
-							align={index === 0 ? 'start' : 'end'}
-						/>
-					))
-				}
-			</div>
-		</section>
-
+		<AboutPage />
 		<TestimonialsSection />
 		<ContactSection />
 	</main>

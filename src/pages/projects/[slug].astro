@@ -16,11 +16,18 @@ import {
 	type GalleryLayoutBlock,
 } from '../../utils/getProjectGallery';
 import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
+import { t } from '../../utils/i18n.ts';
+import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
+import {
+	buildProjectPageSegments,
+	resolveProjectSections,
+} from '../../utils/getProjectSections.ts';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
+	const publishedProjects = projects.filter((project) => !project.data.comingSoon);
 
-	return projects.map((project) => {
+	return publishedProjects.map((project) => {
 		const folderName = resolveProjectFolderName(project);
 		const coverFilename = getCoverFilename(project.data.thumbnail);
 		const galleryLayout = buildGalleryLayout(folderName, coverFilename);
@@ -42,152 +49,179 @@ const data = project.data;
 const title = data.title ?? 'Project';
 const heroSubtitle = data.heroSubtitle ?? '';
 const heroBackground = data.heroBackground ?? '';
-const client = data.client ?? title;
+const client = data.client ?? '';
+const clientLabel = data.clientLabel;
 const heroImage = withPublicAssetVersion(data.heroImage || heroBackground);
 const year = data.year;
 const logo = data.logo ?? '';
 const service = data.service ?? '';
 const industry = data.industry ?? '';
 const market = data.market ?? '';
+const tools = data.tools ?? '';
+const liveLabel = data.liveLabel ?? '';
 const liveUrl = data.liveUrl ?? '';
-const overviewLabel = data.overviewLabel ?? 'Overview';
-const overviewTitle = data.overviewTitle ?? '';
-const overviewText = data.overviewText ?? '';
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
+const overviewLabel = t('project.overview', 'en');
+const overviewTitle = data.overviewTitle ?? '';
+const overviewText = data.overviewText ?? '';
 const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
 const overviewGraphicSrc = overviewGraphicItem
 	? withPublicAssetVersion(overviewGraphicItem.src)
 	: withPublicAssetVersion(data.overviewGraphic || logo);
 const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
 const pageGalleryLayout = galleryLayout.filter((block) => block.group !== 1);
-const challengesLabel = data.challengesLabel ?? 'Challenges';
-const challengesText = data.challengesText ?? '';
-const challengesAfterGroup = data.challengesAfterGroup ?? 2;
-const strategyLabel = data.strategyLabel ?? 'Strategy';
-const strategyTitle = data.strategyTitle ?? '';
-const strategyText = data.strategyText ?? '';
-const strategyAfterGroup = data.strategyAfterGroup ?? 8;
-const summaryLabel = data.summaryLabel ?? 'Summary';
-const summaryTitle = data.summaryTitle ?? '';
-const summaryText = data.summaryText ?? '';
 
-const heroLines = (heroSubtitle || title)
-	.split('\n')
-	.map((line) => line.trim())
-	.filter(Boolean);
+const projectSections = resolveProjectSections(data);
+
+type InfoRow = {
+	label: string;
+	labelKey: string;
+	value: string;
+	href?: string;
+	isLink?: boolean;
+	underlined?: boolean;
+	fieldKey?: string;
+};
+
+const liveDisplay =
+	liveLabel || (liveUrl ? liveUrl.replace(/^https?:\/\//, '') : '');
 
 const infoRows = [
-	service ? { label: 'Service', value: service } : null,
-	industry ? { label: 'Industry', value: industry } : null,
-	market ? { label: 'Market', value: market } : null,
-	year ? { label: 'Year', value: String(year) } : null,
-	liveUrl ? { label: 'Live', value: liveUrl, isLink: true } : null,
-].filter(
-	(row): row is { label: string; value: string; isLink?: boolean } => row !== null,
-);
+	service ? { label: t('project.service', 'en'), labelKey: 'project.service', value: service, fieldKey: 'service' } : null,
+	industry ? { label: t('project.industry', 'en'), labelKey: 'project.industry', value: industry, fieldKey: 'industry' } : null,
+	market ? { label: t('project.market', 'en'), labelKey: 'project.market', value: market, fieldKey: 'market' } : null,
+	tools ? { label: t('project.tools', 'en'), labelKey: 'project.tools', value: tools, fieldKey: 'tools' } : null,
+	year ? { label: t('project.year', 'en'), labelKey: 'project.year', value: String(year) } : null,
+	liveDisplay
+		? {
+				label: t('project.live', 'en'),
+				labelKey: 'project.live',
+				value: liveDisplay,
+				href: liveUrl || undefined,
+				isLink: Boolean(liveUrl),
+				underlined: true,
+				fieldKey: 'liveLabel',
+			}
+		: null,
+].filter((row): row is InfoRow => row !== null);
 
-const pageDescription = summaryText || overviewText || challengesText || heroSubtitle || title;
+const showOverview = Boolean(overviewTitle || overviewText || infoRows.length);
+const pageDescription =
+	projectSections.find((section) => section.text)?.text ||
+	overviewText ||
+	heroSubtitle ||
+	title;
 
-function splitGalleryByGroup(
+function splitGalleryAfterGroupLead(
 	blocks: GalleryLayoutBlock[],
 	afterGroup: number,
 ): { before: GalleryLayoutBlock[]; after: GalleryLayoutBlock[] } {
-	const before = blocks.filter((block) => block.group <= afterGroup);
-	const after = blocks.filter((block) => block.group > afterGroup);
+	const before: GalleryLayoutBlock[] = [];
+	const after: GalleryLayoutBlock[] = [];
+	let passedTargetLead = false;
+
+	for (const block of blocks) {
+		if (block.group < afterGroup) {
+			before.push(block);
+			continue;
+		}
+
+		if (block.group > afterGroup) {
+			after.push(block);
+			continue;
+		}
+
+		if (!passedTargetLead) {
+			before.push(block);
+			passedTargetLead = true;
+		} else {
+			after.push(block);
+		}
+	}
+
 	return { before, after };
 }
 
-const firstSplit = challengesText
-	? splitGalleryByGroup(pageGalleryLayout, challengesAfterGroup)
-	: { before: pageGalleryLayout, after: [] as GalleryLayoutBlock[] };
+const pageSegments = buildProjectPageSegments(
+	pageGalleryLayout,
+	projectSections,
+	splitGalleryAfterGroupLead,
+);
 
-const secondSplit = strategyText
-	? splitGalleryByGroup(firstSplit.after, strategyAfterGroup)
-	: { before: firstSplit.after, after: [] as GalleryLayoutBlock[] };
-
-const galleryBeforeCount = firstSplit.before.length;
-const galleryMiddleCount = secondSplit.before.length;
+let galleryMediaCursor = 0;
+const projectCopy = buildProjectCopyBundle(data);
+const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
+const revealHeadingIds = [
+	'project-overview-heading',
+	...projectSections
+		.filter((section) => section.title)
+		.map((section) => `project-section-${section.index}-heading`),
+];
 ---
 
 <Layout title={title} description={pageDescription}>
 	<Header projectCount={projectCount} />
 
-	<main id="project-page" class="project-page relative z-20 flex-1">
-		<ProjectHero heroImage={heroImage} heroLines={heroLines} client={client} />
+	<main id="project-page" class="project-page relative z-20 flex-1" data-project-client={client}>
+		<template id="project-copy-data" data-project-copy="true" set:html={projectCopyJson} />
+		<script is:inline define:vars={{ projectCopy }}>
+			globalThis.__projectCopy = projectCopy;
+		</script>
+		<ProjectHero
+			heroImage={heroImage}
+			heroSubtitle={heroSubtitle}
+			client={client}
+			clientLabel={clientLabel}
+		/>
 
 		<div class="project-page__body relative z-10">
-			<ProjectOverviewSection
-				label={overviewLabel}
-				title={overviewTitle}
-				text={overviewText}
-				graphicSrc={overviewGraphicSrc}
-				graphicType={overviewGraphicType}
-				graphicAlt={client}
-				rows={infoRows}
-			/>
-
 			{
-				firstSplit.before.length > 0 ? (
-					<ProjectGallerySection blocks={firstSplit.before} title={title} startIndex={0} />
-				) : null
-			}
-
-			{
-				challengesText ? (
-					<ProjectContentBlock
-						index={2}
-						label={challengesLabel}
-						text={challengesText}
-						theme="light"
+				showOverview ? (
+					<ProjectOverviewSection
+						label={overviewLabel}
+						labelKey="project.overview"
+						title={overviewTitle}
+						text={overviewText}
+						graphicSrc={overviewGraphicSrc}
+						graphicType={overviewGraphicType}
+						graphicAlt={client || title}
+						rows={infoRows}
 					/>
 				) : null
 			}
 
 			{
-				secondSplit.before.length > 0 ? (
-					<ProjectGallerySection
-						blocks={secondSplit.before}
-						title={title}
-						startIndex={galleryBeforeCount}
-					/>
-				) : null
-			}
+				pageSegments.map((segment) => {
+					if (segment.type === 'gallery') {
+						const startIndex = galleryMediaCursor;
+						galleryMediaCursor += segment.blocks.reduce((count, block) => {
+							if (block.kind === 'full') return count + 1;
+							return count + block.items.length;
+						}, 0);
 
-			{
-				strategyText ? (
-					<ProjectContentBlock
-						index={3}
-						label={strategyLabel}
-						title={strategyTitle}
-						text={strategyText}
-						theme="dark"
-						headingId="project-strategy-heading"
-					/>
-				) : null
-			}
+						return (
+							<ProjectGallerySection
+								blocks={segment.blocks}
+								title={title}
+								startIndex={startIndex}
+							/>
+						);
+					}
 
-			{
-				secondSplit.after.length > 0 ? (
-					<ProjectGallerySection
-						blocks={secondSplit.after}
-						title={title}
-						startIndex={galleryBeforeCount + galleryMiddleCount}
-					/>
-				) : null
-			}
-
-			{
-				summaryText ? (
-					<ProjectContentBlock
-						index={4}
-						label={summaryLabel}
-						title={summaryTitle}
-						text={summaryText}
-						theme="light"
-						headingId="project-summary-heading"
-					/>
-				) : null
+					const { section } = segment;
+					return (
+						<ProjectContentBlock
+							index={section.index + 1}
+							sectionIndex={section.index}
+							label={section.label}
+							title={section.title}
+							text={section.text}
+							theme={section.theme}
+							headingId={`project-section-${section.index}-heading`}
+						/>
+					);
+				})
 			}
 		</div>
 
@@ -196,19 +230,19 @@ const galleryMiddleCount = secondSplit.before.length;
 
 	<Footer />
 
+	<script is:inline define:vars={{ revealHeadingIds }}>
+		globalThis.__projectRevealHeadings = revealHeadingIds;
+	</script>
+
 	<script>
 		import { bootSlideUpReveal } from '../../scripts/initSlideUpReveal.ts';
 		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
 
-		const PROJECT_REVEAL_HEADINGS = [
-			'project-overview-heading',
-			'project-strategy-heading',
-			'project-summary-heading',
-		];
-
 		function initProjectPage() {
 			bootSlideUpReveal();
-			initScrollLetterReveals(PROJECT_REVEAL_HEADINGS);
+			const ids =
+				(globalThis as { __projectRevealHeadings?: string[] }).__projectRevealHeadings ?? [];
+			initScrollLetterReveals(ids);
 		}
 
 		if (document.readyState === 'loading') {
@@ -227,10 +261,20 @@ const galleryMiddleCount = secondSplit.before.length;
 		opacity: 1;
 	}
 
+	.project-page__body {
+		background: #ffffff;
+	}
+
 	.project-page__body :global(img),
 	.project-page__body :global(video) {
 		display: block;
 		width: 100%;
 		height: auto;
+	}
+
+	/* Same gutter between section↔gallery as between gallery images (white via body bg) */
+	.project-page__body > :global(.project-gallery + .project-content-block),
+	.project-page__body > :global(.project-content-block + .project-gallery) {
+		margin-top: var(--page-gutter);
 	}
 </style>

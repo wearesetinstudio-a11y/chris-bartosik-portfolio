@@ -1,12 +1,35 @@
 ---
+import { t } from '../../utils/i18n.ts';
+
 interface Props {
 	heroImage?: string;
-	heroLines: string[];
-	client: string;
+	heroSubtitle?: string;
+	client?: string;
+	/** Override for the [Client] label. Empty = hide label. Undefined = use i18n default when client exists. */
+	clientLabel?: string;
 }
 
-const { heroImage = '', heroLines, client } = Astro.props;
-const clientLabel = client.toUpperCase();
+const {
+	heroImage = '',
+	heroSubtitle = '',
+	client = '',
+	clientLabel: clientLabelProp,
+} = Astro.props;
+
+const heroLines = heroSubtitle
+	.split('\n')
+	.map((line) => line.trim())
+	.filter(Boolean);
+
+const hasTagline = heroLines.length > 0;
+const hasClientName = Boolean(client.trim());
+const defaultClientLabel = t('project.client', 'en');
+const customClientLabel = clientLabelProp?.trim() ?? '';
+const resolvedClientLabel = customClientLabel || (hasClientName ? defaultClientLabel : '');
+const hasClientLabel = Boolean(resolvedClientLabel);
+const hasMeta = hasClientLabel || hasClientName;
+const hasHeroContent = hasTagline || hasMeta;
+const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 ---
 
 <section id="project-hero" class="project-hero relative h-[85vh] overflow-hidden">
@@ -17,49 +40,92 @@ const clientLabel = client.toUpperCase();
 				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[85vh] w-full overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
-				<img
-					src={heroImage}
-					alt=""
-					width="1920"
-					height="1080"
-					class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
-					loading="eager"
-					decoding="async"
-				/>
+				<div id="project-hero-parallax" class="project-hero-parallax pointer-events-none absolute inset-x-0">
+					<img
+						src={heroImage}
+						alt=""
+						width="1920"
+						height="1080"
+						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
+						loading="eager"
+						decoding="async"
+					/>
+				</div>
 
 				<div class="pointer-events-none absolute inset-0 z-[1] bg-black/10"></div>
-
-				<canvas
-					id="project-hero-noise-filter"
-					class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
-					aria-hidden="true"
-				></canvas>
 			</div>
 		) : (
 			<div id="project-hero-visual" class="pointer-events-none absolute inset-0 bg-[#131415]" aria-hidden="true"></div>
 		)
 	}
 
-	<div class="relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-[60px] pt-28">
-		<div class="grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
-			<div class="w-full lg:w-[75vw] lg:max-w-[75vw]">
-				<h1 id="hero-headline" class="project-hero__title w-full uppercase text-white">
+	{
+		hasHeroContent ? (
+			<div class="relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-[60px] pt-28">
+				<div
+					class:list={[
+						'grid w-full items-end gap-[40px] lg:gap-16',
+						hasTagline && hasMeta
+							? 'grid-cols-1 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)]'
+							: 'grid-cols-1',
+					]}
+				>
 					{
-						heroLines.map((line) => (
-							<span class="block">{line}</span>
-						))
+						hasTagline ? (
+							<div class="min-w-0 w-full" data-hero-part="tagline">
+								<h1 id="project-hero-headline" class="project-hero__title w-full uppercase text-white">
+									{heroLines.map((line) => (
+										<span class="block">{line}</span>
+									))}
+								</h1>
+							</div>
+						) : null
 					}
-				</h1>
-			</div>
 
-			<div class="lg:ml-auto lg:max-w-md lg:text-right">
-				<p class="project-hero__client-label text-[1.2rem] font-semibold uppercase tracking-[0.14em] text-white">[Client]</p>
-				<p class="project-hero__client-name mt-3 font-semibold uppercase leading-[1.08] tracking-tight text-white">
-					{clientLabel}
-				</p>
+					{
+						hasMeta ? (
+							<div
+								class:list={[
+									'project-hero__meta',
+									hasTagline && 'lg:ml-auto lg:max-w-md lg:text-right',
+								]}
+								data-hero-part="meta"
+							>
+								{
+									hasClientLabel ? (
+										<p class="project-hero__client-label uppercase text-white">
+											[
+											<span
+												class="project-hero__client-label-text"
+												data-project-field="clientLabel"
+												data-i18n={usesI18nClientLabel ? 'project.client' : undefined}
+											>
+												{resolvedClientLabel}
+											</span>
+											]
+										</p>
+									) : null
+								}
+								{
+									hasClientName ? (
+										<p
+											class:list={[
+												'project-hero__client-name uppercase text-white',
+												hasClientLabel && 'mt-3',
+											]}
+											data-project-field="client"
+										>
+											{client.toUpperCase()}
+										</p>
+									) : null
+								}
+							</div>
+						) : null
+					}
+				</div>
 			</div>
-		</div>
-	</div>
+		) : null
+	}
 </section>
 
 <style is:global>
@@ -68,49 +134,115 @@ const clientLabel = client.toUpperCase();
 		visibility: hidden;
 	}
 
+	.project-hero-parallax {
+		top: -12%;
+		height: 124%;
+		will-change: transform;
+	}
+
 	.project-hero-background {
-		transform: scale(1.12);
+		transform: scale(1.08);
 		transform-origin: center 42%;
 	}
 
 	.project-hero__title {
-		font-size: 2rem;
-		line-height: 1.18;
-		letter-spacing: -0.01em;
+		font-size: 1.75rem;
+		font-weight: 600;
+		line-height: 1.15;
+		letter-spacing: var(--letter-spacing-ui);
+	}
+
+	.project-hero__client-label {
+		margin: 0;
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: 0;
+		line-height: 1.2;
+	}
+
+	.project-hero__client-label-text {
+		letter-spacing: var(--label-text-tracking);
 	}
 
 	.project-hero__client-name {
 		font-size: 1.6rem;
+		font-weight: 600;
+		line-height: 1.15;
+		letter-spacing: var(--letter-spacing-ui);
 	}
 
 	@media (min-width: 768px) {
 		.project-hero__title {
-			font-size: 2.75rem;
+			font-size: 2.35rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.project-hero-parallax {
+			top: 0;
+			height: 100%;
+			transform: none !important;
 		}
 
-		.project-hero__client-name {
-			font-size: 1.8rem;
+		.project-hero-background {
+			transform: scale(1.12);
 		}
 	}
 </style>
 
 <script>
-	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
+	let cleanupProjectHero: (() => void) | null = null;
 
 	function initProjectHero() {
-		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
-
 		const hero = document.getElementById('project-hero');
 		const visual = document.getElementById('project-hero-visual');
 		if (!hero || !visual) return;
+		if (visual.dataset.heroSyncInit === 'true' && visual.isConnected) return;
+
+		cleanupProjectHero?.();
+
+		const parallax = document.getElementById('project-hero-parallax');
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		/** Total shift across the full time the hero stays in view — keep it subtle/slow */
+		const MAX_SHIFT_RATIO = 0.05;
+
+		let ticking = false;
 
 		const syncHeroVisual = () => {
-			const heroBottom = hero.getBoundingClientRect().bottom;
-			visual.classList.toggle('is-hidden', heroBottom <= 0);
+			const rect = hero.getBoundingClientRect();
+			const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
+			visual.classList.toggle('is-hidden', !inViewport);
+
+			if (!parallax || reduceMotion) return;
+
+			// 0 at top of page → 1 when hero has fully scrolled past the top edge
+			const scrolled = Math.max(0, -rect.top);
+			const progress = Math.min(1, scrolled / Math.max(1, rect.height));
+			// Scroll down → background moves down (opposite to page content), slowly
+			const offset = progress * visual.offsetHeight * MAX_SHIFT_RATIO;
+			parallax.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
+		const onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				syncHeroVisual();
+				ticking = false;
+			});
+		};
+
+		visual.dataset.heroSyncInit = 'true';
 		syncHeroVisual();
-		window.addEventListener('scroll', syncHeroVisual, { passive: true });
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', syncHeroVisual, { passive: true });
+
+		cleanupProjectHero = () => {
+			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('resize', syncHeroVisual);
+			delete visual.dataset.heroSyncInit;
+			if (parallax) parallax.style.transform = '';
+		};
 	}
 
 	if (document.readyState === 'loading') {

@@ -2,7 +2,7 @@
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
-import LogoMark from './LogoMark.astro';
+import ChrisLogo from './ChrisLogo.astro';
 import { t } from '../utils/i18n.ts';
 
 interface Props {
@@ -17,17 +17,20 @@ const {
 	theme = 'default',
 } = Astro.props;
 
-const hasLocalContact =
-	Astro.url.pathname === '/' ||
-	Astro.url.pathname === '/about' ||
-	Astro.url.pathname === '/projects' ||
-	/^\/projects\/[^/]+$/.test(Astro.url.pathname);
-
-const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
+const workWithUsHref = '#contact';
 const isLightBg = theme === 'light-bg';
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+function isNavCurrent(href: string) {
+	const target = href.replace(/\/$/, '') || '/';
+	if (target === '/projects') return currentPath === '/projects' || currentPath.startsWith('/projects/');
+	return currentPath === target;
+}
 
 const nav = [
-	{ href: '/projects', label: t('nav.projects', 'en'), count: projectCount, i18nKey: 'nav.projects' },
+	{ href: '/', label: t('nav.home', 'en'), i18nKey: 'nav.home' },
+	{ href: '/skills', label: t('nav.skills', 'en'), i18nKey: 'nav.skills' },
+	{ href: '/projects', label: t('nav.projects', 'en'), i18nKey: 'nav.projects' },
 	{ href: '/about', label: t('nav.about', 'en'), i18nKey: 'nav.about' },
 ];
 
@@ -46,7 +49,7 @@ const headerClass = waitForIntro
 		headerClass,
 	]}
 >
-	<div class="grid h-[72px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:h-[100px] md:grid-cols-[1fr_auto_1fr]">
+	<div class="grid h-[72px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:h-[100px]">
 		<a
 			href="/"
 			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
@@ -54,41 +57,41 @@ const headerClass = waitForIntro
 			data-i18n-aria="nav.homeAria"
 		>
 			<div class="site-header__logo-mark flex items-center" aria-hidden="true">
-				<LogoMark size="nav" />
+				<ChrisLogo size="nav" />
 			</div>
 		</a>
 
-		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10" aria-label="Main">
+		<nav class="hidden items-center justify-end gap-8 md:flex lg:gap-10" aria-label={t('nav.main', 'en')} data-i18n-aria="nav.main">
 			{
 				nav.map((item) => (
 					<RollingLink
 						href={item.href}
 						label={item.label}
-						count={item.count}
 						inverted={isLightBg}
 						i18nKey={item.i18nKey}
+						current={isNavCurrent(item.href)}
 					/>
 				))
 			}
+			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
+			<LanguageSwitcher />
 		</nav>
 
-		<div class="hidden items-center justify-end gap-8 md:flex">
+		<div class="header-mobile-tools relative z-[60] flex items-center gap-8 md:hidden">
 			<LanguageSwitcher />
-			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
+			<button
+				type="button"
+				id="mobile-nav-toggle"
+				class="mobile-nav-toggle relative flex h-10 w-10 flex-col items-end justify-center gap-2"
+				aria-expanded="false"
+				aria-controls="mobile-nav-panel"
+				aria-label={t('nav.openMenu', 'en')}
+				data-i18n-aria="nav.openMenu"
+			>
+				<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
+				<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
+			</button>
 		</div>
-
-		<button
-			type="button"
-			id="mobile-nav-toggle"
-			class="mobile-nav-toggle relative -mr-1 flex h-10 w-10 flex-col items-end justify-center gap-[5px] md:hidden"
-			aria-expanded="false"
-			aria-controls="mobile-nav-panel"
-			aria-label={t('nav.openMenu', 'en')}
-			data-i18n-aria="nav.openMenu"
-		>
-			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
-			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
-		</button>
 	</div>
 </header>
 
@@ -98,49 +101,86 @@ const headerClass = waitForIntro
 	aria-hidden="true"
 >
 	<div class="mobile-nav-panel__content flex w-full flex-col gap-10">
-		<nav class="flex flex-col gap-8" aria-label="Mobile">
+		<nav class="flex flex-col gap-8" aria-label={t('nav.mobile', 'en')} data-i18n-aria="nav.mobile">
 			{
-				nav.map((item) => {
-					const text =
-						item.count !== undefined ? `${item.label} [${item.count}]` : item.label;
-
-					return (
+				nav.map((item) => (
 						<a
 							href={item.href}
-							class="mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg"
+							class:list={[
+								'mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg',
+								isNavCurrent(item.href) && 'mobile-nav-link--current',
+							]}
+							aria-current={isNavCurrent(item.href) ? 'page' : undefined}
 							data-mobile-nav-link
 							data-i18n={item.i18nKey}
-							data-i18n-count={item.count}
 						>
-							{text}
+							{item.label}
 						</a>
-					);
-				})
+					))
 			}
 		</nav>
 
-		<div class="mobile-nav-panel__cta flex flex-col items-start gap-10" data-mobile-nav-link>
-			<LanguageSwitcher />
+		<div class="mobile-nav-panel__cta flex flex-col items-start" data-mobile-nav-link>
 			<WorkWithUsButton href={workWithUsHref} size="large" i18nKey="cta.workWithMe" />
 		</div>
 	</div>
 </div>
 
 <style is:global>
+	.site-header {
+		pointer-events: none;
+	}
+
+	.site-header__logo-link,
+	.site-header nav,
+	.header-mobile-tools,
+	.mobile-nav-toggle {
+		pointer-events: auto;
+	}
+
 	.site-header.header-solid {
 		background-color: #131415;
+	}
+
+	.rolling-link,
+	.mobile-nav-link {
+		transition: opacity 0.25s ease;
+	}
+
+	.rolling-link--current,
+	.mobile-nav-link--current {
+		opacity: 0.38;
+	}
+
+	.rolling-link--current:hover,
+	.rolling-link--current:focus-visible,
+	.mobile-nav-link--current:hover,
+	.mobile-nav-link--current:focus-visible {
+		opacity: 1;
 	}
 
 	.site-header__logo-text {
 		white-space: nowrap;
 	}
 
+	.site-header__logo-mark .logo-mark img {
+		transition: filter 0.35s ease;
+	}
+
 	.site-header--light-bg:not(.header-solid) .site-header__logo-text {
 		color: #000000;
 	}
 
+	.site-header--light-bg:not(.header-solid) .site-header__logo-mark .logo-mark__name {
+		filter: brightness(0);
+	}
+
 	.site-header--light-bg.header-solid .site-header__logo-text {
 		color: #f5f5f5;
+	}
+
+	.site-header--light-bg.header-solid .site-header__logo-mark .logo-mark img {
+		filter: none;
 	}
 
 	.site-header--light-bg:not(.header-solid) .lang-switcher {
@@ -185,14 +225,24 @@ const headerClass = waitForIntro
 		color: #f5f5f5;
 	}
 
+	body.mobile-nav-open .site-header--light-bg .site-header__logo-mark .logo-mark__name {
+		filter: none;
+	}
+
 	body.mobile-nav-open .site-header--light-bg .mobile-nav-toggle {
 		color: #f5f5f5;
 	}
 
+	.header-mobile-tools {
+		pointer-events: auto;
+	}
+
 	.mobile-nav-toggle {
 		position: relative;
-		z-index: 50;
+		z-index: 60;
+		pointer-events: auto;
 		color: #f5f5f5;
+		touch-action: manipulation;
 		transition: gap 0.6s cubic-bezier(0.76, 0, 0.24, 1);
 	}
 
@@ -221,11 +271,11 @@ const headerClass = waitForIntro
 	}
 
 	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:first-child {
-		transform: translateY(3.5px);
+		transform: translateY(5px);
 	}
 
 	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:last-child {
-		transform: translateY(-3.5px);
+		transform: translateY(-5px);
 		opacity: 0;
 	}
 
@@ -260,37 +310,112 @@ const headerClass = waitForIntro
 			visibility 0s linear 0s;
 	}
 
+	.mobile-nav-panel .mobile-nav-link,
+	.mobile-nav-panel .mobile-nav-panel__cta {
+		opacity: 0;
+		transform: translateX(-1.75rem);
+	}
+
+	.mobile-nav-panel.is-open .mobile-nav-link,
+	.mobile-nav-panel.is-open .mobile-nav-panel__cta {
+		transition:
+			opacity 0.35s ease,
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* Enter: first → last */
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link,
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__cta {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(1) {
+		transition-delay: 0ms;
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(2) {
+		transition-delay: 55ms;
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(3) {
+		transition-delay: 110ms;
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(4) {
+		transition-delay: 165ms;
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__cta {
+		transition-delay: 220ms;
+	}
+
+	/* Exit: last → first */
+	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-panel__cta {
+		transition-delay: 0ms;
+	}
+
+	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(4) {
+		transition-delay: 55ms;
+	}
+
+	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(3) {
+		transition-delay: 110ms;
+	}
+
+	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(2) {
+		transition-delay: 165ms;
+	}
+
+	.mobile-nav-panel.is-open:not(.is-content-ready) .mobile-nav-link:nth-child(1) {
+		transition-delay: 220ms;
+	}
+
 	body.mobile-nav-open {
 		overflow: hidden;
 		overscroll-behavior: none;
-	}
-
-	html.mobile-nav-open {
-		overflow: hidden;
-		overscroll-behavior: none;
+		touch-action: none;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.mobile-nav-toggle,
 		.mobile-nav-toggle__line,
-		.mobile-nav-panel {
+		.mobile-nav-panel,
+		.mobile-nav-panel .mobile-nav-link,
+		.mobile-nav-panel .mobile-nav-panel__cta {
 			transition: none !important;
+			transition-delay: 0ms !important;
+			transform: none !important;
+			opacity: 1 !important;
 		}
 	}
 </style>
 
 <script>
 	import { hasCompletedIntro } from '../scripts/introState.ts';
+	import { initLogoWave } from '../scripts/preloaderWave.ts';
 	import { t } from '../utils/i18n.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
-	let mobileNavCleanup: (() => void) | null = null;
 	let syncHeaderAppearance: (() => void) | null = null;
 	let lockedScrollY = 0;
+	let mobileNavContentTimer = 0;
+
+	type MobileNavWindow = Window &
+		typeof globalThis & {
+			__mobileNavBound?: boolean;
+		};
+
+	function restoreScroll(scrollY: number) {
+		const html = document.documentElement;
+		const previousBehavior = html.style.scrollBehavior;
+		html.style.scrollBehavior = 'auto';
+		window.scrollTo(0, scrollY);
+		html.style.scrollBehavior = previousBehavior;
+	}
 
 	function lockBodyScroll() {
-		lockedScrollY = window.scrollY;
-		document.documentElement.classList.add('mobile-nav-open');
+		lockedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
 		document.body.classList.add('mobile-nav-open');
 		document.body.style.position = 'fixed';
 		document.body.style.top = `-${lockedScrollY}px`;
@@ -303,14 +428,14 @@ const headerClass = waitForIntro
 		if (!document.body.classList.contains('mobile-nav-open')) return;
 
 		const scrollY = lockedScrollY;
-		document.documentElement.classList.remove('mobile-nav-open');
 		document.body.classList.remove('mobile-nav-open');
+		document.documentElement.classList.remove('mobile-nav-open');
 		document.body.style.position = '';
 		document.body.style.top = '';
 		document.body.style.left = '';
 		document.body.style.right = '';
 		document.body.style.width = '';
-		window.scrollTo(0, scrollY);
+		restoreScroll(scrollY);
 	}
 
 	function initHeaderSolidBackground() {
@@ -321,7 +446,9 @@ const headerClass = waitForIntro
 		if (!header) return;
 
 		const isLightBg = header.dataset.theme === 'light-bg';
-		const headline = document.getElementById('hero-headline');
+		const headline =
+			document.getElementById('hero-headline') ??
+			document.getElementById('project-hero-headline');
 
 		function updateHeaderSolid() {
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
@@ -369,70 +496,91 @@ const headerClass = waitForIntro
 		syncHeaderAppearance = updateHeaderSolid;
 	}
 
-	function closeMobileNav() {
+	function setMobileNavOpen(isOpen: boolean) {
 		const toggle = document.getElementById('mobile-nav-toggle');
 		const panel = document.getElementById('mobile-nav-panel');
 
 		if (!toggle || !panel) return;
 
-		toggle.classList.remove('is-open');
-		toggle.setAttribute('aria-expanded', 'false');
-		toggle.setAttribute('aria-label', t('nav.openMenu'));
-		toggle.dataset.i18nAria = 'nav.openMenu';
-		panel.classList.remove('is-open');
-		panel.setAttribute('aria-hidden', 'true');
-		unlockBodyScroll();
+		window.clearTimeout(mobileNavContentTimer);
+
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+		toggle.setAttribute('aria-label', isOpen ? t('nav.closeMenu') : t('nav.openMenu'));
+		toggle.dataset.i18nAria = isOpen ? 'nav.closeMenu' : 'nav.openMenu';
+		panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+		if (isOpen) {
+			toggle.classList.add('is-open');
+			panel.classList.add('is-open');
+			panel.classList.remove('is-content-ready');
+			lockBodyScroll();
+
+			mobileNavContentTimer = window.setTimeout(
+				() => {
+					if (panel.classList.contains('is-open')) {
+						panel.classList.add('is-content-ready');
+					}
+				},
+				reduceMotion ? 0 : 560,
+			);
+		} else {
+			toggle.classList.remove('is-open');
+			const hadContent = panel.classList.contains('is-content-ready');
+			panel.classList.remove('is-content-ready');
+
+			const finishClose = () => {
+				panel.classList.remove('is-open');
+				unlockBodyScroll();
+				syncHeaderAppearance?.();
+			};
+
+			if (reduceMotion || !panel.classList.contains('is-open') || !hadContent) {
+				finishClose();
+			} else {
+				// Wait for reverse item stagger, then slide panel up
+				mobileNavContentTimer = window.setTimeout(finishClose, 650);
+			}
+		}
+
 		syncHeaderAppearance?.();
 	}
 
+	function closeMobileNav() {
+		setMobileNavOpen(false);
+	}
+
 	function initMobileNav() {
-		mobileNavCleanup?.();
-		mobileNavCleanup = null;
+		const navWindow = window as MobileNavWindow;
+		if (navWindow.__mobileNavBound) return;
+		navWindow.__mobileNavBound = true;
 
-		const toggle = document.getElementById('mobile-nav-toggle');
-		const panel = document.getElementById('mobile-nav-panel');
+		document.addEventListener('click', (event) => {
+			const target = event.target as HTMLElement | null;
+			if (!target) return;
 
-		if (!toggle || !panel) {
-			closeMobileNav();
-			return;
-		}
-
-		const onToggleClick = () => {
-			const isOpen = toggle.classList.toggle('is-open');
-			panel.classList.toggle('is-open', isOpen);
-			panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-			toggle.setAttribute('aria-label', isOpen ? t('nav.closeMenu') : t('nav.openMenu'));
-			toggle.dataset.i18nAria = isOpen ? 'nav.closeMenu' : 'nav.openMenu';
-
-			if (isOpen) {
-				lockBodyScroll();
-			} else {
-				unlockBodyScroll();
+			if (target.closest('#mobile-nav-toggle')) {
+				const toggle = document.getElementById('mobile-nav-toggle');
+				const isOpen = toggle?.classList.contains('is-open') === true;
+				setMobileNavOpen(!isOpen);
+				return;
 			}
 
-			syncHeaderAppearance?.();
-		};
+			if (target.closest('#mobile-nav-panel [data-mobile-nav-link]')) {
+				closeMobileNav();
+			}
+		});
 
-		const onPanelClick = (event: Event) => {
-			const target = event.target as HTMLElement | null;
-			if (target?.closest('[data-mobile-nav-link]')) closeMobileNav();
-		};
-
-		const onKeyDown = (event: KeyboardEvent) => {
+		window.addEventListener('keydown', (event) => {
 			if (event.key === 'Escape') closeMobileNav();
-		};
+		});
+	}
 
-		toggle.addEventListener('click', onToggleClick);
-		panel.addEventListener('click', onPanelClick);
-		window.addEventListener('keydown', onKeyDown);
-
-		mobileNavCleanup = () => {
-			toggle.removeEventListener('click', onToggleClick);
-			panel.removeEventListener('click', onPanelClick);
-			window.removeEventListener('keydown', onKeyDown);
-			closeMobileNav();
-		};
+	function revealHeader() {
+		const header = document.getElementById('site-header');
+		if (!header) return;
+		header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
 	}
 
 	function initHeaderIntroReveal() {
@@ -440,23 +588,19 @@ const headerClass = waitForIntro
 		if (!header || header.dataset.waitIntro !== 'true') return;
 
 		if (hasCompletedIntro()) {
-			header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+			revealHeader();
 			return;
 		}
 
-		window.addEventListener(
-			'intro-complete',
-			() => {
-				header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
-			},
-			{ once: true },
-		);
+		window.addEventListener('intro-complete', revealHeader, { once: true });
+		window.setTimeout(revealHeader, 3500);
 	}
 
 	function initHeader() {
 		initHeaderSolidBackground();
 		initMobileNav();
 		initHeaderIntroReveal();
+		initLogoWave();
 	}
 
 	initHeader();
