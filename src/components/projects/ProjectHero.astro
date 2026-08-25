@@ -32,12 +32,12 @@ const hasHeroContent = hasTagline || hasMeta;
 const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 ---
 
-<section id="project-hero" class="project-hero relative h-[85vh] overflow-hidden">
+<section id="project-hero" class="project-hero relative h-[100svh] overflow-hidden md:h-[85vh]">
 	{
 		heroImage ? (
 			<div
 				id="project-hero-visual"
-				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[85vh] w-full overflow-hidden bg-[#131415]"
+				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100svh] w-full overflow-hidden bg-[#131415] md:h-[85vh]"
 				aria-hidden="true"
 			>
 				<div id="project-hero-parallax" class="project-hero-parallax pointer-events-none absolute inset-x-0">
@@ -46,7 +46,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 						alt=""
 						width="1920"
 						height="1080"
-						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
+						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-center md:object-[center_42%]"
 						loading="eager"
 						decoding="async"
 					/>
@@ -134,15 +134,16 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 		visibility: hidden;
 	}
 
+	/* Mobile: fill viewport, no parallax overscan/zoom so ~full graphic height stays readable */
 	.project-hero-parallax {
-		top: -12%;
-		height: 124%;
+		top: 0;
+		height: 100%;
 		will-change: transform;
 	}
 
 	.project-hero-background {
-		transform: scale(1.08);
-		transform-origin: center 42%;
+		transform: scale(1);
+		transform-origin: center center;
 	}
 
 	.project-hero__title {
@@ -172,6 +173,16 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 	}
 
 	@media (min-width: 768px) {
+		.project-hero-parallax {
+			top: -12%;
+			height: 124%;
+		}
+
+		.project-hero-background {
+			transform: scale(1.08);
+			transform-origin: center 42%;
+		}
+
 		.project-hero__title {
 			font-size: 2.35rem;
 		}
@@ -185,7 +196,13 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 		}
 
 		.project-hero-background {
-			transform: scale(1.12);
+			transform: scale(1);
+		}
+
+		@media (min-width: 768px) {
+			.project-hero-background {
+				transform: scale(1.12);
+			}
 		}
 	}
 </style>
@@ -203,6 +220,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 		const parallax = document.getElementById('project-hero-parallax');
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const mobileMq = window.matchMedia('(max-width: 767px)');
 		/** Total shift across the full time the hero stays in view — keep it subtle/slow */
 		const MAX_SHIFT_RATIO = 0.05;
 
@@ -213,7 +231,11 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 			const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
 			visual.classList.toggle('is-hidden', !inViewport);
 
-			if (!parallax || reduceMotion) return;
+			// No parallax on mobile: layer is exactly viewport-sized (max graphic height visible)
+			if (!parallax || reduceMotion || mobileMq.matches) {
+				if (parallax && (reduceMotion || mobileMq.matches)) parallax.style.transform = '';
+				return;
+			}
 
 			// 0 at top of page → 1 when hero has fully scrolled past the top edge
 			const scrolled = Math.max(0, -rect.top);
