@@ -3,7 +3,7 @@ title: Platform for Luxury Real Estate
 client: Epic Realty
 tags: ['UX/UI design and development']
 categories: ['ux-ui', 'development']
-thumbnail: '/portfolio/epic-realty-web/cover.webp'
+thumbnail: '/portfolio/epic-realty-web/1.webp'
 folderName: 'epic-realty-web'
 order: 2
 comingSoon: false
