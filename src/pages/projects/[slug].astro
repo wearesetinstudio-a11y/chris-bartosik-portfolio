@@ -239,12 +239,14 @@ const revealHeadingIds = [
 	<script>
 		import { bootSlideUpReveal } from '../../scripts/initSlideUpReveal.ts';
 		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
+		import { initProjectGalleryVideos } from '../../scripts/initProjectGalleryVideos.ts';
 
 		function initProjectPage() {
 			bootSlideUpReveal();
 			const ids =
 				(globalThis as { __projectRevealHeadings?: string[] }).__projectRevealHeadings ?? [];
 			initScrollLetterReveals(ids);
+			initProjectGalleryVideos();
 		}
 
 		if (document.readyState === 'loading') {
