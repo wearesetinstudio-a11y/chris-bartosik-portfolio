@@ -1,76 +1,133 @@
 ---
-title: See More Logistics - rebranding
+title: New way of Logistics
 client: See More Logistics
 tags: ['Rebranding']
-
-categories: ['branding']
+categories: ['branding', 'motion']
 thumbnail: '/portfolio/see-more-rebranding/cover.webm'
 folderName: 'see-more-rebranding'
 order: 2
-comingSoon: true
+comingSoon: false
 video: '/portfolio/see-more-rebranding/cover.webm'
 heroImage: '/portfolio/see-more-rebranding/bg.webp'
+clientLabel: Client
 heroSubtitle: |-
-  A brand that shapes the Panama's
-  logistics trust and innovation
-overviewLabel: ''
-overviewTitle: 'Moving national cargo with absolute clarity'
-overviewText: 'See More Logistics needed a visual identity that matched their physical presence on Panamanian roads. The local logistics market often relies on generic, literal imagery that fails to communicate modern reliability or professionalism. I designed and developed a functional brand system that positions them as an institutional authority, allowing regional business owners and government contractors to experience true operational confidence.'
-overviewGraphic: '/logos/see-more.svg'
-service: 'Brand Strategy, Visual Identity, Webflow Development'
-industry: 'Industrial Logistics'
-market: 'Panama'
-year: 2026
-liveUrl: 'seemorelogistics.com'
+  Modern visual identity for a fast-growing Panamanian logistics provider
+service: |-
+  Rebranding, Animation
+industry: |-
+  Logistics & Transportation
+market: Panama
+tools: |-
+  Figma, Adobe
+year: 2025
+liveLabel: Coming soon
+liveUrl: 'https://see-more-logistics-pty.webflow.io/'
 logo: '/logos/see-more.svg'
-challengesAfterGroup: 2
-strategyAfterGroup: 8
-challengesLabel: 'Challenges'
-challengesText: 'The main obstacle was the lack of visual distinction in the logistics sector. Most operators use dated design tropes that do not inspire corporate or governmental trust. I had to solve for extreme physical scalability, ensuring the system maintains flawless legibility on a small employee ID badge, corporate documentation, and massive cargo trucks traveling at high speeds across the country.'
-strategyLabel: 'Strategy'
-strategyTitle: 'Engineering structural grids for seamless real-world application'
-strategyText: |-
-  I abandoned decorative elements to focus entirely on functional design. I designed and developed a functional brand system using mathematical rules from the brandbook to ensure absolute consistency across all physical and digital layouts.
-
-  The logotype integrates a global icon directly into the typography, anchoring the brand to Panama's role as a major Latin American transport hub. For the color palette, we selected a combination of deep industrial navy and vibrant electric blue to evoke engineering precision and high visibility. This systematic approach was applied to their internal manifests, employee access cards, and minimalist vehicle wraps, turning their entire operation into a cohesive visual statement.
-summaryLabel: 'Summary'
-summaryTitle: 'Establishing an unmistakable visual standard for national logistics'
-summaryText: 'By stripping away the noise, I delivered an identity that feels like an institutional standard. See More Logistics now possesses a commanding visual presence that aligns perfectly with their operational commitment. Every touchpoint, from physical fleet graphics to technical documentation, reinforces their promise of trust and transparency, giving them the leverage to secure high-value contracts and drive business expansion.'
+overviewLabel: Overview
+overviewTitle: |-
+  Strategic brand evolution designed to build B2B trust and market presence in Panama.
+overviewText: |-
+  I led the first-ever rebranding for See More Logistics, a fast-growing Panamanian logistics provider serving local corporate accounts and government institutions. Moving beyond their initial startup phase, the company required a mature visual identity system to communicate operational reliability and clarity. I developed a comprehensive visual strategy, refreshed the core brand identity, and created a unified communication framework designed to elevate their market presence and build long-term B2B trust.
+sections:
+  - label: Logo Evolution
+    title: Refining Type and Geometry Around an Established Symbol
+    text: |-
+      The founders were deeply attached to their existing globe mark. However, the original logo lacked custom identity and relied on muted pastel tones. Rather than replacing it completely, I customized the typography (starting from Open Sans, adjusting letter proportions and weights) and cleaned up the globe geometry. Increasing color saturation gave the logo an immediate boost in authority without losing brand recognition.
+  - label: Fleet Branding
+    title: Designing High-Impact Visuals for On-the-Road Fleet Advertising
+    text: |-
+      Since their truck fleet served as their primary marketing touchpoint, the design had to communicate their business scope immediately. I created a clean, line-art landscape of the Panama City skyline in grey, layered with a bold blue delivery vehicle and cargo graphics. Applied over white vehicle panels, it delivers a clear message about local service coverage.
+  - label: Messaging
+    title: Memorable Bilingual Tagline
+    text: |-
+      I copywrote the tagline "SEE MORE CONFIANZA EN TU LOGÍSTICA". This concept merges the English brand name (See More) with a Spanish value proposition. The phonetic flow creates a clear connection between the name See More and bringing "more confidence" to their clients' logistics operations.
+  - label: Motion design
+    title: Dynamic Motion Asset for Digital Brand Channels
+    text: |-
+      I brought the vector city landscape and delivery truck to life through clean motion design. This animated element serves as a versatile brand anchor across social content, email signatures, and presentation decks, while maintaining proper hierarchy so the core logo always takes center stage.
+  - label: Summary
+    title: Transforming Brand Perception for Business Growth
+    text: |-
+      The rebranding successfully transitioned See More Logistics from a startup image to an authoritative B2B partner. The high-contrast visual system sets them apart in the local market, turning every vehicle on the road into a memorable brand touchpoint.
 i18n:
   pl:
-    category: 'Rebranding'
+    title: New way of Logistics
+    clientLabel: Klient
+    category: Rebranding
     heroSubtitle: |-
-      Marka, która kształtuje zaufanie
-      i innowację logistyki Panamy
-    service: 'Strategia marki, identyfikacja wizualna, Webflow'
-    industry: 'Logistyka przemysłowa'
-    market: 'Panama'
-    overviewTitle: 'Przewóz ładunków krajowych z absolutną jasnością'
-    overviewText: 'See More Logistics potrzebowało tożsamości wizualnej na miarę swojej fizycznej obecności na panamskich drogach. Lokalny rynek logistyczny często opiera się na schematycznych, dosłownych obrazach, które nie komunikują nowoczesnej niezawodności ani profesjonalizmu. Zaprojektowałem i wdrożyłem funkcjonalny system marki, który ustawia ich jako instytucjonalny autorytet — tak, by regionalni przedsiębiorcy i wykonawcy rządowi odczuwali prawdziwą pewność operacyjną.'
-    challengesText: 'Główną przeszkodą był brak wizualnego wyróżnienia w sektorze logistycznym. Większość operatorów korzysta z przestarzałych tropów, które nie budują zaufania korporacyjnego ani rządowego. Musiałem rozwiązać ekstremalną skalowalność fizyczną: system ma zachować nienaganną czytelność na małej identyfikacji pracownika, dokumentacji firmowej i ogromnych ciężarówkach jadących z dużą prędkością przez kraj.'
-    strategyTitle: 'Siatki konstrukcyjne pod bezszwowe zastosowanie w realnym świecie'
-    strategyText: |-
-      Odrzuciłem elementy dekoracyjne, żeby skupić się wyłącznie na designie funkcjonalnym. Zaprojektowałem i wdrożyłem system marki oparty na matematycznych zasadach z księgi znaku, żeby zapewnić absolutną spójność we wszystkich layoutach fizycznych i cyfrowych.
-
-      Logotyp wplata globalną ikonę bezpośrednio w typografię, kotwicząc markę w roli Panamy jako kluczowego węzła transportowego Ameryki Łacińskiej. Paletę oparliśmy na głębokim industrialnym granacie i żywym elektrycznym błękicie — precyzja inżynierska i wysoka widoczność. To samo podejście trafiło na manifesty wewnętrzne, karty dostępu i minimalistyczne okleiny pojazdów, zamieniając całą operację w spójny komunikat wizualny.
-    summaryTitle: 'Wyraźny standard wizualny dla logistyki krajowej'
-    summaryText: 'Odcinając szum, oddałem tożsamość, która czuje się jak instytucjonalny standard. See More Logistics ma teraz władczą obecność wizualną, zsynchronizowaną z ich zobowiązaniem operacyjnym. Każdy punkt styku — od grafiki floty po dokumentację techniczną — wzmacnia obietnicę zaufania i przejrzystości, dając im dźwignię do kontraktów wysokiej wartości i dalszej ekspansji.'
+      Nowoczesna identyfikacja dla dynamicznie rozwijającej się firmy logistycznej
+    service: |-
+      Rebranding, Animacja
+    industry: |-
+      Logistyka & Transport
+    market: Panama
+    tools: |-
+      Figma, Adobe
+    liveLabel: Już wkrótce
+    overviewLabel: Intro
+    overviewTitle: |-
+      Ewolucja marki budująca profesjonalizm i zaufanie klientów B2B w Panamie.
+    overviewText: |-
+      Przeprowadziłem pierwszy rebranding w historii See More Logistics – rozwijającej się firmy logistycznej z Panamy, obsługującej rynek lokalny, kluczowych klientów B2B oraz instytucje rządowe. Firma wychodziła z etapu wczesnego startupu i potrzebowała spójnego, dojrzałego systemu wizualnego, który odzwierciedlałby jej niezawodność oraz klarowność działania. W ramach projektu opracowałem nową strategię wizualną, odświeżyłem identyfikację marki i stworzyłem spójny język komunikacji, który umocnił jej pozycję rynkową oraz zbudował zaufanie w relacjach biznesowych.
+    sections:
+      - label: Ewolucja Logo
+        title: Dopracowanie kroju pisma z zachowaniem rozpoznawalnego globusa
+        text: |-
+          Założyciele byli silnie przywiązani do dotychczasowego motywu globusa. Stare logo miało jednak mało unikatowy wygląd i pastelową kolorystykę. Zamiast rewolucji, stworzyłem typografię (wychodząc od kroju Open Sans, modyfikując ramiona i proporcje liter) oraz uporządkowałem geometrię globusa. Zwiększyłem nasycenie ciemnego i niebieskiego koloru, dzięki czemu marka zyskała profesjonalny, wyrazisty sznyt.
+      - label: Branding Floty
+        title: Marketing na kółkach - jak łączyć pożyteczne z pożytecznym.
+        text: |-
+          Flota transportowa była głównym nośnikiem reklamowym marki w Panamie. Musiałem w prosty sposób komunikować branżę i lokalny rynek. Zaprojektowałem minimalistyczną, liniową ilustrację przedstawiającą kontury budynków Panama City w szarym odcieniu, na tle których wyróżnia się niebieski busik oraz kontenery. Całość na białym tle pojazdu buduje spójność marki i przyciąga wzrok na drogach.
+      - label: Komunikacja Marki
+        title: Dwujęzyczna gra słowna wzmacniająca zaufanie do marki
+        text: |-
+          Opracowałem chwytliwe hasło "SEE MORE CONFIANZA EN TU LOGÍSTICA". Slogan w naturalny sposób łączy angielską nazwę marki (See More) z komunikatem w języku hiszpańskim. Wykorzystuje fonetyczną grę słów, sugerując "zobacz więcej zaufania w swojej logistyce", co zbudowało świetny Cross-Over językowy na rynku panamskim.
+      - label: Motion design
+        title: Animowany motyw przewodni dla cyfrowych kanałów marketingowych
+        text: |-
+          Zanimowałem stworzony przeze mnie liniowy pejzaż miasta z niebieskim busikiem, zamieniając go w dynamiczny asset marki. Motyw ten uatrakcyjnił komunikację w mediach społecznościowych i materiałach firmowych. Zaplanowałem całą strukturę wizualną tak, aby logo zawsze zachowywało główną rolę, podczas gdy animacje pełnią funkcję przyciągającego wzrok akcentu.
+      - label: Podsumowanie
+        title: Nowy wizerunek profesjonalnego partnera w logistyce
+        text: |-
+          Projekt przekształcił wizerunek See More Logistics z etapu wczesnego startupu w dojrzałą, budzącą zaufanie markę. Minimalistyczny, wyrazisty system identyfikacji wyróżnia firmę na panamskich drogach i skutecznie wspiera pozyskiwanie kluczowych klientów B2B.
   pa:
-    category: 'Rebranding'
+    title: New way of Logistics
+    clientLabel: Cliente
+    category: Rebranding
     heroSubtitle: |-
-      Una marca que da forma a la confianza
-      e innovación logística de Panamá
-    service: 'Estrategia de marca, identidad visual, Webflow'
-    industry: 'Logística industrial'
-    market: 'Panamá'
-    overviewTitle: 'Moviendo carga nacional con claridad absoluta'
-    overviewText: 'See More Logistics necesitaba una identidad visual a la altura de su presencia física en las carreteras panameñas. El mercado logístico local suele apoyarse en imágenes genéricas y literales que no comunican fiabilidad moderna ni profesionalismo. Diseñé y desarrollé un sistema de marca funcional que los posiciona como una autoridad institucional, para que empresarios regionales y contratistas gubernamentales perciban verdadera confianza operativa.'
-    challengesText: 'El principal obstáculo era la falta de distinción visual en el sector logístico. La mayoría de operadores usa tropes de diseño anticuados que no inspiran confianza corporativa ni gubernamental. Tuve que resolver una escalabilidad física extrema: el sistema debía mantener una legibilidad impecable en un gafete pequeño, en documentación corporativa y en camiones de carga que circulan a alta velocidad por el país.'
-    strategyTitle: 'Grids estructurales para una aplicación real sin fricción'
-    strategyText: |-
-      Dejé de lado lo decorativo para centrarme por completo en el diseño funcional. Diseñé y desarrollé un sistema de marca con reglas matemáticas del brandbook para garantizar consistencia absoluta en todos los layouts físicos y digitales.
-
-      El isotipo integra un ícono global en la tipografía, anclando la marca al rol de Panamá como gran hub de transporte en Latinoamérica. Para el color elegimos un navy industrial profundo y un azul eléctrico de alta visibilidad: precisión de ingeniería. El mismo enfoque se aplicó a manifiestos internos, tarjetas de acceso y wrapping minimalista de vehículos, convirtiendo toda la operación en un discurso visual cohesivo.
-    summaryTitle: 'Un estándar visual inconfundible para la logística nacional'
-    summaryText: 'Al quitar el ruido, entregué una identidad que se siente como un estándar institucional. See More Logistics tiene ahora una presencia visual firme, alineada con su compromiso operativo. Cada punto de contacto, de la flota a la documentación técnica, refuerza la promesa de confianza y transparencia, y les da palanca para contratos de alto valor y expansión.'
+      Identidad moderna para una empresa de logística en plena expansión en Panamá
+    service: |-
+      Rediseño de Marca, Animación
+    industry: |-
+      Logística y Transporte
+    market: Panamá
+    tools: |-
+      Figma, Adobe
+    liveLabel: Viene pronto
+    overviewLabel: Visión General
+    overviewTitle: |-
+      Evolución estratégica de marca para fortalecer la confianza B2B en el mercado panameño.
+    overviewText: |-
+      Realicé el primer rediseño en la historia de See More Logistics, una empresa de logística en Panamá que atiende a clientes corporativos e instituciones gubernamentales. Al consolidar su presencia en el mercado, la firma necesitaba un sistema visual sólido que proyectara confianza y profesionalismo. Desarrollé una nueva estrategia visual, rediseñé la identidad de marca y estructuré un lenguaje de comunicación coherente que fortaleció su posicionamiento y credibilidad en el sector B2B.
+    sections:
+      - label: Evolución del Logo
+        title: Ajuste tipográfico conservando el símbolo del globo
+        text: |-
+          Los fundadores deseaban mantener el elemento del globo terráqueo. No obstante, la versión anterior lucía poco exclusiva y utilizaba tonos pasteles. En lugar de cambiarlo totalmente, personalicé la tipografía (partiendo de Open Sans y ajustando proporciones) y simplifiqué la gráfica del globo. Aumenté la saturación de los tonos azules y oscuros para conferirle la firmeza visual propia del sector.
+      - label: Branding en Flota
+        title: Alto impacto visual en camiones como soporte publicitario clave
+        text: |-
+          La flota vehicular era el medio publicitario más importante de la empresa. Para transmitir su enfoque local, creé una ilustración lineal de la Ciudad de Panamá en tono gris sobre la que destaca un vehículo de entregas en azul intenso junto a cajas de carga. Esta composición en los paneles blancos transmite al instante la esencia de la marca.
+      - label: Optimización
+        title: Un eslogan bilingüe basado en un juego de palabras
+        text: |-
+          Diseñé el tagline "SEE MORE CONFIANZA EN TU LOGÍSTICA". La frase integra el nombre comercial en inglés (See More) con el mensaje de valor en español. Aprovecha la fonética del nombre para transmitir la idea de "encontrar más confianza" en los servicios de la empresa.
+      - label: Movimiento
+        title: Recurso animado distintivo para medios digitales
+        text: |-
+          Animé la ilustración de la Ciudad de Panamá y el vehículo logístico, creando un recurso dinámico para la marca. Este elemento aporta frescura en redes sociales y presentaciones, manteniendo una jerarquía clara donde el logotipo principal conserva siempre la máxima prioridad.
+      - label: Resumen del Proyecto
+        title: Transformación de imagen para la atracción de clientes B2B
+        text: |-
+          El rediseño posicionó a See More Logistics como una opción sólida y confiable en el sector logístico. El sistema visual de alto contraste resalta en las calles de Panamá, convirtiendo a la flota vehicular en un canal permanente de reconocimiento de marca.
 ---
