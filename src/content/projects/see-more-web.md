@@ -5,7 +5,7 @@ tags: ['UX/UI & web development']
 categories: ['ux-ui', 'development', 'motion']
 thumbnail: '/portfolio/see-more-web/cover.webm'
 folderName: 'see-more-web'
-order: 3
+order: 4
 comingSoon: false
 video: '/portfolio/see-more-web/cover.webm'
 heroImage: '/portfolio/see-more-web/bg.webp'

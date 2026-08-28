@@ -5,7 +5,7 @@ tags: ['Rebranding']
 categories: ['branding', 'motion']
 thumbnail: '/portfolio/see-more-rebranding/cover.riv'
 folderName: 'see-more-rebranding'
-order: 2
+order: 3
 comingSoon: false
 video: '/portfolio/see-more-rebranding/cover.riv'
 heroImage: '/portfolio/see-more-rebranding/bg.webp'

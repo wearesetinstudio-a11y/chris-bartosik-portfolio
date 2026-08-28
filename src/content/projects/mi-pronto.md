@@ -5,7 +5,7 @@ tags: ['Branding', 'Print']
 categories: ['branding']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'
-order: 5
+order: 7
 comingSoon: true
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'

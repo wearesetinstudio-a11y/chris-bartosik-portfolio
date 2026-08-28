@@ -5,7 +5,7 @@ tags: ['Branding', 'Visual Identity', 'Webflow']
 categories: ['branding', 'development']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
-order: 4
+order: 5
 comingSoon: true
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-

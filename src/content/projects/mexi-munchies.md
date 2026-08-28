@@ -5,7 +5,7 @@ tags: ['Branding', 'Visual Identity', 'Webflow']
 categories: ['branding', 'development']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
-order: 6
+order: 8
 comingSoon: true
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: |-

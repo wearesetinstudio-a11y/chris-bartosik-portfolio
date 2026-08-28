@@ -6,5 +6,5 @@ tags: ['Tech web']
 categories: ['ux-ui', 'development']
 thumbnail: ''
 comingSoon: true
-order: 10
+order: 12
 ---

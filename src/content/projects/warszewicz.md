@@ -5,7 +5,7 @@ tags: ['AI Video Generation', 'Art Direction', 'Print']
 categories: ['branding', 'ai-engineering']
 thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
-order: 7
+order: 9
 comingSoon: true
 heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: 'A refined identity shaped by detail, contrast, and editorial restraint'

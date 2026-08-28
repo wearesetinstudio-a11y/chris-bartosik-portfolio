@@ -5,7 +5,7 @@ tags: ['Coming soon']
 categories: ['branding']
 thumbnail: '/portfolio/les-negres-de-europe/cover.webm'
 folderName: 'les-negres-de-europe'
-order: 5
+order: 6
 comingSoon: true
 video: '/portfolio/les-negres-de-europe/cover.webm'
 heroSubtitle: Coming soon
