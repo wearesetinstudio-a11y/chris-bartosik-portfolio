@@ -27,12 +27,16 @@ const { src, fit = 'contain', class: className = '', label = '' } = Astro.props;
 		width: 100%;
 		overflow: hidden;
 		background: transparent;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 
 	.rive-player__canvas {
 		display: block;
 		width: 100%;
 		height: 100%;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 
 	.project-card__media .rive-player {
@@ -41,6 +45,8 @@ const { src, fit = 'contain', class: className = '', label = '' } = Astro.props;
 		width: 100%;
 		height: 100%;
 		background: transparent;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 
 	.project-card__media .rive-player .rive-player__canvas {
@@ -48,6 +54,8 @@ const { src, fit = 'contain', class: className = '', label = '' } = Astro.props;
 		inset: 0;
 		width: 100%;
 		height: 100%;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 
 	/* Soft fallback until artboard ratio is applied inline on load */
@@ -58,5 +66,7 @@ const { src, fit = 'contain', class: className = '', label = '' } = Astro.props;
 		aspect-ratio: 16 / 10;
 		height: auto;
 		background: transparent;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 </style>

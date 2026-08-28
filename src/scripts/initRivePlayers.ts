@@ -89,6 +89,8 @@ function mountRive(host: RiveHost) {
 		src,
 		canvas,
 		autoplay: true,
+		isTouchScrollEnabled: true,
+		shouldDisableRiveListeners: true,
 		stateMachines: undefined,
 		layout: new Layout({
 			fit,
