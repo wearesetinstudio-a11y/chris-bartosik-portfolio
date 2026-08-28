@@ -9,8 +9,17 @@ const HEADLINE_MIN_PX = 18;
 const MOBILE_FIT_WIDTH_TOLERANCE_PX = 8;
 
 let cleanupHeroHeadlineBlur: (() => void) | null = null;
-let cachedMobileHeadlineFit: { fontSize: number; width: number } | null = null;
+let cachedMobileHeadlineFit: {
+	fontSize: number;
+	width: number;
+	locale: string;
+	letterSpacing: string;
+} | null = null;
 const headlineBaselineCache = new WeakMap<HTMLElement, number>();
+
+function getHeadlineLocale() {
+	return document.documentElement.dataset.locale || document.documentElement.lang || 'en';
+}
 
 function parseSpacing(value: string, fontSize: number) {
 	if (!value || value === 'normal') return 0;
@@ -54,10 +63,29 @@ function getHeadlineLines(headline: HTMLElement) {
 	);
 }
 
+function lineFitsWidth(line: HTMLElement, width: number) {
+	const text = (line.innerText || '').replace(/\s+/g, ' ').trim();
+	if (!text) return true;
+
+	// Absolute glitch canvases can inflate scrollWidth — hide while measuring.
+	const canvases = Array.from(line.querySelectorAll('canvas'));
+	const previousDisplay = canvases.map((canvas) => canvas.style.display);
+	for (const canvas of canvases) canvas.style.display = 'none';
+
+	const fits = line.scrollWidth <= width + 1;
+
+	canvases.forEach((canvas, index) => {
+		canvas.style.display = previousDisplay[index];
+	});
+
+	return fits;
+}
+
 function fitHeroHeadline(headline: HTMLElement, force = false) {
 	const desk = headline.querySelector<HTMLElement>('[data-hero-headline-desk]');
 	const mob = headline.querySelector<HTMLElement>('[data-hero-headline-mob]');
 	const mobile = isMobileHeadline();
+	const locale = getHeadlineLocale();
 	if (desk) desk.setAttribute('aria-hidden', mobile ? 'true' : 'false');
 	if (mob) mob.setAttribute('aria-hidden', mobile ? 'false' : 'true');
 
@@ -65,44 +93,72 @@ function fitHeroHeadline(headline: HTMLElement, force = false) {
 	if (!lines.length || headline.clientWidth < 8) return;
 
 	const width = headline.clientWidth;
+	const fits = () => lines.every((line) => lineFitsWidth(line, width));
 
-	if (mobile && !force && cachedMobileHeadlineFit) {
-		if (Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX) {
-			headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
-			return;
-		}
+	const cacheHit =
+		cachedMobileHeadlineFit &&
+		cachedMobileHeadlineFit.locale === locale &&
+		Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX;
+
+	if (mobile && !force && cacheHit && cachedMobileHeadlineFit) {
+		headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+		headline.style.letterSpacing = cachedMobileHeadlineFit.letterSpacing;
+		if (fits()) return;
 	}
 
 	headline.style.fontSize = '';
-	const maxPx = parseFloat(getComputedStyle(headline).fontSize);
-	if (!Number.isFinite(maxPx) || maxPx <= 0) return;
+	headline.style.letterSpacing = '';
+	const cssPx = parseFloat(getComputedStyle(headline).fontSize);
+	if (!Number.isFinite(cssPx) || cssPx <= 0) return;
 
-	const fits = () => lines.every((line) => line.scrollWidth <= width + 1);
+	const maxFontForTracking = (tracking: string, hi: number) => {
+		headline.style.letterSpacing = tracking;
+		headline.style.fontSize = `${hi}px`;
+		if (fits()) return hi;
 
-	let lo = HEADLINE_MIN_PX;
-	let hi = mobile ? Math.max(maxPx * 1.85, width * 0.135) : maxPx;
-	let best = HEADLINE_MIN_PX;
-
-	if (!mobile && fits()) return;
-
-	for (let i = 0; i < 20; i += 1) {
-		const mid = (lo + hi) / 2;
-		headline.style.fontSize = `${mid}px`;
-		if (fits()) {
-			best = mid;
-			lo = mid;
-		} else {
-			hi = mid;
+		let lo = HEADLINE_MIN_PX;
+		let best = HEADLINE_MIN_PX;
+		let high = hi;
+		for (let i = 0; i < 22; i += 1) {
+			const mid = (lo + high) / 2;
+			headline.style.fontSize = `${mid}px`;
+			if (fits()) {
+				best = mid;
+				lo = mid;
+			} else {
+				high = mid;
+			}
 		}
+		return best;
+	};
+
+	if (!mobile) {
+		headline.style.letterSpacing = '';
+		if (fits()) {
+			cachedMobileHeadlineFit = null;
+			return;
+		}
+		const best = maxFontForTracking('', cssPx);
+		headline.style.fontSize = `${best}px`;
+		cachedMobileHeadlineFit = null;
+		return;
 	}
+
+	// Mobile: fill the grid. Longer 2-line locales (PL) tighten tracking
+	// before shrinking so size stays closer to EN/ES.
+	const hi = Math.max(cssPx, width * 0.145);
+	const defaultTracking = '-0.03em';
+	const tightTracking = '-0.06em';
+	const sizeDefault = maxFontForTracking(defaultTracking, hi);
+	const sizeTight = maxFontForTracking(tightTracking, hi);
+
+	const useTight = sizeTight > sizeDefault + 0.4;
+	const best = useTight ? sizeTight : sizeDefault;
+	const letterSpacing = useTight ? tightTracking : defaultTracking;
 
 	headline.style.fontSize = `${best}px`;
-
-	if (mobile) {
-		cachedMobileHeadlineFit = { fontSize: best, width };
-	} else {
-		cachedMobileHeadlineFit = null;
-	}
+	headline.style.letterSpacing = letterSpacing;
+	cachedMobileHeadlineFit = { fontSize: best, width, locale, letterSpacing };
 }
 
 export function initHeroHeadlineGlitch() {
@@ -121,22 +177,30 @@ export function initHeroHeadlineGlitch() {
 		const onResizeOnly = () => {
 			if (isMobileHeadline()) {
 				const width = headline.clientWidth;
+				const locale = getHeadlineLocale();
 				if (
 					cachedMobileHeadlineFit &&
-					Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX
+					cachedMobileHeadlineFit.locale === locale &&
+					width >= cachedMobileHeadlineFit.width - MOBILE_FIT_WIDTH_TOLERANCE_PX
 				) {
 					headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+					headline.style.letterSpacing = cachedMobileHeadlineFit.letterSpacing;
 					return;
 				}
 			}
 			fitHeroHeadline(headline, true);
 		};
+		const onI18nOnly = () => {
+			cachedMobileHeadlineFit = null;
+			requestAnimationFrame(() => fitHeroHeadline(headline, true));
+		};
 		window.addEventListener('resize', onResizeOnly, { passive: true });
-		document.addEventListener('i18n-applied', onResizeOnly);
+		document.addEventListener('i18n-applied', onI18nOnly);
 		cleanupHeroHeadlineBlur = () => {
 			window.removeEventListener('resize', onResizeOnly);
-			document.removeEventListener('i18n-applied', onResizeOnly);
+			document.removeEventListener('i18n-applied', onI18nOnly);
 			headline.style.fontSize = '';
+			headline.style.letterSpacing = '';
 			cachedMobileHeadlineFit = null;
 		};
 		return;
@@ -343,11 +407,7 @@ export function initHeroHeadlineGlitch() {
 		for (const line of getHeadlineLines(headline)) {
 			headlineBaselineCache.delete(line);
 		}
-		if (refit || !isMobileHeadline()) {
-			fitHeroHeadline(headline, refit);
-		} else if (cachedMobileHeadlineFit) {
-			headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
-		}
+		fitHeroHeadline(headline, refit || !isMobileHeadline());
 		paintSource();
 		clearOverlay();
 	}
@@ -359,15 +419,27 @@ export function initHeroHeadlineGlitch() {
 		}
 
 		const width = headline.clientWidth;
+		const locale = getHeadlineLocale();
 		if (
 			cachedMobileHeadlineFit &&
-			Math.abs(width - cachedMobileHeadlineFit.width) < MOBILE_FIT_WIDTH_TOLERANCE_PX
+			cachedMobileHeadlineFit.locale === locale &&
+			width >= cachedMobileHeadlineFit.width - MOBILE_FIT_WIDTH_TOLERANCE_PX
 		) {
+			// Width stable or slightly larger — keep locked mobile size (no shrink).
 			rebuild(false);
 			return;
 		}
 
 		rebuild(true);
+	}
+
+	function scheduleLocaleRefit() {
+		cachedMobileHeadlineFit = null;
+		const run = () => onLayoutChange(true);
+		requestAnimationFrame(() => {
+			requestAnimationFrame(run);
+		});
+		void document.fonts.ready.then(run);
 	}
 
 	void document.fonts.ready.then(() => onLayoutChange(true));
@@ -387,15 +459,25 @@ export function initHeroHeadlineGlitch() {
 			return;
 		}
 
+		// Height-only changes (mobile chrome) must not refit the headline.
+		const widthChanged = Math.abs(width - lastObservedWidth) >= 2;
 		lastObservedWidth = width;
 		lastObservedHeight = height;
+		if (!widthChanged && isMobileHeadline()) {
+			if (cachedMobileHeadlineFit?.locale === getHeadlineLocale()) {
+				headline.style.fontSize = `${cachedMobileHeadlineFit.fontSize}px`;
+				headline.style.letterSpacing = cachedMobileHeadlineFit.letterSpacing;
+			}
+			return;
+		}
+
 		onLayoutChange(false);
 	});
 	resizeObserver.observe(headline);
 
 	headline.addEventListener('pointermove', onPointerMove, { passive: true });
 	headline.addEventListener('pointerleave', onPointerLeave, { passive: true });
-	const onI18nApplied = () => onLayoutChange(true);
+	const onI18nApplied = () => scheduleLocaleRefit();
 	const onWindowResize = () => onLayoutChange(false);
 
 	document.addEventListener('i18n-applied', onI18nApplied);
@@ -416,6 +498,7 @@ export function initHeroHeadlineGlitch() {
 		window.removeEventListener('resize', onWindowResize);
 		canvas?.remove();
 		headline.style.fontSize = '';
+		headline.style.letterSpacing = '';
 		cachedMobileHeadlineFit = null;
 	};
 }

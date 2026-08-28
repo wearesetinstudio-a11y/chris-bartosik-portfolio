@@ -52,7 +52,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			<div class="site-footer__brand">
 				<a
 					href="/"
-					class="site-footer__logo block w-fit select-none transition-opacity hover:opacity-70"
+					class="site-footer__logo block w-full select-none transition-opacity hover:opacity-70"
 					aria-label={t('nav.homeAria', 'en')}
 					data-i18n-aria="nav.homeAria"
 				>
@@ -180,7 +180,38 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
-		padding-bottom: 1.75rem;
+		order: 10;
+		padding-top: 1.75rem;
+		padding-bottom: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.site-footer__logo {
+		display: block;
+		width: 100%;
+		max-width: none;
+	}
+
+	.site-footer__logo .logo-mark {
+		display: flex;
+		width: 100%;
+		align-items: flex-end;
+		justify-content: flex-start;
+		gap: 0.45rem;
+	}
+
+	.site-footer__logo .logo-mark__name {
+		flex: 1 1 auto;
+		min-width: 0;
+		width: 100%;
+		height: auto;
+	}
+
+	.site-footer__logo .logo-mark__hand {
+		flex: 0 0 auto;
+		width: 22%;
+		max-width: 4.75rem;
+		height: auto;
 	}
 
 	.site-footer__locations {
@@ -206,8 +237,12 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	}
 
 	.site-footer__list .rolling-link--footer {
-		font-size: 0.7rem;
+		font-size: 0.84rem;
 		letter-spacing: 0.06em;
+	}
+
+	.site-footer__list .rolling-link--footer .rolling-link__arrow {
+		height: 0.95em;
 	}
 
 	.site-footer__location-label,
@@ -227,7 +262,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	}
 
 	.site-footer__col:last-child {
-		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+		border-bottom: 0;
 	}
 
 	.site-footer__col-title {
@@ -290,6 +325,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		.site-footer__brand,
 		.site-footer__col {
 			position: relative;
+			order: unset;
 			width: auto;
 			max-width: none;
 			min-width: 0;
@@ -299,7 +335,31 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		}
 
 		.site-footer__brand {
+			padding-top: 0;
 			padding-bottom: 0;
+		}
+
+		.site-footer__logo {
+			width: fit-content;
+		}
+
+		.site-footer__logo .logo-mark {
+			width: auto;
+			justify-content: flex-start;
+			gap: 0.32rem;
+		}
+
+		.site-footer__logo .logo-mark__name {
+			flex: 0 0 auto;
+			width: auto;
+			height: 1.75rem;
+		}
+
+		.site-footer__logo .logo-mark__hand {
+			flex: 0 0 auto;
+			width: auto;
+			height: 1.9rem;
+			max-width: none;
 		}
 
 		.site-footer__brand::after,
@@ -334,10 +394,17 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		.site-footer__location-label,
 		.site-footer__location-time,
 		.site-footer__col-title,
-		.site-footer__list .rolling-link--footer,
 		.site-footer__rights,
 		.site-footer__credit {
 			font-size: 0.75rem;
+		}
+
+		.site-footer__list .rolling-link--footer {
+			font-size: 0.9rem;
+		}
+
+		.site-footer__list .rolling-link--footer .rolling-link__arrow {
+			height: 1em;
 		}
 
 		.site-footer__bar {

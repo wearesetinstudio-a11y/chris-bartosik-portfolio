@@ -3,11 +3,11 @@ title: New identity for Epic Realty
 client: Epic Realty
 tags: ['Rebranding']
 categories: ['branding']
-thumbnail: '/portfolio/epic-realty/cover.mp4'
+thumbnail: '/portfolio/epic-realty/cover.riv'
 folderName: 'epic-realty'
 order: 1
 comingSoon: false
-video: '/portfolio/epic-realty/cover.mp4'
+video: '/portfolio/epic-realty/cover.riv'
 heroImage: '/portfolio/epic-realty/bg.webp'
 clientLabel: Client
 heroSubtitle: Rebranding for a luxury real estate studio from Panama
@@ -17,7 +17,7 @@ industry: |-
   Real estate, Luxury
 market: Panama
 tools: |-
-  Figma, Adobe
+  Figma, Adobe, Rive
 year: 2025
 overviewLabel: Overview
 overviewTitle: |-
@@ -60,7 +60,7 @@ i18n:
       Nieruchomości, Luksusowe
     market: Panama
     tools: |-
-      Figma, Adobe
+      Figma, Adobe, Rive
     overviewLabel: Intro
     overviewTitle: |-
       Nowy, profesjonalny wizerunek dla panamskiej agencji nieruchomości z sektora premium.
@@ -100,7 +100,7 @@ i18n:
       Bienes Raíces, Sector de Lujo
     market: Panamá
     tools: |-
-      Figma, Adobe
+      Figma, Adobe, Rive
     overviewLabel: Introducción
     overviewTitle: Una nueva imagen de alto nivel para una firma boutique en el mercado inmobiliario panameño.
     overviewText: |-

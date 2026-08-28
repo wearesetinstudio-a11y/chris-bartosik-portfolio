@@ -49,9 +49,10 @@ const HOLD_EMIT_DELAY_MS = 180;
 const DRAG_EMIT_PX = 10;
 const SCROLL_INTENT_PX = 14;
 const TOP_DRIP_INTERVAL = 0.42;
-const SCROLL_BOOST_DECAY = 1.2;
-const SCROLL_BOOST_MAX = 1;
-const SCROLL_SPEED_REF = 1600;
+/** Ignore tiny viewport jitter from mobile browser chrome (URL bar show/hide). */
+const RESIZE_EPSILON_PX = 96;
+/** Extra particle field below the fold so chrome collapse never shows a hard edge. */
+const MOBILE_FIELD_PAD_PX = 180;
 
 function sparkSize() {
 	return 2;
@@ -134,10 +135,9 @@ export function initHeroParticles() {
 	let holdEmitTimer = 0;
 	let hoveredCta: HTMLElement | null = null;
 	let hoverEmitAcc = 0;
-	let scrollBoost = 0;
-	let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-	let lastScrollSample = 0;
 	let motionTime = 0;
+	let clipFrame = 0;
+	let lastClipPath = '';
 
 	const ctaButtons = [...hero.querySelectorAll<HTMLElement>('.hero-cta')];
 
@@ -395,11 +395,56 @@ export function initHeroParticles() {
 	}
 
 	function measureHeroSize() {
+		const bg = hero.querySelector<HTMLElement>('.hero-bg');
+		const rect = bg?.getBoundingClientRect();
+		const nextWidth = Math.max(1, Math.floor(rect?.width || window.innerWidth));
+		let nextHeight = Math.max(1, Math.floor(rect?.height || window.innerHeight));
+
+		if (isMobileHero()) {
+			const visualH = Math.ceil(window.visualViewport?.height ?? 0);
+			const layoutH = Math.ceil(window.innerHeight);
+			nextHeight = Math.max(nextHeight, visualH, layoutH) + MOBILE_FIELD_PAD_PX;
+		}
+
+		return { nextWidth, nextHeight };
+	}
+
+	function syncHeroBgClip() {
+		const bg = hero.querySelector<HTMLElement>('.hero-bg');
+		if (!bg) return;
+
 		const rect = hero.getBoundingClientRect();
-		return {
-			nextWidth: Math.max(1, Math.floor(rect.width)),
-			nextHeight: Math.max(1, Math.floor(rect.height)),
-		};
+		const viewH = window.innerHeight;
+		const viewW = window.innerWidth;
+
+		if (rect.bottom <= 0 || rect.top >= viewH) {
+			if (lastClipPath !== 'hidden') {
+				bg.style.visibility = 'hidden';
+				bg.style.clipPath = 'inset(100%)';
+				lastClipPath = 'hidden';
+			}
+			return;
+		}
+
+		const top = Math.max(0, Math.round(rect.top));
+		const bottom = Math.min(viewH, Math.round(rect.bottom));
+		const left = Math.max(0, Math.round(rect.left));
+		const right = Math.min(viewW, Math.round(rect.right));
+		const nextClip = `inset(${top}px ${Math.max(0, viewW - right)}px ${Math.max(0, viewH - bottom)}px ${left}px)`;
+
+		if (nextClip === lastClipPath) return;
+
+		bg.style.visibility = 'visible';
+		bg.style.clipPath = nextClip;
+		lastClipPath = nextClip;
+	}
+
+	function scheduleHeroBgClip() {
+		if (clipFrame) return;
+		clipFrame = window.requestAnimationFrame(() => {
+			clipFrame = 0;
+			syncHeroBgClip();
+		});
 	}
 
 	function resize(force = false) {
@@ -408,10 +453,10 @@ export function initHeroParticles() {
 		const nextDpr = Math.min(window.devicePixelRatio || 1, 1.5);
 		if (
 			!force &&
-			nextWidth === width &&
-			nextHeight === height &&
+			particles.length &&
 			nextDpr === dpr &&
-			particles.length
+			Math.abs(nextWidth - width) < RESIZE_EPSILON_PX &&
+			Math.abs(nextHeight - height) < RESIZE_EPSILON_PX
 		) {
 			return;
 		}
@@ -485,14 +530,7 @@ export function initHeroParticles() {
 		prevMouseX = mouseX;
 		prevMouseY = mouseY;
 
-		if (mobileHero) {
-			scrollBoost = Math.max(0, scrollBoost - dt * SCROLL_BOOST_DECAY);
-		} else {
-			scrollBoost = 0;
-		}
-
-		const boost = mobileHero ? scrollBoost : 0;
-		motionTime += dt * (1 + boost * 4.2);
+		motionTime += dt;
 		const t = motionTime;
 
 		for (const particle of particles) {
@@ -792,17 +830,7 @@ export function initHeroParticles() {
 	let resyncTimers: number[] = [];
 
 	function onScroll() {
-		if (!mobileHero || !visible) return;
-
-		const now = performance.now();
-		const y = window.scrollY;
-		const sampleDt = lastScrollSample ? Math.max(0.008, (now - lastScrollSample) / 1000) : 0.016;
-		const speed = Math.abs(y - lastScrollY) / sampleDt;
-		lastScrollY = y;
-		lastScrollSample = now;
-
-		const impulse = Math.min(0.75, speed / SCROLL_SPEED_REF);
-		scrollBoost = Math.min(SCROLL_BOOST_MAX, scrollBoost * 0.86 + impulse * 0.95);
+		scheduleHeroBgClip();
 	}
 
 	function onResize() {
@@ -810,6 +838,7 @@ export function initHeroParticles() {
 		resizeFrame = window.requestAnimationFrame(() => {
 			resizeFrame = 0;
 			resize();
+			syncHeroBgClip();
 			if (!animate) drawStatic();
 		});
 	}
@@ -823,7 +852,8 @@ export function initHeroParticles() {
 		lastTime = 0;
 
 		const run = () => {
-			resize(true);
+			// Soft resize: only rebuild the field when the canvas size actually changed.
+			resize(false);
 			if (!animate) {
 				drawStatic();
 				return;
@@ -841,20 +871,39 @@ export function initHeroParticles() {
 		);
 	}
 
+	function resumeAfterBackground() {
+		// Tab focus must NOT respawn particles — that looks like a teleport jump.
+		lastTime = 0;
+		if (!animate) {
+			drawStatic();
+			return;
+		}
+		startLoop();
+	}
+
 	function onVisibilityChange() {
-		if (document.hidden) return;
-		resyncSurfaces();
+		if (document.hidden) {
+			if (rafId) {
+				window.cancelAnimationFrame(rafId);
+				rafId = 0;
+			}
+			lastTime = 0;
+			return;
+		}
+		resumeAfterBackground();
 	}
 
 	function onPageShow() {
-		resyncSurfaces();
+		resumeAfterBackground();
 	}
 
-	function onViewportChange() {
+	function onViewportResize() {
+		// Only react to real orientation / window changes — not URL-bar scroll jitter.
 		onResize();
 	}
 
 	resize(true);
+	syncHeroBgClip();
 
 	if (animate) {
 		draw(performance.now());
@@ -864,6 +913,7 @@ export function initHeroParticles() {
 
 	function refreshForReveal() {
 		resize(true);
+		syncHeroBgClip();
 		if (animate) {
 			visible = true;
 			if (!rafId) draw(performance.now());
@@ -892,13 +942,12 @@ export function initHeroParticles() {
 	window.addEventListener('resize', onResize, { passive: true });
 	window.addEventListener('scroll', onScroll, { passive: true });
 	window.addEventListener('pageshow', onPageShow);
-	window.addEventListener('focus', onPageShow);
 	document.addEventListener('visibilitychange', onVisibilityChange);
-	window.visualViewport?.addEventListener('resize', onViewportChange, { passive: true });
-	window.visualViewport?.addEventListener('scroll', onViewportChange, { passive: true });
+	window.visualViewport?.addEventListener('resize', onViewportResize, { passive: true });
 
 	const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onResize) : null;
-	resizeObserver?.observe(hero);
+	const heroBg = hero.querySelector<HTMLElement>('.hero-bg');
+	resizeObserver?.observe(heroBg ?? hero);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -910,9 +959,12 @@ export function initHeroParticles() {
 			if (visible) {
 				lastTime = 0;
 				startLoop();
+			} else if (rafId) {
+				window.cancelAnimationFrame(rafId);
+				rafId = 0;
 			}
 		},
-		{ threshold: 0.05 },
+		{ threshold: 0.02, rootMargin: '0px' },
 	);
 
 	observer.observe(hero);
@@ -936,16 +988,24 @@ export function initHeroParticles() {
 		window.removeEventListener('resize', onResize);
 		window.removeEventListener('scroll', onScroll);
 		window.removeEventListener('pageshow', onPageShow);
-		window.removeEventListener('focus', onPageShow);
 		document.removeEventListener('visibilitychange', onVisibilityChange);
-		window.visualViewport?.removeEventListener('resize', onViewportChange);
-		window.visualViewport?.removeEventListener('scroll', onViewportChange);
+		window.visualViewport?.removeEventListener('resize', onViewportResize);
+		if (clipFrame) {
+			window.cancelAnimationFrame(clipFrame);
+			clipFrame = 0;
+		}
 		window.removeEventListener('mousemove', onMove);
 		hero.removeEventListener('pointerdown', onPointerDown);
 		for (const cta of ctaButtons) {
 			cta.removeEventListener('mouseenter', onCtaEnter);
 			cta.removeEventListener('mouseleave', onCtaLeave);
 		}
+		const bg = hero.querySelector<HTMLElement>('.hero-bg');
+		if (bg) {
+			bg.style.clipPath = '';
+			bg.style.visibility = '';
+		}
+		lastClipPath = '';
 		delete canvas.dataset.particlesInit;
 		if (sparkCanvas) delete sparkCanvas.dataset.particlesInit;
 	};

@@ -53,6 +53,7 @@ const clients = [
 	.clients-heading {
 		font-size: 1.4rem;
 		line-height: 1.15;
+		min-width: 0;
 	}
 
 	.clients-heading [data-reveal-line] {
@@ -184,6 +185,43 @@ const clients = [
 		}
 	}
 
+	function fitClientsHeading() {
+		const heading = document.getElementById('clients-heading');
+		if (!heading) return;
+
+		const mobile = window.matchMedia('(max-width: 767px)').matches;
+		heading.style.fontSize = '';
+		if (!mobile) return;
+
+		const lines = [...heading.querySelectorAll<HTMLElement>('[data-reveal-line]')].filter((line) =>
+			(line.textContent ?? '').trim(),
+		);
+		if (!lines.length) return;
+
+		const width = heading.clientWidth;
+		if (width < 8) return;
+
+		const maxPx = parseFloat(getComputedStyle(heading).fontSize) || 22.4;
+		const fits = () => lines.every((line) => line.scrollWidth <= width + 1);
+		if (fits()) return;
+
+		// Only shrink when overflowing — keep visual weight close to projects heading.
+		let lo = Math.max(18, maxPx * 0.88);
+		let hi = maxPx;
+		let best = lo;
+		for (let i = 0; i < 16; i += 1) {
+			const mid = (lo + hi) / 2;
+			heading.style.fontSize = `${mid}px`;
+			if (fits()) {
+				best = mid;
+				lo = mid;
+			} else {
+				hi = mid;
+			}
+		}
+		heading.style.fontSize = `${best}px`;
+	}
+
 	function initClientsSection() {
 		const heading = document.getElementById('clients-heading');
 
@@ -193,15 +231,39 @@ const clients = [
 				wrapLetters(line as HTMLElement);
 			});
 
+			fitClientsHeading();
 			updateHeadingReveal();
 			window.addEventListener('scroll', onScroll, { passive: true });
-			window.addEventListener('resize', updateHeadingReveal, { passive: true });
+			window.addEventListener('resize', onClientsResize, { passive: true });
+			document.addEventListener('i18n-applied', onClientsLocale);
+		} else {
+			fitClientsHeading();
 		}
 
 		initLogosReveal();
 	}
 
 	let ticking = false;
+	let resizeTick = 0;
+
+	function onClientsResize() {
+		if (resizeTick) return;
+		resizeTick = window.requestAnimationFrame(() => {
+			resizeTick = 0;
+			fitClientsHeading();
+			updateHeadingReveal();
+		});
+	}
+
+	function onClientsLocale() {
+		const heading = document.getElementById('clients-heading');
+		if (!heading) return;
+		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+			wrapLetters(line as HTMLElement);
+		});
+		fitClientsHeading();
+		updateHeadingReveal();
+	}
 
 	function onScroll() {
 		if (ticking) return;

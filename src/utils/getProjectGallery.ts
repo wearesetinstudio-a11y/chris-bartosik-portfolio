@@ -1,17 +1,41 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm']);
-const DEFAULT_EXCLUDED = new Set(['bg.webp']);
+const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm', '.riv', '.svg']);
+const DEFAULT_EXCLUDED = new Set([
+	'bg.webp',
+	'cover.webp',
+	'cover.mp4',
+	'cover.webm',
+	'cover.riv',
+	'cover.svg',
+]);
 const PROJECT_MEDIA_DIR = 'portfolio';
 
 function isVideoExtension(extension: string): boolean {
 	return extension === '.mp4' || extension === '.webm';
 }
 
+function isRiveExtension(extension: string): boolean {
+	return extension === '.riv';
+}
+
+function isSvgExtension(extension: string): boolean {
+	return extension === '.svg';
+}
+
+function mediaTypeFromExtension(extension: string): GalleryMediaItem['type'] {
+	if (isRiveExtension(extension)) return 'rive';
+	if (isSvgExtension(extension)) return 'svg';
+	if (isVideoExtension(extension)) return 'video';
+	return 'image';
+}
+
 export type GalleryMediaItem =
 	| { type: 'image'; src: string; filename: string }
-	| { type: 'video'; src: string; filename: string };
+	| { type: 'video'; src: string; filename: string }
+	| { type: 'rive'; src: string; filename: string }
+	| { type: 'svg'; src: string; filename: string };
 
 export type GalleryLayoutBlock =
 	| { kind: 'full'; item: GalleryMediaItem; group: number }
@@ -22,7 +46,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm)$/i;
+const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm|riv|svg)$/i;
 
 export function getCoverFilename(thumbnail: string): string {
 	return thumbnail.split('/').pop() ?? 'cover.webp';
@@ -35,6 +59,62 @@ export function resolveProjectFolderName(project: {
 	return project.data.folderName ?? project.id;
 }
 
+export function getProjectCoverMedia(project: {
+	id: string;
+	data: { folderName?: string; thumbnail?: string; video?: string };
+}): { src: string; type: GalleryMediaItem['type'] } {
+	const folder = resolveProjectFolderName(project);
+	const folderDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folder);
+	try {
+		const files = readdirSync(folderDir);
+		const coverFiles = files.filter((f) => /^cover\.(riv|webm|mp4|webp|svg)$/i.test(f));
+		const preferred = preferRiveFilenames(coverFiles)[0];
+		if (preferred) {
+			const ext = preferred.slice(preferred.lastIndexOf('.')).toLowerCase();
+			return {
+				src: `/${PROJECT_MEDIA_DIR}/${folder}/${preferred}`,
+				type: mediaTypeFromExtension(ext),
+			};
+		}
+	} catch {
+		/* ignore */
+	}
+
+	const explicit = project.data.video || project.data.thumbnail || '';
+	const ext = explicit.slice(explicit.lastIndexOf('.')).toLowerCase();
+	return {
+		src: explicit,
+		type: mediaTypeFromExtension(ext),
+	};
+}
+
+/** Prefer .riv, then .svg, then video over raster siblings with the same basename. */
+export function preferRiveFilenames(filenames: string[]): string[] {
+	const set = new Set(filenames);
+	return filenames.filter((filename) => {
+		const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
+		const base = filename.slice(0, filename.lastIndexOf('.'));
+		const rivName = `${base}.riv`;
+		const svgName = `${base}.svg`;
+		const webmName = `${base}.webm`;
+		const mp4Name = `${base}.mp4`;
+
+		if (isRiveExtension(extension)) return true;
+		if (set.has(rivName)) return false;
+
+		if (isSvgExtension(extension)) return true;
+		if (set.has(svgName)) return false;
+
+		// Prefer motion over still when both share a basename (e.g. 5.webm + 5.webp).
+		if (extension === '.webp' && (set.has(webmName) || set.has(mp4Name))) return false;
+
+		// Prefer webm over mp4 when both exist.
+		if (extension === '.mp4' && set.has(webmName)) return false;
+
+		return true;
+	});
+}
+
 function parseMediaFilename(filename: string): ParsedMediaFile | null {
 	const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
 	if (!MEDIA_EXTENSIONS.has(extension)) return null;
@@ -44,10 +124,9 @@ function parseMediaFilename(filename: string): ParsedMediaFile | null {
 
 	const group = Number(match[1]);
 	const part = match[2] ? Number(match[2]) : null;
-	const mediaType = isVideoExtension(extension) ? 'video' : 'image';
 
 	return {
-		type: mediaType,
+		type: mediaTypeFromExtension(extension),
 		src: '',
 		filename,
 		group,
@@ -55,7 +134,11 @@ function parseMediaFilename(filename: string): ParsedMediaFile | null {
 	};
 }
 
-function toMediaItem(folderName: string, filename: string, type: 'image' | 'video'): GalleryMediaItem {
+function toMediaItem(
+	folderName: string,
+	filename: string,
+	type: GalleryMediaItem['type'],
+): GalleryMediaItem {
 	return {
 		type,
 		filename,
@@ -72,16 +155,19 @@ export function getProjectGalleryFiles(
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
-		return readdirSync(portfolioDir)
-			.filter((filename) => {
+		const filenames = preferRiveFilenames(
+			readdirSync(portfolioDir).filter((filename) => {
 				if (excluded.has(filename)) return false;
 				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
 				return MEDIA_EXTENSIONS.has(extension);
-			})
+			}),
+		);
+
+		return filenames
 			.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
 			.map((filename) => {
 				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
-				return toMediaItem(folderName, filename, isVideoExtension(extension) ? 'video' : 'image');
+				return toMediaItem(folderName, filename, mediaTypeFromExtension(extension));
 			});
 	} catch {
 		return [];
@@ -97,17 +183,18 @@ export function buildGalleryLayout(
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
-		const parsedFiles = readdirSync(portfolioDir)
+		const filenames = preferRiveFilenames(
+			readdirSync(portfolioDir).filter((filename) => !excluded.has(filename)),
+		);
+
+		const parsedFiles = filenames
 			.map((filename) => {
-				if (excluded.has(filename)) return null;
 				const parsed = parseMediaFilename(filename);
 				if (!parsed) return null;
 
-				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
 				return {
 					...parsed,
 					src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
-					type: isVideoExtension(extension) ? ('video' as const) : ('image' as const),
 				};
 			})
 			.filter((file): file is ParsedMediaFile => file !== null)
@@ -131,8 +218,6 @@ export function buildGalleryLayout(
 			const parts = files.filter((file) => file.part !== null);
 			const singles = files.filter((file) => file.part === null);
 
-			// Emit the unnumbered file (e.g. 2.webp) as its own full row, then
-			// paired frames (2.1 / 2.2) as a grid — sections insert after the whole group.
 			for (const single of singles) {
 				layout.push({
 					kind: 'full',

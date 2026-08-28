@@ -3,6 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
 import { t } from '../utils/i18n.ts';
 import { buildProjectCopyBundle } from '../utils/getProjectCopy.ts';
+import { getProjectCoverMedia } from '../utils/getProjectGallery.ts';
+import RivePlayer from './RivePlayer.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -10,7 +12,7 @@ interface Props {
 }
 
 const { project, basePath = '/projects' } = Astro.props;
-const { title, client, thumbnail, video, comingSoon = false, tags, categories = [] } = project.data;
+const { title, client, comingSoon = false, tags, categories = [] } = project.data;
 const copy = buildProjectCopyBundle(project.data);
 const label = (copy.en.title ?? title).toUpperCase();
 const category = copy.en.category ?? tags[0] ?? '';
@@ -24,15 +26,17 @@ const titleMap = JSON.stringify({
 	pl: copy.pl.title ?? title,
 	pa: copy.pa.title ?? title,
 });
-const categoryMap = category
-	? JSON.stringify({
-			en: category,
-			pl: copy.pl.category ?? category,
-			pa: copy.pa.category ?? category,
-		})
-	: undefined;
-const thumbnailSrc = thumbnail ? withPublicAssetVersion(thumbnail) : '';
-const videoSrc = video ? withPublicAssetVersion(video) : '';
+const categoryMap = JSON.stringify({
+	en: copy.en.category ?? category,
+	pl: copy.pl.category ?? copy.en.category ?? category,
+	pa: copy.pa.category ?? copy.en.category ?? category,
+});
+
+const coverMedia = getProjectCoverMedia(project);
+const coverSrc = coverMedia.src ? withPublicAssetVersion(coverMedia.src) : '';
+const isRive = coverMedia.type === 'rive';
+const isVideo = coverMedia.type === 'video';
+const isImage = coverMedia.type === 'image' || coverMedia.type === 'svg';
 const Tag = comingSoon ? 'div' : 'a';
 ---
 
@@ -45,26 +49,29 @@ const Tag = comingSoon ? 'div' : 'a';
 	data-client={clientSlug || undefined}
 	data-transition-label={comingSoon ? undefined : client}
 >
-	<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
+	<div class="project-card__media overflow-hidden">
 		{
-			video ? (
+			isRive && coverSrc ? (
+				<RivePlayer src={coverSrc} fit="cover" class="project-card__rive" />
+			) : isVideo && coverSrc ? (
 				<video
-					src={videoSrc}
+					src={coverSrc}
 					class="project-card__video block h-full w-full object-cover"
 					muted
 					loop
 					playsinline
-					preload="metadata"
+					preload="none"
 					aria-hidden="true"
 				/>
-			) : thumbnailSrc ? (
+			) : isImage && coverSrc ? (
 				<img
-					src={thumbnailSrc}
+					src={coverSrc}
 					alt={title}
 					width="960"
 					height="600"
 					class="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 					loading="lazy"
+					decoding="async"
 				/>
 			) : null
 		}
@@ -111,6 +118,8 @@ const Tag = comingSoon ? 'div' : 'a';
 		position: relative;
 		aspect-ratio: var(--project-cover-aspect);
 		width: 100%;
+		/* Match projects section so an unloaded shell doesn't flash a darker gray tile. */
+		background-color: transparent;
 	}
 
 	.project-card__media img,
@@ -120,6 +129,23 @@ const Tag = comingSoon ? 'div' : 'a';
 		height: 100%;
 		width: 100%;
 		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.35s ease;
+	}
+
+	.project-card__media .rive-player {
+		position: absolute;
+		inset: 0;
+		height: 100%;
+		width: 100%;
+		opacity: 1;
+		transition: opacity 0.35s ease;
+	}
+
+	.project-card__media.is-ready img,
+	.project-card__media.is-ready video,
+	.project-card__media.is-ready .rive-player {
+		opacity: 1;
 	}
 
 	.project-card__title {
@@ -203,8 +229,9 @@ const Tag = comingSoon ? 'div' : 'a';
 		cursor: none;
 	}
 
-	.project-card--soon .project-card__media img,
-	.project-card--soon .project-card__media video {
+	.project-card--soon .project-card__media.is-ready img,
+	.project-card--soon .project-card__media.is-ready video,
+	.project-card--soon .project-card__media.is-ready .rive-player {
 		filter: grayscale(0.55) brightness(0.92);
 		opacity: 0.72;
 	}

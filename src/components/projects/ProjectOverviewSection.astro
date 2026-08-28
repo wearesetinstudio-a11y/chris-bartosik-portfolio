@@ -1,5 +1,6 @@
 ---
 import ProjectInfoRow from './ProjectInfoRow.astro';
+import RivePlayer from '../RivePlayer.astro';
 import { t } from '../../utils/i18n.ts';
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 	title: string;
 	text: string;
 	graphicSrc: string;
-	graphicType?: 'image' | 'video';
+	graphicType?: 'image' | 'video' | 'rive' | 'svg';
 	graphicAlt: string;
 	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
 }
@@ -91,9 +92,28 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 
 		<div class="project-overview__visual min-w-0">
 			<div class="project-overview__sticky lg:sticky lg:top-[100px] lg:w-full">
-				<div class="project-overview__frame w-full overflow-hidden bg-[#ECECEC]">
+				<div class="project-overview__frame w-full overflow-hidden">
 					{
-						graphicType === 'video' ? (
+						graphicType === 'rive' ? (
+							<RivePlayer src={graphicSrc} fit="contain" label={graphicAlt} />
+						) : graphicType === 'svg' ? (
+							<object
+								data={graphicSrc}
+								type="image/svg+xml"
+								class="project-overview__svg block h-auto w-full"
+								aria-label={graphicAlt}
+							>
+								<img
+									src={graphicSrc}
+									alt={graphicAlt}
+									width="720"
+									height="900"
+									class="block h-auto w-full"
+									loading="lazy"
+									decoding="async"
+								/>
+							</object>
+						) : graphicType === 'video' ? (
 							<video
 								src={graphicSrc}
 								class="block h-auto w-full"

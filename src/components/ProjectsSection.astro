@@ -66,7 +66,7 @@ const projectFilters = [
 		)
 	}
 
-	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3" data-projects-grid>
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2" data-projects-grid>
 		{displayedProjects.map((project) => <ProjectCard project={project} />)}
 		{!standalone && <SeeAllProjectsCard count={projects.length} href="/projects" />}
 	</div>
@@ -250,6 +250,7 @@ const projectFilters = [
 <script>
 	import { t } from '../utils/i18n.ts';
 	import { initProjectCardVideos } from '../scripts/initProjectCardVideos.ts';
+	import { initRivePlayers } from '../scripts/initRivePlayers.ts';
 	import { initProjectsFilter } from '../scripts/initProjectsFilter.ts';
 
 	function isComingSoonCard(card: Element) {
@@ -505,6 +506,7 @@ const projectFilters = [
 		initProjectCursor();
 		initProjectsHeadingReveal();
 		initProjectCardVideos();
+		initRivePlayers();
 	}
 
 	document.addEventListener('astro:page-load', initProjectsSection);

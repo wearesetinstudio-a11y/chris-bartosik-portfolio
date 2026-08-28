@@ -3,11 +3,11 @@ title: New way of Logistics
 client: See More Logistics
 tags: ['Rebranding']
 categories: ['branding', 'motion']
-thumbnail: '/portfolio/see-more-rebranding/cover.webm'
+thumbnail: '/portfolio/see-more-rebranding/cover.riv'
 folderName: 'see-more-rebranding'
 order: 2
 comingSoon: false
-video: '/portfolio/see-more-rebranding/cover.webm'
+video: '/portfolio/see-more-rebranding/cover.riv'
 heroImage: '/portfolio/see-more-rebranding/bg.webp'
 clientLabel: Client
 heroSubtitle: |-
@@ -18,7 +18,7 @@ industry: |-
   Logistics & Transportation
 market: Panama
 tools: |-
-  Figma, Adobe
+  Figma, Adobe, Rive
 year: 2025
 liveLabel: Coming soon
 liveUrl: 'https://see-more-logistics-pty.webflow.io/'
@@ -62,7 +62,7 @@ i18n:
       Logistyka & Transport
     market: Panama
     tools: |-
-      Figma, Adobe
+      Figma, Adobe, Rive
     liveLabel: Już wkrótce
     overviewLabel: Intro
     overviewTitle: |-
@@ -102,7 +102,7 @@ i18n:
       Logística y Transporte
     market: Panamá
     tools: |-
-      Figma, Adobe
+      Figma, Adobe, Rive
     liveLabel: Viene pronto
     overviewLabel: Visión General
     overviewTitle: |-

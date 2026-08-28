@@ -27,23 +27,16 @@ export async function getStaticPaths() {
 	const projects = await getCollection('projects');
 	const publishedProjects = projects.filter((project) => !project.data.comingSoon);
 
-	return publishedProjects.map((project) => {
-		const folderName = resolveProjectFolderName(project);
-		const coverFilename = getCoverFilename(project.data.thumbnail);
-		const galleryLayout = buildGalleryLayout(folderName, coverFilename);
-
-		return {
-			params: { slug: project.id },
-			props: {
-				project,
-				projectCount: projects.length,
-				galleryLayout,
-			},
-		};
-	});
+	return publishedProjects.map((project) => ({
+		params: { slug: project.id },
+		props: {
+			project,
+			projectCount: projects.length,
+		},
+	}));
 }
 
-const { project, projectCount, galleryLayout } = Astro.props;
+const { project, projectCount } = Astro.props;
 const data = project.data;
 
 const title = data.title ?? 'Project';
@@ -62,6 +55,7 @@ const liveLabel = data.liveLabel ?? '';
 const liveUrl = data.liveUrl ?? '';
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
+const galleryLayout = buildGalleryLayout(folderName, coverFilename);
 const customOverviewLabel = (data.overviewLabel ?? '').trim();
 const overviewLabel = customOverviewLabel || t('project.overview', 'en');
 const overviewUsesI18nDefault = !customOverviewLabel;
@@ -225,6 +219,7 @@ const revealHeadingIds = [
 		import { bootSlideUpReveal } from '../../scripts/initSlideUpReveal.ts';
 		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
 		import { initProjectGalleryVideos } from '../../scripts/initProjectGalleryVideos.ts';
+		import { initRivePlayers } from '../../scripts/initRivePlayers.ts';
 
 		function initProjectPage() {
 			bootSlideUpReveal();
@@ -232,6 +227,7 @@ const revealHeadingIds = [
 				(globalThis as { __projectRevealHeadings?: string[] }).__projectRevealHeadings ?? [];
 			initScrollLetterReveals(ids);
 			initProjectGalleryVideos();
+			initRivePlayers();
 		}
 
 		if (document.readyState === 'loading') {

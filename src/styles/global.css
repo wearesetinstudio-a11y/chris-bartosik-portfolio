@@ -461,3 +461,13 @@ body.intro-active {
 		cursor: auto !important;
 	}
 }
+
+/* Skip offscreen layout/paint work for below-fold homepage blocks */
+#clients-section,
+#testimonials,
+.tools-section,
+#contact,
+.site-footer {
+	content-visibility: auto;
+	contain-intrinsic-size: 1px 720px;
+}

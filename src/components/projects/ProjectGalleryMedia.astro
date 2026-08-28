@@ -1,5 +1,7 @@
 ---
 import type { GalleryMediaItem } from '../../utils/getProjectGallery';
+import RivePlayer from '../RivePlayer.astro';
+import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
 
 interface Props {
 	item: GalleryMediaItem;
@@ -9,13 +11,14 @@ interface Props {
 
 const { item, title, index } = Astro.props;
 const label = `${title} — ${index + 1}`;
+const src = withPublicAssetVersion(item.src);
 ---
 
 {
 	item.type === 'image' ? (
 		<figure class="project-gallery__item m-0 w-full">
 			<img
-				src={item.src}
+				src={src}
 				alt={label}
 				width="1600"
 				height="1000"
@@ -24,10 +27,26 @@ const label = `${title} — ${index + 1}`;
 				decoding="async"
 			/>
 		</figure>
+	) : item.type === 'rive' ? (
+		<figure class="project-gallery__item project-gallery__item--rive m-0 w-full">
+			<RivePlayer src={src} fit="contain" label={label} />
+		</figure>
+	) : item.type === 'svg' ? (
+		<figure class="project-gallery__item project-gallery__item--svg m-0 w-full">
+			{/* object (not img) so CSS @keyframes inside the SVG actually run */}
+			<object
+				data={src}
+				type="image/svg+xml"
+				class="project-gallery__svg"
+				aria-label={label}
+			>
+				<img src={src} alt={label} class="block h-auto w-full" loading="lazy" decoding="async" />
+			</object>
+		</figure>
 	) : (
 		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
 			<video
-				src={item.src}
+				src={src}
 				class="block h-auto w-full"
 				muted
 				loop
@@ -38,3 +57,15 @@ const label = `${title} — ${index + 1}`;
 		</figure>
 	)
 }
+
+<style is:global>
+	.project-gallery__item--svg .project-gallery__svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		/* Matches Epic web 5.svg viewBox; keeps object from collapsing */
+		aspect-ratio: 1320 / 640;
+		background: #ececec;
+		pointer-events: none;
+	}
+</style>

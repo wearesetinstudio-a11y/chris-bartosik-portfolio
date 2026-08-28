@@ -114,6 +114,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
+			import { initRivePlayers } from '../scripts/initRivePlayers.ts';
 
 			initI18n();
 			initPageTransitionOverlay();
@@ -121,12 +122,14 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			initSiteCursor();
 			initHeroParticles();
 			initHandParticles();
+			initRivePlayers();
 			document.addEventListener('astro:page-load', () => {
 				initI18n();
 				initGlobalPreloader();
 				initSiteCursor();
 				initHeroParticles();
 				initHandParticles();
+				initRivePlayers();
 			});
 		</script>
 	</body>
@@ -212,7 +215,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 	.page-transition-bar {
 		flex: 1 1 20%;
 		height: 100%;
-		background-color: #131415;
+		background-color: #1f1f1f;
 		transform: translateY(-100%);
 		will-change: transform;
 	}
