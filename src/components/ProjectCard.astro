@@ -56,11 +56,13 @@ const Tag = comingSoon ? 'div' : 'a';
 			) : isVideo && coverSrc ? (
 				<video
 					src={coverSrc}
+					poster={project.data.heroImage ? withPublicAssetVersion(project.data.heroImage) : undefined}
 					class="project-card__video block h-full w-full object-cover"
 					muted
 					loop
 					playsinline
-					preload="none"
+					autoplay
+					preload="auto"
 					aria-hidden="true"
 				/>
 			) : isImage && coverSrc ? (
@@ -122,8 +124,7 @@ const Tag = comingSoon ? 'div' : 'a';
 		background-color: transparent;
 	}
 
-	.project-card__media img,
-	.project-card__media video {
+	.project-card__media img {
 		position: absolute;
 		inset: 0;
 		height: 100%;
@@ -133,11 +134,13 @@ const Tag = comingSoon ? 'div' : 'a';
 		transition: opacity 0.35s ease;
 	}
 
+	.project-card__media video,
 	.project-card__media .rive-player {
 		position: absolute;
 		inset: 0;
 		height: 100%;
 		width: 100%;
+		object-fit: cover;
 		opacity: 1;
 		transition: opacity 0.35s ease;
 	}

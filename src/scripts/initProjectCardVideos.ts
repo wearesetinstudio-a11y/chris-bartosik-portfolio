@@ -76,7 +76,10 @@ export function initProjectCardVideos() {
 		video.playsInline = true;
 		video.setAttribute('muted', '');
 		video.setAttribute('playsinline', '');
-		video.preload = 'none';
+		video.setAttribute('autoplay', '');
+		video.preload = 'auto';
+		warmVideo(video);
+		markReady(video);
 	});
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -84,11 +87,7 @@ export function initProjectCardVideos() {
 
 	if (typeof IntersectionObserver === 'undefined') {
 		videos.forEach((video) => {
-			warmVideo(video);
-			whenVideoFrameReady(video, () => {
-				markReady(video);
-				if (!reduceMotion) playVideo(video);
-			});
+			if (!reduceMotion) playVideo(video);
 		});
 		(window as Window & { __projectCardVideosCleanup?: () => void }).__projectCardVideosCleanup =
 			() => {
@@ -96,20 +95,6 @@ export function initProjectCardVideos() {
 			};
 		return;
 	}
-
-	// Warm + decode first frame before the card enters the viewport.
-	const preloadObserver = new IntersectionObserver(
-		(entries) => {
-			entries.forEach((entry) => {
-				if (!entry.isIntersecting) return;
-				const video = entry.target as HTMLVideoElement;
-				warmVideo(video);
-				whenVideoFrameReady(video, () => markReady(video));
-				preloadObserver.unobserve(video);
-			});
-		},
-		{ root: null, rootMargin: '80% 0px', threshold: 0.01 },
-	);
 
 	const playObserver = new IntersectionObserver(
 		(entries) => {
@@ -120,35 +105,18 @@ export function initProjectCardVideos() {
 					return;
 				}
 
-				warmVideo(video);
-				whenVideoFrameReady(video, () => {
-					markReady(video);
-					if (!reduceMotion) playVideo(video);
-				});
+				if (!reduceMotion) playVideo(video);
 			});
 		},
-		{ root: null, rootMargin: '12% 0px', threshold: 0.05 },
+		{ root: null, rootMargin: '50% 0px', threshold: 0.01 },
 	);
 
 	videos.forEach((video) => {
-		preloadObserver.observe(video);
 		playObserver.observe(video);
-
-		const rect = video.getBoundingClientRect();
-		const near =
-			rect.bottom > -window.innerHeight * 0.8 && rect.top < window.innerHeight * 1.8;
-		const inView = rect.bottom > 0 && rect.top < window.innerHeight;
-		if (near) {
-			warmVideo(video);
-			whenVideoFrameReady(video, () => {
-				markReady(video);
-				if (inView && !reduceMotion) playVideo(video);
-			});
-		}
+		if (!reduceMotion) playVideo(video);
 	});
 
 	cleanups.push(() => {
-		preloadObserver.disconnect();
 		playObserver.disconnect();
 		videos.forEach(pauseVideo);
 	});
