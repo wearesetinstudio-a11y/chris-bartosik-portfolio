@@ -6,6 +6,7 @@ import ProjectHero from '../../components/projects/ProjectHero.astro';
 import ProjectOverviewSection from '../../components/projects/ProjectOverviewSection.astro';
 import ProjectContentBlock from '../../components/projects/ProjectContentBlock.astro';
 import ProjectGallerySection from '../../components/projects/ProjectGallerySection.astro';
+import ProjectQuoteSection from '../../components/projects/ProjectQuoteSection.astro';
 import ProjectSidebar, { type SidebarNavItem } from '../../components/projects/ProjectSidebar.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
@@ -69,6 +70,15 @@ const overviewGraphicSrc = overviewGraphicItem
 	: withPublicAssetVersion(data.overviewGraphic || logo);
 const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
 const pageGalleryLayout = galleryLayout.filter((block) => block.group !== 1);
+
+const quote = data.quote ?? '';
+const quoteAuthor = data.quoteAuthor ?? '';
+const quoteRole = data.quoteRole ?? '';
+const customQuoteLabel = (data.quoteLabel ?? '').trim();
+const defaultQuoteLabel = t('project.testimonial', 'en');
+const quoteLabel = customQuoteLabel || defaultQuoteLabel;
+const quoteUsesI18nDefault = !customQuoteLabel;
+const hasQuote = Boolean(quote || quoteAuthor);
 
 const projectSections = resolveProjectSections(data);
 
@@ -227,7 +237,6 @@ const navItems: SidebarNavItem[] = [
 								).padStart(2, '0');
 
 								const isSummary = isSummaryLabel(section.label) || isSummaryLabel(section.title);
-								const isDarkSection = !isSummary && (Number(sectionNum) % 2 === 0);
 
 								return (
 									<ProjectContentBlock
@@ -238,12 +247,23 @@ const navItems: SidebarNavItem[] = [
 										label={section.label}
 										title={section.title}
 										text={section.text}
-										theme={isSummary ? 'light' : section.theme}
+										theme="light"
 										headingId={`project-section-${section.index}-heading`}
-										dataDarkTheme={isDarkSection}
 									/>
 								);
 							})
+						}
+
+						{
+							hasQuote ? (
+								<ProjectQuoteSection
+									label={quoteLabel}
+									labelKey={quoteUsesI18nDefault ? 'project.testimonial' : undefined}
+									quote={quote}
+									author={quoteAuthor}
+									role={quoteRole}
+								/>
+							) : null
 						}
 					</div>
 				</div>
@@ -294,11 +314,6 @@ const navItems: SidebarNavItem[] = [
 
 	.project-page__body {
 		background: #ffffff;
-		transition: background-color 0.5s ease;
-	}
-
-	.project-page.project-page--dark .project-page__body {
-		background: #131415;
 	}
 
 	.project-page__body :global(img),

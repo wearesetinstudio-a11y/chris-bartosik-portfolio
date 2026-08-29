@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { project, basePath = '/projects' } = Astro.props;
-const { title, client, comingSoon = false, tags, categories = [] } = project.data;
+const { title, client, comingSoon = false, tags = [], categories = [] } = project.data;
 const copy = buildProjectCopyBundle(project.data);
 const label = (copy.en.title ?? title).toUpperCase();
 const category = copy.en.category ?? tags[0] ?? '';
@@ -26,6 +26,7 @@ const titleMap = JSON.stringify({
 	pl: copy.pl.title ?? title,
 	pa: copy.pa.title ?? title,
 });
+const tagsList = tags.length > 0 ? tags : category ? category.split(',').map((s) => s.trim()).filter(Boolean) : [];
 const categoryMap = JSON.stringify({
 	en: copy.en.category ?? category,
 	pl: copy.pl.category ?? copy.en.category ?? category,
@@ -88,8 +89,8 @@ const Tag = comingSoon ? 'div' : 'a';
 		}
 	</div>
 
-	<div class="project-card__meta mt-3 flex items-end justify-between gap-4">
-		<div class="min-w-0">
+	<div class="project-card__meta mt-3.5 flex items-end justify-between gap-4">
+		<div class="min-w-0 flex flex-col gap-2.5">
 			<h3 class="project-card__title min-w-0 font-semibold uppercase tracking-[0.02em] text-black">
 				<span class="project-card__title-roll">
 					<span class="project-card__title-track">
@@ -99,8 +100,14 @@ const Tag = comingSoon ? 'div' : 'a';
 				</span>
 			</h3>
 			{
-				category ? (
-					<p class="project-card__category" data-locale-copy={categoryMap}>{category}</p>
+				tagsList && tagsList.length > 0 ? (
+					<div class="project-card__tags flex flex-wrap items-center gap-1.5" data-locale-tags={categoryMap}>
+						{tagsList.map((tag) => (
+							<span class="project-card__tag inline-flex items-center bg-[#FFFFFF] px-2.5 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.04em] text-black">
+								{tag}
+							</span>
+						))}
+					</div>
 				) : null
 			}
 		</div>
@@ -212,6 +219,13 @@ const Tag = comingSoon ? 'div' : 'a';
 		color: rgba(0, 0, 0, 0.45);
 	}
 
+	.project-card__tag {
+		border-radius: 0;
+		line-height: 1.15;
+		white-space: nowrap;
+		user-select: none;
+	}
+
 	.project-card__arrow {
 		display: block;
 		width: auto;
@@ -240,7 +254,8 @@ const Tag = comingSoon ? 'div' : 'a';
 	}
 
 	.project-card--soon .project-card__title,
-	.project-card--soon .project-card__category {
+	.project-card--soon .project-card__category,
+	.project-card--soon .project-card__tags {
 		opacity: 0.55;
 	}
 

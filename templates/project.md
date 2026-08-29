@@ -101,6 +101,12 @@ sections:
   #   title: ''
   #   text: ''
 
+# --- Cytat / Opinia klienta (pod ostatnią sekcją summary, opcjonalnie) ---
+quoteLabel: '' # Puste = domyślne [CLIENT REVIEW] / [OPINIA KLIENTA] / [OPINIÓN DEL CLIENTE]
+quote: '' # Treść cytatu / opinii klienta
+quoteAuthor: '' # Imię i nazwisko (np. NEDELKA VELASCO)
+quoteRole: '' # Stanowisko / firma (np. CEO OF NRV)
+
 # --- Tłumaczenia: tylko pola do nadpisania (reszta bierze EN) ---
 i18n:
   pl:
@@ -119,6 +125,10 @@ i18n:
       Pierwszy akapit.
 
       Drugi akapit.
+    quoteLabel: ''
+    quote: ''
+    quoteAuthor: ''
+    quoteRole: ''
     sections:
       - label: Sekcja 01
         title: 'Nagłówek sekcji jeden'
@@ -152,6 +162,10 @@ i18n:
       Primer párrafo.
 
       Segundo párrafo.
+    quoteLabel: ''
+    quote: ''
+    quoteAuthor: ''
+    quoteRole: ''
     sections:
       - label: Sección 01
         title: 'Título sección uno'

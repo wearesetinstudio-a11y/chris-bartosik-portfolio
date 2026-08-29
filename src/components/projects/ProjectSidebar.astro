@@ -17,13 +17,13 @@ const { items } = Astro.props;
 
 <aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
 	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)]">
-		<nav class="project-sidebar__nav flex flex-col gap-6" aria-label="Spis sekcji projektu">
+		<nav class="project-sidebar__nav flex flex-col gap-4.5" aria-label="Spis sekcji projektu">
 			{
 				items.map((item, idx) => (
 					<a
 						href={`#${item.id}`}
 						class:list={[
-							'project-sidebar__link group flex items-baseline gap-2.5 text-[0.875rem] transition-colors duration-200',
+							'project-sidebar__link group flex items-baseline gap-2.5 text-[1rem] transition-colors duration-200',
 							idx === 0 && 'is-active',
 						]}
 						data-section-target={item.id}

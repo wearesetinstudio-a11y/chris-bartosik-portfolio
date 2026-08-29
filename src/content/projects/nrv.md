@@ -1,7 +1,7 @@
 ---
 title: NRV
 client: NRV
-tags: ['Tech web']
+tags: ['UX/UI', 'Development']
 
 categories: ['ux-ui', 'development']
 thumbnail: ''

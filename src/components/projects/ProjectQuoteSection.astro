@@ -1,0 +1,130 @@
+---
+interface Props {
+	id?: string;
+	label?: string;
+	labelKey?: string;
+	quote?: string;
+	author?: string;
+	role?: string;
+}
+
+const {
+	id = 'project-quote',
+	label = '',
+	labelKey,
+	quote = '',
+	author = '',
+	role = '',
+} = Astro.props;
+
+const hasLabel = Boolean(label.trim()) || Boolean(labelKey);
+const hasQuote = Boolean(quote.trim());
+const hasAuthor = Boolean(author.trim());
+const hasRole = Boolean(role.trim());
+const hasMeta = hasAuthor || hasRole;
+---
+
+{
+	hasQuote || hasMeta ? (
+		<section
+			id={id}
+			class="project-quote w-full pt-4 md:pt-6"
+			aria-label={label || 'Quote'}
+		>
+			<div class="project-quote__stack flex w-full flex-col">
+				{hasLabel ? (
+					<p class="project-quote__label mb-8 md:mb-10 flex items-baseline gap-2.5">
+						<span class="project-quote__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
+							[
+							<span
+								class="project-quote__label-text"
+								data-project-field="quoteLabel"
+								data-i18n={labelKey}
+							>
+								{label}
+							</span>
+							]
+						</span>
+					</p>
+				) : null}
+
+				{hasQuote ? (
+					<blockquote class="project-quote__blockquote mb-8 md:mb-12">
+						<p
+							class="project-quote__text text-[1.35rem] font-medium leading-[1.35] text-black md:text-[1.85rem] md:leading-[1.3] uppercase"
+							data-project-field="quote"
+						>
+							„{quote}”
+						</p>
+					</blockquote>
+				) : null}
+
+				{hasMeta ? (
+					<div class="project-quote__meta flex flex-col gap-1.5">
+						{hasAuthor ? (
+							<p
+								class="project-quote__author text-[1rem] font-semibold uppercase tracking-[0.04em] text-black md:text-[1.1rem]"
+								data-project-field="quoteAuthor"
+							>
+								{author}
+							</p>
+						) : null}
+
+						{hasRole ? (
+							<p
+								class="project-quote__role text-[0.875rem] uppercase tracking-[0.03em] text-black/55 md:text-[0.925rem]"
+								data-project-field="quoteRole"
+							>
+								{role}
+							</p>
+						) : null}
+					</div>
+				) : null}
+			</div>
+		</section>
+	) : null
+}
+
+<style>
+	.project-quote {
+		scroll-margin-top: 100px;
+	}
+
+	@media (min-width: 1024px) {
+		.project-quote {
+			scroll-margin-top: 160px;
+		}
+	}
+
+	.project-quote__label {
+		font-size: var(--label-text-size);
+		font-weight: 600;
+		letter-spacing: 0;
+		line-height: 1.2;
+	}
+
+	.project-quote__label-text {
+		letter-spacing: var(--label-text-tracking);
+	}
+
+	/* Dark theme overrides when project body is in dark mode */
+	:global(.project-page--dark) .project-quote {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-quote__label-bracket {
+		color: rgba(255, 255, 255, 0.4) !important;
+	}
+
+	:global(.project-page--dark) .project-quote__text {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-quote__author {
+		color: #ffffff;
+	}
+
+	:global(.project-page--dark) .project-quote__role {
+		color: rgba(255, 255, 255, 0.55);
+	}
+</style>

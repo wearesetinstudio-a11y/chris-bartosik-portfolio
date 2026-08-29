@@ -1,7 +1,7 @@
 ---
 title: New way of Logistics
 client: See More Logistics
-tags: ['Rebranding']
+tags: ['Rebranding', 'Motion']
 categories: ['branding', 'motion']
 thumbnail: '/portfolio/see-more-rebranding/cover.riv'
 folderName: 'see-more-rebranding'

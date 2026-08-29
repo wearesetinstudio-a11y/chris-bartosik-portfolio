@@ -25,6 +25,10 @@ export type ProjectCopyFields = {
 	strategyText?: string;
 	summaryTitle?: string;
 	summaryText?: string;
+	quote?: string;
+	quoteAuthor?: string;
+	quoteRole?: string;
+	quoteLabel?: string;
 	sections?: ProjectSectionFields[];
 };
 
@@ -53,6 +57,10 @@ type ProjectCopySource = {
 	summaryTitle?: string;
 	summaryText?: string;
 	summaryLabel?: string;
+	quote?: string;
+	quoteAuthor?: string;
+	quoteRole?: string;
+	quoteLabel?: string;
 	sections?: {
 		label?: string;
 		title?: string;
@@ -75,7 +83,7 @@ export function buildProjectCopyBundle(data: ProjectCopySource): ProjectCopyBund
 		title: data.title,
 		client: data.client,
 		clientLabel: data.clientLabel ?? '',
-		category: data.tags[0] ?? '',
+		category: data.tags && data.tags.length > 0 ? data.tags.join(', ') : (data.tags?.[0] ?? ''),
 		heroSubtitle: data.heroSubtitle ?? '',
 		service: data.service ?? '',
 		industry: data.industry ?? '',
@@ -91,6 +99,10 @@ export function buildProjectCopyBundle(data: ProjectCopySource): ProjectCopyBund
 		strategyText: data.strategyText ?? '',
 		summaryTitle: data.summaryTitle ?? '',
 		summaryText: data.summaryText ?? '',
+		quote: data.quote ?? '',
+		quoteAuthor: data.quoteAuthor ?? '',
+		quoteRole: data.quoteRole ?? '',
+		quoteLabel: data.quoteLabel ?? '',
 		sections: localeSectionCopy(resolved),
 	};
 

@@ -1,7 +1,7 @@
 ---
 title: WCR Kraków
 client: WCR Kraków
-tags: ['Social media']
+tags: ['Social media', 'Motion']
 
 categories: ['branding', 'motion']
 thumbnail: '/portfolio/wcr-krakow/cover.webm'

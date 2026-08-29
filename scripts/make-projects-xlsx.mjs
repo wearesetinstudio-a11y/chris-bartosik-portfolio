@@ -73,6 +73,26 @@ const BASE_FIELDS = [
 		section: 'Overview / Kontekst',
 		note: 'Body copy. Keep paragraph breaks (blank lines). Optional.',
 	},
+	{
+		key: 'quoteLabel',
+		section: 'Cytat / Opinia',
+		note: 'Text inside [ … ] above quote. Empty = default [Client review] / [Opinia klienta] / [Opinión del cliente].',
+	},
+	{
+		key: 'quote',
+		section: 'Cytat / Opinia',
+		note: 'Quote / testimonial body text. Empty = hidden.',
+	},
+	{
+		key: 'quoteAuthor',
+		section: 'Cytat / Opinia',
+		note: 'Author name (e.g. Nedelka Velasco).',
+	},
+	{
+		key: 'quoteRole',
+		section: 'Cytat / Opinia',
+		note: 'Role / Company (e.g. CEO of NRV).',
+	},
 ];
 
 const grey = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF0F0F0' } };

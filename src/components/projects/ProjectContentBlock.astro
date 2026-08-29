@@ -13,7 +13,6 @@ interface Props {
 	theme?: 'dark' | 'light' | 'muted';
 	headingId?: string;
 	sectionIndex?: number;
-	dataDarkTheme?: boolean;
 }
 
 const {
@@ -28,7 +27,6 @@ const {
 	theme = 'light',
 	headingId = '',
 	sectionIndex,
-	dataDarkTheme,
 } = Astro.props;
 
 const titleChars = title.split('');
@@ -48,7 +46,6 @@ const hasBody = hasTitle || hasText;
 			id={resolvedSectionId}
 			class="project-content-block w-full"
 			data-project-section={sectionIndex ?? index}
-			data-dark-section={dataDarkTheme ? 'true' : undefined}
 		>
 			<div class="project-content-block__stack flex w-full flex-col">
 				{

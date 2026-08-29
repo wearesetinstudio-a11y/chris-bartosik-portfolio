@@ -46,7 +46,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm|riv|svg)$/i;
+const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|mp4|webm|riv|svg)$/i;
 
 export function getCoverFilename(thumbnail: string): string {
 	return thumbnail.split('/').pop() ?? 'cover.webp';

@@ -39,7 +39,11 @@ const projectCopyFields = z
 		strategyText: z.string().optional(),
 		summaryTitle: z.string().optional(),
 		summaryText: z.string().optional(),
-		sections: z.array(projectSectionCopyFields).max(8).optional(),
+		quote: z.string().optional(),
+		quoteAuthor: z.string().optional(),
+		quoteRole: z.string().optional(),
+		quoteLabel: z.string().optional(),
+		sections: z.array(projectSectionCopyFields).max(10).optional(),
 	})
 	.partial();
 
@@ -71,9 +75,13 @@ const workItemSchema = z.object({
 	overviewTitle: z.string().optional().default(''),
 	overviewText: z.string().optional().default(''),
 	overviewGraphic: z.string().optional().default(''),
+	quote: z.string().optional().default(''),
+	quoteAuthor: z.string().optional().default(''),
+	quoteRole: z.string().optional().default(''),
+	quoteLabel: z.string().optional().default(''),
 	year: z.number().optional(),
-	/** Flexible content sections under overview (max 8). */
-	sections: z.array(projectSectionSchema).max(8).optional().default([]),
+	/** Flexible content sections under overview (max 10). */
+	sections: z.array(projectSectionSchema).max(10).optional().default([]),
 	/** @deprecated Prefer `sections` */
 	challengesLabel: z.string().optional().default('Challenges'),
 	challengesTitle: z.string().optional().default(''),

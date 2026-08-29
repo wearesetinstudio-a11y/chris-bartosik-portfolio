@@ -1,7 +1,7 @@
 ---
 title: See More Logistics - Website
 client: See More Logistics
-tags: ['UX/UI & web development']
+tags: ['UX/UI', 'Development', 'Motion']
 categories: ['ux-ui', 'development', 'motion']
 thumbnail: '/portfolio/see-more-web/cover.webm'
 folderName: 'see-more-web'

@@ -46,13 +46,6 @@ export function initProjectSidebar() {
 	};
 	document.addEventListener('click', onDocumentClick);
 
-	function updateDarkThemeState(targetId: string) {
-		if (!projectPage) return;
-		const targetEl = document.getElementById(targetId);
-		const isDark = targetEl?.dataset.darkSection === 'true';
-		projectPage.classList.toggle('project-page--dark', isDark);
-	}
-
 	function setActiveLink(targetId: string) {
 		let activeLinkEl: HTMLAnchorElement | null = null;
 
@@ -76,8 +69,6 @@ export function initProjectSidebar() {
 				currentLabelEl.innerHTML = labelEl.innerHTML || '';
 			}
 		}
-
-		updateDarkThemeState(targetId);
 	}
 
 	// Smooth scroll on click with header offset

@@ -126,6 +126,24 @@ export function applyProjectCopy(locale: Locale) {
 		}
 	});
 
+	document.querySelectorAll<HTMLElement>('[data-locale-tags]').forEach((container) => {
+		try {
+			const map = JSON.parse(container.dataset.localeTags || '{}') as Record<string, string>;
+			const raw = (map[locale] || map.en || '').trim();
+			if (!raw) return;
+			const items = raw.split(',').map((s) => s.trim()).filter(Boolean);
+			if (items.length === 0) return;
+			container.innerHTML = items
+				.map(
+					(item) =>
+						`<span class="project-card__tag inline-flex items-center bg-[#FFFFFF] px-2.5 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.04em] text-black">${escapeHtml(item)}</span>`,
+				)
+				.join('');
+		} catch {
+			/* ignore */
+		}
+	});
+
 	const bundle = readBundle();
 	if (!bundle?.en) return;
 
@@ -172,12 +190,12 @@ export function applyProjectCopy(locale: Locale) {
 			return;
 		}
 
-		if (key === 'overviewLabel') {
+		if (key === 'overviewLabel' || key === 'quoteLabel') {
 			const next = (typeof value === 'string' ? value : '').trim();
 			if (next) {
 				element.textContent = next;
 			} else if (element.hasAttribute('data-i18n')) {
-				/* i18n layer fills Overview / Kontekst / Descripción */
+				/* i18n layer fills default */
 			}
 			return;
 		}
