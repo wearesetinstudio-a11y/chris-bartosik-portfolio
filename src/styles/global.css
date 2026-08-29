@@ -10,8 +10,8 @@
 	--letter-spacing-ui: -0.1px;
 	--page-gutter: 16px;
 	--section-padding-y: 60px;
-	--body-text-size: 1rem;
-	--body-text-lh: 1.5;
+	--body-text-size: 1.05rem;
+	--body-text-lh: 1.8;
 	--heading-h1-size: 2rem;
 	--heading-h1-lh: 1.08;
 	--heading-h1-tracking: -0.03em;
@@ -25,8 +25,8 @@
 	:root {
 		--page-gutter: 60px;
 		--section-padding-y: 200px;
-		--body-text-size: 1.1rem;
-		--body-text-lh: 1.55;
+		--body-text-size: 1.05rem;
+		--body-text-lh: 1.8;
 		--heading-h1-size: 3.8rem;
 		--heading-h2-size: 2rem;
 		--label-text-size: 1.1rem;
@@ -35,8 +35,8 @@
 
 @media (max-width: 767px) {
 	:root {
-		--body-text-size: 1rem;
-		--body-text-lh: 1.5;
+		--body-text-size: 1.05rem;
+		--body-text-lh: 1.8;
 	}
 }
 
@@ -96,7 +96,7 @@ blockquote,
 .testimonial-card__quote {
 	letter-spacing: var(--letter-spacing-body);
 	font-size: var(--body-text-size);
-	font-weight: 500;
+	font-weight: 400;
 	line-height: var(--body-text-lh);
 }
 
@@ -184,9 +184,9 @@ label,
 	.about-page__list li,
 	.skills-block__intro,
 	.skills-block__body {
-		font-size: 1rem;
-		font-weight: 500;
-		line-height: 1.5;
+		font-size: 1.05rem;
+		font-weight: 400;
+		line-height: 1.8;
 	}
 }
 
@@ -219,9 +219,9 @@ label,
 	.about-page__list li,
 	.skills-block__intro,
 	.skills-block__body {
-		font-size: 1.1rem;
-		font-weight: 500;
-		line-height: 1.55;
+		font-size: 1.05rem;
+		font-weight: 400;
+		line-height: 1.8;
 	}
 }
 .clients-heading,

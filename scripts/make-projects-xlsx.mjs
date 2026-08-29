@@ -3,7 +3,7 @@ import { parse as parseYaml } from 'yaml';
 import { readdir, readFile } from 'node:fs/promises';
 
 const PROJECTS_DIR = new URL('../src/content/projects/', import.meta.url);
-const MAX_SECTIONS = 8;
+const MAX_SECTIONS = 10;
 
 const BASE_FIELDS = [
 	{

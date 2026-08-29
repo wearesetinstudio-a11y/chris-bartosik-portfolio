@@ -6,6 +6,7 @@ import ProjectHero from '../../components/projects/ProjectHero.astro';
 import ProjectOverviewSection from '../../components/projects/ProjectOverviewSection.astro';
 import ProjectContentBlock from '../../components/projects/ProjectContentBlock.astro';
 import ProjectGallerySection from '../../components/projects/ProjectGallerySection.astro';
+import ProjectSidebar, { type SidebarNavItem } from '../../components/projects/ProjectSidebar.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import {
@@ -20,6 +21,7 @@ import { t } from '../../utils/i18n.ts';
 import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
 import {
 	buildProjectPageSegments,
+	isSummaryLabel,
 	resolveProjectSections,
 } from '../../utils/getProjectSections.ts';
 
@@ -139,6 +141,26 @@ const revealHeadingIds = [
 		.filter((section) => section.title)
 		.map((section) => `project-section-${section.index}-heading`),
 ];
+
+const navItems: SidebarNavItem[] = [
+	...(showOverview
+		? [
+				{
+					id: 'project-section-0',
+					num: '01',
+					label: overviewLabel,
+					isOverview: true,
+					labelKey: overviewUsesI18nDefault ? 'project.overview' : undefined,
+				},
+			]
+		: []),
+	...projectSections.map((section, idx) => ({
+		id: `project-section-${section.index + 1}`,
+		num: String(showOverview ? idx + 2 : idx + 1).padStart(2, '0'),
+		label: section.label,
+		sectionIndex: section.index,
+	})),
+];
 ---
 
 <Layout title={title} description={pageDescription}>
@@ -156,54 +178,76 @@ const revealHeadingIds = [
 			clientLabel={clientLabel}
 		/>
 
-		<div class="project-page__body relative z-10">
-			{
-				showOverview ? (
-					<ProjectOverviewSection
-						label={overviewLabel}
-						labelKey={overviewUsesI18nDefault ? 'project.overview' : undefined}
-						title={overviewTitle}
-						text={overviewText}
-						graphicSrc={overviewGraphicSrc}
-						graphicType={overviewGraphicType}
-						graphicAlt={client || title}
-						rows={infoRows}
-					/>
-				) : null
-			}
+		<div class="project-page__body relative z-10 bg-white pb-20 transition-colors duration-500 lg:pb-0">
+			<div class="project-page__container relative mx-auto w-full px-[var(--page-gutter)] py-12 md:py-20 lg:py-24">
+				<div class="project-page__layout grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_65%] lg:gap-14 xl:gap-20">
+					{navItems.length > 0 ? <ProjectSidebar items={navItems} /> : null}
 
-			{
-				pageSegments.map((segment) => {
-					if (segment.type === 'gallery') {
-						const startIndex = galleryMediaCursor;
-						galleryMediaCursor += segment.blocks.reduce((count, block) => {
-							if (block.kind === 'full') return count + 1;
-							return count + block.items.length;
-						}, 0);
+					<div class="project-page__content flex min-w-0 flex-col gap-14 md:gap-20 lg:gap-24">
+						{
+							showOverview ? (
+								<ProjectOverviewSection
+									id="project-section-0"
+									num="01"
+									label={overviewLabel}
+									labelKey={overviewUsesI18nDefault ? 'project.overview' : undefined}
+									title={overviewTitle}
+									text={overviewText}
+									graphicSrc={overviewGraphicSrc}
+									graphicType={overviewGraphicType}
+									graphicAlt={client || title}
+									rows={infoRows}
+								/>
+							) : null
+						}
 
-						return (
-							<ProjectGallerySection
-								blocks={segment.blocks}
-								title={title}
-								startIndex={startIndex}
-							/>
-						);
-					}
+						{
+							pageSegments.map((segment) => {
+								if (segment.type === 'gallery') {
+									const startIndex = galleryMediaCursor;
+									galleryMediaCursor += segment.blocks.reduce((count, block) => {
+										if (block.kind === 'full') return count + 1;
+										return count + block.items.length;
+									}, 0);
 
-					const { section } = segment;
-					return (
-						<ProjectContentBlock
-							index={section.index + 1}
-							sectionIndex={section.index}
-							label={section.label}
-							title={section.title}
-							text={section.text}
-							theme={section.theme}
-							headingId={`project-section-${section.index}-heading`}
-						/>
-					);
-				})
-			}
+									return (
+										<ProjectGallerySection
+											blocks={segment.blocks}
+											title={title}
+											startIndex={startIndex}
+										/>
+									);
+								}
+
+								const { section } = segment;
+								const sectionNum = String(
+									showOverview
+										? projectSections.findIndex((s) => s.index === section.index) + 2
+										: projectSections.findIndex((s) => s.index === section.index) + 1,
+								).padStart(2, '0');
+
+								const isSummary = isSummaryLabel(section.label) || isSummaryLabel(section.title);
+								const isDarkSection = !isSummary && (Number(sectionNum) % 2 === 0);
+
+								return (
+									<ProjectContentBlock
+										id={`project-section-${section.index + 1}`}
+										num={sectionNum}
+										index={section.index + 1}
+										sectionIndex={section.index}
+										label={section.label}
+										title={section.title}
+										text={section.text}
+										theme={isSummary ? 'light' : section.theme}
+										headingId={`project-section-${section.index}-heading`}
+										dataDarkTheme={isDarkSection}
+									/>
+								);
+							})
+						}
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<ContactSection />
@@ -220,6 +264,7 @@ const revealHeadingIds = [
 		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
 		import { initProjectGalleryVideos } from '../../scripts/initProjectGalleryVideos.ts';
 		import { initRivePlayers } from '../../scripts/initRivePlayers.ts';
+		import { initProjectSidebar } from '../../scripts/initProjectSidebar.ts';
 
 		function initProjectPage() {
 			bootSlideUpReveal();
@@ -228,6 +273,7 @@ const revealHeadingIds = [
 			initScrollLetterReveals(ids);
 			initProjectGalleryVideos();
 			initRivePlayers();
+			initProjectSidebar();
 		}
 
 		if (document.readyState === 'loading') {
@@ -248,6 +294,11 @@ const revealHeadingIds = [
 
 	.project-page__body {
 		background: #ffffff;
+		transition: background-color 0.5s ease;
+	}
+
+	.project-page.project-page--dark .project-page__body {
+		background: #131415;
 	}
 
 	.project-page__body :global(img),
@@ -257,9 +308,26 @@ const revealHeadingIds = [
 		height: auto;
 	}
 
-	/* Same gutter between section↔gallery as between gallery images (white via body bg) */
-	.project-page__body > :global(.project-gallery + .project-content-block),
-	.project-page__body > :global(.project-content-block + .project-gallery) {
-		margin-top: var(--page-gutter);
+	/* Consistent gutter between consecutive gallery elements if any */
+	.project-page__content > :global(.project-gallery + .project-gallery) {
+		margin-top: calc(var(--project-gallery-gap, 20px) - 3.5rem);
+	}
+
+	@media (min-width: 768px) {
+		.project-page__content > :global(.project-gallery + .project-gallery) {
+			margin-top: calc(var(--project-gallery-gap, 20px) - 5rem);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.project-page__content > :global(.project-gallery + .project-gallery) {
+			margin-top: calc(var(--project-gallery-gap, 20px) - 6rem);
+		}
+	}
+
+	/* Same gutter between section↔gallery as between gallery images */
+	.project-page__content > :global(.project-gallery + .project-content-block),
+	.project-page__content > :global(.project-content-block + .project-gallery) {
+		margin-top: 0;
 	}
 </style>

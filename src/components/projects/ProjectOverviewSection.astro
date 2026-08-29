@@ -4,35 +4,41 @@ import RivePlayer from '../RivePlayer.astro';
 import { t } from '../../utils/i18n.ts';
 
 interface Props {
+	id?: string;
+	num?: string;
 	label?: string;
 	labelKey?: string;
 	title: string;
 	text: string;
-	graphicSrc: string;
+	graphicSrc?: string;
 	graphicType?: 'image' | 'video' | 'rive' | 'svg';
-	graphicAlt: string;
+	graphicAlt?: string;
 	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
 }
 
 const {
+	id = 'project-section-0',
+	num = '01',
 	label = t('project.overview', 'en'),
 	labelKey = 'project.overview',
 	title,
 	text,
 	graphicSrc,
 	graphicType = 'image',
-	graphicAlt,
+	graphicAlt = '',
 	rows,
 } = Astro.props;
 
 const titleChars = title.split('');
 const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
+const hasGraphic = Boolean(graphicSrc);
 ---
 
-<section id="project-overview" class="project-overview relative z-10 bg-white px-[var(--page-gutter)] py-20 md:py-28">
-	<div class="project-overview__grid grid gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
-		<div class="project-overview__content min-w-0">
-			<p class="project-overview__label">
+<section id={id} class="project-overview relative z-10 bg-white">
+	<div class="project-overview__content w-full min-w-0">
+		<p class="project-overview__label flex items-baseline gap-2.5">
+			<span class="project-overview__num font-semibold text-black/35">{num}</span>
+			<span class="project-overview__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
 				[
 				<span
 					class="project-overview__label-text"
@@ -42,107 +48,129 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 					{label}
 				</span>
 				]
-			</p>
+			</span>
+		</p>
 
-			<h2 id="project-overview-heading" class="project-overview__heading" data-project-field="overviewTitle">
-				<span class="project-overview__heading-line" data-reveal-line>
+		{
+			title ? (
+				<h2 id="project-overview-heading" class="project-overview__heading" data-project-field="overviewTitle">
+					<span class="project-overview__heading-line" data-reveal-line>
+						{
+							titleChars.map((char) => (
+								<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+							))
+						}
+					</span>
+				</h2>
+			) : null
+		}
+
+		{
+			overviewParagraphs.length > 0 ? (
+				<div
+					class="project-overview__text-wrap"
+					data-project-field="overviewText"
+					data-project-paragraphs="true"
+					data-paragraph-class="project-overview__text"
+				>
 					{
-						titleChars.map((char) => (
-							<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+						overviewParagraphs.map((paragraph) => (
+							<p class="project-overview__text">{paragraph}</p>
 						))
 					}
-				</span>
-			</h2>
+				</div>
+			) : null
+		}
 
-			<div
-				class="project-overview__text-wrap"
-				data-project-field="overviewText"
-				data-project-paragraphs="true"
-				data-paragraph-class="project-overview__text"
-			>
-				{
-					overviewParagraphs.map((paragraph) => (
-						<p class="project-overview__text">{paragraph}</p>
-					))
-				}
-			</div>
+		{
+			rows.length > 0 ? (
+				<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
+					<dl class="m-0">
+						{rows.map((row, index) => (
+							<ProjectInfoRow
+								label={row.label}
+								labelKey={row.labelKey}
+								value={row.value}
+								href={row.href}
+								isLink={row.isLink}
+								underlined={row.underlined}
+								fieldKey={row.fieldKey}
+								isLast={index === rows.length - 1}
+								theme="light"
+							/>
+						))}
+					</dl>
+				</div>
+			) : null
+		}
 
-			{
-				rows.length > 0 ? (
-					<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
-						<dl class="m-0">
-							{rows.map((row, index) => (
-								<ProjectInfoRow
-									label={row.label}
-									labelKey={row.labelKey}
-									value={row.value}
-									href={row.href}
-									isLink={row.isLink}
-									underlined={row.underlined}
-									fieldKey={row.fieldKey}
-									isLast={index === rows.length - 1}
-									theme="light"
+		{
+			hasGraphic && graphicSrc ? (
+				<div class="project-overview__visual mt-12 w-full md:mt-16">
+					<div class="project-overview__frame w-full overflow-hidden">
+						{
+							graphicType === 'rive' ? (
+								<RivePlayer src={graphicSrc} fit="contain" label={graphicAlt} />
+							) : graphicType === 'svg' ? (
+								<object
+									data={graphicSrc}
+									type="image/svg+xml"
+									class="project-overview__svg block h-auto w-full"
+									aria-label={graphicAlt}
+								>
+									<img
+										src={graphicSrc}
+										alt={graphicAlt}
+										width="1400"
+										height="900"
+										class="block h-auto w-full"
+										loading="lazy"
+										decoding="async"
+									/>
+								</object>
+							) : graphicType === 'video' ? (
+								<video
+									src={graphicSrc}
+									class="block h-auto w-full"
+									autoplay
+									muted
+									loop
+									playsinline
+									preload="metadata"
+									aria-label={graphicAlt}
 								/>
-							))}
-						</dl>
-					</div>
-				) : null
-			}
-		</div>
-
-		<div class="project-overview__visual min-w-0">
-			<div class="project-overview__sticky lg:sticky lg:top-[100px] lg:w-full">
-				<div class="project-overview__frame w-full overflow-hidden">
-					{
-						graphicType === 'rive' ? (
-							<RivePlayer src={graphicSrc} fit="contain" label={graphicAlt} />
-						) : graphicType === 'svg' ? (
-							<object
-								data={graphicSrc}
-								type="image/svg+xml"
-								class="project-overview__svg block h-auto w-full"
-								aria-label={graphicAlt}
-							>
+							) : (
 								<img
 									src={graphicSrc}
 									alt={graphicAlt}
-									width="720"
+									width="1400"
 									height="900"
 									class="block h-auto w-full"
 									loading="lazy"
 									decoding="async"
 								/>
-							</object>
-						) : graphicType === 'video' ? (
-							<video
-								src={graphicSrc}
-								class="block h-auto w-full"
-								autoplay
-								muted
-								loop
-								playsinline
-								preload="metadata"
-								aria-label={graphicAlt}
-							/>
-						) : (
-							<img
-								src={graphicSrc}
-								alt={graphicAlt}
-								width="720"
-								height="900"
-								class="block h-auto w-full"
-								loading="lazy"
-								decoding="async"
-							/>
-						)
-					}
+							)
+						}
+					</div>
 				</div>
-			</div>
-		</div>
+			) : null
+		}
 	</div>
 </section>
 
 <style>
+	.project-overview {
+		scroll-margin-top: 160px;
+		padding-bottom: 0;
+	}
+
+	@media (max-width: 767px) {
+		.project-overview {
+			scroll-margin-top: 100px;
+			padding-bottom: 0;
+		}
+	}
+
 	.project-overview__content {
 		width: 100%;
 		max-width: 100%;
@@ -155,6 +183,7 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 		letter-spacing: 0;
 		line-height: 1.2;
 		color: rgba(0, 0, 0, 0.4);
+		margin: 0;
 	}
 
 	.project-overview__label-text {
@@ -162,7 +191,8 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 	}
 
 	.project-overview__heading {
-		margin-top: 2rem;
+		margin-top: 1.5rem;
+		margin-bottom: 0;
 		width: 100%;
 		max-width: 100%;
 		font-size: var(--heading-h2-size);
@@ -188,6 +218,47 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 		color: #000000;
 	}
 
+	:global(.project-page--dark) .project-overview__label {
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	:global(.project-page--dark) .project-overview__heading {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-overview__heading :global(.reveal-char) {
+		color: rgba(255, 255, 255, 0.15);
+	}
+
+	:global(.project-page--dark) .project-overview__heading :global(.reveal-char.active) {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-overview__text-wrap {
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	:global(.project-page--dark) .project-overview .border-black\/10 {
+		border-color: rgba(255, 255, 255, 0.12) !important;
+	}
+
+	:global(.project-page--dark) .project-overview :global(.project-info-row__label) {
+		color: rgba(255, 255, 255, 0.4) !important;
+	}
+
+	:global(.project-page--dark) .project-overview :global(.project-info-row__value) {
+		color: #f5f5f5 !important;
+	}
+
+	:global(.project-page--dark) .project-overview :global(.project-info-row .border-black\/10) {
+		border-color: rgba(255, 255, 255, 0.12) !important;
+	}
+
+	:global(.project-page--dark) .project-overview :global(.project-info-row a),
+	:global(.project-page--dark) .project-overview :global(.project-info-row span.underline) {
+		text-decoration-color: rgba(255, 255, 255, 0.5) !important;
+	}
+
 	.project-overview__text-wrap {
 		margin-top: 1.5rem;
 		display: flex;
@@ -202,25 +273,13 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 		max-width: 100%;
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 500;
+		font-weight: 400;
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: inherit;
 	}
 
-	@media (min-width: 1024px) {
-		.project-overview__visual {
-			align-self: stretch;
-		}
-
-		.project-overview__sticky {
-			height: fit-content;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.project-overview {
-			padding-bottom: 2rem;
-		}
+	.project-overview__visual {
+		border-radius: 0;
 	}
 </style>

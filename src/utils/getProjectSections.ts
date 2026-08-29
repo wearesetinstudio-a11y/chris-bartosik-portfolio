@@ -45,7 +45,7 @@ function themeForSectionIndex(index: number): ProjectSectionTheme {
 	return SECTION_THEME_CYCLE[index % SECTION_THEME_CYCLE.length];
 }
 
-function isSummaryLabel(label: string): boolean {
+export function isSummaryLabel(label: string): boolean {
 	return /summar|podsum|resultado|resumen/i.test(label);
 }
 
@@ -53,13 +53,13 @@ function stripLabelBrackets(label: string): string {
 	return label.replace(/^\[\s*/, '').replace(/\s*\]$/, '').replace(/\s*\}$/, '').trim();
 }
 
-/** Prefer explicit `sections` (max 8). Fall back to legacy challenge/strategy/summary fields. */
+/** Prefer explicit `sections` (max 10). Fall back to legacy challenge/strategy/summary fields. */
 export function resolveProjectSections(data: LegacySectionSource): ResolvedProjectSection[] {
 	let resolved: ResolvedProjectSection[] = [];
 
 	if (data.sections && data.sections.length > 0) {
 		resolved = data.sections
-			.slice(0, 8)
+			.slice(0, 10)
 			.map((section, index) => {
 				const label = stripLabelBrackets(section.label?.trim() ?? '');
 				const isSummary = isSummaryLabel(label);
@@ -70,7 +70,7 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 					text: section.text?.trim() ?? '',
 					theme: themeForSectionIndex(index),
 					// Summary is always trailing (after the full gallery)
-					afterGroup: isSummary ? undefined : section.afterGroup,
+					afterGroup: isSummary ? undefined : section.afterGroup ?? (index + 2),
 				};
 			})
 			.filter((section) => section.label || section.title || section.text);
@@ -109,7 +109,7 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 			});
 		}
 
-		resolved = legacy.slice(0, 8);
+		resolved = legacy.slice(0, 10);
 	}
 
 	// Re-index + re-theme after filter; keep Summary sections last (trailing).
@@ -117,15 +117,15 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 	// group 2 → section 0 → group 3 → section 1 → … → remaining gallery → Summary
 	const content = resolved.filter((section) => !isSummaryLabel(section.label));
 	const summaries = resolved.filter((section) => isSummaryLabel(section.label));
-	const ordered = [...content, ...summaries].slice(0, 8);
+	const ordered = [...content, ...summaries].slice(0, 10);
 
 	return ordered.map((section, index) => ({
 		...section,
 		index,
-		theme: themeForSectionIndex(index),
+		theme: isSummaryLabel(section.label) ? 'light' : themeForSectionIndex(index),
 		afterGroup: isSummaryLabel(section.label)
 			? undefined
-			: section.afterGroup ?? index + 2,
+			: section.afterGroup ?? (section.index != null ? section.index + 2 : index + 2),
 	}));
 }
 
@@ -157,28 +157,43 @@ export function buildProjectPageSegments(
 		after: import('./getProjectGallery.ts').GalleryLayoutBlock[];
 	},
 ): ProjectPageSegment[] {
-	const placed = sections
+	const activeSections = sections.filter(
+		(section) => Boolean(section.label || section.title || section.text),
+	);
+
+	const placed = activeSections
 		.filter((section) => typeof section.afterGroup === 'number')
 		.sort((a, b) => (a.afterGroup ?? 0) - (b.afterGroup ?? 0));
-	const trailing = sections.filter((section) => typeof section.afterGroup !== 'number');
+	const trailing = activeSections.filter((section) => typeof section.afterGroup !== 'number');
 
-	const segments: ProjectPageSegment[] = [];
+	const rawSegments: ProjectPageSegment[] = [];
 	let remaining = gallery;
 
 	for (const section of placed) {
 		const { before, after } = splitAfterLead(remaining, section.afterGroup as number);
-		if (before.length > 0) segments.push({ type: 'gallery', blocks: before });
-		segments.push({ type: 'section', section });
+		if (before.length > 0) rawSegments.push({ type: 'gallery', blocks: before });
+		rawSegments.push({ type: 'section', section });
 		remaining = after;
 	}
 
-	if (remaining.length > 0) segments.push({ type: 'gallery', blocks: remaining });
+	if (remaining.length > 0) rawSegments.push({ type: 'gallery', blocks: remaining });
 
 	for (const section of trailing) {
-		segments.push({ type: 'section', section });
+		rawSegments.push({ type: 'section', section });
 	}
 
-	return segments;
+	// Merge adjacent gallery segments so they form a continuous gallery stack with standard gap
+	const mergedSegments: ProjectPageSegment[] = [];
+	for (const segment of rawSegments) {
+		const prev = mergedSegments[mergedSegments.length - 1];
+		if (segment.type === 'gallery' && prev && prev.type === 'gallery') {
+			prev.blocks.push(...segment.blocks);
+		} else {
+			mergedSegments.push(segment);
+		}
+	}
+
+	return mergedSegments;
 }
 
 export function localeSectionCopy(

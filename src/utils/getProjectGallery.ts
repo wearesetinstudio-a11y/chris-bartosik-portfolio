@@ -38,7 +38,7 @@ export type GalleryMediaItem =
 	| { type: 'svg'; src: string; filename: string };
 
 export type GalleryLayoutBlock =
-	| { kind: 'full'; item: GalleryMediaItem; group: number }
+	| { kind: 'full'; item: GalleryMediaItem; group: number; part?: number | null }
 	| { kind: 'grid'; items: GalleryMediaItem[]; group: number; leadFull?: boolean };
 
 type ParsedMediaFile = GalleryMediaItem & {
@@ -174,6 +174,14 @@ export function getProjectGalleryFiles(
 	}
 }
 
+/**
+ * Builds gallery layout per section/group.
+ * Rule:
+ * - 1 large (part 1 or single) → full block
+ * - 2 smaller (part 2 and 3) → 2-column grid block
+ * - 1 large (part 4 or last single) → full block
+ * Also supports legacy part naming (.1, .2) or plain singles seamlessly.
+ */
 export function buildGalleryLayout(
 	folderName: string,
 	coverFilename = 'cover.webp',
@@ -218,19 +226,67 @@ export function buildGalleryLayout(
 			const parts = files.filter((file) => file.part !== null);
 			const singles = files.filter((file) => file.part === null);
 
+			// Check if files follow X.1, X.2, X.3, X.4 structure
+			if (parts.length > 0) {
+				const p1 = parts.find((f) => f.part === 1);
+				const p2 = parts.find((f) => f.part === 2);
+				const p3 = parts.find((f) => f.part === 3);
+				const p4 = parts.find((f) => f.part === 4);
+				const others = parts.filter((f) => f.part !== null && ![1, 2, 3, 4].includes(f.part));
+
+				// If we have 1 large at start
+				if (p1) {
+					layout.push({
+						kind: 'full',
+						group,
+						part: 1,
+						item: toMediaItem(folderName, p1.filename, p1.type),
+					});
+				}
+
+				// If we have 2 middle smaller (or even just p2 or p3)
+				const middleParts = [p2, p3].filter((f): f is ParsedMediaFile => Boolean(f));
+				if (middleParts.length > 0) {
+					layout.push({
+						kind: 'grid',
+						group,
+						items: middleParts.map((p) => toMediaItem(folderName, p.filename, p.type)),
+					});
+				}
+
+				// If we have 1 large at end (part 4)
+				if (p4) {
+					layout.push({
+						kind: 'full',
+						group,
+						part: 4,
+						item: toMediaItem(folderName, p4.filename, p4.type),
+					});
+				}
+
+				// Fallback for legacy parts that were only .1 and .2 without 3/4 and without p1
+				if (!p1 && !p4 && middleParts.length === 0 && others.length > 0) {
+					layout.push({
+						kind: 'grid',
+						group,
+						items: others.map((p) => toMediaItem(folderName, p.filename, p.type)),
+					});
+				} else if (others.length > 0) {
+					layout.push({
+						kind: 'grid',
+						group,
+						items: others.map((p) => toMediaItem(folderName, p.filename, p.type)),
+					});
+				}
+			}
+
+			// Also process singles if any exist for this group
 			for (const single of singles) {
 				layout.push({
 					kind: 'full',
 					group,
+					part: null,
 					item: toMediaItem(folderName, single.filename, single.type),
-				});
-			}
-
-			if (parts.length > 0) {
-				layout.push({
-					kind: 'grid',
-					group,
-					items: parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
 				});
 			}
 		}

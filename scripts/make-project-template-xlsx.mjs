@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs';
 
-const MAX_SECTIONS = 8;
+const MAX_SECTIONS = 10;
 
 /** Human-facing rows only — gallery/hero assets come from folder files automatically. */
 const ROWS = [
@@ -242,9 +242,10 @@ styleHeader(checklist.getRow(1));
 for (const [file, note] of [
 	['cover.webp / cover.webm / cover.mp4', 'Okładka na liście projektów'],
 	['bg.webp', 'Tło hero na stronie projektu'],
-	['1.webp', 'Grafika przy Overview (opcjonalnie)'],
-	['2.webp, 3.webp, 4.webp…', 'Pełne kadry w galerii (kolejność = numer)'],
-	['2.1.webp + 2.2.webp…', 'Pary pod pełnym kadrem o tym samym numerze'],
+	['1.webp', 'Grafika przy Overview / Intro (opcjonalnie)'],
+	['X.1.webp / X.1.mp4', 'Sekcja X: 1 duże zdjęcie / wideo'],
+	['X.2.webp + X.3.webp', 'Sekcja X: 2 mniejsze zdjęcia (w parze obok siebie)'],
+	['X.4.webp / X.4.mp4', 'Sekcja X: 1 duże zdjęcie / wideo'],
 	['ten Excel (opcjonalnie)', 'Żebym mógł wciągnąć teksty z folderu'],
 ]) {
 	const row = checklist.addRow([file, note]);

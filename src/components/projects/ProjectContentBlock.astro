@@ -2,6 +2,8 @@
 import { parseProjectCopyBlocks } from '../../utils/parseProjectCopyBlocks.ts';
 
 interface Props {
+	id?: string;
+	num?: string;
 	index: number;
 	label?: string;
 	title?: string;
@@ -11,9 +13,12 @@ interface Props {
 	theme?: 'dark' | 'light' | 'muted';
 	headingId?: string;
 	sectionIndex?: number;
+	dataDarkTheme?: boolean;
 }
 
 const {
+	id,
+	num,
 	index,
 	label = '',
 	title = '',
@@ -23,11 +28,14 @@ const {
 	theme = 'light',
 	headingId = '',
 	sectionIndex,
+	dataDarkTheme,
 } = Astro.props;
 
 const titleChars = title.split('');
 const contentBlocks = parseProjectCopyBlocks(text);
 const resolvedHeadingId = headingId || (title ? `project-section-${index}-heading` : '');
+const resolvedSectionId = id || (sectionIndex != null ? `project-section-${sectionIndex + 1}` : `project-section-${index}`);
+const resolvedNum = num || String(sectionIndex != null ? sectionIndex + 2 : index).padStart(2, '0');
 const hasLabel = Boolean(label.trim());
 const hasTitle = Boolean(title.trim());
 const hasText = contentBlocks.length > 0;
@@ -37,88 +45,76 @@ const hasBody = hasTitle || hasText;
 {
 	hasLabel || hasBody ? (
 		<section
-			class:list={[
-				'project-content-block px-[var(--page-gutter)] project-content-block--stacked',
-				theme === 'dark'
-					? 'project-content-block--dark'
-					: theme === 'muted'
-						? 'project-content-block--muted'
-						: 'project-content-block--light',
-			]}
+			id={resolvedSectionId}
+			class="project-content-block w-full"
 			data-project-section={sectionIndex ?? index}
+			data-dark-section={dataDarkTheme ? 'true' : undefined}
 		>
-			<div
-				class:list={[
-					'project-content-block__grid project-content-block__grid--stacked',
-					!hasLabel && 'project-content-block__grid--no-label',
-				]}
-			>
+			<div class="project-content-block__stack flex w-full flex-col">
 				{
 					hasLabel ? (
-						<p class="project-content-block__label">
-							[
-							<span
-								class="project-content-block__label-text"
-								data-project-section-field="label"
-							>
-								{label}
+						<p class="project-content-block__label mb-6 flex items-baseline gap-2.5">
+							<span class="project-content-block__num font-semibold text-black/35">{resolvedNum}</span>
+							<span class="project-content-block__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
+								[
+								<span
+									class="project-content-block__label-text"
+									data-project-section-field="label"
+								>
+									{label}
+								</span>
+								]
 							</span>
-							]
 						</p>
 					) : null
 				}
 
 				{
-					hasBody ? (
-						<div class="project-content-block__body">
-							{hasTitle ? (
-								<h2
-									id={resolvedHeadingId}
-									class="project-content-block__heading"
-									data-project-section-field="title"
-									data-project-field={titleField}
-								>
-									<span class="project-content-block__heading-line" data-reveal-line>
-										{titleChars.map((char) => (
-											<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
-										))}
-									</span>
-								</h2>
-							) : null}
+					hasTitle ? (
+						<h2
+							id={resolvedHeadingId}
+							class="project-content-block__heading mb-6"
+							data-project-section-field="title"
+							data-project-field={titleField}
+						>
+							<span class="project-content-block__heading-line" data-reveal-line>
+								{titleChars.map((char) => (
+									<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+								))}
+							</span>
+						</h2>
+					) : null
+				}
 
-							{hasText ? (
-								<div
-									class:list={[
-										'project-content-block__copy',
-										hasTitle ? 'project-content-block__copy--with-title' : '',
-									]}
-									data-project-section-field="text"
-									data-project-field={textField}
-									data-project-paragraphs={textField || sectionIndex != null ? 'true' : undefined}
-									data-paragraph-class="project-content-block__text"
-								>
-									{contentBlocks.map((block) =>
-										block.type === 'list' ? (
-											<ul class="project-content-block__list">
-												{block.items.map((item) => (
-													<li>
-														{item.title ? (
-															<>
-																<strong>{item.title}:</strong>
-																{item.body ? ` ${item.body}` : ''}
-															</>
-														) : (
-															item.body
-														)}
-													</li>
-												))}
-											</ul>
-										) : (
-											<p class="project-content-block__text">{block.text}</p>
-										),
-									)}
-								</div>
-							) : null}
+				{
+					hasText ? (
+						<div
+							class="project-content-block__copy flex flex-col gap-6"
+							data-project-section-field="text"
+							data-project-field={textField}
+							data-project-paragraphs={textField || sectionIndex != null ? 'true' : undefined}
+							data-paragraph-class="project-content-block__text"
+						>
+							{contentBlocks.map((block) =>
+								block.type === 'list' ? (
+									<ul class="project-content-block__list">
+										{block.items.map((item) => (
+											<li>
+												{item.title ? (
+													<>
+														<strong>{item.title}:</strong>
+														{item.body ? ` ${item.body}` : ''}
+													</>
+												) : (
+													item.body
+												)}
+											</li>
+										))}
+									</ul>
+								) : (
+									<p class="project-content-block__text">{block.text}</p>
+								),
+							)}
 						</div>
 					) : null
 				}
@@ -128,97 +124,44 @@ const hasBody = hasTitle || hasText;
 }
 
 <style>
-	.project-content-block--light {
-		background: #ffffff;
+	.project-content-block {
+		scroll-margin-top: 160px;
+		padding-block: 0;
+		background: transparent;
 		color: #131415;
 	}
 
-	.project-content-block--muted {
-		background: #fafafa;
-		color: #131415;
-	}
-
-	.project-content-block--dark {
-		background: #1c1c1c;
-		color: #ffffff;
-	}
-
-	.project-content-block--stacked {
-		container-type: inline-size;
-		padding-block: 7rem;
-	}
-
-	@media (min-width: 768px) {
-		.project-content-block--stacked {
-			padding-block: 10rem;
-		}
-	}
-
-	.project-content-block__grid {
-		display: grid;
-		gap: 2.5rem;
-	}
-
-	@media (min-width: 1024px) {
-		.project-content-block--stacked .project-content-block__grid,
-		.project-content-block__grid--stacked {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 65%);
-			column-gap: 5rem;
-			row-gap: 0;
-			align-items: start;
-		}
-
-		.project-content-block--stacked .project-content-block__grid--no-label {
-			grid-template-columns: minmax(0, 65%);
-			justify-content: end;
-		}
-
-		.project-content-block--stacked .project-content-block__body {
-			width: 100%;
-			max-width: none;
-			min-width: 0;
-			justify-self: stretch;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.project-content-block--stacked .project-content-block__grid,
-		.project-content-block__grid--stacked {
-			column-gap: 6rem;
+	@media (max-width: 767px) {
+		.project-content-block {
+			scroll-margin-top: 100px;
+			padding-block: 0;
 		}
 	}
 
 	.project-content-block__label {
-		margin: 0;
 		font-size: var(--label-text-size);
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0;
 		line-height: 1.2;
-		white-space: nowrap;
+		color: rgba(0, 0, 0, 0.4);
+		margin-top: 0;
 	}
 
 	.project-content-block__label-text {
 		letter-spacing: var(--label-text-tracking);
 	}
 
-	.project-content-block--light .project-content-block__label,
-	.project-content-block--muted .project-content-block__label {
-		color: rgba(0, 0, 0, 0.4);
-	}
-
-	.project-content-block--dark .project-content-block__label {
-		color: rgba(255, 255, 255, 0.4);
-	}
-
 	.project-content-block__heading {
-		margin: 0;
 		font-size: var(--heading-h2-size);
 		font-weight: 600;
 		text-transform: uppercase;
 		line-height: var(--heading-h2-lh);
 		letter-spacing: var(--letter-spacing-ui);
-		color: transparent;
+		color: #131415;
+		margin-top: 0;
+		width: 100%;
+		max-width: 100%;
 	}
 
 	.project-content-block__heading-line {
@@ -228,50 +171,24 @@ const hasBody = hasTitle || hasText;
 		word-break: normal;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char),
-	.project-content-block--muted .project-content-block__heading :global(.reveal-char) {
+	.project-content-block__heading :global(.reveal-char) {
 		color: rgba(0, 0, 0, 0.15);
 		transition: color 0.35s ease-out;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char.active),
-	.project-content-block--muted .project-content-block__heading :global(.reveal-char.active) {
+	.project-content-block__heading :global(.reveal-char.active) {
 		color: #000000;
 	}
 
-	.project-content-block--dark .project-content-block__heading :global(.reveal-char) {
-		color: rgba(255, 255, 255, 0.18);
-		transition: color 0.35s ease-out;
-	}
-
-	.project-content-block--dark .project-content-block__heading :global(.reveal-char.active) {
-		color: #ffffff;
-	}
-
 	.project-content-block__copy {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	.project-content-block__copy--with-title {
-		margin-top: 1.5rem;
-	}
-
-	.project-content-block--light .project-content-block__copy,
-	.project-content-block--muted .project-content-block__copy {
 		color: rgba(0, 0, 0, 0.7);
-	}
-
-	.project-content-block--dark .project-content-block__copy {
-		color: rgba(255, 255, 255, 0.72);
 	}
 
 	.project-content-block__copy :global(p),
 	.project-content-block__text {
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 500;
+		font-weight: 400;
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: inherit;
@@ -283,7 +200,7 @@ const hasBody = hasTitle || hasText;
 		list-style-type: disc;
 		list-style-position: outside;
 		font-size: var(--body-text-size);
-		font-weight: 500;
+		font-weight: 400;
 		line-height: var(--body-text-lh);
 		color: inherit;
 	}
@@ -307,7 +224,39 @@ const hasBody = hasTitle || hasText;
 		color: #131415;
 	}
 
-	.project-content-block--dark .project-content-block__list :global(strong) {
-		color: #ffffff;
+	:global(.project-page--dark) .project-content-block {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-content-block__label {
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	:global(.project-page--dark) .project-content-block__label-bracket {
+		color: rgba(255, 255, 255, 0.45) !important;
+	}
+
+	:global(.project-page--dark) .project-content-block__num {
+		color: rgba(255, 255, 255, 0.4) !important;
+	}
+
+	:global(.project-page--dark) .project-content-block__heading {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-content-block__heading :global(.reveal-char) {
+		color: rgba(255, 255, 255, 0.15);
+	}
+
+	:global(.project-page--dark) .project-content-block__heading :global(.reveal-char.active) {
+		color: #f5f5f5;
+	}
+
+	:global(.project-page--dark) .project-content-block__copy {
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	:global(.project-page--dark) .project-content-block__list :global(strong) {
+		color: #f5f5f5;
 	}
 </style>
