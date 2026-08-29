@@ -143,8 +143,12 @@ const { items } = Astro.props;
 		font-weight: 700;
 	}
 
-	.project-sidebar-mobile.is-open .project-sidebar-mobile__chevron {
+	.project-sidebar-mobile__chevron {
 		transform: rotate(180deg);
+	}
+
+	.project-sidebar-mobile.is-open .project-sidebar-mobile__chevron {
+		transform: rotate(0deg);
 	}
 
 	.project-sidebar-mobile.is-open .project-sidebar-mobile__dropdown {
