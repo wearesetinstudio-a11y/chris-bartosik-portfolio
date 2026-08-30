@@ -51,14 +51,12 @@ export function initProjectGalleryVideos() {
 				else pauseVideo(video);
 			});
 		},
-		{ root: null, rootMargin: '15% 0px', threshold: 0.1 },
+		{ root: null, rootMargin: '100% 0px', threshold: 0.01 },
 	);
 
 	videos.forEach((video) => {
 		observer.observe(video);
-		const rect = video.getBoundingClientRect();
-		const inView = rect.bottom > 0 && rect.top < window.innerHeight;
-		if (inView) playVideo(video);
+		playVideo(video);
 	});
 
 	cleanups.push(() => {

@@ -124,8 +124,8 @@ const hasGraphic = Boolean(graphicSrc);
 										width="1400"
 										height="900"
 										class="block h-auto w-full"
-										loading="lazy"
-										decoding="async"
+										loading="eager"
+										decoding="auto"
 									/>
 								</object>
 							) : graphicType === 'video' ? (
@@ -136,7 +136,7 @@ const hasGraphic = Boolean(graphicSrc);
 									muted
 									loop
 									playsinline
-									preload="metadata"
+									preload="auto"
 									aria-label={graphicAlt}
 								/>
 							) : (
@@ -146,8 +146,8 @@ const hasGraphic = Boolean(graphicSrc);
 									width="1400"
 									height="900"
 									class="block h-auto w-full"
-									loading="lazy"
-									decoding="async"
+									loading="eager"
+									decoding="auto"
 								/>
 							)
 						}

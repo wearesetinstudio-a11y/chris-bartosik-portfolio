@@ -73,8 +73,8 @@ const Tag = comingSoon ? 'div' : 'a';
 					width="960"
 					height="600"
 					class="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-					loading="lazy"
-					decoding="async"
+					loading="eager"
+					decoding="auto"
 				/>
 			) : null
 		}
@@ -137,8 +137,7 @@ const Tag = comingSoon ? 'div' : 'a';
 		height: 100%;
 		width: 100%;
 		object-fit: cover;
-		opacity: 0;
-		transition: opacity 0.35s ease;
+		opacity: 1;
 	}
 
 	.project-card__media video,

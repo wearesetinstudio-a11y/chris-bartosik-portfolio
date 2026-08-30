@@ -14,49 +14,49 @@ const label = `${title} — ${index + 1}`;
 const src = withPublicAssetVersion(item.src);
 ---
 
-{
-	item.type === 'image' ? (
-		<figure class="project-gallery__item m-0 w-full">
-			<img
-				src={src}
-				alt={label}
-				width="1600"
-				height="1000"
-				class="block h-auto w-full"
-				loading={index < 2 ? 'eager' : 'lazy'}
-				decoding="async"
-			/>
-		</figure>
-	) : item.type === 'rive' ? (
-		<figure class="project-gallery__item project-gallery__item--rive m-0 w-full">
-			<RivePlayer src={src} fit="contain" label={label} />
-		</figure>
-	) : item.type === 'svg' ? (
-		<figure class="project-gallery__item project-gallery__item--svg m-0 w-full">
-			{/* object (not img) so CSS @keyframes inside the SVG actually run */}
-			<object
-				data={src}
-				type="image/svg+xml"
-				class="project-gallery__svg"
-				aria-label={label}
-			>
-				<img src={src} alt={label} class="block h-auto w-full" loading="lazy" decoding="async" />
-			</object>
-		</figure>
-	) : (
-		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
-			<video
-				src={src}
-				class="block h-auto w-full"
-				muted
-				loop
-				playsinline
-				preload="metadata"
-				aria-label={label}
-			/>
-		</figure>
-	)
-}
+	{
+		item.type === 'image' ? (
+			<figure class="project-gallery__item m-0 w-full">
+				<img
+					src={src}
+					alt={label}
+					width="1600"
+					height="1000"
+					class="block h-auto w-full"
+					loading="eager"
+					decoding="auto"
+				/>
+			</figure>
+		) : item.type === 'rive' ? (
+			<figure class="project-gallery__item project-gallery__item--rive m-0 w-full">
+				<RivePlayer src={src} fit="contain" label={label} />
+			</figure>
+		) : item.type === 'svg' ? (
+			<figure class="project-gallery__item project-gallery__item--svg m-0 w-full">
+				{/* object (not img) so CSS @keyframes inside the SVG actually run */}
+				<object
+					data={src}
+					type="image/svg+xml"
+					class="project-gallery__svg"
+					aria-label={label}
+				>
+					<img src={src} alt={label} class="block h-auto w-full" loading="eager" decoding="auto" />
+				</object>
+			</figure>
+		) : (
+			<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
+				<video
+					src={src}
+					class="block h-auto w-full"
+					muted
+					loop
+					playsinline
+					preload="auto"
+					aria-label={label}
+				/>
+			</figure>
+		)
+	}
 
 <style is:global>
 	.project-gallery__item--svg .project-gallery__svg {
