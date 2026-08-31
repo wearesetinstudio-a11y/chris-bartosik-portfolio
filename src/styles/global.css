@@ -37,6 +37,7 @@
 	:root {
 		--body-text-size: 1rem;
 		--body-text-lh: 1.8;
+		--label-text-size: 0.95rem;
 	}
 }
 
