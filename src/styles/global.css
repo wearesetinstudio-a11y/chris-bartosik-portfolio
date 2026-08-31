@@ -35,7 +35,7 @@
 
 @media (max-width: 767px) {
 	:root {
-		--body-text-size: 1.05rem;
+		--body-text-size: 0.95rem;
 		--body-text-lh: 1.8;
 	}
 }
