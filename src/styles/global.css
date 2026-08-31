@@ -35,7 +35,7 @@
 
 @media (max-width: 767px) {
 	:root {
-		--body-text-size: 0.95rem;
+		--body-text-size: 1rem;
 		--body-text-lh: 1.8;
 	}
 }
@@ -184,9 +184,9 @@ label,
 	.about-page__list li,
 	.skills-block__intro,
 	.skills-block__body {
-		font-size: 1.05rem;
+		font-size: var(--body-text-size);
 		font-weight: 400;
-		line-height: 1.8;
+		line-height: var(--body-text-lh);
 	}
 }
 

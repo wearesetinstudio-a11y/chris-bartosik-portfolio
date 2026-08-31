@@ -49,6 +49,7 @@ const Tag = comingSoon ? 'div' : 'a';
 	data-project-id={project.id}
 	data-client={clientSlug || undefined}
 	data-transition-label={comingSoon ? undefined : client}
+	data-hero-bg={project.data.heroImage ? withPublicAssetVersion(project.data.heroImage) : undefined}
 >
 	<div class="project-card__media overflow-hidden">
 		{

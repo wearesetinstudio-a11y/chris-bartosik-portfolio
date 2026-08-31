@@ -40,7 +40,11 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100svh] w-full overflow-hidden bg-[#131415] md:h-[85vh]"
 				aria-hidden="true"
 			>
-				<div id="project-hero-parallax" class="project-hero-parallax pointer-events-none absolute inset-x-0">
+				<div
+					id="project-hero-parallax"
+					class="project-hero-parallax pointer-events-none absolute inset-x-0 bg-cover bg-center"
+					style={`background-image: url('${heroImage}');`}
+				>
 					<img
 						src={heroImage}
 						alt=""
@@ -48,7 +52,8 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 						height="1080"
 						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-center md:object-[center_42%]"
 						loading="eager"
-						decoding="async"
+						decoding="auto"
+						fetchpriority="high"
 					/>
 				</div>
 

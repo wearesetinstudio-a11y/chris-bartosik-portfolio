@@ -92,9 +92,9 @@ const projectFilters = [
 	}
 
 	.projects-description {
-		font-size: 1.05rem;
+		font-size: var(--body-text-size);
 		font-weight: 400;
-		line-height: 1.8;
+		line-height: var(--body-text-lh);
 		color: rgba(0, 0, 0, 0.55);
 	}
 
@@ -502,12 +502,27 @@ const projectFilters = [
 		window.addEventListener('resize', updateProjectsHeadingReveal, { passive: true });
 	}
 
+	function initProjectCardPreloads() {
+		document.querySelectorAll<HTMLElement>('.project-card[data-hero-bg]').forEach((card) => {
+			const preloadHero = () => {
+				const src = card.dataset.heroBg;
+				if (src) {
+					const img = new Image();
+					img.src = src;
+				}
+			};
+			card.addEventListener('pointerenter', preloadHero, { once: true, passive: true });
+			card.addEventListener('touchstart', preloadHero, { once: true, passive: true });
+		});
+	}
+
 	function initProjectsSection() {
 		initProjectsFilter();
 		initProjectCursor();
 		initProjectsHeadingReveal();
 		initProjectCardVideos();
 		initRivePlayers();
+		initProjectCardPreloads();
 	}
 
 	document.addEventListener('astro:page-load', initProjectsSection);
