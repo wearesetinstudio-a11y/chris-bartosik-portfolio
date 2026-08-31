@@ -55,7 +55,7 @@ const RESIZE_EPSILON_PX = 96;
 const MOBILE_FIELD_PAD_PX = 180;
 
 function sparkSize() {
-	return 2;
+	return 3;
 }
 
 function gauss() {

@@ -402,7 +402,7 @@ body.intro-active {
 	left: 0;
 	width: 12px;
 	height: 12px;
-	border-radius: 50%;
+	border-radius: 0;
 	background-color: #ffffff;
 	transform: translate(-50%, -50%);
 	transition: background-color 0.22s ease;
