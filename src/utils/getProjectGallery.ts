@@ -246,7 +246,15 @@ export function buildGalleryLayout(
 
 				// If we have 2 middle smaller (or even just p2 or p3)
 				const middleParts = [p2, p3].filter((f): f is ParsedMediaFile => Boolean(f));
-				if (middleParts.length > 0) {
+				if (middleParts.length === 1) {
+					// Single item from the pair (e.g. only X.2 or only X.3) fills full width
+					layout.push({
+						kind: 'full',
+						group,
+						part: middleParts[0].part,
+						item: toMediaItem(folderName, middleParts[0].filename, middleParts[0].type),
+					});
+				} else if (middleParts.length > 1) {
 					layout.push({
 						kind: 'grid',
 						group,
