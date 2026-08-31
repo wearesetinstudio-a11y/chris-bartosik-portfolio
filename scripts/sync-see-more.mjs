@@ -2,12 +2,12 @@ import ExcelJS from 'exceljs';
 import fs from 'fs';
 import path from 'path';
 
-const xlsxPath = path.resolve('public/portfolio/see-more-rebranding/See More Logistics.xlsx');
+const xlsxPath = path.resolve('public/portfolio/see-more/See More Logistics.xlsx');
 const wb = new ExcelJS.Workbook();
 
 async function run() {
   await wb.xlsx.readFile(xlsxPath);
-  const ws = wb.worksheets.find(w => w.name.includes('Tłumaczenia') || w.name.includes('Translations'));
+  const ws = wb.worksheets.find(w => w.name.includes('Tłumaczenia') || w.name.includes('Translations')) || wb.worksheets[0];
   const data = {};
 
   const getVal = (cell) => {

@@ -9,12 +9,12 @@ categories:
   - branding
   - ux-ui
   - development
-thumbnail: /portfolio/see-more-rebranding/cover.riv
-folderName: see-more-rebranding
+thumbnail: /portfolio/see-more/cover.riv
+folderName: see-more
 order: 3
 comingSoon: false
-video: /portfolio/see-more-rebranding/cover.riv
-heroImage: /portfolio/see-more-rebranding/bg.webp
+video: /portfolio/see-more/cover.riv
+heroImage: /portfolio/see-more/bg.webp
 logo: /logos/see-more.svg
 clientLabel: Client
 heroSubtitle: Brand evolution and foundational website build for a Panamanian
@@ -77,7 +77,7 @@ sections:
       the brand identity directly onto the streets. As these vehicles navigate
       the city, they capture attention and build instant brand recall, operating
       as a highly creative, clean, and cost-effective mobile marketing channel.
-    afterGroup: 3
+    afterGroup: 4
   - label: Website Architecture & UX/UI Design
     title: UX/UI strategy, 3-second rule, and site architecture
     text: >-
@@ -119,7 +119,7 @@ sections:
       operating in Panama and local businesses. The remaining layout features
       clean, dedicated blocks for specific services, fleet capabilities, and
       company overview, closing with a focused contact module.
-    afterGroup: 5
+    afterGroup: 7
   - label: Summary
     title: Results & Business Impact
     text: The project successfully established SeeMore Logistics' first-ever online

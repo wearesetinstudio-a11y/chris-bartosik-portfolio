@@ -9,12 +9,12 @@ const frontmatter = {
   client: 'See More Logistics',
   tags: ['branding', 'ux-ui', 'webflow'],
   categories: ['branding', 'ux-ui', 'development'],
-  thumbnail: '/portfolio/see-more-rebranding/cover.riv',
-  folderName: 'see-more-rebranding',
+  thumbnail: '/portfolio/see-more/cover.riv',
+  folderName: 'see-more',
   order: 3,
   comingSoon: false,
-  video: '/portfolio/see-more-rebranding/cover.riv',
-  heroImage: '/portfolio/see-more-rebranding/bg.webp',
+  video: '/portfolio/see-more/cover.riv',
+  heroImage: '/portfolio/see-more/bg.webp',
   logo: '/logos/see-more.svg',
   clientLabel: 'Client',
   heroSubtitle: data.heroSubtitle.en,
@@ -39,13 +39,13 @@ const frontmatter = {
       label: data['sections.1.label'].en,
       title: data['sections.1.title'].en,
       text: data['sections.1.text'].en,
-      afterGroup: 3,
+      afterGroup: 4,
     },
     {
       label: data['sections.2.label'].en,
       title: data['sections.2.title'].en,
       text: data['sections.2.text'].en,
-      afterGroup: 5,
+      afterGroup: 7,
     },
     {
       label: data['sections.9.label'].en,
@@ -129,8 +129,6 @@ const frontmatter = {
   },
 };
 
-const yamlStr = yaml.stringify(frontmatter);
-const mdContent = `---\n${yamlStr}---\n`;
-
-fs.writeFileSync('src/content/projects/see-more.md', mdContent, 'utf-8');
-console.log('Successfully written src/content/projects/see-more.md');
+const yamlContent = `---\n${yaml.stringify(frontmatter)}---\n`;
+fs.writeFileSync('src/content/projects/see-more.md', yamlContent, 'utf-8');
+console.log('Successfully generated src/content/projects/see-more.md');
