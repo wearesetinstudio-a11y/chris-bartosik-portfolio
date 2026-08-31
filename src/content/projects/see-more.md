@@ -49,7 +49,7 @@ sections:
       juvenile and failed to reflect the company's professional values, with a
       modern sans-serif typeface brought visual balance and a mature, reliable
       character to the identity.
-    afterGroup: 2
+    afterGroup: 1
   - label: Regional Identity, Motion & Fleet Branding
     title: Panama architectural motif, animation, and fleet livery design
     text: >-
@@ -77,7 +77,7 @@ sections:
       the brand identity directly onto the streets. As these vehicles navigate
       the city, they capture attention and build instant brand recall, operating
       as a highly creative, clean, and cost-effective mobile marketing channel.
-    afterGroup: 4
+    afterGroup: 2
   - label: Website Architecture & UX/UI Design
     title: UX/UI strategy, 3-second rule, and site architecture
     text: >-
@@ -119,7 +119,7 @@ sections:
       operating in Panama and local businesses. The remaining layout features
       clean, dedicated blocks for specific services, fleet capabilities, and
       company overview, closing with a focused contact module.
-    afterGroup: 7
+    afterGroup: 3
   - label: Summary
     title: Results & Business Impact
     text: The project successfully established SeeMore Logistics' first-ever online
@@ -129,6 +129,7 @@ sections:
       integrated with WhatsApp, and backed by client social proof, the new
       website serves as a high-performing sales and trust-building asset in the
       logistics market.
+    afterGroup: 9
 i18n:
   pl:
     title: See More Logistics

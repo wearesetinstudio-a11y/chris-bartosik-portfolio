@@ -148,9 +148,33 @@ export function initRivePlayers() {
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+	// Warm up / mount all hosts so canvas and Rive assets preload immediately without layout shift
 	for (const host of hosts) {
 		mountRive(host);
-		if (!reduceMotion) {
+	}
+
+	let observer: IntersectionObserver | undefined;
+
+	if (!reduceMotion && typeof IntersectionObserver !== 'undefined') {
+		observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					const host = entry.target as RiveHost;
+					if (entry.isIntersecting) {
+						playHost(host);
+					} else {
+						pauseHost(host);
+					}
+				});
+			},
+			{ root: null, rootMargin: '500px 0px', threshold: 0.01 },
+		);
+
+		for (const host of hosts) {
+			observer.observe(host);
+		}
+	} else if (!reduceMotion) {
+		for (const host of hosts) {
 			playHost(host);
 		}
 	}
@@ -175,6 +199,7 @@ export function initRivePlayers() {
 		'astro:before-swap',
 		() => {
 			window.removeEventListener('resize', onResize);
+			observer?.disconnect();
 			for (const host of hosts) {
 				try {
 					host.__riveInstance?.cleanup();

@@ -65,11 +65,12 @@ const overviewUsesI18nDefault = !customOverviewLabel;
 const overviewTitle = data.overviewTitle ?? '';
 const overviewText = data.overviewText ?? '';
 const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
-const overviewGraphicSrc = overviewGraphicItem
-	? withPublicAssetVersion(overviewGraphicItem.src)
-	: withPublicAssetVersion(data.overviewGraphic || logo);
+const hasGroupOne = galleryLayout.some((block) => block.group === 1);
+const overviewGraphicSrc = hasGroupOne
+	? (data.overviewGraphic ? withPublicAssetVersion(data.overviewGraphic) : undefined)
+	: (data.overviewGraphic ? withPublicAssetVersion(data.overviewGraphic) : (overviewGraphicItem ? withPublicAssetVersion(overviewGraphicItem.src) : undefined));
 const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
-const pageGalleryLayout = galleryLayout.filter((block) => block.group !== 1);
+const pageGalleryLayout = galleryLayout;
 
 const quote = data.quote ?? '';
 const quoteAuthor = data.quoteAuthor ?? '';

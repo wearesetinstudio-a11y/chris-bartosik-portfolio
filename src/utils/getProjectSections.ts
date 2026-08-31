@@ -69,8 +69,8 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 					title: section.title?.trim() ?? '',
 					text: section.text?.trim() ?? '',
 					theme: themeForSectionIndex(index),
-					// Summary is always trailing (after the full gallery)
-					afterGroup: isSummary ? undefined : section.afterGroup ?? (index + 2),
+					// Default: section 0 comes after group 1 (under overview), section 1 after group 2, etc.
+					afterGroup: section.afterGroup ?? (isSummary ? undefined : index + 1),
 				};
 			})
 			.filter((section) => section.label || section.title || section.text);
@@ -114,7 +114,7 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 
 	// Re-index + re-theme after filter; keep Summary sections last (trailing).
 	// Default rhythm without explicit afterGroup:
-	// group 2 → section 0 → group 3 → section 1 → … → remaining gallery → Summary
+	// group 1 → section 0 → group 2 → section 1 → … → remaining gallery → Summary
 	const content = resolved.filter((section) => !isSummaryLabel(section.label));
 	const summaries = resolved.filter((section) => isSummaryLabel(section.label));
 	const ordered = [...content, ...summaries].slice(0, 10);
@@ -123,9 +123,12 @@ export function resolveProjectSections(data: LegacySectionSource): ResolvedProje
 		...section,
 		index,
 		theme: isSummaryLabel(section.label) ? 'light' : themeForSectionIndex(index),
-		afterGroup: isSummaryLabel(section.label)
-			? undefined
-			: section.afterGroup ?? (section.index != null ? section.index + 2 : index + 2),
+		afterGroup:
+			section.afterGroup !== undefined
+				? section.afterGroup
+				: isSummaryLabel(section.label)
+					? undefined
+					: (section.index != null ? section.index + 1 : index + 1),
 	}));
 }
 

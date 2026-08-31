@@ -51,12 +51,11 @@ export function initProjectGalleryVideos() {
 				else pauseVideo(video);
 			});
 		},
-		{ root: null, rootMargin: '100% 0px', threshold: 0.01 },
+		{ root: null, rootMargin: '500px 0px', threshold: 0.01 },
 	);
 
 	videos.forEach((video) => {
 		observer.observe(video);
-		playVideo(video);
 	});
 
 	cleanups.push(() => {
