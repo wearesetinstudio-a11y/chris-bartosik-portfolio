@@ -135,6 +135,18 @@ const { items } = Astro.props;
 </div>
 
 <style>
+	.project-sidebar__num,
+	.project-sidebar-mobile__link-num,
+	.project-sidebar-mobile__current-num {
+		display: inline-block;
+		flex: 0 0 auto;
+		flex-shrink: 0;
+		white-space: nowrap;
+		word-break: keep-all;
+		overflow-wrap: normal;
+		font-variant-numeric: tabular-nums;
+	}
+
 	.project-sidebar__link.is-active .project-sidebar__num,
 	.project-sidebar__link.is-active .project-sidebar__label,
 	.project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-num,

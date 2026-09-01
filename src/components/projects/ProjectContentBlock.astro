@@ -143,6 +143,26 @@ const hasBody = hasTitle || hasText;
 		line-height: 1.2;
 		color: rgba(0, 0, 0, 0.4);
 		margin-top: 0;
+		flex-wrap: nowrap;
+		word-break: normal;
+		overflow-wrap: normal;
+	}
+
+	.project-content-block__num {
+		display: inline-block;
+		flex: 0 0 auto;
+		flex-shrink: 0;
+		white-space: nowrap;
+		word-break: keep-all;
+		overflow-wrap: normal;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.project-content-block__label-bracket {
+		flex: 1 1 auto;
+		min-width: 0;
+		word-break: break-word;
+		overflow-wrap: break-word;
 	}
 
 	.project-content-block__label-text {
