@@ -448,58 +448,10 @@ const projectFilters = [
 		);
 	}
 
-	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
-
-	function wrapLetters(element: HTMLElement) {
-		wrapRevealLetters(element);
-	}
-
-	function updateProjectsHeadingReveal() {
-		const heading = document.getElementById('projects-heading');
-		if (!heading) return;
-
-		const chars = heading.querySelectorAll('.reveal-char');
-		if (!chars.length) return;
-
-		const rect = heading.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const startLine = viewportHeight * 0.88;
-		const endLine = viewportHeight * 0.45;
-		const range = startLine - endLine;
-		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
-		const activeCount = Math.ceil(progress * chars.length);
-
-		chars.forEach((char, index) => {
-			char.classList.toggle('active', index < activeCount);
-		});
-	}
-
-	let scrollTicking = false;
-
-	function onProjectsScroll() {
-		if (scrollTicking) return;
-		scrollTicking = true;
-		requestAnimationFrame(() => {
-			updateProjectsHeadingReveal();
-			scrollTicking = false;
-		});
-	}
+	import { initScrollLetterReveals } from '../scripts/initScrollLetterReveal.ts';
 
 	function initProjectsHeadingReveal() {
-		const heading = document.getElementById('projects-heading');
-		if (!heading) return;
-
-		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-			wrapLetters(line as HTMLElement);
-		});
-
-		updateProjectsHeadingReveal();
-
-		if (heading.dataset.revealInit === 'true') return;
-		heading.dataset.revealInit = 'true';
-
-		window.addEventListener('scroll', onProjectsScroll, { passive: true });
-		window.addEventListener('resize', updateProjectsHeadingReveal, { passive: true });
+		initScrollLetterReveals(['projects-heading']);
 	}
 
 	function initProjectCardPreloads() {

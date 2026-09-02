@@ -8,8 +8,6 @@ const testimonials = [
 		roleKey: 'testimonials.role1',
 		name: 'Nedelka Velasco',
 		role: t('testimonials.role1', 'en'),
-		logo: '/logos/nrv.svg',
-		logoHeight: 38,
 	},
 	{
 		quoteKey: 'testimonials.quote2',
@@ -17,8 +15,6 @@ const testimonials = [
 		roleKey: 'testimonials.role2',
 		name: 'Karen Núñez',
 		role: t('testimonials.role2', 'en'),
-		logo: '/logos/see-more.svg',
-		logoHeight: 42,
 	},
 	{
 		quoteKey: 'testimonials.quote3',
@@ -26,15 +22,18 @@ const testimonials = [
 		roleKey: 'testimonials.role3',
 		name: 'Thays Ríos Gun',
 		role: t('testimonials.role3', 'en'),
-		logo: '/logos/trg.svg',
-		logoHeight: 48,
+	},
+	{
+		quoteKey: 'testimonials.quote4',
+		quote: t('testimonials.quote4', 'en'),
+		roleKey: 'testimonials.role4',
+		name: 'Jakub Bartosik',
+		role: t('testimonials.role4', 'en'),
 	},
 ];
-
-const loopTestimonials = [...testimonials, ...testimonials];
 ---
 
-<section id="testimonials" class="relative z-20 bg-[#F5F5F5] px-[var(--page-gutter)] py-[var(--section-padding-y)] lg:pr-0">
+<section id="testimonials" class="relative z-30 bg-[#F5F5F5] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
@@ -47,42 +46,97 @@ const loopTestimonials = [...testimonials, ...testimonials];
 			</p>
 		</div>
 
-		<div class="testimonials-scroll min-w-0">
-			<div id="testimonials-viewport" class="testimonials-scroll__viewport" aria-live="off">
-				<div id="testimonials-track" class="testimonials-scroll__track">
-					{
-						loopTestimonials.map((testimonial, index) => (
-							<article class="testimonial-card" data-testimonial-index={index % testimonials.length}>
-								<p class="testimonial-card__quote" data-i18n={testimonial.quoteKey}>{testimonial.quote}</p>
+		<div class="testimonials-slider min-w-0">
+			<div
+				id="testimonials-slider-viewport"
+				class="testimonials-slider__viewport"
+				aria-live="polite"
+				aria-atomic="true"
+			>
+				{
+					testimonials.map((testimonial, index) => (
+						<article
+							class:list={['testimonial-item', index === 0 && 'is-active']}
+							data-testimonial-item
+							data-testimonial-index={index}
+							hidden={index !== 0}
+						>
+							<p class="testimonial-item__quote">
+								<span class="testimonial-item__quote-clamp" data-i18n={testimonial.quoteKey}>
+									{testimonial.quote}
+								</span>
+							</p>
 
-								<div class="testimonial-card__footer mt-auto pt-10">
-									<img
-										src={testimonial.logo}
-										alt=""
-										width="205"
-										height={testimonial.logoHeight}
-										style={`max-height: ${testimonial.logoHeight}px`}
-										class="testimonial-card__logo h-auto w-auto max-w-[9.5rem] shrink-0 object-contain object-left"
-									/>
-									<span
-										class="testimonial-card__divider h-10 w-px shrink-0 bg-black/10"
-										aria-hidden="true"
-									/>
-									<div>
-										<p class="testimonial-card__name uppercase">{testimonial.name}</p>
-										<p class="testimonial-card__role mt-1 uppercase" data-i18n={testimonial.roleKey}>{testimonial.role}</p>
-									</div>
-								</div>
-							</article>
-						))
-					}
-				</div>
+							<div class="testimonial-item__meta">
+								<p class="testimonial-item__name uppercase">
+									<span class="testimonial-item__line">
+										<span class="testimonial-item__line-text">{testimonial.name}</span>
+									</span>
+								</p>
+								<p class="testimonial-item__role mt-1 uppercase">
+									<span class="testimonial-item__line">
+										<span
+											class="testimonial-item__line-text"
+											data-i18n={testimonial.roleKey}
+										>
+											{testimonial.role}
+										</span>
+									</span>
+								</p>
+							</div>
+						</article>
+					))
+				}
+			</div>
+
+			<div class="testimonials-slider__controls">
+				<button
+					type="button"
+					class="testimonials-slider__arrow testimonials-slider__arrow--prev"
+					aria-label="Previous testimonial"
+					data-testimonials-prev
+				>
+					<svg width="18" height="15" viewBox="0 0 18 15" fill="none" aria-hidden="true">
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						/>
+					</svg>
+				</button>
+
+				<button
+					type="button"
+					class="testimonials-slider__arrow testimonials-slider__arrow--next"
+					aria-label="Next testimonial"
+					data-testimonials-next
+				>
+					<svg width="18" height="15" viewBox="0 0 18 15" fill="none" aria-hidden="true">
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						/>
+					</svg>
+				</button>
 			</div>
 		</div>
 	</div>
 </section>
 
 <style is:global>
+	:root {
+		--testimonial-quote-size: 1.35rem;
+		--testimonial-quote-lh: 1.4;
+		--testimonial-name-size: 1rem;
+		--testimonial-role-size: 1rem;
+		--testimonials-slider-height: calc(
+			(var(--testimonial-quote-size) * var(--testimonial-quote-lh) * 5) + (var(--testimonial-quote-size) * var(--testimonial-quote-lh)) + (var(--testimonial-name-size) * 1.3) + 0.25rem + (var(--testimonial-role-size) * 1.3)
+		);
+	}
+
 	.testimonials-heading {
 		font-size: 1.4rem;
 		line-height: 1.15;
@@ -122,298 +176,707 @@ const loopTestimonials = [...testimonials, ...testimonials];
 		color: rgba(0, 0, 0, 1);
 	}
 
-	.testimonials-scroll__viewport {
-		position: relative;
-		overflow: hidden;
-		border-left: 1px solid rgba(0, 0, 0, 0.12);
-		padding-left: 1.25rem;
-		cursor: grab;
-		touch-action: pan-y;
-	}
-
-	.testimonials-scroll__viewport.is-dragging {
-		cursor: grabbing;
-		user-select: none;
-	}
-
-	.testimonials-scroll__track {
+	.testimonials-slider {
 		display: flex;
-		width: max-content;
+		align-items: flex-start;
+		justify-content: flex-end;
 		gap: 1.25rem;
+		width: 100%;
+		max-width: 100%;
+		min-height: var(--testimonials-slider-height);
 	}
 
-	.testimonial-card {
+	.testimonials-slider__viewport {
+		position: relative;
+		flex: 1 1 auto;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		height: var(--testimonials-slider-height);
+	}
+
+	@media (min-width: 768px) {
+		.testimonials-slider__viewport {
+			flex: 0 1 auto;
+			max-width: 40vw;
+		}
+	}
+
+	.testimonials-slider__controls {
 		display: flex;
-		width: 22.5rem;
-		min-height: 26rem;
-		flex-shrink: 0;
-		flex-direction: column;
-		background-color: #ffffff;
-		padding: 2.5rem;
+		flex: 0 0 auto;
+		align-items: center;
+		gap: 8px;
 	}
 
-	.testimonial-card__quote {
-		font-size: var(--body-text-size);
-		font-weight: 400;
-		line-height: var(--body-text-lh);
+	.testimonials-slider__arrow {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 42px;
+		height: 42px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: #000000;
+		cursor: pointer;
+		isolation: isolate;
+		transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.testimonials-slider__arrow::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		background-color: #ffffff;
+		opacity: 1;
+		transition:
+			background-color 0.25s ease,
+			opacity 0.25s ease,
+			transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.testimonials-slider__arrow svg {
+		position: relative;
+		z-index: 1;
+		transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.testimonials-slider__arrow:hover,
+		.testimonials-slider__arrow:focus-visible {
+			transform: scale(1.04);
+			color: #ffffff;
+		}
+
+		.testimonials-slider__arrow:hover::before,
+		.testimonials-slider__arrow:focus-visible::before {
+			background-color: #000000;
+			opacity: 1;
+		}
+
+		.testimonials-slider__arrow--next:hover svg,
+		.testimonials-slider__arrow--next:focus-visible svg {
+			transform: translateX(2px);
+		}
+
+		.testimonials-slider__arrow--prev:hover svg,
+		.testimonials-slider__arrow--prev:focus-visible svg {
+			transform: rotate(180deg) translateX(2px);
+		}
+	}
+
+	.testimonials-slider__arrow:active {
+		transform: scale(0.96);
+		color: #ffffff;
+	}
+
+	.testimonials-slider__arrow:active::before {
+		background-color: #222222;
+		opacity: 1;
+	}
+
+	.testimonials-slider__arrow--next:active svg {
+		transform: translateX(1px);
+	}
+
+	.testimonials-slider__arrow--prev:active svg {
+		transform: rotate(180deg) translateX(1px);
+	}
+
+	.testimonials-slider__arrow:focus-visible {
+		outline: 2px solid rgba(0, 0, 0, 0.35);
+		outline-offset: 2px;
+	}
+
+	.testimonials-slider__arrow--prev svg {
+		transform: rotate(180deg);
+	}
+
+	.testimonial-item {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.testimonial-item[hidden] {
+		display: none;
+	}
+
+	.testimonial-item.is-measuring {
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.testimonial-item.is-exiting-quote {
+		z-index: 2;
+	}
+
+	.testimonial-item.is-entering-quote {
+		z-index: 1;
+	}
+
+	.testimonial-item__quote {
+		margin: 0;
+		min-height: calc(var(--testimonial-quote-size) * var(--testimonial-quote-lh) * 5);
+		max-height: calc(var(--testimonial-quote-size) * var(--testimonial-quote-lh) * 5);
+	}
+
+	.testimonial-item__quote-clamp {
+		display: block;
+		overflow: hidden;
+		font-size: var(--testimonial-quote-size);
+		font-weight: 500;
+		line-height: var(--testimonial-quote-lh);
 		color: rgba(0, 0, 0, 0.82);
 	}
 
-	.testimonial-card__footer {
-		display: flex;
-		align-items: center;
-		gap: 1.25rem;
+	.testimonial-item__line {
+		display: block;
+		overflow: hidden;
+		height: calc(var(--testimonial-quote-size) * var(--testimonial-quote-lh));
 	}
 
-	.testimonial-card__logo {
-		filter: brightness(0);
-		opacity: 0.22;
+	.testimonial-item__line-text {
+		display: block;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		opacity: 0;
+		transform: translateY(110%);
+		transition:
+			transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+			opacity 0.28s ease;
+		will-change: transform, opacity;
 	}
 
-	.testimonial-card__name {
-		font-size: 0.875rem;
-		font-weight: 600;
-		line-height: 1.3;
-		color: rgba(0, 0, 0, 0.45);
+	.testimonial-item__line.is-visible .testimonial-item__line-text {
+		opacity: 1;
+		transform: translateY(0);
 	}
 
-	.testimonial-card__role {
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1.3;
-		color: rgba(0, 0, 0, 0.3);
+	.testimonial-item__line.is-exiting .testimonial-item__line-text {
+		opacity: 0;
+		transform: translateY(-110%);
 	}
 
-	@media (max-width: 767px) {
-		.testimonial-card {
-			width: 18.5rem;
-			min-height: 18rem;
-			padding: 1.5rem;
-		}
-
-		.testimonial-card__footer {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.75rem;
-			padding-top: 1.5rem;
-		}
-
-		.testimonial-card__divider {
-			display: none;
-		}
-
-		.testimonial-card__logo {
-			max-width: 7.5rem;
-		}
+	.testimonial-item__line-text--clamp {
+		white-space: normal;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.testimonials-scroll__viewport {
-			cursor: default;
+		.testimonial-item__line-text {
+			transform: none;
+			transition: opacity 0.2s ease;
+		}
+
+		.testimonial-item__line.is-visible .testimonial-item__line-text,
+		.testimonial-item__line.is-exiting .testimonial-item__line-text {
+			transform: none;
+		}
+	}
+
+	.testimonial-item__meta {
+		margin-top: calc(
+			(var(--testimonial-quote-lines, 5) - 4) * var(--testimonial-quote-size) * var(--testimonial-quote-lh)
+		);
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+
+	.testimonial-item__meta .testimonial-item__line {
+		height: calc(var(--testimonial-name-size) * 1.3);
+	}
+
+	.testimonial-item__role .testimonial-item__line {
+		height: calc(var(--testimonial-role-size) * 1.3);
+	}
+
+	.testimonial-item__name {
+		margin: 0;
+	}
+
+	.testimonial-item__name .testimonial-item__line-text {
+		font-size: var(--testimonial-name-size);
+		font-weight: 600;
+		line-height: 1.3;
+		color: #000000;
+	}
+
+	.testimonial-item__role {
+		margin: 0;
+	}
+
+	.testimonial-item__role .testimonial-item__line-text {
+		font-size: var(--testimonial-role-size);
+		font-weight: 400;
+		line-height: 1.3;
+		color: #000000;
+	}
+
+	@media (max-width: 767px) {
+		:root {
+			--testimonial-quote-size: 1.125rem;
+			--testimonials-slider-height: calc(
+				(var(--testimonial-quote-size) * var(--testimonial-quote-lh) * 5) + (var(--testimonial-quote-size) * var(--testimonial-quote-lh)) + (var(--testimonial-name-size) * 1.3) + 0.25rem + (var(--testimonial-role-size) * 1.3)
+			);
+		}
+
+		.testimonials-slider {
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			gap: 0;
+			min-height: calc(var(--testimonials-slider-height) + 36px + 1.25rem);
+		}
+
+		.testimonials-slider__viewport {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.testimonials-slider__controls {
+			margin-top: 1.25rem;
+			align-self: flex-start;
+		}
+
+		.testimonials-slider__arrow {
+			width: 36px;
+			height: 36px;
 		}
 	}
 </style>
 
 <script>
-	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
-
-	function wrapLetters(element: HTMLElement) {
-		wrapRevealLetters(element);
-	}
-
-	function updateTestimonialsHeadingReveal() {
-		const heading = document.getElementById('testimonials-heading');
-		if (!heading) return;
-
-		const chars = heading.querySelectorAll('.reveal-char');
-		if (!chars.length) return;
-
-		const rect = heading.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const startLine = viewportHeight * 0.88;
-		const endLine = viewportHeight * 0.45;
-		const range = startLine - endLine;
-		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
-		const activeCount = Math.ceil(progress * chars.length);
-
-		chars.forEach((char, index) => {
-			char.classList.toggle('active', index < activeCount);
-		});
-	}
-
-	let scrollTicking = false;
-
-	function onTestimonialsScroll() {
-		if (scrollTicking) return;
-		scrollTicking = true;
-		requestAnimationFrame(() => {
-			updateTestimonialsHeadingReveal();
-			scrollTicking = false;
-		});
-	}
+	import { getLocale, t } from '../utils/i18n.ts';
+	import { initScrollLetterReveals } from '../scripts/initScrollLetterReveal.ts';
 
 	function initTestimonialsHeadingReveal() {
-		const heading = document.getElementById('testimonials-heading');
-		if (!heading || heading.dataset.revealInit === 'true') return;
-
-		heading.dataset.revealInit = 'true';
-
-		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-			wrapLetters(line as HTMLElement);
-		});
-
-		updateTestimonialsHeadingReveal();
-		window.addEventListener('scroll', onTestimonialsScroll, { passive: true });
-		window.addEventListener('resize', updateTestimonialsHeadingReveal, { passive: true });
+		initScrollLetterReveals(['testimonials-heading']);
 	}
 
-	function initTestimonialsMarquee() {
-		const viewport = document.getElementById('testimonials-viewport');
-		const track = document.getElementById('testimonials-track');
+	function initTestimonialsSlider() {
+		const section = document.getElementById('testimonials');
+		if (!section || section.dataset.sliderInit === 'true') return;
 
-		if (!viewport || !track || viewport.dataset.marqueeInit === 'true') return;
+		const items = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-testimonial-item]'),
+		);
+		const prevButton = section.querySelector<HTMLButtonElement>('[data-testimonials-prev]');
+		const nextButton = section.querySelector<HTMLButtonElement>('[data-testimonials-next]');
 
-		viewport.dataset.marqueeInit = 'true';
+		if (!items.length || !prevButton || !nextButton) return;
 
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const baseSpeed = 0.45;
-		const hoverSpeed = 0.07;
-		let offset = 0;
-		let loopWidth = 0;
-		let isDragging = false;
-		let isHovered = false;
-		let dragStartX = 0;
-		let dragStartOffset = 0;
-		let resumeAt = 0;
-		let rafId = 0;
-		let isVisible = false;
+		section.dataset.sliderInit = 'true';
 
-		function normalizeOffset() {
-			if (loopWidth <= 0) return;
+		let activeIndex = items.findIndex((item) => !item.hidden);
+		if (activeIndex < 0) activeIndex = 0;
 
-			while (offset >= 0) offset -= loopWidth;
-			while (offset < -loopWidth) offset += loopWidth;
+		let revealToken = 0;
+		const revealTimers: number[] = [];
+
+		function clearRevealTimers() {
+			revealTimers.forEach((timerId) => window.clearTimeout(timerId));
+			revealTimers.length = 0;
 		}
 
-		function applyTransform() {
-			track.style.transform = `translate3d(${offset}px, 0, 0)`;
+		const LINE_DELAY_MS = 90;
+		const LINE_TRANSITION_MS = 340;
+		const MAX_LINES = 5;
+
+		function getQuoteClamp(item: HTMLElement) {
+			return item.querySelector<HTMLElement>('.testimonial-item__quote-clamp');
 		}
 
-		function measureLoop() {
-			loopWidth = track.scrollWidth / 2;
-			normalizeOffset();
-			applyTransform();
-		}
-
-		function tick() {
-			if (isVisible && !isDragging && !reducedMotion && Date.now() >= resumeAt) {
-				const speed = isHovered ? hoverSpeed : baseSpeed;
-				offset += speed;
-				normalizeOffset();
-				applyTransform();
-			}
-
-			if (isVisible || isDragging) {
-				rafId = requestAnimationFrame(tick);
-			} else {
-				rafId = 0;
-				track.style.willChange = '';
-			}
-		}
-
-		function startLoop() {
-			if (!rafId) {
-				track.style.willChange = 'transform';
-				rafId = requestAnimationFrame(tick);
-			}
-		}
-
-		function scheduleResume() {
-			resumeAt = Date.now() + 2000;
-		}
-
-		function onPointerDown(event: PointerEvent) {
-			if (reducedMotion) return;
-
-			isDragging = true;
-			dragStartX = event.clientX;
-			dragStartOffset = offset;
-			resumeAt = Number.POSITIVE_INFINITY;
-			viewport.classList.add('is-dragging');
-			viewport.setPointerCapture(event.pointerId);
-		}
-
-		function onPointerMove(event: PointerEvent) {
-			if (!isDragging) return;
-
-			offset = dragStartOffset + (event.clientX - dragStartX);
-			normalizeOffset();
-			applyTransform();
-			startLoop();
-		}
-
-		function onPointerUp(event: PointerEvent) {
-			if (!isDragging) return;
-
-			isDragging = false;
-			viewport.classList.remove('is-dragging');
-
-			if (viewport.hasPointerCapture(event.pointerId)) {
-				viewport.releasePointerCapture(event.pointerId);
-			}
-
-			scheduleResume();
-		}
-
-		function onMouseEnter() {
-			isHovered = true;
-		}
-
-		function onMouseLeave() {
-			isHovered = false;
-		}
-
-		measureLoop();
-		viewport.addEventListener('pointerdown', onPointerDown);
-		viewport.addEventListener('pointermove', onPointerMove);
-		viewport.addEventListener('pointerup', onPointerUp);
-		viewport.addEventListener('pointercancel', onPointerUp);
-		viewport.addEventListener('mouseenter', onMouseEnter);
-		viewport.addEventListener('mouseleave', onMouseLeave);
-		window.addEventListener('resize', measureLoop, { passive: true });
-
-		const testimonialsSection = document.getElementById('testimonials');
-		if (testimonialsSection) {
-			const visibilityObserver = new IntersectionObserver(
-				(entries) => {
-					for (const entry of entries) {
-						isVisible = entry.isIntersecting;
-						if (isVisible) startLoop();
-					}
-				},
-				{ threshold: 0, rootMargin: '100px 0px' },
+		function getMetaLines(item: HTMLElement) {
+			return Array.from(
+				item.querySelectorAll<HTMLElement>('.testimonial-item__meta .testimonial-item__line'),
 			);
-			visibilityObserver.observe(testimonialsSection);
 		}
 
-		offset = -loopWidth;
-		applyTransform();
+		function syncMetaText(item: HTMLElement) {
+			const roleText = item.querySelector<HTMLElement>(
+				'.testimonial-item__role .testimonial-item__line-text',
+			);
+			if (!roleText) return;
 
-		return () => {
-			cancelAnimationFrame(rafId);
-			window.removeEventListener('resize', measureLoop);
-			viewport.removeEventListener('pointerdown', onPointerDown);
-			viewport.removeEventListener('pointermove', onPointerMove);
-			viewport.removeEventListener('pointerup', onPointerUp);
-			viewport.removeEventListener('pointercancel', onPointerUp);
-			viewport.removeEventListener('mouseenter', onMouseEnter);
-			viewport.removeEventListener('mouseleave', onMouseLeave);
-		};
+			const key = roleText.dataset.i18n;
+			if (key) {
+				roleText.textContent = t(key, getLocale());
+			}
+		}
+
+		function syncQuoteText(quote: HTMLElement) {
+			const key = quote.dataset.i18n;
+			const text = key
+				? t(key, getLocale())
+				: quote.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+			quote.dataset.originalText = text;
+			return text;
+		}
+
+		function getQuoteText(quote: HTMLElement) {
+			return quote.dataset.originalText || syncQuoteText(quote);
+		}
+
+		function resetQuoteMarkup(quote: HTMLElement) {
+			syncQuoteText(quote);
+			quote.textContent = quote.dataset.originalText ?? '';
+			delete quote.dataset.linesBuilt;
+		}
+
+		function waitForQuoteWidth(quote: HTMLElement): Promise<void> {
+			return new Promise((resolve) => {
+				let attempts = 0;
+
+				const check = () => {
+					if (quote.getBoundingClientRect().width > 0 || attempts >= 12) {
+						resolve();
+						return;
+					}
+
+					attempts += 1;
+					requestAnimationFrame(check);
+				};
+
+				check();
+			});
+		}
+
+		function syncQuoteLineCount(quote: HTMLElement, lineCount: number) {
+			const item = quote.closest<HTMLElement>('[data-testimonial-item]');
+			item?.style.setProperty('--testimonial-quote-lines', String(lineCount));
+		}
+
+		async function buildQuoteLines(quote: HTMLElement): Promise<HTMLElement[]> {
+			const existingLines = Array.from(
+				quote.querySelectorAll<HTMLElement>('.testimonial-item__line'),
+			);
+			if (quote.dataset.linesBuilt === 'true' && existingLines.length > 0) {
+				syncQuoteLineCount(quote, existingLines.length);
+				return existingLines;
+			}
+
+			delete quote.dataset.linesBuilt;
+			await waitForQuoteWidth(quote);
+
+			const text = getQuoteText(quote);
+			const words = text.split(' ').filter(Boolean);
+			if (!words.length) return [];
+
+			const style = getComputedStyle(quote);
+			const fontSize = Number.parseFloat(style.fontSize) || 24;
+			const parsedLineHeight = Number.parseFloat(style.lineHeight);
+			const lineHeight = Number.isFinite(parsedLineHeight) ? parsedLineHeight : fontSize * 1.4;
+			const maxHeight = lineHeight * MAX_LINES;
+
+			quote.textContent = '';
+			const lineTexts: string[] = [];
+			let currentLine = '';
+
+			const countLines = (content: string) => {
+				quote.textContent = content;
+				return Math.max(1, Math.round(quote.scrollHeight / lineHeight));
+			};
+
+			for (let index = 0; index < words.length; index += 1) {
+				const word = words[index];
+				const attempt = currentLine ? `${currentLine} ${word}` : word;
+				const linesBefore = currentLine ? countLines(currentLine) : 0;
+				const linesAfter = countLines(attempt);
+
+				if (currentLine && linesAfter > linesBefore) {
+					lineTexts.push(currentLine);
+					if (lineTexts.length >= MAX_LINES) {
+						let lastLine = lineTexts[MAX_LINES - 1];
+						for (let overflowIndex = index; overflowIndex < words.length; overflowIndex += 1) {
+							const overflowAttempt = `${lastLine} ${words[overflowIndex]}`;
+							quote.textContent = `${overflowAttempt}…`;
+							if (quote.scrollHeight > maxHeight) break;
+							lastLine = overflowAttempt;
+						}
+						lineTexts[MAX_LINES - 1] = `${lastLine}…`;
+						currentLine = '';
+						break;
+					}
+					currentLine = word;
+				} else {
+					currentLine = attempt;
+				}
+			}
+
+			if (currentLine && lineTexts.length < MAX_LINES) {
+				lineTexts.push(currentLine);
+			}
+
+			quote.textContent = '';
+			const lineElements = lineTexts.map((lineText, index) => {
+				const line = document.createElement('span');
+				line.className = 'testimonial-item__line';
+				const lineTextEl = document.createElement('span');
+				lineTextEl.className = 'testimonial-item__line-text';
+				if (index === MAX_LINES - 1 && lineText.endsWith('…')) {
+					lineTextEl.classList.add('testimonial-item__line-text--clamp');
+				}
+				lineTextEl.textContent = lineText;
+				line.appendChild(lineTextEl);
+				quote.appendChild(line);
+				return line;
+			});
+
+			quote.dataset.linesBuilt = 'true';
+			syncQuoteLineCount(quote, lineElements.length);
+			return lineElements;
+		}
+
+		function getQuoteLines(item: HTMLElement) {
+			const quote = getQuoteClamp(item);
+			if (!quote) return Promise.resolve([]);
+			return buildQuoteLines(quote);
+		}
+
+		function setLinesVisible(lines: HTMLElement[], visible: boolean) {
+			lines.forEach((line) => {
+				line.classList.toggle('is-visible', visible);
+				line.classList.remove('is-exiting');
+			});
+		}
+
+		function resetLineMotion(lines: HTMLElement[]) {
+			lines.forEach((line) => {
+				line.classList.remove('is-visible', 'is-exiting');
+			});
+		}
+
+		function delay(ms: number, token: number): Promise<void> {
+			return new Promise((resolve) => {
+				const timerId = window.setTimeout(() => {
+					resolve();
+				}, ms);
+				revealTimers.push(timerId);
+				if (token !== revealToken) resolve();
+			});
+		}
+
+		async function animateCrossfade(
+			currentLines: HTMLElement[],
+			nextLines: HTMLElement[],
+			token: number,
+		) {
+			const totalSteps = Math.max(currentLines.length, nextLines.length + 1);
+
+			for (let step = 0; step < totalSteps; step += 1) {
+				if (token !== revealToken) return;
+
+				if (step < currentLines.length) {
+					const line = currentLines[step];
+					line.classList.remove('is-visible');
+					line.classList.add('is-exiting');
+				}
+
+				if (step > 0 && step - 1 < nextLines.length) {
+					nextLines[step - 1].classList.add('is-visible');
+				}
+
+				if (step < totalSteps - 1) {
+					await delay(LINE_DELAY_MS, token);
+				}
+			}
+
+			await delay(LINE_TRANSITION_MS, token);
+		}
+
+		async function finishCrossfadeTransition(
+			currentItem: HTMLElement,
+			nextItem: HTMLElement,
+			currentLines: HTMLElement[],
+			nextLines: HTMLElement[],
+		) {
+			currentItem.hidden = true;
+			currentItem.classList.remove('is-transitioning', 'is-exiting-quote');
+			nextItem.classList.remove('is-transitioning', 'is-entering-quote');
+			resetLineMotion(currentLines);
+			resetLineMotion(getMetaLines(currentItem));
+			setLinesVisible(nextLines, true);
+			setLinesVisible(getMetaLines(nextItem), true);
+		}
+
+		async function animateLinesIn(lines: HTMLElement[], token: number) {
+			resetLineMotion(lines);
+			for (let index = 0; index < lines.length; index += 1) {
+				if (token !== revealToken) return;
+				lines[index].classList.add('is-visible');
+				if (index < lines.length - 1) {
+					await delay(LINE_DELAY_MS, token);
+				}
+			}
+		}
+
+		let isAnimating = false;
+
+		async function transitionToItem(index: number, options: { animateOut?: boolean } = {}) {
+			const { animateOut = true } = options;
+			const nextIndex = (index + items.length) % items.length;
+			if (isAnimating || nextIndex === activeIndex) return;
+
+			isAnimating = true;
+			clearRevealTimers();
+			const token = ++revealToken;
+
+			const currentItem = items[activeIndex];
+			const nextItem = items[nextIndex];
+			const currentQuote = getQuoteClamp(currentItem);
+			const nextQuote = getQuoteClamp(nextItem);
+			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			if (!animateOut || reducedMotion || !currentQuote || !nextQuote) {
+				if (currentQuote) {
+					const currentLines = await getQuoteLines(currentItem);
+					setLinesVisible(currentLines, false);
+					setLinesVisible(getMetaLines(currentItem), false);
+				}
+
+				if (token !== revealToken) {
+					isAnimating = false;
+					return;
+				}
+
+				currentItem.hidden = true;
+				nextItem.hidden = false;
+				items.forEach((item, itemIndex) => {
+					item.classList.toggle('is-active', itemIndex === nextIndex);
+				});
+				activeIndex = nextIndex;
+
+				resetQuoteMarkup(nextQuote);
+				syncMetaText(nextItem);
+				const nextLines = await buildQuoteLines(nextQuote);
+				setLinesVisible(nextLines, true);
+				setLinesVisible(getMetaLines(nextItem), true);
+				isAnimating = false;
+				return;
+			}
+
+			const currentLines = await getQuoteLines(currentItem);
+			const currentMetaLines = getMetaLines(currentItem);
+
+			nextItem.hidden = false;
+			nextItem.classList.add('is-measuring');
+			resetQuoteMarkup(nextQuote);
+			syncMetaText(nextItem);
+			delete nextQuote.dataset.linesBuilt;
+			const nextLines = await buildQuoteLines(nextQuote);
+			const nextMetaLines = getMetaLines(nextItem);
+			nextItem.classList.remove('is-measuring');
+			resetLineMotion(nextLines);
+			resetLineMotion(nextMetaLines);
+
+			activeIndex = nextIndex;
+			items.forEach((item, itemIndex) => {
+				item.classList.toggle('is-active', itemIndex === nextIndex);
+			});
+
+			currentItem.classList.add('is-transitioning', 'is-exiting-quote');
+			nextItem.classList.add('is-transitioning', 'is-entering-quote');
+
+			await animateCrossfade(
+				[...currentLines, ...currentMetaLines],
+				[...nextLines, ...nextMetaLines],
+				token,
+			);
+
+			if (token !== revealToken) {
+				isAnimating = false;
+				return;
+			}
+
+			finishCrossfadeTransition(currentItem, nextItem, currentLines, nextLines);
+			isAnimating = false;
+		}
+
+		async function revealActiveQuote(animateIn = true) {
+			const activeItem = items[activeIndex];
+			const activeQuote = getQuoteClamp(activeItem);
+			if (!activeQuote) return;
+
+			resetQuoteMarkup(activeQuote);
+			syncMetaText(activeItem);
+			const token = ++revealToken;
+			const lines = await buildQuoteLines(activeQuote);
+			const metaLines = getMetaLines(activeItem);
+			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			if (reducedMotion || !animateIn) {
+				setLinesVisible(lines, true);
+				setLinesVisible(metaLines, true);
+				return;
+			}
+
+			isAnimating = true;
+			await animateLinesIn(lines, token);
+			if (token !== revealToken) {
+				isAnimating = false;
+				return;
+			}
+			await animateLinesIn(metaLines, token);
+			isAnimating = false;
+		}
+
+		items.forEach((item, itemIndex) => {
+			item.hidden = itemIndex !== activeIndex;
+			const quote = getQuoteClamp(item);
+			if (quote) syncQuoteText(quote);
+			syncMetaText(item);
+		});
+
+		void revealActiveQuote();
+
+		prevButton.addEventListener('click', () => {
+			void transitionToItem(activeIndex - 1);
+		});
+
+		nextButton.addEventListener('click', () => {
+			void transitionToItem(activeIndex + 1);
+		});
+
+		document.addEventListener('i18n-applied', () => {
+			items.forEach((item) => {
+				const quote = getQuoteClamp(item);
+				if (quote) resetQuoteMarkup(quote);
+				syncMetaText(item);
+			});
+			void revealActiveQuote(false);
+		});
+
+		window.addEventListener(
+			'resize',
+			() => {
+				const activeQuote = getQuoteClamp(items[activeIndex]);
+				if (!activeQuote) return;
+				resetQuoteMarkup(activeQuote);
+				void buildQuoteLines(activeQuote).then((lines) => {
+					setLinesVisible(lines, true);
+				});
+			},
+			{ passive: true },
+		);
 	}
 
 	function initTestimonialsSection() {
 		initTestimonialsHeadingReveal();
-		initTestimonialsMarquee();
+		initTestimonialsSlider();
 	}
 
 	if (document.readyState === 'loading') {

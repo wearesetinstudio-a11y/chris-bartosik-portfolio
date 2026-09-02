@@ -26,7 +26,7 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 ];
 ---
 
-<section id="contact" class="relative z-20 bg-[#131415] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
+<section id="contact" class="relative bg-[#131415] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
 	<div class="grid gap-8 md:gap-16 lg:grid-cols-2 lg:items-start lg:gap-24">
 		<div class="flex flex-col">
 			<h2 id="contact-heading" class="contact-heading uppercase leading-[1.15] text-setin-fg">
@@ -56,14 +56,13 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 								</span>
 							</span>
 						</span>
-						<img
-							src="/icons/simple-arrow.svg"
-							alt=""
-							width="22"
-							height="18"
-							class="contact-email-cta__arrow"
+						<span
+							class="contact-email-cta__hand"
+							data-contact-cta-hand
 							aria-hidden="true"
-						/>
+						>
+							<img src="/chris-hand-logo.svg" alt="" width="28" height="30" />
+						</span>
 					</span>
 				</a>
 			</div>
@@ -113,6 +112,36 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 </section>
 
 <style is:global>
+	.contact-parallax-shell {
+		--contact-parallax-overlap: min(40vh, 360px);
+		position: relative;
+		z-index: 10;
+		margin-top: calc(-1 * var(--contact-parallax-overlap));
+	}
+
+	.contact-parallax-track {
+		position: relative;
+		transform: translateZ(0);
+		backface-visibility: hidden;
+		will-change: transform;
+	}
+
+	@media (max-width: 767px) {
+		.contact-parallax-shell {
+			--contact-parallax-overlap: min(30vh, 220px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-parallax-shell {
+			margin-top: 0;
+		}
+
+		.contact-parallax-track {
+			will-change: auto;
+		}
+	}
+
 	.contact-heading {
 		font-size: 1.4rem;
 		line-height: 1.15;
@@ -199,7 +228,7 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 	}
 
 	.contact-email-cta__label-line,
-	.contact-email-cta__arrow {
+	.contact-email-cta__hand img {
 		transition:
 			color 0.35s ease,
 			filter 0.35s ease;
@@ -225,12 +254,49 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		color: #18191b;
 	}
 
-	.contact-email-cta__arrow {
-		display: block;
-		width: auto;
-		height: 1rem;
+	.contact-email-cta__hand {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.65rem;
+		height: 1.65rem;
 		flex-shrink: 0;
+		transform-origin: 50% 100%;
+	}
+
+	.contact-email-cta__hand img {
+		display: block;
+		width: 100%;
+		height: auto;
 		filter: brightness(0) invert(1);
+	}
+
+	.contact-email-cta__hand.is-waving {
+		animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s 1;
+	}
+
+	.contact-email-cta:hover .contact-email-cta__hand,
+	.contact-email-cta:focus-visible .contact-email-cta__hand {
+		animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s infinite;
+	}
+
+	@keyframes contact-cta-hand-wave {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0deg);
+		}
+		18% {
+			transform: translateY(0) rotate(18deg);
+		}
+		38% {
+			transform: translateY(0) rotate(-10deg);
+		}
+		58% {
+			transform: translateY(0) rotate(14deg);
+		}
+		78% {
+			transform: translateY(0) rotate(-6deg);
+		}
 	}
 
 	.contact-email-cta:hover,
@@ -239,10 +305,9 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		background-color: #ffffff;
 	}
 
-	.contact-email-cta:hover .contact-email-cta__arrow,
-	.contact-email-cta:focus-visible .contact-email-cta__arrow,
-	.contact-email-cta.is-hovering .contact-email-cta__arrow {
-		filter: brightness(0);
+	.contact-email-cta:hover .contact-email-cta__hand img,
+	.contact-email-cta:focus-visible .contact-email-cta__hand img {
+		filter: none;
 	}
 
 	.contact-social__arrow {
@@ -308,78 +373,87 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 			transform: none;
 		}
 
-		.contact-email-cta:hover .contact-email-cta__arrow,
-		.contact-email-cta:focus-visible .contact-email-cta__arrow,
-		.contact-email-cta.is-hovering .contact-email-cta__arrow {
-			filter: brightness(0);
+		.contact-email-cta:hover .contact-email-cta__hand img,
+		.contact-email-cta:focus-visible .contact-email-cta__hand img {
+			filter: none;
+		}
+
+		.contact-email-cta__hand.is-waving,
+		.contact-email-cta:hover .contact-email-cta__hand,
+		.contact-email-cta:focus-visible .contact-email-cta__hand {
+			animation: none;
 		}
 	}
 </style>
 
 <script>
-	import { wrapRevealLetters } from '../scripts/initScrollLetterReveal.ts';
-
-	function wrapLetters(element: HTMLElement) {
-		wrapRevealLetters(element);
-	}
-
-	function updateContactHeadingReveal() {
-		const heading = document.getElementById('contact-heading');
-		if (!heading) return;
-
-		const chars = heading.querySelectorAll('.reveal-char');
-		if (!chars.length) return;
-
-		const rect = heading.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const startLine = viewportHeight * 0.88;
-		const endLine = viewportHeight * 0.45;
-		const range = startLine - endLine;
-		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
-		const activeCount = Math.ceil(progress * chars.length);
-
-		chars.forEach((char, index) => {
-			char.classList.toggle('active', index < activeCount);
-		});
-	}
-
-	let scrollTicking = false;
-
-	function onContactScroll() {
-		if (scrollTicking) return;
-		scrollTicking = true;
-		requestAnimationFrame(() => {
-			updateContactHeadingReveal();
-			scrollTicking = false;
-		});
-	}
+	import { initScrollLetterReveals } from '../scripts/initScrollLetterReveal.ts';
+	import { initContactParallax } from '../scripts/initContactParallax.ts';
 
 	function initContactHeadingReveal() {
-		const heading = document.getElementById('contact-heading');
-		if (!heading) return;
-
-		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-			wrapLetters(line as HTMLElement);
-		});
-
-		updateContactHeadingReveal();
-
-		if (heading.dataset.revealInit === 'true') return;
-		heading.dataset.revealInit = 'true';
-
-		window.addEventListener('scroll', onContactScroll, { passive: true });
-		window.addEventListener('resize', updateContactHeadingReveal, { passive: true });
+		initScrollLetterReveals(['contact-heading']);
 	}
 
 	function initContactEmailButton() {
 		const section = document.getElementById('contact');
 		const button = document.getElementById('contact-email-cta');
+		const hand = button?.querySelector<HTMLElement>('[data-contact-cta-hand]');
 
 		if (!section || !button || button.dataset.emailInit === 'true') return;
 
 		button.dataset.emailInit = 'true';
 
 		const MAX_MOVE = 10;
+		const HAND_WAVE_INTERVAL_MS = 3000;
+		let handWaveIntervalId: number | null = null;
+		let isButtonHovered = false;
+
+		function stopHandWaveLoop() {
+			if (handWaveIntervalId !== null) {
+				window.clearInterval(handWaveIntervalId);
+				handWaveIntervalId = null;
+			}
+		}
+
+		function playHandWave() {
+			if (!hand || isButtonHovered) return;
+
+			hand.classList.remove('is-waving');
+			void hand.offsetWidth;
+			hand.classList.add('is-waving');
+
+			const onWaveEnd = () => {
+				hand.classList.remove('is-waving');
+				hand.removeEventListener('animationend', onWaveEnd);
+			};
+
+			hand.addEventListener('animationend', onWaveEnd);
+		}
+
+		function startHandWaveLoop() {
+			if (!hand || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+			if (isButtonHovered || handWaveIntervalId !== null) return;
+
+			playHandWave();
+			handWaveIntervalId = window.setInterval(playHandWave, HAND_WAVE_INTERVAL_MS);
+		}
+
+		function pauseHandWaveLoop() {
+			stopHandWaveLoop();
+			hand?.classList.remove('is-waving');
+		}
+
+		function onButtonHoverStart() {
+			if (isButtonHovered) return;
+			isButtonHovered = true;
+			pauseHandWaveLoop();
+		}
+
+		function onButtonHoverEnd() {
+			if (!isButtonHovered) return;
+			isButtonHovered = false;
+			startHandWaveLoop();
+		}
 
 		function onSectionMove(event: MouseEvent) {
 			const rect = button.getBoundingClientRect();
@@ -407,29 +481,21 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 			button.style.transform = 'translate3d(0, 0, 0) scale(1)';
 		}
 
+		button.addEventListener('mouseenter', onButtonHoverStart);
+		button.addEventListener('mouseleave', onButtonHoverEnd);
+		button.addEventListener('focus', onButtonHoverStart);
+		button.addEventListener('blur', onButtonHoverEnd);
+
 		section.addEventListener('mousemove', onSectionMove, { passive: true });
 		section.addEventListener('mouseleave', onSectionLeave, { passive: true });
+
+		startHandWaveLoop();
 	}
 
 	function bootContactSection() {
 		initContactHeadingReveal();
 		initContactEmailButton();
-
-		const section = document.getElementById('contact');
-		if (!section || section.dataset.revealObserved === 'true') return;
-
-		section.dataset.revealObserved = 'true';
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) updateContactHeadingReveal();
-				}
-			},
-			{ threshold: [0, 0.25, 0.5, 0.75, 1] },
-		);
-
-		observer.observe(section);
+		initContactParallax();
 	}
 
 	if (document.readyState === 'loading') {

@@ -44,7 +44,7 @@ const headerClass = waitForIntro
 	data-wait-intro={waitForIntro ? 'true' : 'false'}
 	data-theme={theme}
 	class:list={[
-		'site-header fixed inset-x-0 top-0 z-50 bg-transparent transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]',
+		'site-header fixed inset-x-0 top-0 z-50 bg-transparent transition-[background-color] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]',
 		isLightBg && 'site-header--light-bg',
 		headerClass,
 	]}
@@ -155,6 +155,11 @@ const headerClass = waitForIntro
 		background-color: #131415;
 	}
 
+	.site-header--light-bg.header-solid,
+	.site-header--light-bg.is-scrolled {
+		background-color: #ffffff;
+	}
+
 	.site-header__inner {
 		position: relative;
 		padding-left: calc(var(--page-gutter) - 20px);
@@ -240,57 +245,47 @@ const headerClass = waitForIntro
 		transition: filter 0.35s ease;
 	}
 
-	.site-header--light-bg:not(.header-solid) .site-header__logo-text {
+	.site-header--light-bg:not(.header-solid) .site-header__logo-text,
+	.site-header--light-bg.header-solid .site-header__logo-text {
 		color: #000000;
 	}
 
-	.site-header--light-bg:not(.header-solid) .site-header__logo-mark .logo-mark__name {
+	.site-header--light-bg:not(.header-solid) .site-header__logo-mark .logo-mark__name,
+	.site-header--light-bg.header-solid .site-header__logo-mark .logo-mark__name {
 		filter: brightness(0);
 	}
 
-	.site-header--light-bg.header-solid .site-header__logo-text {
-		color: #f5f5f5;
-	}
-
-	.site-header--light-bg.header-solid .site-header__logo-mark .logo-mark img {
-		filter: none;
-	}
-
-	.site-header--light-bg:not(.header-solid) .lang-switcher {
+	.site-header--light-bg:not(.header-solid) .lang-switcher,
+	.site-header--light-bg.header-solid .lang-switcher {
 		color: #000000;
 	}
 
-	.site-header--light-bg.header-solid .lang-switcher,
-	.site-header:not(.site-header--light-bg) .lang-switcher {
-		color: #f5f5f5;
-	}
-
 	.site-header--light-bg:not(.header-solid) .rolling-link,
-	.site-header--light-bg:not(.header-solid) .rolling-link span {
-		color: #000000 !important;
-	}
-
+	.site-header--light-bg:not(.header-solid) .rolling-link span,
 	.site-header--light-bg.header-solid .rolling-link,
 	.site-header--light-bg.header-solid .rolling-link span {
-		color: #f5f5f5 !important;
+		color: #000000 !important;
 	}
 
 	.site-header--light-bg:not(.header-solid) .work-with-us-button,
-	.site-header--light-bg:not(.header-solid) .work-with-us-button span {
+	.site-header--light-bg:not(.header-solid) .work-with-us-button span,
+	.site-header--light-bg.header-solid .work-with-us-button,
+	.site-header--light-bg.header-solid .work-with-us-button span {
 		color: #000000 !important;
 	}
 
-	.site-header--light-bg:not(.header-solid) .work-with-us-button__underline {
+	.site-header--light-bg:not(.header-solid) .work-with-us-button__underline,
+	.site-header--light-bg.header-solid .work-with-us-button__underline {
 		background-color: #000000 !important;
 	}
 
-	.site-header--light-bg.header-solid .work-with-us-button,
-	.site-header--light-bg.header-solid .work-with-us-button span {
-		color: #f5f5f5 !important;
+	.site-header--light-bg:not(.header-solid) .mobile-nav-toggle,
+	.site-header--light-bg.header-solid .mobile-nav-toggle {
+		color: #000000;
 	}
 
-	.site-header--light-bg.header-solid .work-with-us-button__underline {
-		background-color: #ffffff !important;
+	.site-header--light-bg.header-solid .site-header__inner::after {
+		background-color: rgba(0, 0, 0, 0.12);
 	}
 
 	body.mobile-nav-open .site-header--light-bg .site-header__logo-text,
@@ -379,11 +374,10 @@ const headerClass = waitForIntro
 		right: 1px;
 	}
 
-	.site-header--light-bg:not(.header-solid) .mobile-nav-toggle {
-		color: #000000;
+	.site-header:not(.site-header--light-bg) .lang-switcher {
+		color: #f5f5f5;
 	}
 
-	.site-header--light-bg.header-solid .mobile-nav-toggle,
 	.site-header:not(.site-header--light-bg) .mobile-nav-toggle {
 		color: #f5f5f5;
 	}
@@ -628,6 +622,7 @@ const headerClass = waitForIntro
 		registerMobileNavStateListener,
 		setMobileNavOpen,
 	} from '../scripts/mobileNavPanel.ts';
+	import { onScrollFrame } from '../scripts/scrollFrame.ts';
 	import { t } from '../utils/i18n.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
@@ -667,7 +662,7 @@ const headerClass = waitForIntro
 			header.classList.toggle('is-scrolled', isScrolled);
 
 			if (isLightBg) {
-				header.classList.toggle('header-solid', window.scrollY > 40);
+				header.classList.toggle('header-solid', isScrolled);
 				return;
 			}
 
@@ -681,23 +676,12 @@ const headerClass = waitForIntro
 			header.classList.toggle('header-solid', headlineTop <= headerHeight);
 		}
 
-		let ticking = false;
-
-		function onScroll() {
-			if (ticking) return;
-			ticking = true;
-			requestAnimationFrame(() => {
-				updateHeaderSolid();
-				ticking = false;
-			});
-		}
-
 		updateHeaderSolid();
-		window.addEventListener('scroll', onScroll, { passive: true });
+		const unsubscribeScroll = onScrollFrame(updateHeaderSolid);
 		window.addEventListener('resize', updateHeaderSolid, { passive: true });
 
 		headerScrollCleanup = () => {
-			window.removeEventListener('scroll', onScroll);
+			unsubscribeScroll();
 			window.removeEventListener('resize', updateHeaderSolid);
 		};
 
