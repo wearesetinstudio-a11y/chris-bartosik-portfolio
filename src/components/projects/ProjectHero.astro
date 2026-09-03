@@ -32,12 +32,12 @@ const hasHeroContent = hasTagline || hasMeta;
 const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 ---
 
-<section id="project-hero" class="project-hero relative h-[140svh]">
+<section id="project-hero" class="project-hero relative h-[100svh]">
 	{
 		heroImage ? (
 			<div
 				id="project-hero-visual"
-				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100svh] w-full overflow-hidden bg-[#131415]"
+				class="project-hero-visual pointer-events-none absolute inset-0 isolate z-0 h-full w-full overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
 				<div
@@ -66,7 +66,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 	{
 		hasHeroContent ? (
-			<div class="project-hero__sticky relative z-10 flex h-[100svh] items-end px-[var(--page-gutter)] pb-[128px] pt-28 md:pb-[104px]">
+			<div class="project-hero__sticky relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-10 pt-28">
 				<div
 					class:list={[
 						'project-hero__grid grid w-full items-end gap-[40px] lg:gap-16',
@@ -135,19 +135,11 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 <style is:global>
 	.project-hero {
-		--project-hero-height: 140svh;
-		--project-hero-content-height: 100svh;
+		min-height: 100svh;
 	}
 
 	.project-hero__sticky {
-		position: sticky;
-		top: 0;
-		height: var(--project-hero-content-height);
-	}
-
-	.project-hero-visual.is-hidden {
-		opacity: 0;
-		visibility: hidden;
+		height: 100%;
 	}
 
 	.project-hero-bg {
@@ -189,52 +181,3 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 		}
 	}
 </style>
-
-<script>
-	let cleanupProjectHero: (() => void) | null = null;
-
-	function initProjectHero() {
-		const hero = document.getElementById('project-hero');
-		const visual = document.getElementById('project-hero-visual');
-		if (!hero || !visual) return;
-		if (visual.dataset.heroSyncInit === 'true' && visual.isConnected) return;
-
-		cleanupProjectHero?.();
-
-		let ticking = false;
-
-		const syncHeroVisual = () => {
-			const rect = hero.getBoundingClientRect();
-			const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
-			visual.classList.toggle('is-hidden', !inViewport);
-		};
-
-		const onScroll = () => {
-			if (ticking) return;
-			ticking = true;
-			requestAnimationFrame(() => {
-				syncHeroVisual();
-				ticking = false;
-			});
-		};
-
-		visual.dataset.heroSyncInit = 'true';
-		syncHeroVisual();
-		window.addEventListener('scroll', onScroll, { passive: true });
-		window.addEventListener('resize', syncHeroVisual, { passive: true });
-
-		cleanupProjectHero = () => {
-			window.removeEventListener('scroll', onScroll);
-			window.removeEventListener('resize', syncHeroVisual);
-			delete visual.dataset.heroSyncInit;
-		};
-	}
-
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initProjectHero, { once: true });
-	} else {
-		initProjectHero();
-	}
-
-	document.addEventListener('astro:page-load', initProjectHero);
-</script>
