@@ -79,7 +79,7 @@ const workItemSchema = z.object({
 	quoteAuthor: z.string().optional().default(''),
 	quoteRole: z.string().optional().default(''),
 	quoteLabel: z.string().optional().default(''),
-	year: z.number().optional(),
+	year: z.union([z.number(), z.string()]).optional(),
 	/** Flexible content sections under overview (max 10). */
 	sections: z.array(projectSectionSchema).max(10).optional().default([]),
 	/** @deprecated Prefer `sections` */
