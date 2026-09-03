@@ -230,11 +230,13 @@ const headerClass = waitForIntro
 		opacity: 0.38;
 	}
 
-	.rolling-link--current:hover,
-	.rolling-link--current:focus-visible,
-	.mobile-nav-link--current:hover,
-	.mobile-nav-link--current:focus-visible {
-		opacity: 1;
+	@media (hover: hover) and (pointer: fine) {
+		.rolling-link--current:hover,
+		.rolling-link--current:focus-visible,
+		.mobile-nav-link--current:hover,
+		.mobile-nav-link--current:focus-visible {
+			opacity: 1;
+		}
 	}
 
 	.site-header__logo-text {

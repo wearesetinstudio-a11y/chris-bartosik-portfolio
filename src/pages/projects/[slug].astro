@@ -190,11 +190,11 @@ const navItems: SidebarNavItem[] = [
 		/>
 
 		<div class="project-page__body relative z-10 bg-white pb-20 transition-colors duration-500 lg:pb-0">
-			<div class="project-page__container relative mx-auto w-full px-[var(--page-gutter)] py-12 md:py-20 lg:py-24">
+			<div class="project-page__container relative mx-auto w-full px-[var(--page-gutter)] pt-24 pb-12 md:pt-36 md:pb-20 lg:pt-48 lg:pb-24">
 				<div class="project-page__layout grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_65%] lg:gap-14 xl:gap-20">
 					{navItems.length > 0 ? <ProjectSidebar items={navItems} /> : null}
 
-					<div class="project-page__content flex min-w-0 flex-col gap-14 md:gap-20 lg:gap-24">
+					<div class="project-page__content flex min-w-0 flex-col gap-20 md:gap-28 lg:gap-36">
 						{
 							showOverview ? (
 								<ProjectOverviewSection
@@ -315,29 +315,42 @@ const navItems: SidebarNavItem[] = [
 
 	.project-page__body {
 		background: #ffffff;
+		min-width: 0;
+		max-width: 100%;
+		overflow-x: clip;
+	}
+
+	.project-page__layout,
+	.project-page__content {
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.project-page__body :global(img),
-	.project-page__body :global(video) {
+	.project-page__body :global(video),
+	.project-page__body :global(object),
+	.project-page__body :global(canvas),
+	.project-page__body :global(.rive-player) {
 		display: block;
 		width: 100%;
+		max-width: 100%;
 		height: auto;
 	}
 
 	/* Consistent gutter between consecutive gallery elements if any */
 	.project-page__content > :global(.project-gallery + .project-gallery) {
-		margin-top: calc(var(--project-gallery-gap, 20px) - 3.5rem);
+		margin-top: calc(var(--project-gallery-gap, 32px) - 5rem);
 	}
 
 	@media (min-width: 768px) {
 		.project-page__content > :global(.project-gallery + .project-gallery) {
-			margin-top: calc(var(--project-gallery-gap, 20px) - 5rem);
+			margin-top: calc(var(--project-gallery-gap, 32px) - 7rem);
 		}
 	}
 
 	@media (min-width: 1024px) {
 		.project-page__content > :global(.project-gallery + .project-gallery) {
-			margin-top: calc(var(--project-gallery-gap, 20px) - 6rem);
+			margin-top: calc(var(--project-gallery-gap, 32px) - 9rem);
 		}
 	}
 

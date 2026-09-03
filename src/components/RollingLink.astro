@@ -118,9 +118,19 @@ const lineClass = isFooter
 		transition: color 0.25s ease;
 	}
 
-	.rolling-link--footer:hover,
 	.rolling-link--footer:focus-visible {
 		color: rgba(245, 245, 245, 0.45);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.rolling-link--footer:hover {
+			color: rgba(245, 245, 245, 0.45);
+		}
+
+		.rolling-link--footer:hover .rolling-link__arrow,
+		.rolling-link--footer:focus-visible .rolling-link__arrow {
+			transform: rotate(0deg) translateZ(0);
+		}
 	}
 
 	.rolling-link--footer .site-footer__roll-line {
@@ -142,7 +152,6 @@ const lineClass = isFooter
 		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.rolling-link--footer:hover .rolling-link__arrow,
 	.rolling-link--footer:focus-visible .rolling-link__arrow {
 		transform: rotate(0deg) translateZ(0);
 	}

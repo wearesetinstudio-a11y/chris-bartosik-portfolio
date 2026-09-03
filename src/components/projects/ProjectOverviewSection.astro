@@ -131,12 +131,11 @@ const hasGraphic = Boolean(graphicSrc);
 							) : graphicType === 'video' ? (
 								<video
 									src={graphicSrc}
-									class="block h-auto w-full"
-									autoplay
+									class="project-overview__video block h-auto w-full"
 									muted
 									loop
 									playsinline
-									preload="auto"
+									preload="metadata"
 									aria-label={graphicAlt}
 								/>
 							) : (
@@ -211,7 +210,7 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__heading {
-		margin-top: 1.5rem;
+		margin-top: 2.25rem;
 		margin-bottom: 0;
 		width: 100%;
 		max-width: 100%;
@@ -280,11 +279,22 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__text-wrap {
-		margin-top: 1.5rem;
+		margin-top: 1.75rem;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 2rem;
 		color: rgba(0, 0, 0, 0.7);
+	}
+
+	@media (min-width: 768px) {
+		.project-overview__heading,
+		.project-overview__text-wrap {
+			margin-top: 4rem;
+		}
+
+		.project-overview__text-wrap {
+			gap: 2.25rem;
+		}
 	}
 
 	.project-overview__text-wrap :global(p),
@@ -297,6 +307,12 @@ const hasGraphic = Boolean(graphicSrc);
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: inherit;
+	}
+
+	.project-overview__visual,
+	.project-overview__frame {
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.project-overview__visual {

@@ -50,7 +50,7 @@ const hasBody = hasTitle || hasText;
 			<div class="project-content-block__stack flex w-full flex-col">
 				{
 					hasLabel ? (
-						<p class="project-content-block__label mb-6 flex items-baseline gap-2.5">
+						<p class="project-content-block__label flex items-baseline gap-2.5">
 							<span class="project-content-block__num font-semibold text-black/35">{resolvedNum}</span>
 							<span class="project-content-block__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
 								[
@@ -70,7 +70,7 @@ const hasBody = hasTitle || hasText;
 					hasTitle ? (
 						<h2
 							id={resolvedHeadingId}
-							class="project-content-block__heading mb-6"
+							class="project-content-block__heading"
 							data-project-section-field="title"
 							data-project-field={titleField}
 						>
@@ -86,7 +86,7 @@ const hasBody = hasTitle || hasText;
 				{
 					hasText ? (
 						<div
-							class="project-content-block__copy flex flex-col gap-6"
+							class="project-content-block__copy flex flex-col"
 							data-project-section-field="text"
 							data-project-field={textField}
 							data-project-paragraphs={textField || sectionIndex != null ? 'true' : undefined}
@@ -143,6 +143,7 @@ const hasBody = hasTitle || hasText;
 		line-height: 1.2;
 		color: rgba(0, 0, 0, 0.4);
 		margin-top: 0;
+		margin-bottom: 1.75rem;
 		flex-wrap: nowrap;
 		word-break: normal;
 		overflow-wrap: normal;
@@ -177,6 +178,7 @@ const hasBody = hasTitle || hasText;
 		letter-spacing: var(--letter-spacing-ui);
 		color: #131415;
 		margin-top: 0;
+		margin-bottom: 1.75rem;
 		width: 100%;
 		max-width: 100%;
 	}
@@ -199,6 +201,18 @@ const hasBody = hasTitle || hasText;
 
 	.project-content-block__copy {
 		color: rgba(0, 0, 0, 0.7);
+		gap: 2rem;
+	}
+
+	@media (min-width: 768px) {
+		.project-content-block__label,
+		.project-content-block__heading {
+			margin-bottom: 3rem;
+		}
+
+		.project-content-block__copy {
+			gap: 2.25rem;
+		}
 	}
 
 	.project-content-block__copy :global(p),

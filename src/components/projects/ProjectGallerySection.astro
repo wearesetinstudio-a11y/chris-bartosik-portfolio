@@ -57,29 +57,35 @@ let mediaIndex = startIndex;
 
 <style>
 	:root {
-		--project-gallery-gap: 20px;
+		--project-gallery-gap: 32px;
 	}
 
 	@media (max-width: 767px) {
 		:root {
-			--project-gallery-gap: 12px;
+			--project-gallery-gap: 20px;
 		}
 	}
 
 	.project-gallery {
 		background: transparent;
 		padding-block: 0;
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.project-gallery__stack {
 		display: flex;
 		flex-direction: column;
 		gap: var(--project-gallery-gap);
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.project-gallery__row--full,
 	.project-gallery__row--grid {
 		width: 100%;
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.project-gallery__row--grid {
@@ -88,7 +94,7 @@ let mediaIndex = startIndex;
 	}
 
 	.project-gallery__row--grid-2 {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	@media (min-width: 768px) {
@@ -98,7 +104,7 @@ let mediaIndex = startIndex;
 	}
 
 	.project-gallery__row--grid-3 {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	@media (min-width: 768px) {
@@ -108,7 +114,7 @@ let mediaIndex = startIndex;
 	}
 
 	.project-gallery__row--lead-full {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	@media (min-width: 768px) {
@@ -119,6 +125,22 @@ let mediaIndex = startIndex;
 		.project-gallery__row--lead-full > :global(:first-child) {
 			grid-column: 1 / -1;
 		}
+	}
+
+	.project-gallery__row :global(.project-gallery__item) {
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.project-gallery__row :global(.project-gallery__item img),
+	.project-gallery__row :global(.project-gallery__item video),
+	.project-gallery__row :global(.project-gallery__item object),
+	.project-gallery__row :global(.project-gallery__item canvas),
+	.project-gallery__row :global(.project-gallery__item .rive-player) {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		height: auto;
 	}
 
 	@media (max-width: 767px) {

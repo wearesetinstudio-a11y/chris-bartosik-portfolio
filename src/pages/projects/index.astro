@@ -8,7 +8,9 @@ import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { t } from '../../utils/i18n.ts';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+import { sortProjects } from '../../utils/sortProjects.ts';
+
+const projects = sortProjects(await getCollection('projects'));
 const { projectCount } = await getSiteCounts();
 ---
 

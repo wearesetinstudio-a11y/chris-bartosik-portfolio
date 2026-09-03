@@ -183,11 +183,13 @@ const { items } = Astro.props;
 		color: rgba(255, 255, 255, 0.4);
 	}
 
-	:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__num,
-	:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__label,
-	:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-num,
-	:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-label {
-		color: #ffffff;
+	@media (hover: hover) and (pointer: fine) {
+		:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__num,
+		:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__label,
+		:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-num,
+		:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-label {
+			color: #ffffff;
+		}
 	}
 
 	:global(.project-page--dark) .project-sidebar__link.is-active .project-sidebar__num,

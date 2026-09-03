@@ -51,7 +51,7 @@ const src = withPublicAssetVersion(item.src);
 					muted
 					loop
 					playsinline
-					preload="auto"
+					preload="metadata"
 					aria-label={label}
 				/>
 			</figure>
@@ -59,9 +59,15 @@ const src = withPublicAssetVersion(item.src);
 	}
 
 <style is:global>
+	.project-gallery__item {
+		min-width: 0;
+		max-width: 100%;
+	}
+
 	.project-gallery__item--svg .project-gallery__svg {
 		display: block;
 		width: 100%;
+		max-width: 100%;
 		height: auto;
 		/* Matches Epic web 5.svg viewBox; keeps object from collapsing */
 		aspect-ratio: 1320 / 640;

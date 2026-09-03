@@ -11,41 +11,31 @@ import TestimonialsSection from '../components/TestimonialsSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { sortProjects } from '../utils/sortProjects.ts';
 
 const allProjects = await getCollection('projects');
-const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+const projects = sortProjects(allProjects);
 const { projectCount } = await getSiteCounts();
 ---
 
 <Layout>
-	<Header projectCount={projectCount} waitForIntro={true} />
+	<Header projectCount={projectCount} theme="light-bg" />
 
 	<main class="relative z-20 flex-1">
 		<HeroSection />
 
 		<script>
-			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
+			import { initHeroSparks } from '../scripts/initHeroSparks.ts';
 			import { initHeroTime } from '../scripts/initHeroTime.ts';
-			import { initHeroDescriptionLines } from '../scripts/splitHeroDescription.ts';
-			import { initHeroGlitch } from '../scripts/initHeroGlitch.ts';
-			import { initHeroCtaTilt } from '../scripts/initHeroCtaTilt.ts';
-			import { initHeroBadgeStreak } from '../scripts/initHeroBadgeStreak.ts';
-			import { initHeroHeadlineGlitch } from '../scripts/initHeroHeadlineGlitch.ts';
 
 			function initHeroInteractions() {
-				initHeroParticles();
-				initHeroGlitch();
-				initHeroHeadlineGlitch();
-				initHeroCtaTilt();
-				initHeroBadgeStreak();
+				initHeroSparks();
 			}
 
-			initHeroDescriptionLines();
 			initHeroInteractions();
 			initHeroTime();
 
 			document.addEventListener('astro:page-load', () => {
-				initHeroDescriptionLines();
 				initHeroInteractions();
 				initHeroTime();
 			});
@@ -61,8 +51,11 @@ const { projectCount } = await getSiteCounts();
 
 		<TestimonialsSection />
 
-		<ContactSection />
+		<div class="contact-parallax-shell" data-contact-parallax-shell>
+			<div class="contact-parallax-track" data-contact-parallax-track>
+				<ContactSection />
+				<Footer />
+			</div>
+		</div>
 	</main>
-
-	<Footer />
 </Layout>

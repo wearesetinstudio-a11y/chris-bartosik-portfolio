@@ -32,18 +32,7 @@ function measureBaseline(el: HTMLElement) {
 
 export function initHeroGlitch() {
 	const headline = document.getElementById('hero-headline');
-	const mobile = window.matchMedia('(max-width: 767px)').matches;
-	const scope =
-		(mobile
-			? headline?.querySelector<HTMLElement>('[data-hero-headline-mob]')
-			: headline?.querySelector<HTMLElement>('[data-hero-headline-desk]')) ?? headline;
-
-	const candidates = [...(scope?.querySelectorAll<HTMLElement>('.hero-glitch') ?? [])];
-	const root =
-		candidates.find((node) => {
-			const text = node.querySelector('.hero-glitch__text')?.textContent?.trim();
-			return Boolean(text);
-		}) ?? candidates[0];
+	const root = headline?.querySelector<HTMLElement>('.hero-glitch');
 
 	if (!root) return;
 
@@ -91,6 +80,14 @@ export function initHeroGlitch() {
 	let baselineY = 0;
 	let italicUntil = 0;
 	let italicOn = false;
+
+	function isGlitchActive() {
+		const hero = document.getElementById('hero-section');
+		const roleLine = document.querySelector('[data-hero-intro-group="role-a"]');
+		return Boolean(
+			hero?.classList.contains('is-hero-intro-complete') || roleLine?.classList.contains('is-visible'),
+		);
+	}
 
 	function alphaAt(x: number, y: number) {
 		if (!alphaMap) return 0;
@@ -235,6 +232,13 @@ export function initHeroGlitch() {
 
 	function frame(now: number) {
 		if (!running) return;
+		if (!isGlitchActive()) {
+			if (canvas) {
+				ctx?.clearRect(0, 0, canvas.width, canvas.height);
+			}
+			raf = window.requestAnimationFrame(frame);
+			return;
+		}
 		if (now - lastPattern >= PATTERN_MS) {
 			lastPattern = now;
 			updateItalic(now);
@@ -264,7 +268,12 @@ export function initHeroGlitch() {
 		initHeroGlitch();
 	};
 
+	const onIntroProgress = () => {
+		rebuild();
+	};
+
 	document.addEventListener('i18n-applied', onLocaleChange);
+	document.addEventListener('hero-intro-progress', onIntroProgress);
 	mediaMobile.addEventListener('change', onViewportChange);
 
 	raf = window.requestAnimationFrame(frame);
@@ -274,6 +283,7 @@ export function initHeroGlitch() {
 		window.cancelAnimationFrame(raf);
 		resizeObserver.disconnect();
 		document.removeEventListener('i18n-applied', onLocaleChange);
+		document.removeEventListener('hero-intro-progress', onIntroProgress);
 		mediaMobile.removeEventListener('change', onViewportChange);
 		textEl.style.fontStyle = '';
 	};

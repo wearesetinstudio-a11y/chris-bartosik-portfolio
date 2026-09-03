@@ -33,7 +33,7 @@ const hasMeta = hasAuthor || hasRole;
 		>
 			<div class="project-quote__stack flex w-full flex-col">
 				{hasLabel ? (
-					<p class="project-quote__label mb-8 md:mb-10 flex items-baseline gap-2.5">
+					<p class="project-quote__label flex items-baseline gap-2.5">
 						<span class="project-quote__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
 							[
 							<span
@@ -49,7 +49,7 @@ const hasMeta = hasAuthor || hasRole;
 				) : null}
 
 				{hasQuote ? (
-					<blockquote class="project-quote__blockquote mb-8 md:mb-12">
+					<blockquote class="project-quote__blockquote">
 						<p
 							class="project-quote__text text-[1.35rem] font-medium leading-[1.35] text-black md:text-[1.85rem] md:leading-[1.3] uppercase"
 							data-project-field="quote"
@@ -101,6 +101,18 @@ const hasMeta = hasAuthor || hasRole;
 		font-weight: 600;
 		letter-spacing: 0;
 		line-height: 1.2;
+		margin-bottom: 1.75rem;
+	}
+
+	.project-quote__blockquote {
+		margin: 0 0 1.75rem;
+	}
+
+	@media (min-width: 768px) {
+		.project-quote__label,
+		.project-quote__blockquote {
+			margin-bottom: 3rem;
+		}
 	}
 
 	.project-quote__label-text {

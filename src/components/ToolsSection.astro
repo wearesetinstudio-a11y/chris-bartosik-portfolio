@@ -46,7 +46,6 @@ const tools = [
 <style is:global>
 	.tools-section {
 		position: relative;
-		z-index: 20;
 		display: flex;
 		align-items: center;
 		background-color: #131415;
@@ -121,8 +120,10 @@ const tools = [
 		transition: opacity 0.3s ease;
 	}
 
-	.tools-section__logo:hover {
-		opacity: 1;
+	@media (hover: hover) and (pointer: fine) {
+		.tools-section__logo:hover {
+			opacity: 1;
+		}
 	}
 
 	@keyframes tools-marquee {

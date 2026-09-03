@@ -25,17 +25,17 @@ function syncCanvasSize(canvas: HTMLCanvasElement, host: HTMLElement) {
 
 	canvas.width = Math.floor(width * dpr);
 	canvas.height = Math.floor(height * dpr);
-	canvas.style.width = `${width}px`;
-	canvas.style.height = `${height}px`;
+	canvas.style.width = '100%';
+	canvas.style.height = '100%';
 }
 
 function markCardReady(host: HTMLElement) {
 	host.closest('.project-card__media')?.classList.add('is-ready');
 }
 
-function isRoughlyInView(el: Element, marginRatio = 0.15) {
+function isRoughlyInView(el: Element, viewportHeights = 1) {
 	const rect = el.getBoundingClientRect();
-	const margin = window.innerHeight * marginRatio;
+	const margin = window.innerHeight * viewportHeights;
 	return rect.bottom > -margin && rect.top < window.innerHeight + margin;
 }
 
@@ -113,7 +113,7 @@ function mountRive(host: RiveHost) {
 			}
 			host.__riveLoaded = true;
 			markCardReady(host);
-			startRive(instance);
+			if (host.__riveWantPlay) startRive(instance);
 		},
 		onLoadError: (err) => {
 			console.error('Rive load error for', src, err);
@@ -139,6 +139,7 @@ function pauseHost(host: RiveHost) {
 }
 
 function warmHost(host: RiveHost) {
+	if (host.__riveWantPlay === undefined) host.__riveWantPlay = false;
 	if (!host.__riveBound) mountRive(host);
 }
 
@@ -147,31 +148,41 @@ export function initRivePlayers() {
 	if (!hosts.length) return;
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const warmMargin = '200% 0px';
+	const playMargin = '100% 0px';
 
-	// Warm up / mount all hosts so canvas and Rive assets preload immediately without layout shift
-	for (const host of hosts) {
-		mountRive(host);
-	}
+	let warmObserver: IntersectionObserver | undefined;
+	let playObserver: IntersectionObserver | undefined;
 
-	let observer: IntersectionObserver | undefined;
-
-	if (!reduceMotion && typeof IntersectionObserver !== 'undefined') {
-		observer = new IntersectionObserver(
+	if (typeof IntersectionObserver !== 'undefined') {
+		warmObserver = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
-					const host = entry.target as RiveHost;
-					if (entry.isIntersecting) {
-						playHost(host);
-					} else {
-						pauseHost(host);
-					}
+					if (!entry.isIntersecting) return;
+					warmHost(entry.target as RiveHost);
 				});
 			},
-			{ root: null, rootMargin: '500px 0px', threshold: 0.01 },
+			{ root: null, rootMargin: warmMargin, threshold: 0 },
 		);
 
+		if (!reduceMotion) {
+			playObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						const host = entry.target as RiveHost;
+						if (entry.isIntersecting) playHost(host);
+						else pauseHost(host);
+					});
+				},
+				{ root: null, rootMargin: playMargin, threshold: 0 },
+			);
+		}
+
 		for (const host of hosts) {
-			observer.observe(host);
+			warmObserver.observe(host);
+			playObserver?.observe(host);
+			if (isRoughlyInView(host, 2)) warmHost(host);
+			if (!reduceMotion && isRoughlyInView(host, 1)) playHost(host);
 		}
 	} else if (!reduceMotion) {
 		for (const host of hosts) {
@@ -199,7 +210,8 @@ export function initRivePlayers() {
 		'astro:before-swap',
 		() => {
 			window.removeEventListener('resize', onResize);
-			observer?.disconnect();
+			warmObserver?.disconnect();
+			playObserver?.disconnect();
 			for (const host of hosts) {
 				try {
 					host.__riveInstance?.cleanup();

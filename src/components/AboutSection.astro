@@ -30,6 +30,7 @@ import { t } from '../utils/i18n.ts';
 			<div class="about-content__body">
 				<p data-i18n="about.body1">{t('about.body1', 'en')}</p>
 				<p data-i18n="about.body2">{t('about.body2', 'en')}</p>
+				<p data-i18n="about.body3">{t('about.body3', 'en')}</p>
 			</div>
 
 			<div class="about-copy__cta">
@@ -127,6 +128,10 @@ import { t } from '../utils/i18n.ts';
 		font-weight: 400;
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
+	}
+
+	.about-content__body p:empty {
+		display: none;
 	}
 
 	.about-copy__cta {

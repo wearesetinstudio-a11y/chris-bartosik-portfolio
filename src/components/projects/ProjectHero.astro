@@ -32,17 +32,17 @@ const hasHeroContent = hasTagline || hasMeta;
 const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 ---
 
-<section id="project-hero" class="project-hero relative h-[100svh] overflow-hidden md:h-[85vh]">
+<section id="project-hero" class="project-hero relative h-[140svh]">
 	{
 		heroImage ? (
 			<div
 				id="project-hero-visual"
-				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100svh] w-full overflow-hidden bg-[#131415] md:h-[85vh]"
+				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100svh] w-full overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
 				<div
-					id="project-hero-parallax"
-					class="project-hero-parallax pointer-events-none absolute inset-x-0 bg-cover bg-center"
+					id="project-hero-bg"
+					class="project-hero-bg pointer-events-none absolute inset-0 bg-cover bg-center"
 					style={`background-image: url('${heroImage}');`}
 				>
 					<img
@@ -66,10 +66,10 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 	{
 		hasHeroContent ? (
-			<div class="relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-[92px] pt-28 md:pb-[60px]">
+			<div class="project-hero__sticky relative z-10 flex h-[100svh] items-end px-[var(--page-gutter)] pb-[128px] pt-28 md:pb-[104px]">
 				<div
 					class:list={[
-						'grid w-full items-end gap-[40px] lg:gap-16',
+						'project-hero__grid grid w-full items-end gap-[40px] lg:gap-16',
 						hasTagline && hasMeta
 							? 'grid-cols-1 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)]'
 							: 'grid-cols-1',
@@ -134,21 +134,24 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 </section>
 
 <style is:global>
+	.project-hero {
+		--project-hero-height: 140svh;
+		--project-hero-content-height: 100svh;
+	}
+
+	.project-hero__sticky {
+		position: sticky;
+		top: 0;
+		height: var(--project-hero-content-height);
+	}
+
 	.project-hero-visual.is-hidden {
 		opacity: 0;
 		visibility: hidden;
 	}
 
-	/* Mobile: fill viewport, no parallax overscan/zoom so ~full graphic height stays readable */
-	.project-hero-parallax {
-		top: 0;
-		height: 100%;
-		will-change: transform;
-	}
-
-	.project-hero-background {
-		transform: scale(1);
-		transform-origin: center center;
+	.project-hero-bg {
+		inset: 0;
 	}
 
 	.project-hero__title {
@@ -156,6 +159,9 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 		font-weight: 600;
 		line-height: 1.15;
 		letter-spacing: var(--letter-spacing-ui);
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-touch-callout: none;
 	}
 
 	.project-hero__client-label {
@@ -178,36 +184,8 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 	}
 
 	@media (min-width: 768px) {
-		.project-hero-parallax {
-			top: -12%;
-			height: 124%;
-		}
-
-		.project-hero-background {
-			transform: scale(1.08);
-			transform-origin: center 42%;
-		}
-
 		.project-hero__title {
 			font-size: 2.35rem;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.project-hero-parallax {
-			top: 0;
-			height: 100%;
-			transform: none !important;
-		}
-
-		.project-hero-background {
-			transform: scale(1);
-		}
-
-		@media (min-width: 768px) {
-			.project-hero-background {
-				transform: scale(1.12);
-			}
 		}
 	}
 </style>
@@ -223,31 +201,12 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 		cleanupProjectHero?.();
 
-		const parallax = document.getElementById('project-hero-parallax');
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const mobileMq = window.matchMedia('(max-width: 767px)');
-		/** Total shift across the full time the hero stays in view — keep it subtle/slow */
-		const MAX_SHIFT_RATIO = 0.05;
-
 		let ticking = false;
 
 		const syncHeroVisual = () => {
 			const rect = hero.getBoundingClientRect();
 			const inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
 			visual.classList.toggle('is-hidden', !inViewport);
-
-			// No parallax on mobile: layer is exactly viewport-sized (max graphic height visible)
-			if (!parallax || reduceMotion || mobileMq.matches) {
-				if (parallax && (reduceMotion || mobileMq.matches)) parallax.style.transform = '';
-				return;
-			}
-
-			// 0 at top of page → 1 when hero has fully scrolled past the top edge
-			const scrolled = Math.max(0, -rect.top);
-			const progress = Math.min(1, scrolled / Math.max(1, rect.height));
-			// Scroll down → background moves down (opposite to page content), slowly
-			const offset = progress * visual.offsetHeight * MAX_SHIFT_RATIO;
-			parallax.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
 		const onScroll = () => {
@@ -268,7 +227,6 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 			window.removeEventListener('scroll', onScroll);
 			window.removeEventListener('resize', syncHeroVisual);
 			delete visual.dataset.heroSyncInit;
-			if (parallax) parallax.style.transform = '';
 		};
 	}
 

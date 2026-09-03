@@ -537,22 +537,43 @@ const testimonials = [
 			delete quote.dataset.linesBuilt;
 		}
 
+		function resolveLineHeight(style: CSSStyleDeclaration, fontSize: number) {
+			const raw = style.lineHeight;
+			if (!raw || raw === 'normal') return fontSize * 1.4;
+
+			const parsed = Number.parseFloat(raw);
+			if (!Number.isFinite(parsed)) return fontSize * 1.4;
+			if (raw.endsWith('px')) return parsed;
+			if (raw.endsWith('%')) return fontSize * (parsed / 100);
+			if (raw.endsWith('rem')) {
+				const rootSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+				return parsed * rootSize;
+			}
+			if (raw.endsWith('em')) return parsed * fontSize;
+
+			return parsed * fontSize;
+		}
+
 		function waitForQuoteWidth(quote: HTMLElement): Promise<void> {
-			return new Promise((resolve) => {
-				let attempts = 0;
+			return document.fonts.ready.then(
+				() =>
+					new Promise((resolve) => {
+						let attempts = 0;
 
-				const check = () => {
-					if (quote.getBoundingClientRect().width > 0 || attempts >= 12) {
-						resolve();
-						return;
-					}
+						const check = () => {
+							const width = quote.getBoundingClientRect().width;
+							if (width > 48 || attempts >= 48) {
+								resolve();
+								return;
+							}
 
-					attempts += 1;
-					requestAnimationFrame(check);
-				};
+							attempts += 1;
+							requestAnimationFrame(check);
+						};
 
-				check();
-			});
+						check();
+					}),
+			);
 		}
 
 		function syncQuoteLineCount(quote: HTMLElement, lineCount: number) {
@@ -578,8 +599,7 @@ const testimonials = [
 
 			const style = getComputedStyle(quote);
 			const fontSize = Number.parseFloat(style.fontSize) || 24;
-			const parsedLineHeight = Number.parseFloat(style.lineHeight);
-			const lineHeight = Number.isFinite(parsedLineHeight) ? parsedLineHeight : fontSize * 1.4;
+			const lineHeight = resolveLineHeight(style, fontSize);
 			const maxHeight = lineHeight * MAX_LINES;
 
 			quote.textContent = '';
@@ -637,6 +657,7 @@ const testimonials = [
 			});
 
 			quote.dataset.linesBuilt = 'true';
+			quote.dataset.linesMeasuredWidth = String(quote.getBoundingClientRect().width);
 			syncQuoteLineCount(quote, lineElements.length);
 			return lineElements;
 		}
@@ -868,10 +889,39 @@ const testimonials = [
 				resetQuoteMarkup(activeQuote);
 				void buildQuoteLines(activeQuote).then((lines) => {
 					setLinesVisible(lines, true);
+					const metaLines = getMetaLines(items[activeIndex]);
+					setLinesVisible(metaLines, true);
 				});
 			},
 			{ passive: true },
 		);
+
+		const viewport = section.querySelector<HTMLElement>('.testimonials-slider__viewport');
+		if (viewport) {
+			const layoutObserver = new ResizeObserver(() => {
+				const activeQuote = getQuoteClamp(items[activeIndex]);
+				if (!activeQuote) return;
+
+				const width = activeQuote.getBoundingClientRect().width;
+				if (width < 48) return;
+
+				const builtWidth = Number(activeQuote.dataset.linesMeasuredWidth || 0);
+				if (activeQuote.dataset.linesBuilt === 'true' && Math.abs(width - builtWidth) < 2) {
+					return;
+				}
+
+				if (activeQuote.dataset.linesBuilt === 'true') {
+					resetQuoteMarkup(activeQuote);
+				}
+
+				void buildQuoteLines(activeQuote).then((lines) => {
+					setLinesVisible(lines, true);
+					const metaLines = getMetaLines(items[activeIndex]);
+					setLinesVisible(metaLines, true);
+				});
+			});
+			layoutObserver.observe(viewport);
+		}
 	}
 
 	function initTestimonialsSection() {

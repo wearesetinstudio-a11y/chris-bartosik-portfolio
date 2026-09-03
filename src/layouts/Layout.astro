@@ -77,6 +77,50 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 					var locale = window.localStorage.getItem('portfolio-locale');
 					if (locale) document.documentElement.dataset.locale = locale;
 				} catch (e) {}
+
+				var KEY = 'cb-load-scroll';
+				var TOP = 24;
+				if ('scrollRestoration' in history) {
+					try {
+						history.scrollRestoration = 'manual';
+					} catch (err) {}
+				}
+				function currentY() {
+					return window.scrollY || document.documentElement.scrollTop || 0;
+				}
+				function jumpTo(y) {
+					var html = document.documentElement;
+					var previous = html.style.scrollBehavior;
+					html.style.scrollBehavior = 'auto';
+					window.scrollTo(0, y);
+					html.scrollTop = y;
+					if (document.body) document.body.scrollTop = y;
+					html.style.scrollBehavior = previous;
+				}
+				function save() {
+					var state = window.__cbLoadScroll;
+					var y = state && state.stayTop && !state.cancelled ? 0 : currentY();
+					try {
+						sessionStorage.setItem(KEY, JSON.stringify({ p: path, y: y }));
+					} catch (err) {}
+				}
+				window.addEventListener('pagehide', save);
+				window.addEventListener('beforeunload', save);
+
+				var stayTop = !location.hash;
+				var restoreY = 0;
+				try {
+					var saved = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+					if (saved && saved.p === path) {
+						stayTop = stayTop && saved.y <= TOP;
+						restoreY = saved.y > TOP ? saved.y : 0;
+					}
+				} catch (err) {}
+
+				window.__cbLoadScroll = { stayTop: stayTop, restoreY: restoreY };
+				if (location.hash) return;
+				if (stayTop) jumpTo(0);
+				else if (restoreY) jumpTo(restoreY);
 			})();
 		</script>
 	</head>
@@ -117,12 +161,14 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 		<script>
 			import { initI18n } from '../scripts/initI18n.ts';
 			import { initGlobalPreloader } from '../scripts/initGlobalPreloader.ts';
+			import { initLoadScroll } from '../scripts/initLoadScroll.ts';
 			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
 			import { initRivePlayers } from '../scripts/initRivePlayers.ts';
 
+			initLoadScroll();
 			initI18n();
 			initPageTransitionOverlay();
 			initGlobalPreloader();

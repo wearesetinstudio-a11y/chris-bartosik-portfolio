@@ -128,7 +128,11 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 
 	@media (max-width: 767px) {
 		.contact-parallax-shell {
-			--contact-parallax-overlap: min(30vh, 220px);
+			margin-top: 0;
+		}
+
+		.contact-parallax-track {
+			will-change: auto;
 		}
 	}
 
@@ -242,16 +246,40 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		color: #18191b !important;
 	}
 
-	.contact-email-cta:hover .contact-email-cta__roll-inner,
-	.contact-email-cta:focus-visible .contact-email-cta__roll-inner,
-	.contact-email-cta.is-hovering .contact-email-cta__roll-inner {
-		transform: translateY(-50%);
-	}
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover .contact-email-cta__roll-inner,
+		.contact-email-cta:focus-visible .contact-email-cta__roll-inner,
+		.contact-email-cta.is-hovering .contact-email-cta__roll-inner {
+			transform: translateY(-50%);
+		}
 
-	.contact-email-cta:hover .contact-email-cta__label-line--default,
-	.contact-email-cta:focus-visible .contact-email-cta__label-line--default,
-	.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
-		color: #18191b;
+		.contact-email-cta:hover .contact-email-cta__label-line--default,
+		.contact-email-cta:focus-visible .contact-email-cta__label-line--default,
+		.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
+			color: #18191b;
+		}
+
+		.contact-email-cta:hover .contact-email-cta__hand,
+		.contact-email-cta:focus-visible .contact-email-cta__hand {
+			animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s infinite;
+		}
+
+		.contact-email-cta:hover,
+		.contact-email-cta:focus-visible,
+		.contact-email-cta.is-hovering {
+			background-color: #ffffff;
+		}
+
+		.contact-email-cta:hover .contact-email-cta__hand img,
+		.contact-email-cta:focus-visible .contact-email-cta__hand img,
+		.contact-email-cta.is-hovering .contact-email-cta__hand img {
+			filter: none;
+		}
+
+		.contact-social__link:hover .contact-social__arrow,
+		.contact-social__link:focus-visible .contact-social__arrow {
+			transform: translateX(-6px) rotate(45deg);
+		}
 	}
 
 	.contact-email-cta__hand {
@@ -275,11 +303,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s 1;
 	}
 
-	.contact-email-cta:hover .contact-email-cta__hand,
-	.contact-email-cta:focus-visible .contact-email-cta__hand {
-		animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s infinite;
-	}
-
 	@keyframes contact-cta-hand-wave {
 		0%,
 		100% {
@@ -299,17 +322,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		}
 	}
 
-	.contact-email-cta:hover,
-	.contact-email-cta:focus-visible,
-	.contact-email-cta.is-hovering {
-		background-color: #ffffff;
-	}
-
-	.contact-email-cta:hover .contact-email-cta__hand img,
-	.contact-email-cta:focus-visible .contact-email-cta__hand img {
-		filter: none;
-	}
-
 	.contact-social__arrow {
 		display: block;
 		flex-shrink: 0;
@@ -322,11 +334,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		font-weight: 500;
 		letter-spacing: 0;
 		color: #a3a3a3;
-	}
-
-	.contact-social__link:hover .contact-social__arrow,
-	.contact-social__link:focus-visible .contact-social__arrow {
-		transform: translateX(-6px) rotate(45deg);
 	}
 
 	@media (max-width: 767px) {
@@ -402,6 +409,8 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		if (!section || !button || button.dataset.emailInit === 'true') return;
 
 		button.dataset.emailInit = 'true';
+
+		const finePointer = window.matchMedia('(pointer: fine)').matches;
 
 		const MAX_MOVE = 10;
 		const HAND_WAVE_INTERVAL_MS = 3000;
@@ -481,13 +490,15 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 			button.style.transform = 'translate3d(0, 0, 0) scale(1)';
 		}
 
-		button.addEventListener('mouseenter', onButtonHoverStart);
-		button.addEventListener('mouseleave', onButtonHoverEnd);
 		button.addEventListener('focus', onButtonHoverStart);
 		button.addEventListener('blur', onButtonHoverEnd);
 
-		section.addEventListener('mousemove', onSectionMove, { passive: true });
-		section.addEventListener('mouseleave', onSectionLeave, { passive: true });
+		if (finePointer) {
+			button.addEventListener('mouseenter', onButtonHoverStart);
+			button.addEventListener('mouseleave', onButtonHoverEnd);
+			section.addEventListener('mousemove', onSectionMove, { passive: true });
+			section.addEventListener('mouseleave', onSectionLeave, { passive: true });
+		}
 
 		startHandWaveLoop();
 	}

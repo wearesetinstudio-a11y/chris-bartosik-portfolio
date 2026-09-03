@@ -116,6 +116,12 @@ export const dictionary = {
 		hero: {
 			badgeLocation: 'Panama',
 			badgeAvailability: 'Global remotely',
+			greeting: 'Hi',
+			introBefore: "I'm",
+			introAfter: 'Chris',
+			roleWord1: 'Digital',
+			roleWord2: 'product',
+			roleWord3: 'designer',
 			roleTitle: '[ Digital product designer ]',
 			roleTitleStart: '[ Digital product designer ',
 			roleTitleEnd: ']',
@@ -143,6 +149,8 @@ export const dictionary = {
 			pillar4: 'AI Agents & Automation',
 			viewWork: 'Selected projects',
 			aboutMe: 'About me',
+			specialization:
+				'I design UX/UI, brands, and animations, while delivering functional products through no-code and AI.',
 		},
 		work: {
 			heading: 'Selected projects & collaborations',
@@ -173,19 +181,22 @@ export const dictionary = {
 			line2: '& tools',
 		},
 		testimonials: {
-			line1: 'Clients feedbacks',
-			line2: '& impressions',
+			line1: "Clients' feedbacks",
+			line2: 'and impressions',
 			description:
-				'Clean handoffs and stress-free collaboration outlast any launch date. Here is how founders and product leads describe what it’s actually like to team up with me.',
+				'Smooth deliveries and easy, relaxing teamwork go much farther than any fixed deadline. See below how founders and product managers explain in their own words what a collaboration with me usually looks like.',
 			quote1:
 				'I am more than pleased with the result. Our website has gone from being merely informative to becoming a true representation of who we are as a company.',
 			quote2:
 				"The way Chris built our new Webflow site moved See More to finally show our clients a professional side we're actually proud of.",
 			quote3:
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
+			quote4:
+				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
 			role1: 'CEO of NRV',
 			role2: 'CEO of See More Logistics',
 			role3: 'Owner of TRG',
+			role4: 'Developer',
 		},
 		about: {
 			eyebrow: 'My story',
@@ -193,11 +204,12 @@ export const dictionary = {
 				'I am an independent digital creator who turned a craft obsession into a practice dedicated to quality. I combine design engineering and development to build digital products that last.',
 			kickerBefore: '[Beyond',
 			kickerAfter: 'the pixels]',
-			heading: 'I build products that balance technical precision with creative experiences.',
+			heading: 'I create digital products where precision meets creativity.',
 			body1:
-				'Over the past 5+ years, I’ve built products at the crossroads of product design, motion, and dev execution. I help companies turn complex operational problems into scalable design systems, sharp interfaces, and memorable brand identities.',
+				'For over five years, I have been designing at the intersection of UX/UI, motion design, and code. I build end to end design systems, interfaces, and modern brand identities, turning complex business needs into clear, intuitive experiences.',
 			body2:
-				'I integrate custom AI agent pipelines directly into my day-to-day workflow. This lets me streamline production and deliver assets in record time, without sacrificing a single detail.',
+				'In my daily work, I use AI driven automations. This allows me to deliver polished, production ready design much faster without compromising on quality.',
+			body3: '',
 			readMore: 'Explore my journey',
 			pageTitle: 'About me',
 			pageDescription:
@@ -240,7 +252,7 @@ export const dictionary = {
 			line1: "Let's build something",
 			line2: 'great together',
 			description:
-				'Every successful project starts with a simple conversation. Reach out and let’s create great success together.',
+				'There is no better start to a successful business partnership than a friendly chat. Get in touch today and we will craft together your perfect solution.',
 			sendEmail: 'Get in touch',
 		},
 		meta: {
@@ -257,11 +269,11 @@ export const dictionary = {
 	},
 	pl: {
 		brand: {
-			name: 'Krzysztof Bartosik',
-			firstName: 'Krzysztof',
+			name: 'Chris Bartosik',
+			firstName: 'Chris',
 		},
 		footer: {
-			credit: 'Stworzone z pasją przez Krzysztofa Bartosika',
+			credit: 'Stworzone z pasją przez Chrisa Bartosika',
 			rights: '© 2026 All rights reserved',
 			sitemap: 'Mapa strony',
 			viewAll: 'Wszystkie',
@@ -273,7 +285,7 @@ export const dictionary = {
 			about: 'O mnie',
 			openMenu: 'Otwórz menu',
 			closeMenu: 'Zamknij menu',
-			homeAria: 'Krzysztof Bartosik — strona główna',
+			homeAria: 'Chris Bartosik — strona główna',
 			language: 'Język',
 			main: 'Główne',
 			mobile: 'Mobilne',
@@ -360,6 +372,12 @@ export const dictionary = {
 		hero: {
 			badgeLocation: 'Panama',
 			badgeAvailability: 'Globalnie zdalnie',
+			greeting: 'Hej',
+			introBefore: 'Jestem',
+			introAfter: 'Chris',
+			roleWord1: 'Digital',
+			roleWord2: 'product',
+			roleWord3: 'designer',
 			roleTitle: '[ Digital product designer ]',
 			roleTitleStart: '[ Digital product designer ',
 			roleTitleEnd: ']',
@@ -376,17 +394,19 @@ export const dictionary = {
 			mLine3Glitch: '',
 			mLine3After: '',
 			description:
-				'Nazywam się Krzysztof Bartosik. Łączę dane i agentów AI, tworząc niezawodne produkty cyfrowe.',
-			descriptionLine1: 'Nazywam się Krzysztof Bartosik.',
+				'Nazywam się Chris Bartosik. Łączę dane i agentów AI, tworząc niezawodne produkty cyfrowe.',
+			descriptionLine1: 'Nazywam się Chris Bartosik.',
 			descriptionLine2: 'Łączę dane i agentów AI, tworząc',
 			descriptionLine3: 'niezawodne produkty cyfrowe.',
-			portraitCaption: '[ Cześć! Nazywam się Krzysztof\u00a0Bartosik ]',
+			portraitCaption: '[ Cześć! Nazywam się Chris\u00a0Bartosik ]',
 			pillar1: 'Product & UX/UI Design',
 			pillar2: 'Motion Design',
 			pillar3: 'Wdrożenia AI i no-code',
 			pillar4: 'Automatyzacje z agentami AI',
 			viewWork: 'Wybrane projekty',
 			aboutMe: 'O mnie',
+			specialization:
+				'Projektuję UX/UI, marki i animacje, oraz wdrażam gotowe produkty za pomocą no-code i AI.',
 		},
 		work: {
 			heading: 'Wybrane projekty i realizacje',
@@ -396,7 +416,7 @@ export const dictionary = {
 				'Tworzę produkty, które rozwiązują realne problemy biznesowe. Od koncepcji po wdrożenia wspierane przez agentów AI.',
 			seeAll: 'Zobacz wszystkie projekty',
 			pageTitle: 'Wybrane projekty i realizacje',
-			pageDescription: 'Wybrane projekty Krzysztofa Bartosika.',
+			pageDescription: 'Wybrane projekty Chrisa Bartosika.',
 			filterAll: 'Wszystkie projekty',
 			filterUxUi: 'UX/UI',
 			filterMotion: 'Motion',
@@ -424,12 +444,15 @@ export const dictionary = {
 			quote1:
 				'I am more than pleased with the result. Our website has gone from being merely informative to becoming a true representation of who we are as a company.',
 			quote2:
-				"The way Krzysztof built our new Webflow site moved See More to finally show our clients a professional side we're actually proud of.",
+				"The way Chris built our new Webflow site moved See More to finally show our clients a professional side we're actually proud of.",
 			quote3:
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
+			quote4:
+				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
 			role1: 'CEO NRV',
 			role2: 'CEO See More Logistics',
 			role3: 'Właścicielka TRG',
+			role4: 'Developer',
 		},
 		about: {
 			eyebrow: 'Moja historia',
@@ -438,14 +461,15 @@ export const dictionary = {
 			kickerBefore: '[Poza',
 			kickerAfter: 'pikselami]',
 			heading: 'Tworzę produkty cyfrowe, w których precyzja łączy się z kreatywnością.',
-			body1:
-				'Od ponad pięciu lat projektuję na styku UX/UI, motion designu i kodu. Tworzę kompleksowe design systemy, interfejsy oraz nowoczesne marki, przekształcając skomplikowane potrzeby biznesowe w proste i intuicyjne rozwiązania.',
+			body1: 'Od ponad pięciu lat projektuję na styku UX/UI, motion designu i kodu.',
 			body2:
+				'Tworzę kompleksowe design systemy, interfejsy oraz nowoczesne marki, przekształcając skomplikowane potrzeby biznesowe w proste i intuicyjne rozwiązania.',
+			body3:
 				'W codziennej pracy wykorzystuję automatyzacje z udziałem agentów AI. Pozwala mi to dowozić dojrzałe, dopracowane interfejsy znacznie szybciej i bez jakichkolwiek kompromisów jakościowych.',
 			readMore: 'Przeczytaj całą historię',
 			pageTitle: 'O mnie',
 			pageDescription:
-				'Krzysztof Bartosik — niezależny twórca cyfrowy, design engineer i deweloper.',
+				'Chris Bartosik — niezależny twórca cyfrowy, design engineer i deweloper.',
 		},
 		aboutPage: {
 			role: '[Product designer & AI design specialist]',
@@ -488,7 +512,7 @@ export const dictionary = {
 			sendEmail: 'Napisz do mnie',
 		},
 		meta: {
-			title: 'Krzysztof Bartosik',
+			title: 'Chris Bartosik',
 			description:
 				'Niezależny twórca cyfrowy, design engineer i deweloper wykuwający wysokowydajne doświadczenia cyfrowe.',
 		},
@@ -604,6 +628,12 @@ export const dictionary = {
 		hero: {
 			badgeLocation: 'Panamá',
 			badgeAvailability: 'Remoto global',
+			greeting: 'Hola',
+			introBefore: 'Soy',
+			introAfter: 'Chris',
+			roleWord1: 'Digital',
+			roleWord2: 'product',
+			roleWord3: 'designer',
 			roleTitle: '[ Digital product designer ]',
 			roleTitleStart: '[ Digital product designer ',
 			roleTitleEnd: ']',
@@ -631,6 +661,8 @@ export const dictionary = {
 			pillar4: 'Automatización con IA',
 			viewWork: 'Proyectos seleccionados',
 			aboutMe: 'Sobre mí',
+			specialization:
+				'Diseño UX/UI, marcas y animaciones, implementando productos funcionales con herramientas de no-code e IA.',
 		},
 		work: {
 			heading: 'Proyectos seleccionados y colaboraciones',
@@ -671,9 +703,12 @@ export const dictionary = {
 				"The way Chris built our new Webflow site moved See More to finally show our clients a professional side we're actually proud of.",
 			quote3:
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
+			quote4:
+				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
 			role1: 'CEO de NRV',
 			role2: 'CEO de See More Logistics',
 			role3: 'Propietaria de TRG',
+			role4: 'Developer',
 		},
 		about: {
 			eyebrow: 'Mi historia',
@@ -681,11 +716,12 @@ export const dictionary = {
 				'Soy un creador digital independiente que convirtió una obsesión por el oficio en una práctica dedicada a la calidad. Combino design engineering y desarrollo para construir productos digitales que duran.',
 			kickerBefore: '[Más allá',
 			kickerAfter: 'del píxel]',
-			heading: 'Creo productos digitales donde la precisión técnica se une a la creatividad.',
-			body1:
-				'Llevo más de cinco años impulsando productos en el punto donde se cruzan el diseño UX/UI, la animación y el código. Me especializo en transformar necesidades complejas de negocio en sistemas de diseño escalables, interfaces intuitivas y marcas con identidad propia.',
+			heading: 'Creo productos digitales donde la precisión se une a la creatividad.',
+			body1: 'Durante más de cinco años he diseñado en la intersección entre UX/UI, motion design y código.',
 			body2:
-				'En mi día a día optimizo el trabajo apoyándome en automatizaciones con agentes de IA. Esto me permite desplegar productos digitales de alta madurez visual y técnica, garantizando un acabado impecable en cada entrega.',
+				'Desarrollo sistemas de diseño integrales, interfaces y marcas modernas, transformando necesidades de negocio complejas en soluciones simples e intuitivas.',
+			body3:
+				'En mi día a día me apoyo en automatizaciones con agentes de IA. Esto me permite entregar proyectos maduros y de alta calidad en tiempos reducidos, manteniendo siempre el mejor nivel.',
 			readMore: 'Descubre mi historia',
 			pageTitle: 'Sobre mí',
 			pageDescription:

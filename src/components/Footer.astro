@@ -14,7 +14,9 @@ const locations = [
 const FOOTER_PREVIEW = 3;
 const handSrc = withPublicAssetVersion('/chris-hand-logo.svg');
 
-const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+import { sortProjects } from '../utils/sortProjects.ts';
+
+const allProjects = sortProjects(await getCollection('projects'));
 
 const projectPreview = allProjects.slice(0, FOOTER_PREVIEW);
 const projectsRemaining = Math.max(0, allProjects.length - projectPreview.length);

@@ -63,8 +63,7 @@ const Tag = comingSoon ? 'div' : 'a';
 					muted
 					loop
 					playsinline
-					autoplay
-					preload="auto"
+					preload="metadata"
 					aria-hidden="true"
 				/>
 			) : isImage && coverSrc ? (
@@ -237,9 +236,11 @@ const Tag = comingSoon ? 'div' : 'a';
 		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.project-card:hover .project-card__arrow,
-	.project-card:focus-visible .project-card__arrow {
-		transform: rotate(0deg) translateX(2px);
+	@media (hover: hover) and (pointer: fine) {
+		.project-card:hover .project-card__arrow,
+		.project-card:focus-visible .project-card__arrow {
+			transform: rotate(0deg) translateX(2px);
+		}
 	}
 
 	.project-card--soon {

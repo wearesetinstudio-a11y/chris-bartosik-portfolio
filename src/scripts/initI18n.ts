@@ -15,6 +15,7 @@ function applyI18nToDocument(locale: Locale) {
 
 	document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
 		if (element.closest('[data-reveal-line]')) return;
+		if (element.classList.contains('testimonial-item__quote-clamp')) return;
 
 		const key = element.dataset.i18n;
 		if (!key) return;
@@ -51,8 +52,7 @@ function applyI18nToDocument(locale: Locale) {
 		document.title = document.title
 			.replaceAll('Krzysztof Bartosik', 'Chris Bartosik')
 			.replaceAll('Krzysztofa Bartosika', 'Chrisa Bartosika')
-			.replaceAll('Chris Bartosik', t('brand.name', locale))
-			.replaceAll('Chrisa Bartosika', locale === 'pl' ? 'Krzysztofa Bartosika' : 'Chrisa Bartosika');
+			.replaceAll('Chris Bartosik', t('brand.name', locale));
 	}
 
 	const descriptionMeta = document.querySelector('meta[name="description"]');

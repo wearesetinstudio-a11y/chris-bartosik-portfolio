@@ -35,10 +35,15 @@ const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 		transition: opacity 0.25s ease;
 	}
 
-	.lang-switcher__btn:hover,
-	.lang-switcher__btn:focus-visible,
-	.lang-switcher__btn.is-active {
+	.lang-switcher__btn.is-active,
+	.lang-switcher__btn:focus-visible {
 		opacity: 1;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.lang-switcher__btn:hover {
+			opacity: 1;
+		}
 	}
 
 	.lang-switcher__sep {
@@ -51,6 +56,7 @@ const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 <script>
 	import { getLocale, isLocale, setLocale } from '../utils/i18n.ts';
 	import { applyLocale } from '../scripts/initI18n.ts';
+	import { prepareHeroIntroReplay, replayHeroIntro } from '../scripts/initHeroIntro.ts';
 	import { isIntroSequenceRunning } from '../scripts/introState.ts';
 	import {
 		animatePageTransitionCover,
@@ -85,11 +91,13 @@ const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 				await animatePageTransitionCover({ href: window.location.href, source: null });
 			}
 
+			prepareHeroIntroReplay();
 			applyLocale(locale);
 			syncLanguageSwitcher();
 
 			if (!isIntroSequenceRunning()) {
 				await animatePageTransitionReveal();
+				replayHeroIntro();
 			}
 		} finally {
 			switchingLocale = false;
