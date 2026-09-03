@@ -63,11 +63,11 @@ export const dictionary = {
 			tools: 'Tools',
 			s1Title: 'Product & UX/UI Design',
 			s1Intro:
-				'I design scalable products that align user needs with business goals. From discovery through execution and testing, I ensure consistency, sustainability, and smooth performance across all platforms.',
-			s1F1Title: 'Design System Architecture',
+				'I design functional interfaces and complete digital experiences. I connect business requirements with aesthetic precision, delivering solutions crafted thoughtfully from strategy through execution.',
+			s1F1Title: 'Research & Strategy',
 			s1F1Body:
-				'Building, scaling, and maintaining cohesive design systems in Figma using tokens, variables, and flexible component libraries.',
-			s1F2Title: 'Data-Driven UX',
+				'In the beginning was the... insight. As a digital product designer, I always start with a deep understanding of the problem space. Gathering business requirements, analyzing user behavior, and setting clear objectives are foundational steps I have refined over five years in the industry.',
+			s1F2Title: 'ARCHITECTURE & WIREFRAMING',
 			s1F2Body:
 				'Analyzing real user behavior with Clarity and Google Analytics, combined with A/B testing to optimize conversions.',
 			s1F3Title: 'Cross-Platform Interfaces',
