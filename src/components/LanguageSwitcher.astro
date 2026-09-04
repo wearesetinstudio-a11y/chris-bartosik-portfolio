@@ -87,13 +87,13 @@ const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 				document.getElementById('mobile-nav-toggle')?.click();
 			}
 
-			if (!isIntroSequenceRunning()) {
-				await animatePageTransitionCover({ href: window.location.href, source: null });
-			}
-
 			prepareHeroIntroReplay();
 			applyLocale(locale);
 			syncLanguageSwitcher();
+
+			if (!isIntroSequenceRunning()) {
+				await animatePageTransitionCover({ href: window.location.href, source: null });
+			}
 
 			if (!isIntroSequenceRunning()) {
 				await animatePageTransitionReveal();
