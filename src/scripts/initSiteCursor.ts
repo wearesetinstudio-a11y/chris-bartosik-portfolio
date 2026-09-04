@@ -57,6 +57,19 @@ export function initSiteCursor() {
 		return px >= rect.left && px <= rect.right && py >= rect.top && py <= rect.bottom;
 	}
 
+	function isOverHeader(px: number, py: number) {
+		const header = document.getElementById('site-header');
+		if (!header) return null;
+
+		const rect = header.getBoundingClientRect();
+		if (px < rect.left || px > rect.right || py < rect.top || py > rect.bottom) return null;
+
+		if (header.classList.contains('site-header--light-bg')) return true;
+		if (header.classList.contains('header-solid')) return false;
+
+		return null;
+	}
+
 	function parseRgb(color: string) {
 		const match = color.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/);
 		if (!match) return null;
@@ -85,7 +98,8 @@ export function initSiteCursor() {
 	}
 
 	function useOrangeCursor(px: number, py: number) {
-		return isOverHero(px, py) || isLightSurface(px, py);
+		const headerSurface = isOverHeader(px, py);
+		return headerSurface ?? (isOverHero(px, py) || isLightSurface(px, py));
 	}
 
 	function render() {
