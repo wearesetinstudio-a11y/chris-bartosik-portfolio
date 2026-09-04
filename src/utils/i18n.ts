@@ -90,7 +90,7 @@ export const dictionary = {
 				'Beyond microinteractions, I design motion graphics that cover the whole screen and become an integral part of the visual experience. My work ranges from stepped sliders for big or custom displays to interactive mobile onboarding flows. These complex animations are not decorative because they act as essential components of the user flow that help products stand out.',
 			s2F3Title: 'Generative AI & Video Edition',
 			s2F3Body: 
-				'I integrate generative AI video workflows directly into my creative process to accelerate production and elevate output quality. I produce concise tutorial videos featuring realistic AI avatars that instruct users on actions like proper photo setup, giving them the feeling of interacting with a real expert. I also create hobby historical short films using models like Midjourney, Kling, Seedance, and Magnific AI, bringing static artwork to life through motion.',			s2F4Title: 'Handoff & Dev Specs',
+				'I integrate generative AI video workflows directly into my creative process to accelerate production and elevate output quality. I produce concise tutorial videos featuring realistic AI avatars that instruct users on actions like proper photo setup, giving them the feeling of interacting with a real expert. I also create hobby historical short films using models like Midjourney, Kling, Seedance, and Magnific AI, bringing static artwork to life through motion.',
 			s3Title: 'Development, No-Code & AI',
 			s3Intro: 
 				'Evolving technologies and market shifts create new opportunities for professionals who previously only understood code. Today those same professionals can build and deploy working products independently.',
@@ -99,7 +99,7 @@ export const dictionary = {
 				'Using tools like Claude, Cursor, and VS Code, I build digital products directly within production environments. I create functional solutions ranging from early test prototypes to complete production deployments, bridging the gap between design and real code.',
 			s3F2Title: 'No-Code & Web Platforms',
 			s3F2Body: 
-				'Working on diverse projects required me to bring UX and UI designs to life independently without relying on developers. I learned to build web applications using No-Code platforms such as Webflow and Framer. I deliver scalable, well animated websites with strong SEO optimization that perform exceptionally in the browser.',			s4Title: 'No-code & AI Development',
+				'Working on diverse projects required me to bring UX and UI designs to life independently without relying on developers. I learned to build web applications using No-Code platforms such as Webflow and Framer. I deliver scalable, well animated websites with strong SEO optimization that perform exceptionally in the browser.',
 		},
 		hero: {
 			badgeLocation: 'Panama',
@@ -343,7 +343,7 @@ export const dictionary = {
 				'Dzięki wykorzystaniu nowoczesnych narzędzi takich jak Claude, Cursor czy VS Code tworzę rozwiązania bezpośrednio w realnym środowisku programistycznym. Buduję kompletne projekty od etapu testowych prototypów po pełne wdrożenia produkcyjne, płynnie łącząc projektowanie interfejsów z ich fizyczną realizacją w kodzie.',
 			s3F2Title: 'No-Code & Web Platforms',
 			s3F2Body: 
-				'Praca przy wielu zróżnicowanych projektach wymagała ode mnie niezależności i umiejętności powoływania projektów UX/UI do życia bez stałego wsparcia deweloperów. Opanowałem tworzenie serwisów w narzędziach No-Code, głównie Webflow oraz Framer. Dostarczam dojrzałe, w pełni dopracowane strony, które są dobrze skalowalne, płynnie animowane, zoptymalizowane pod kątem SEO i skutecznie wyróżniają się w sieci.',			s4Title: 'Wdrożenia AI i no-code',
+				'Praca przy wielu zróżnicowanych projektach wymagała ode mnie niezależności i umiejętności powoływania projektów UX/UI do życia bez stałego wsparcia deweloperów. Opanowałem tworzenie serwisów w narzędziach No-Code, głównie Webflow oraz Framer. Dostarczam dojrzałe, w pełni dopracowane strony, które są dobrze skalowalne, płynnie animowane, zoptymalizowane pod kątem SEO i skutecznie wyróżniają się w sieci.',
 		},
 		hero: {
 			badgeLocation: 'Panama',
@@ -587,7 +587,7 @@ export const dictionary = {
 				'Mediante el uso de herramientas como Claude, Cursor y VS Code, creo soluciones directamente en entornos de desarrollo reales. Desarrollo proyectos completos, desde prototipos de prueba hasta despliegues finales en producción, conectando el diseño con la ejecución técnica.',
 			s3F2Title: 'No-Code y Plataformas Web',
 			s3F2Body: 
-				'Mi trabajo en diversos proyectos me exigió la capacidad de dar vida a los diseños de UX y UI sin depender de un desarrollador. Aprendí a construir sitios web utilizando herramientas No-Code como Webflow y Framer. Entrego páginas escalables, con animaciones fluidas, optimización SEO sólida y una gran presencia en el navegador.',				'Definición precisa de prompts y escalado de capacidades para entregar assets visuales pulidos y listos para publicación.',
+				'Mi trabajo en diversos proyectos me exigió la capacidad de dar vida a los diseños de UX y UI sin depender de un desarrollador. Aprendí a construir sitios web utilizando herramientas No-Code como Webflow y Framer. Entrego páginas escalables, con animaciones fluidas, optimización SEO sólida y una gran presencia en el navegador.',
 		},
 		hero: {
 			badgeLocation: 'Panamá',
