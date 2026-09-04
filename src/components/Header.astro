@@ -646,36 +646,27 @@ const headerClass = waitForIntro
 
 		const header = document.getElementById('site-header');
 		if (!header) return;
+		const siteHeader = header;
 
-		const isLightBg = header.dataset.theme === 'light-bg';
-		const headline =
-			document.getElementById('hero-headline') ??
-			document.getElementById('project-hero-headline');
+		const isLightBg = siteHeader.dataset.theme === 'light-bg';
 
 		function updateHeaderSolid() {
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
 
 			if (menuOpen) {
-				header.classList.remove('header-solid', 'is-scrolled');
+				siteHeader.classList.remove('header-solid', 'is-scrolled');
 				return;
 			}
 
 			const isScrolled = window.scrollY > 20;
-			header.classList.toggle('is-scrolled', isScrolled);
+			siteHeader.classList.toggle('is-scrolled', isScrolled);
 
 			if (isLightBg) {
-				header.classList.toggle('header-solid', isScrolled);
+				siteHeader.classList.toggle('header-solid', isScrolled);
 				return;
 			}
 
-			if (!headline) {
-				header.classList.toggle('header-solid', window.scrollY > 40);
-				return;
-			}
-
-			const headlineTop = headline.getBoundingClientRect().top;
-			const headerHeight = header.offsetHeight;
-			header.classList.toggle('header-solid', headlineTop <= headerHeight);
+			siteHeader.classList.toggle('header-solid', isScrolled);
 		}
 
 		updateHeaderSolid();
