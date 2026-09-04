@@ -69,10 +69,16 @@ export const dictionary = {
 				'In the beginning was the... insight. As a digital product designer, I always start with a deep understanding of the problem space. Gathering business requirements, analyzing user behavior, and setting clear objectives are foundational steps I have refined over five years in the industry.',
 			s1F2Title: 'ARCHITECTURE & WIREFRAMING',
 			s1F2Body:
-				'Analyzing real user behavior with Clarity and Google Analytics, combined with A/B testing to optimize conversions.',
-			s1F3Title: 'Cross-Platform Interfaces',
+				'A pretty interface by itself does not drive product adoption. Functionality and delivered value do. That is why before reaching Pixel Perfect UI, I begin with quick sketches, user journey mapping, and Low-Fi wireframes to address the core challenges users face.',
+			s1F3Title: 'HIGH-FIDELITY INTERFACES',
 			s1F3Body:
-				'Designing responsive web solutions (mobile-first), native mobile apps, and custom interfaces like interactive kiosks.',
+				'My UI designs combine a distinct sense of style with brand alignment, while maintaining absolute structural logic. While I focus on detail and striking visual presentation, I consistently integrate standards like accessibility (WCAG) and cohesive visual strategy.',
+			s1F4Title: 'DESIGN SYSTEMS & DEV-CENTERED HANDOFF',
+			s1F4Body:
+				'Creating an attractive mockup in Figma is only half the battle. The real skill lies in delivering a solution engineered for fast and straightforward implementation. Having worked with various Design System architectures, I build systems that are transparent, consistent, and development-oriented.',
+			s1F5Title: 'EVALUATION & OPTIMIZATION',
+			s1F5Body:
+				'Every solution can be refined further, and every flow can be higher-converting. A/B testing, user behavior observation, and heatmap analysis allow me to validate hypotheses and uncover new growth opportunities. I measure the success of a design by its direct impact on the product.',
 			s2Title: 'Motion Design',
 			s2Intro:
 				"Motion isn't decoration, it's clear feedback and UX continuity. I design lightweight, interactive animations that give products a polished, modern feel without sacrificing performance.",
@@ -319,16 +325,22 @@ export const dictionary = {
 			tools: 'Narzędzia',
 			s1Title: 'Product & UX/UI Design',
 			s1Intro:
-				'Projektuję skalowalne produkty, łącząc potrzeby użytkowników z celami biznesowymi. Od fazy discovery po wdrożenie i testy — dbam o spójność, trwałość i płynne działanie na każdej platformie.',
-			s1F1Title: 'Architektura design systemu',
+				'Projektuję funkcjonalne interfejsy i kompleksowe doświadczenia cyfrowe. Łączę potrzeby biznesowe z wyczuciem estetyki, dostarczając rozwiązania przemyślane od strategii po wdrożenie.',
+			s1F1Title: 'RESEARCH & STRATEGIA',
 			s1F1Body:
-				'Budowa, skalowanie i utrzymanie spójnych systemów w Figmie — tokeny, zmienne i elastyczne biblioteki komponentów.',
-			s1F2Title: 'UX oparty na danych',
+				'Na początku była... informacja. Jako projektant produktów cyfrowych zawsze zaczynam od dokładnego zrozumienia przypadku. Zbieranie wymagań biznesowych, analiza zachowań użytkowników i wyznaczanie jasnych celów to fundamenty, które szlifuję od ponad 5 lat pracy w zawodzie.',
+			s1F2Title: 'ARCHITEKTURA & WIREFRAMING',
 			s1F2Body:
-				'Analiza zachowań użytkowników (Clarity, Google Analytics) oraz testy A/B ukierunkowane na optymalizację konwersji.',
-			s1F3Title: 'Interfejsy multiplatformowe',
+				'To nie kolory i ładne kroje pism sprawiają, że użytkownicy korzystają z produktów. Decyduje funkcjonalność i wnoszona wartość. Dlatego zanim powstanie Pixel Perfect UI, zaczynam od szkiców, mapowania ścieżek użytkownika i makiet Low-Fi, aby jak najlepiej odpowiedzieć na podstawowe problemy i wyzwania stojące przed użytkownikami.',
+			s1F3Title: 'HIGH-FIDELITY INTERFACES',
 			s1F3Body:
-				'Projektowanie rozwiązań webowych (mobile-first), natywnych aplikacji mobilnych oraz niestandardowych interfejsów, np. kiosków interaktywnych.',
+				'Moje projekty UI wyróżniają się silnym wyczuciem stylu i spójnością z wytycznymi marki, zachowując przy tym pełną logikę wykonania. Mimo że dbam o dbałość o detale i atrakcyjny odbiór produktów, zawsze uwzględniam standardy, takie jak dostępność (WCAG) oraz spójną strategię wizualną.',
+			s1F4Title: 'DESIGN SYSTEMS & DEV-CENTERED HANDOFF',
+			s1F4Body:
+				'Zrobienie ładnego widoku w Figmie to nie sztuka. Sztuką dla doświadczonego projektanta jest dostarczenie rozwiązania gotowego do szybkiego i prostego wdrożenia. Pracowałem z wieloma typami Design Systemów i wiem, że muszą być przejrzyste, spójne oraz budowane z myślą o wdrożeniach.',
+			s1F5Title: 'EWALUACJA & OPTYMALIZACJA',
+			s1F5Body:
+				'Każde rozwiązanie może być jeszcze lepsze. Testy A/B, obserwacja zachowań użytkowników i analiza heatmap pozwalają nie tylko weryfikować hipotezy, ale też odkrywać nowe kierunki rozwoju. Wartość projektu mierzę jego realnym wpływem na produkt.',
 			s2Title: 'Motion Design',
 			s2Intro:
 				'Motion to nie dekoracja, to czytelny feedback i płynność UX. Projektuję lekkie, interaktywne animacje, które nadają produktom dopracowany, nowoczesny charakter bez utraty wydajności.',
@@ -574,17 +586,23 @@ export const dictionary = {
 			headingLine3: '',
 			tools: 'Herramientas',
 			s1Title: 'Diseño de producto y UX/UI',
-			s1Intro:
-				'Diseño productos escalables alineando las necesidades del usuario con los objetivos de negocio. Desde el discovery hasta la implementación y las pruebas, garantizo consistencia, durabilidad y un rendimiento fluido en cada plataforma.',
-			s1F1Title: 'Arquitectura de Design Systems',
-			s1F1Body:
-				'Creación, escalado y mantenimiento de sistemas de diseño en Figma: tokens, variables y bibliotecas de componentes flexibles.',
-			s1F2Title: 'UX basado en datos',
-			s1F2Body:
-				'Análisis del comportamiento de los usuarios con Clarity y Google Analytics, combinado con tests A/B enfocados en optimizar la conversión.',
-			s1F3Title: 'Interfaces multiplataforma',
-			s1F3Body:
-				'Diseño de soluciones web (mobile-first), aplicaciones móviles nativas e interfaces a medida, como kioscos interactivos.',
+			s1Intro: 
+				'Diseño interfaces funcionales y experiencias digitales completas. Conecto las necesidades del negocio con una cuidada precisión estética, entregando soluciones meditadas desde la estrategia hasta su implementación.',
+			s1F1Title: 'Research y Estrategia',
+			s1F1Body: 
+				'En el principio fue la información. Como diseñador de productos digitales, siempre empiezo comprendiendo a fondo cada caso. La recopilación de requerimientos de negocio, el análisis del comportamiento de los usuarios y la definición de objetivos claros son pilares que he perfeccionado a lo largo de más de cinco años de trayectoria.',
+			s1F2Title: 'Arquitectura y Wireframing',
+			s1F2Body: 
+				'Los colores y las tipografías atractivas no son lo que hace que la gente use un producto. Lo que decide su éxito es la funcionalidad y el valor que aporta. Por eso, antes de llegar al UI Pixel Perfect, comienzo con bocetos, mapas de recorrido de usuario y esquemas Low-Fi para responder a los retos principales a los que se enfrentan los usuarios.',
+			s1F3Title: 'Interfaces High-Fidelity',
+			s1F3Body: 
+				'Mis diseños de UI destacan por un marcado sentido del estilo y coherencia con la identidad de marca, manteniendo una lógica de ejecución impecable. Aunque cuido al máximo el detalle y la estética, garantizo siempre estándares clave como la accesibilidad (WCAG) y una estrategia visual sólida.',
+			s1F4Title: 'Design Systems y Dev-Centered Handoff',
+			s1F4Body: 
+				'Crear una pantalla vistosa en Figma no es un logro completo. La verdadera capacidad de un diseñador radica en entregar una solución lista para una implementación rápida y sencilla. He trabajado con diversos tipos de Design Systems y sé que deben ser claros, coherentes y construidos pensando en los desarrolladores.',
+			s1F5Title: 'Evaluación y Optimización',
+			s1F5Body: 
+				'Cualquier solución puede mejorar. Los test A/B, la observación del usuario y el análisis de mapas de calor me permiten no solo validar hipótesis, sino también descubrir nuevas oportunidades de desarrollo. Mido el valor de un proyecto por su impacto real en el producto.',
 			s2Title: 'Motion Design',
 			s2Intro:
 				'El motion no es decoración, es feedback claro y fluidez en la UX. Diseño animaciones ligeras e interactivas que aportan un acabado moderno y pulido sin comprometer el rendimiento.',
