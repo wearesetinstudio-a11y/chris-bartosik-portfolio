@@ -91,30 +91,15 @@ export const dictionary = {
 			s2F3Title: 'Generative AI & Video Edition',
 			s2F3Body: 
 				'I integrate generative AI video workflows directly into my creative process to accelerate production and elevate output quality. I produce concise tutorial videos featuring realistic AI avatars that instruct users on actions like proper photo setup, giving them the feeling of interacting with a real expert. I also create hobby historical short films using models like Midjourney, Kling, Seedance, and Magnific AI, bringing static artwork to life through motion.',			s2F4Title: 'Handoff & Dev Specs',
-			s3Title: 'AI Agents & Automation',
-			s3Intro:
-				'I integrate AI agents directly into the design workflow. I explore visual concepts, generate custom assets, and build high-end compositions in hours instead of weeks.',
-			s3F1Title: 'Asset & Concept Generation',
-			s3F1Body:
-				'Using generative AI to rapidly explore ideas and create custom visual assets within daily workflows.',
-			s3F2Title: 'High-End Visual Compositions',
-			s3F2Body:
-				'Creating unique graphics, video loops, and dynamic layouts for digital campaigns and brand touchpoints.',
-			s3F3Title: 'Prompt Engineering & Upscaling',
-			s3F3Body:
-				'Precise prompt definition and output scaling to deliver polished, production-ready visual assets.',
-			s4Title: 'No-code & AI Development',
-			s4Intro:
-				'I combine design and code using AI assistants and modern web tools. I efficiently transform complex designs into responsive, production-ready products.',
-			s4F1Title: 'AI-Assisted Web Development',
-			s4F1Body:
-				'Building, prototyping, and deploying custom web platforms using tools like Cursor AI and Claude Code.',
-			s4F2Title: 'Webflow & No-Code Platforms',
-			s4F2Body:
-				'Building scalable Webflow sites with custom CMS structures, animations, and clean, responsive code.',
-			s4F3Title: 'Developer-Ready Handoff',
-			s4F3Body:
-				'Designing with code realities in mind. Structured Figma variables, design tokens, and clear technical specifications.',
+			s3Title: 'Development, No-Code & AI',
+			s3Intro: 
+				'Evolving technologies and market shifts create new opportunities for professionals who previously only understood code. Today those same professionals can build and deploy working products independently.',
+			s3F1Title: 'AI Assisted Development',
+			s3F1Body: 
+				'Using tools like Claude, Cursor, and VS Code, I build digital products directly within production environments. I create functional solutions ranging from early test prototypes to complete production deployments, bridging the gap between design and real code.',
+			s3F2Title: 'No-Code & Web Platforms',
+			s3F2Body: 
+				'Working on diverse projects required me to bring UX and UI designs to life independently without relying on developers. I learned to build web applications using No-Code platforms such as Webflow and Framer. I deliver scalable, well animated websites with strong SEO optimization that perform exceptionally in the browser.',			s4Title: 'No-code & AI Development',
 		},
 		hero: {
 			badgeLocation: 'Panama',
@@ -350,30 +335,15 @@ export const dictionary = {
 			s2F3Title: 'Generative AI & Video Edition',
 			s2F3Body: 
 				'Wraz z rozwojem technologii zacząłem wdrażać w moich procesach kreatywnych narzędzia AI, co znacznie przyspieszyło projektowanie. Tworzę krótkie wideo instruktażowe z realistycznymi postaciami wygenerowanymi przez AI, które pokazują użytkownikowi na przykład jak poprawnie zrobić zdjęcie. Dzięki temu użytkownik ma poczucie kontaktu z żywym ekspertem po drugiej stronie ekranu. Tworzę też hobbistyczne krótkometrażowe filmy historyczne przy użyciu modeli takich jak Midjourney, Kling, Seedance czy Magnific AI, wprawiając statyczne grafiki w ruch i nadając im zupełnie nowy wymiar.',
-			s3Title: 'Automatyzacje z agentami AI',
-			s3Intro:
-				'Wprowadzam agentów AI bezpośrednio w proces projektowy. Tworzę koncepcje wizualne, generuję dedykowane assety i składam zaawansowane kompozycje w godziny, a nie tygodnie.',
-			s3F1Title: 'Produkcja assetów i konceptów',
-			s3F1Body:
-				'Wykorzystanie generative AI do szybkiego eksplorowania pomysłów i tworzenia dedykowanych materiałów wizualnych w codziennym workflow.',
-			s3F2Title: 'Zaawansowane kompozycje wizualne',
-			s3F2Body:
-				'Tworzenie unikalnych grafik, pętli wideo i dynamicznych layoutów na potrzeby kampanii cyfrowych oraz punktów styku z marką.',
-			s3F3Title: 'Prompt engineering i upscaling',
-			s3F3Body:
-				'Precyzyjne definiowanie promptów i skalowanie ich możliwości, by dostarczać gotowe do publikacji, dopracowane assety wizualne.',
-			s4Title: 'Wdrożenia AI i no-code',
-			s4Intro:
-				'Łączę design z kodem wykorzystując asystentów AI oraz nowoczesne narzędzia. Sprawnie zamieniam złożone projekty w responsywne, gotowe do wdrożenia produkty.',
-			s4F1Title: 'Budowa stron ze wsparciem AI',
-			s4F1Body:
-				'Tworzenie, prototypowanie i wdrażanie szytych na miarę platform webowych z wykorzystaniem narzędzi takich jak Cursor AI i Claude Code.',
-			s4F2Title: 'Webflow i platformy no-code',
-			s4F2Body:
-				'Budowa skalowalnych stron na Webflow z dedykowaną strukturą CMS, animacjami i czystym, responsywnym kodem.',
-			s4F3Title: 'Handoff gotowy dla deweloperów',
-			s4F3Body:
-				'Projektowanie z uwzględnieniem realiów kodu. Uporządkowane zmienne w Figmie, design tokens i czytelne specyfikacje techniczne.',
+			s3Title: 'Development, No-Code & AI',
+			s3Intro: 
+				'Dynamicznie zmieniające się technologie i rynek otwierają nowe ścieżki dla osób, które dotychczas głównie rozumiały kod. Dziś te same osoby mogą samodzielnie budować i wdrażać działające produkty.',
+			s3F1Title: 'AI-Assisted Development',
+			s3F1Body: 
+				'Dzięki wykorzystaniu nowoczesnych narzędzi takich jak Claude, Cursor czy VS Code tworzę rozwiązania bezpośrednio w realnym środowisku programistycznym. Buduję kompletne projekty od etapu testowych prototypów po pełne wdrożenia produkcyjne, płynnie łącząc projektowanie interfejsów z ich fizyczną realizacją w kodzie.',
+			s3F2Title: 'No-Code & Web Platforms',
+			s3F2Body: 
+				'Praca przy wielu zróżnicowanych projektach wymagała ode mnie niezależności i umiejętności powoływania projektów UX/UI do życia bez stałego wsparcia deweloperów. Opanowałem tworzenie serwisów w narzędziach No-Code, głównie Webflow oraz Framer. Dostarczam dojrzałe, w pełni dopracowane strony, które są dobrze skalowalne, płynnie animowane, zoptymalizowane pod kątem SEO i skutecznie wyróżniają się w sieci.',			s4Title: 'Wdrożenia AI i no-code',
 		},
 		hero: {
 			badgeLocation: 'Panama',
@@ -609,30 +579,15 @@ export const dictionary = {
 			s2F3Title: 'Generative AI y Edición de Video',
 			s2F3Body: 
 				'Incorporo herramientas de inteligencia artificial en mis procesos creativos para acelerar la producción y mejorar la experiencia final. Genero videos tutoriales breves con avatares fotorrealistas creados con IA que explican procesos complejos, como la toma correcta de fotos, ofreciendo una sensación de acompañamiento profesional. Además, creo cortometrajes históricos personales utilizando modelos como Midjourney, Kling, Seedance y Magnific AI, dando movimiento a imágenes estáticas.',
-			s3Title: 'Automatización con IA',
-			s3Intro:
-				'Integro agentes de IA directamente en el proceso de diseño. Exploro conceptos visuales, genero assets a medida y creo composiciones avanzadas en horas, no semanas.',
-			s3F1Title: 'Producción de assets y conceptos',
-			s3F1Body:
-				'Uso de IA generativa para explorar ideas rápidamente y crear recursos visuales personalizados en el día a día.',
-			s3F2Title: 'Composiciones visuales avanzadas',
-			s3F2Body:
-				'Creación de gráficas únicas, loops de vídeo y layouts dinámicos para campañas digitales y puntos de contacto de la marca.',
-			s3F3Title: 'Ingeniería de prompts y upscaling',
-			s3F3Body:
-				'Definición precisa de prompts y escalado de capacidades para entregar assets visuales pulidos y listos para publicación.',
-			s4Title: 'Desarrollo no-code y IA',
-			s4Intro:
-				'Conecto el diseño con el código utilizando asistentes de IA y herramientas modernas. Transformo de forma eficiente diseños complejos en productos responsivos y listos para producción.',
-			s4F1Title: 'Desarrollo web asistido por IA',
-			s4F1Body:
-				'Creación, prototipado y despliegue de plataformas web a medida utilizando herramientas como Cursor AI y Claude Code.',
-			s4F2Title: 'Webflow y plataformas No-Code',
-			s4F2Body:
-				'Creación de sitios escalables en Webflow con estructuras de CMS personalizadas, animaciones y código limpio y responsivo.',
-			s4F3Title: 'Handoff listo para desarrolladores',
-			s4F3Body:
-				'Diseño teniendo en cuenta las realidades del código. Variables de Figma estructuradas, design tokens y especificaciones técnicas claras.',
+			s3Title: 'Desarrollo, No-Code y IA',
+			s3Intro: 
+				'La rápida evolución de la tecnología abre nuevos caminos para quienes antes solo entendían el código. Hoy en día es posible crear y desplegar productos funcionales de manera directa e independiente.',
+			s3F1Title: 'Desarrollo asistido por IA',
+			s3F1Body: 
+				'Mediante el uso de herramientas como Claude, Cursor y VS Code, creo soluciones directamente en entornos de desarrollo reales. Desarrollo proyectos completos, desde prototipos de prueba hasta despliegues finales en producción, conectando el diseño con la ejecución técnica.',
+			s3F2Title: 'No-Code y Plataformas Web',
+			s3F2Body: 
+				'Mi trabajo en diversos proyectos me exigió la capacidad de dar vida a los diseños de UX y UI sin depender de un desarrollador. Aprendí a construir sitios web utilizando herramientas No-Code como Webflow y Framer. Entrego páginas escalables, con animaciones fluidas, optimización SEO sólida y una gran presencia en el navegador.',				'Definición precisa de prompts y escalado de capacidades para entregar assets visuales pulidos y listos para publicación.',
 		},
 		hero: {
 			badgeLocation: 'Panamá',
