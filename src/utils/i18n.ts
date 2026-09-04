@@ -80,20 +80,17 @@ export const dictionary = {
 			s1F5Body:
 				'Every solution can be refined further, and every flow can be higher-converting. A/B testing, user behavior observation, and heatmap analysis allow me to validate hypotheses and uncover new growth opportunities. I measure the success of a design by its direct impact on the product.',
 			s2Title: 'Motion Design',
-			s2Intro:
-				"Motion isn't decoration, it's clear feedback and UX continuity. I design lightweight, interactive animations that give products a polished, modern feel without sacrificing performance.",
-			s2F1Title: 'Rive & State Machines',
-			s2F1Body:
-				'Creating interactive animations and state-driven UI logic that react in real time to user actions.',
-			s2F2Title: 'UI Polish & Micro-interactions',
-			s2F2Body:
-				'Elevating interface quality through functional micro-interactions, state transitions, and instant visual feedback.',
-			s2F3Title: 'Handoff & Dev Specs',
-			s2F3Body:
-				'Preparing production-ready reference assets and Rive files for seamless front-end integration.',
-			s2F4Title: 'Handoff & Dev Specs',
-			s2F4Body:
-				'Preparing production-ready reference assets and Rive files for seamless front-end integration.',
+			s2Intro: 
+				'Over the years I have learned that every detail matters in design. I create motion and interactions that make digital products feel alive, responsive, and engaging.',
+			s2F1Title: 'Micro-interactions & UX Polish',
+			s2F1Body: 
+				'I design every UI element with user interaction in mind. From subtle button states defined directly for code implementation to complex interactive components built in Rive. My time at PhotoAid gave me the space to explore creative solutions. I map out the strategy, design the assets, and handle handoff and testing myself. I view microinteractions as building a journey step by step. A solid flow is the baseline, but refined microinteractions deliver instant visual feedback that makes an interface feel truly tactile.',
+			s2F2Title: 'Advanced Animations & Macro Motion',
+			s2F2Body: 
+				'Beyond microinteractions, I design motion graphics that cover the whole screen and become an integral part of the visual experience. My work ranges from stepped sliders for big or custom displays to interactive mobile onboarding flows. These complex animations are not decorative because they act as essential components of the user flow that help products stand out.',
+			s2F3Title: 'Generative AI & Video Edition',
+			s2F3Body: 
+				'I integrate generative AI video workflows directly into my creative process to accelerate production and elevate output quality. I produce concise tutorial videos featuring realistic AI avatars that instruct users on actions like proper photo setup, giving them the feeling of interacting with a real expert. I also create hobby historical short films using models like Midjourney, Kling, Seedance, and Magnific AI, bringing static artwork to life through motion.',			s2F4Title: 'Handoff & Dev Specs',
 			s3Title: 'AI Agents & Automation',
 			s3Intro:
 				'I integrate AI agents directly into the design workflow. I explore visual concepts, generate custom assets, and build high-end compositions in hours instead of weeks.',
@@ -342,20 +339,17 @@ export const dictionary = {
 			s1F5Body:
 				'Każde rozwiązanie może być jeszcze lepsze. Testy A/B, obserwacja zachowań użytkowników i analiza heatmap pozwalają nie tylko weryfikować hipotezy, ale też odkrywać nowe kierunki rozwoju. Wartość projektu mierzę jego realnym wpływem na produkt.',
 			s2Title: 'Motion Design',
-			s2Intro:
-				'Motion to nie dekoracja, to czytelny feedback i płynność UX. Projektuję lekkie, interaktywne animacje, które nadają produktom dopracowany, nowoczesny charakter bez utraty wydajności.',
-			s2F1Title: 'Rive & State Machines',
-			s2F1Body:
-				'Tworzenie interaktywnych animacji i logiki UI opartej na stanach, które reagują w czasie rzeczywistym na akcje użytkownika.',
-			s2F2Title: 'Projektowanie UI i mikrointerakcji',
-			s2F2Body:
-				'Podnoszenie jakości interfejsu poprzez funkcjonalne mikrointerakcje, przejścia między stanami i natychmiastowy feedback wizualny.',
-			s2F3Title: 'Handoff i specyfikacja dla devów',
-			s2F3Body:
-				'Przygotowanie gotowych assetów referencyjnych oraz plików Rive do bezproblemowej integracji z front-endem.',
-			s2F4Title: 'Handoff i specyfikacja dla devów',
-			s2F4Body:
-				'Przygotowanie gotowych assetów referencyjnych oraz plików Rive do bezproblemowej integracji z front-endem.',
+			s2Intro: 
+				'Na przestrzeni lat nauczyłem się, że w projektowaniu każdy detal ma znaczenie. Tworzę ruch i interakcje, które sprawiają, że produkt staje się żywy, przewidywalny i angażujący dla użytkownika.',
+			s2F1Title: 'Mikrointerakcje & UX Polish',
+			s2F1Body: 
+				'Myślę o każdym elemencie w kontekście jego interakcji z użytkownikiem. Od prostych reakcji przycisków kodowanych bezpośrednio w UI, po złożone stany i animacje projektowane w Rive. Praca w PhotoAid dała mi przestrzeń do wdrażania kreatywnych rozwiązań. Samodzielnie projektuję strategię, plan i wykonanie mikroanimacji, a potem odpowiadam za ich wdrożenie i testy. Traktuję te detale jak budowanie ścieżki kamyczek po kamyczku. Dobre flow to podstawa, ale to właśnie dopracowane mikrointerakcje dają użytkownikowi natychmiastowy feedback i poczucie, że interfejs reaguje na każdy jego gest.',
+			s2F2Title: 'Zaawansowane Animacje & Macro Motion',
+			s2F2Body: 
+				'Tworzę też złożone animacje na pełny ekran, które stają się nieodłączną częścią całego procesu wizualnego. Projektowałem zarówno skokowe slidery na duże i niestandardowe ekrany, jak i interaktywne onboardingi na urządzenia mobilne. Tego typu rozwiązania to nie dekoracja, ale pełnoprawny element flow, który buduje doświadczenie i pozwala produktowi wyróżnić się na rynku.',
+			s2F3Title: 'Generative AI & Video Edition',
+			s2F3Body: 
+				'Wraz z rozwojem technologii zacząłem wdrażać w moich procesach kreatywnych narzędzia AI, co znacznie przyspieszyło projektowanie. Tworzę krótkie wideo instruktażowe z realistycznymi postaciami wygenerowanymi przez AI, które pokazują użytkownikowi na przykład jak poprawnie zrobić zdjęcie. Dzięki temu użytkownik ma poczucie kontaktu z żywym ekspertem po drugiej stronie ekranu. Tworzę też hobbistyczne krótkometrażowe filmy historyczne przy użyciu modeli takich jak Midjourney, Kling, Seedance czy Magnific AI, wprawiając statyczne grafiki w ruch i nadając im zupełnie nowy wymiar.',
 			s3Title: 'Automatyzacje z agentami AI',
 			s3Intro:
 				'Wprowadzam agentów AI bezpośrednio w proces projektowy. Tworzę koncepcje wizualne, generuję dedykowane assety i składam zaawansowane kompozycje w godziny, a nie tygodnie.',
@@ -463,7 +457,7 @@ export const dictionary = {
 				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
 			role1: 'CEO NRV',
 			role2: 'CEO See More Logistics',
-			role3: 'Właścicielka TRG',
+			role3: 'CEO TRG',
 			role4: 'Developer',
 		},
 		about: {
@@ -604,20 +598,17 @@ export const dictionary = {
 			s1F5Body: 
 				'Cualquier solución puede mejorar. Los test A/B, la observación del usuario y el análisis de mapas de calor me permiten no solo validar hipótesis, sino también descubrir nuevas oportunidades de desarrollo. Mido el valor de un proyecto por su impacto real en el producto.',
 			s2Title: 'Motion Design',
-			s2Intro:
-				'El motion no es decoración, es feedback claro y fluidez en la UX. Diseño animaciones ligeras e interactivas que aportan un acabado moderno y pulido sin comprometer el rendimiento.',
-			s2F1Title: 'Rive y State Machines',
-			s2F1Body:
-				'Creación de animaciones interactivas y lógica de UI basada en estados que responde en tiempo real a las acciones del usuario.',
-			s2F2Title: 'Detalles de UI y microinteracciones',
-			s2F2Body:
-				'Mejora de la interfaz mediante microinteracciones funcionales, transiciones entre estados y feedback visual inmediato.',
-			s2F3Title: 'Handoff y especificación para dev',
-			s2F3Body:
-				'Preparación de assets de referencia listos para producción y archivos Rive para una integración fluida en el front-end.',
-			s2F4Title: 'Handoff y especificación para dev',
-			s2F4Body:
-				'Preparación de assets de referencia listos para producción y archivos Rive para una integración fluida en el front-end.',
+			s2Intro: 
+				'A lo largo de los años he aprendido que cada detalle importa en el diseño. Creo movimiento e interacciones que hacen que los productos digitales cobren vida y sean intuitivos.',
+			s2F1Title: 'Microinteracciones',
+			s2F1Body: 
+				'Diseño cada elemento pensando en su interacción con el usuario. Desde estados simples en botones definidos para código hasta animaciones complejas desarrolladas en Rive. Mi etapa en PhotoAid me permitió implementar soluciones altamente creativas. Diseño la estrategia, ejecuto las animaciones y superviso las pruebas tras el despliegue. Considero estas microinteracciones como construir un proceso piedra a piedra. Un flujo básico debe ser funcional, pero las microinteracciones cuidadas aportan un feedback inmediato que hace sentir la interfaz real.',
+			s2F2Title: 'Animaciones Avanzadas y Macro Motion',
+			s2F2Body: 
+				'Diseño animaciones complejas a gran escala que forman parte activa del flujo visual principal. He desarrollado desde sliders a pantalla completa para monitores grandes y formatos no estándar, hasta procesos de bienvenida móviles e interactivos. Este tipo de movimiento no es simple decoración, sino una parte fundamental del producto que aporta una clara diferenciación en el mercado.',
+			s2F3Title: 'Generative AI y Edición de Video',
+			s2F3Body: 
+				'Incorporo herramientas de inteligencia artificial en mis procesos creativos para acelerar la producción y mejorar la experiencia final. Genero videos tutoriales breves con avatares fotorrealistas creados con IA que explican procesos complejos, como la toma correcta de fotos, ofreciendo una sensación de acompañamiento profesional. Además, creo cortometrajes históricos personales utilizando modelos como Midjourney, Kling, Seedance y Magnific AI, dando movimiento a imágenes estáticas.',
 			s3Title: 'Automatización con IA',
 			s3Intro:
 				'Integro agentes de IA directamente en el proceso de diseño. Exploro conceptos visuales, genero assets a medida y creo composiciones avanzadas en horas, no semanas.',
