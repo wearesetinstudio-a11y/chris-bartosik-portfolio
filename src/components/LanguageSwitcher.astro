@@ -88,12 +88,13 @@ const switcherLocales: Locale[] = ['pl', 'en', 'pa'];
 			}
 
 			prepareHeroIntroReplay();
-			applyLocale(locale);
-			syncLanguageSwitcher();
 
 			if (!isIntroSequenceRunning()) {
 				await animatePageTransitionCover({ href: window.location.href, source: null });
 			}
+
+			applyLocale(locale);
+			syncLanguageSwitcher();
 
 			if (!isIntroSequenceRunning()) {
 				await animatePageTransitionReveal();
