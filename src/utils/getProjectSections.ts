@@ -46,7 +46,7 @@ function themeForSectionIndex(index: number): ProjectSectionTheme {
 }
 
 export function isSummaryLabel(label: string): boolean {
-	return /summar|podsum|resultado|resumen/i.test(label);
+	return /summar|podsum|resultado|resumen|outcome|efekt|results/i.test(label);
 }
 
 function stripLabelBrackets(label: string): string {

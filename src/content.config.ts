@@ -75,6 +75,7 @@ const workItemSchema = z.object({
 	overviewTitle: z.string().optional().default(''),
 	overviewText: z.string().optional().default(''),
 	overviewGraphic: z.string().optional().default(''),
+	overviewYoutube: z.string().optional().default(''),
 	quote: z.string().optional().default(''),
 	quoteAuthor: z.string().optional().default(''),
 	quoteRole: z.string().optional().default(''),

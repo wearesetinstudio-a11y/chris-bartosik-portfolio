@@ -11,7 +11,7 @@ interface Props {
 	title: string;
 	text: string;
 	graphicSrc?: string;
-	graphicType?: 'image' | 'video' | 'rive' | 'svg';
+	graphicType?: 'image' | 'video' | 'rive' | 'svg' | 'youtube';
 	graphicAlt?: string;
 	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
 }
@@ -109,7 +109,19 @@ const hasGraphic = Boolean(graphicSrc);
 				<div class="project-overview__visual mt-12 w-full md:mt-16">
 					<div class="project-overview__frame w-full overflow-hidden">
 						{
-							graphicType === 'rive' ? (
+							graphicType === 'youtube' ? (
+								<div class="project-overview__youtube relative aspect-video w-full">
+									<iframe
+										src={graphicSrc}
+										title={graphicAlt || label}
+										class="absolute inset-0 h-full w-full border-0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+										referrerpolicy="strict-origin-when-cross-origin"
+										allowfullscreen
+										loading="lazy"
+									/>
+								</div>
+							) : graphicType === 'rive' ? (
 								<RivePlayer src={graphicSrc} fit="contain" label={graphicAlt} />
 							) : graphicType === 'svg' ? (
 								<object

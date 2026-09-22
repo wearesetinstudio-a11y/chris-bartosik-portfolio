@@ -18,6 +18,7 @@ import {
 	type GalleryLayoutBlock,
 } from '../../utils/getProjectGallery';
 import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
+import { getYouTubeEmbedUrl } from '../../utils/youtube.ts';
 import { t } from '../../utils/i18n.ts';
 import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
 import {
@@ -64,13 +65,36 @@ const overviewLabel = customOverviewLabel || t('project.overview', 'en');
 const overviewUsesI18nDefault = !customOverviewLabel;
 const overviewTitle = data.overviewTitle ?? '';
 const overviewText = data.overviewText ?? '';
-const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
+const overviewYoutubeEmbed = data.overviewYoutube
+	? getYouTubeEmbedUrl(data.overviewYoutube)
+	: null;
 const hasGroupOne = galleryLayout.some((block) => block.group === 1);
-const overviewGraphicSrc = hasGroupOne
-	? (data.overviewGraphic ? withPublicAssetVersion(data.overviewGraphic) : undefined)
-	: (data.overviewGraphic ? withPublicAssetVersion(data.overviewGraphic) : (overviewGraphicItem ? withPublicAssetVersion(overviewGraphicItem.src) : undefined));
-const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
-const pageGalleryLayout = galleryLayout;
+const overviewGraphicItem = overviewYoutubeEmbed
+	? null
+	: hasGroupOne
+		? null
+		: getOverviewGraphic(folderName, coverFilename);
+const overviewGraphicSrc = overviewYoutubeEmbed
+	? overviewYoutubeEmbed
+	: data.overviewGraphic
+		? withPublicAssetVersion(data.overviewGraphic)
+		: overviewGraphicItem
+			? withPublicAssetVersion(overviewGraphicItem.src)
+			: undefined;
+const overviewGraphicType = overviewYoutubeEmbed
+	? ('youtube' as const)
+	: overviewGraphicItem?.type === 'video'
+		? ('video' as const)
+		: overviewGraphicItem?.type === 'rive'
+			? ('rive' as const)
+			: overviewGraphicItem?.type === 'svg' || data.overviewGraphic?.endsWith('.svg')
+				? ('svg' as const)
+				: ('image' as const);
+
+// YouTube owns slot 1 — remove file-based group 1 from the gallery stream.
+const pageGalleryLayout = overviewYoutubeEmbed
+	? galleryLayout.filter((block) => block.group !== 1)
+	: galleryLayout;
 
 const quote = data.quote ?? '';
 const quoteAuthor = data.quoteAuthor ?? '';
@@ -115,7 +139,7 @@ const infoRows = [
 		: null,
 ].filter((row): row is InfoRow => row !== null);
 
-const showOverview = Boolean(overviewTitle || overviewText || infoRows.length);
+const showOverview = Boolean(overviewTitle || overviewText || infoRows.length || overviewGraphicSrc);
 const pageDescription =
 	projectSections.find((section) => section.text)?.text ||
 	overviewText ||

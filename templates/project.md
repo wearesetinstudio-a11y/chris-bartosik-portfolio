@@ -21,6 +21,7 @@
 # PUSTE POLE = element ukryty na stronie (label / title / text / info row / live…)
 # theme sekcji: light | dark | muted
 # categories: ux-ui | motion | branding | development | ai
+# overviewYoutube: optional YouTube URL shown as first overview media (replaces gallery group 1)
 # =============================================================================
 
 # --- Karta / lista projektów ---
