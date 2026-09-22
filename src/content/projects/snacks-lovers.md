@@ -1,7 +1,7 @@
 ---
 title: Snacks Lovers
 client: Snacks Lovers
-tags: ['Branding', 'Visual Identity', 'Webflow']
+tags: ['Branding', 'Development']
 categories: ['branding', 'development']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'

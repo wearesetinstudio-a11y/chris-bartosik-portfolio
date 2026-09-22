@@ -20,7 +20,7 @@
 #
 # PUSTE POLE = element ukryty na stronie (label / title / text / info row / live…)
 # theme sekcji: light | dark | muted
-# categories: ux-ui | motion | ai-engineering | development | branding
+# categories: ux-ui | motion | branding | development | ai
 # =============================================================================
 
 # --- Karta / lista projektów ---

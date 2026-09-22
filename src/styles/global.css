@@ -459,8 +459,25 @@ body.intro-active {
 	height: 12px;
 	border-radius: 0;
 	background-color: #ffffff;
-	transform: translate(-50%, -50%);
-	transition: background-color 0.22s ease;
+	transform: translate(-50%, -50%) scale(1);
+	transition:
+		background-color 0.22s ease,
+		transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+	will-change: transform;
+}
+
+.site-cursor.is-hover .site-cursor__dot {
+	transform: translate(-50%, -50%) scale(1.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site-cursor__dot {
+		transition: background-color 0.22s ease;
+	}
+
+	.site-cursor.is-hover .site-cursor__dot {
+		transform: translate(-50%, -50%) scale(1.35);
+	}
 }
 
 .site-cursor__glow {
@@ -515,6 +532,16 @@ body.intro-active {
 	html.has-site-cursor,
 	html.has-site-cursor * {
 		cursor: auto !important;
+	}
+}
+
+#contact {
+	scroll-margin-top: 72px;
+}
+
+@media (min-width: 768px) {
+	#contact {
+		scroll-margin-top: 100px;
 	}
 }
 

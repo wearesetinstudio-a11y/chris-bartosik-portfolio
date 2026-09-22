@@ -2,8 +2,7 @@
 title: Agencia Panamá Pacífico Rebranding
 client: Agencia Panamá Pacífico
 tags:
-  - branding
-  - rebranding
+  - Branding
 categories:
   - branding
 thumbnail: /portfolio/app/Cover.webm

@@ -2,14 +2,13 @@
 title: PhotoAiD Biometric App
 client: PhotoAiD
 tags:
-  - ux/ui
-  - motion
-  - app
-  - A/B testy
+  - UX/UI
+  - Motion
+  - AI
 categories:
   - ux-ui
-  - ai-engineering
-  - development
+  - motion
+  - ai
 thumbnail: /portfolio/photoaid-biometric-app/cover.webp
 folderName: photoaid-biometric-app
 order: 2

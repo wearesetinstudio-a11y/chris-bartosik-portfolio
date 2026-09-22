@@ -2,13 +2,15 @@
 title: See More Logistics
 client: See More Logistics
 tags:
-  - branding
-  - ux-ui
-  - webflow
+  - Branding
+  - UX/UI
+  - Development
+  - Motion
 categories:
   - branding
   - ux-ui
   - development
+  - motion
 thumbnail: /portfolio/see-more/cover.riv
 folderName: see-more
 order: 3

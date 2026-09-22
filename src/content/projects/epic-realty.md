@@ -2,9 +2,9 @@
 title: Epic Realty
 client: Epic Realty
 tags:
-  - branding
-  - ux-ui
-  - webflow
+  - Branding
+  - UX/UI
+  - Development
 categories:
   - branding
   - ux-ui

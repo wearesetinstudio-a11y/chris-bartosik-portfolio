@@ -1,7 +1,7 @@
 ---
 title: Mi Pronto
 client: Mi Pronto
-tags: ['Branding', 'Print']
+tags: ['Branding']
 categories: ['branding']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'

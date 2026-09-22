@@ -30,30 +30,31 @@ const displayLabel = count !== undefined ? `${label} [${count}]` : label;
 
 <div class="work-with-us-button group relative inline-block">
 	<a href={href} class={`relative -mx-1 -my-2 block px-1 py-2 ${textColor}`}>
-		{
-			isStatic ? (
-				<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
-					{displayLabel}
-				</span>
-			) : (
-				<div class="flex h-[1.5em] flex-col overflow-hidden">
-					<div
-						class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
-					>
-						<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
-							{displayLabel}
-						</span>
-						<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
-							{displayLabel}
-						</span>
+		<span class="work-with-us-button__label relative inline-block">
+			{
+				isStatic ? (
+					<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
+						{displayLabel}
+					</span>
+				) : (
+					<div class="flex h-[1.5em] flex-col overflow-hidden">
+						<div
+							class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
+						>
+							<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
+								{displayLabel}
+							</span>
+							<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
+								{displayLabel}
+							</span>
+						</div>
 					</div>
-				</div>
-			)
-		}
+				)
+			}
+			<span
+				class={`work-with-us-button__underline absolute top-[calc(50%+0.98em)] left-0 h-[1.5px] w-full origin-left scale-x-100 transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0 ${underlineColor}`}
+				aria-hidden="true"
+			></span>
+		</span>
 	</a>
-
-	<div
-		class={`work-with-us-button__underline absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-100 transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0 ${underlineColor}`}
-		aria-hidden="true"
-	></div>
 </div>

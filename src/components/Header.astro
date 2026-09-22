@@ -77,8 +77,12 @@ const headerClass = waitForIntro
 			<LanguageSwitcher />
 		</nav>
 
-		<div class="header-mobile-tools relative z-[60] flex items-center gap-8 md:hidden">
-			<LanguageSwitcher />
+		<div class="header-mobile-tools relative z-[60] flex items-center gap-5 md:hidden">
+			<WorkWithUsButton
+				href={workWithUsHref}
+				variant={isLightBg ? 'dark' : 'light'}
+				i18nKey="cta.workWithMe"
+			/>
 			<button
 				type="button"
 				id="mobile-nav-toggle"
@@ -133,8 +137,8 @@ const headerClass = waitForIntro
 			}
 		</nav>
 
-		<div class="mobile-nav-panel__cta flex flex-col items-start" data-mobile-nav-link>
-			<WorkWithUsButton href={workWithUsHref} size="large" i18nKey="cta.workWithMe" />
+		<div class="mobile-nav-panel__langs flex items-start" data-mobile-nav-link>
+			<LanguageSwitcher />
 		</div>
 	</div>
 </div>
@@ -290,13 +294,21 @@ const headerClass = waitForIntro
 		background-color: rgba(0, 0, 0, 0.12);
 	}
 
-	body.mobile-nav-open .site-header--light-bg .site-header__logo-text,
-	body.mobile-nav-open .site-header--light-bg .lang-switcher {
+	body.mobile-nav-open .site-header--light-bg .site-header__logo-text {
 		color: #f5f5f5;
 	}
 
 	body.mobile-nav-open .site-header--light-bg .site-header__logo-mark .logo-mark__name {
 		filter: none;
+	}
+
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button,
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button span {
+		color: #f5f5f5 !important;
+	}
+
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button__underline {
+		background-color: #f5f5f5 !important;
 	}
 
 	body.mobile-nav-open .site-header--light-bg .mobile-nav-toggle {
@@ -401,9 +413,14 @@ const headerClass = waitForIntro
 		transform: translate3d(-2.25px, -2.25px, 0) scale(1.35);
 	}
 
-	.mobile-nav-panel__cta .work-with-us-button span {
-		font-size: 2rem;
-		line-height: 1.15;
+	.mobile-nav-panel__langs .lang-switcher {
+		color: #f5f5f5;
+		gap: 0.75rem;
+	}
+
+	.mobile-nav-panel__langs .lang-switcher__btn,
+	.mobile-nav-panel__langs .lang-switcher__sep {
+		font-size: 0.95rem;
 	}
 
 	@keyframes mobile-nav-bar-cover {
@@ -514,20 +531,20 @@ const headerClass = waitForIntro
 	}
 
 	.mobile-nav-panel .mobile-nav-link,
-	.mobile-nav-panel .mobile-nav-panel__cta {
+	.mobile-nav-panel .mobile-nav-panel__langs {
 		opacity: 0;
 		transform: translateX(-1.75rem);
 	}
 
 	.mobile-nav-panel.is-open.is-covered .mobile-nav-link,
-	.mobile-nav-panel.is-open.is-covered .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-open.is-covered .mobile-nav-panel__langs {
 		transition:
 			opacity 0.35s ease,
 			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link,
-	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__langs {
 		opacity: 1;
 		transform: translateX(0);
 	}
@@ -548,17 +565,17 @@ const headerClass = waitForIntro
 		transition-delay: 165ms;
 	}
 
-	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__langs {
 		transition-delay: 220ms;
 	}
 
 	.mobile-nav-panel.is-content-exiting .mobile-nav-link,
-	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__langs {
 		opacity: 0;
 		transform: translateX(-1.75rem);
 	}
 
-	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__cta {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__langs {
 		transition-delay: 0ms;
 	}
 
@@ -591,7 +608,7 @@ const headerClass = waitForIntro
 		.mobile-nav-panel.is-covering .mobile-nav-bar,
 		.mobile-nav-panel.is-revealing .mobile-nav-bar,
 		.mobile-nav-panel .mobile-nav-link,
-		.mobile-nav-panel .mobile-nav-panel__cta {
+		.mobile-nav-panel .mobile-nav-panel__langs {
 			transition: none !important;
 			animation: none !important;
 			transition-delay: 0ms !important;
@@ -606,7 +623,7 @@ const headerClass = waitForIntro
 		}
 
 		.mobile-nav-panel .mobile-nav-link,
-		.mobile-nav-panel .mobile-nav-panel__cta {
+		.mobile-nav-panel .mobile-nav-panel__langs {
 			opacity: 1 !important;
 			transform: none !important;
 		}

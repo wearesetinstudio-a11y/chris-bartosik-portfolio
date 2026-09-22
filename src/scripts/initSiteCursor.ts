@@ -37,7 +37,29 @@ export function initSiteCursor() {
 	let motion = 0;
 	let hasAngle = false;
 	let visible = false;
+	let hoveringInteractive = false;
 	let rafId = 0;
+
+	const INTERACTIVE_SELECTOR = [
+		'a[href]',
+		'button:not([disabled])',
+		'[role="button"]:not([aria-disabled="true"])',
+		'input:not([disabled])',
+		'select:not([disabled])',
+		'textarea:not([disabled])',
+		'summary',
+		'label[for]',
+		'.work-with-us-button',
+		'[data-cursor-hover]',
+	].join(',');
+
+	function isInteractiveTarget(target: EventTarget | null) {
+		if (!(target instanceof Element)) return false;
+		const hit = target.closest(INTERACTIVE_SELECTOR);
+		if (!hit) return false;
+		if (hit instanceof HTMLElement && hit.getAttribute('aria-disabled') === 'true') return false;
+		return true;
+	}
 
 	function lerp(a: number, b: number, t: number) {
 		return a + (b - a) * t;
@@ -130,6 +152,7 @@ export function initSiteCursor() {
 		const projectActive = Boolean(document.querySelector('.project-cursor.is-active'));
 		cursor.classList.toggle('is-visible', visible && !projectActive);
 		cursor.classList.toggle('is-orange', useOrangeCursor(x, y));
+		cursor.classList.toggle('is-hover', hoveringInteractive && visible && !projectActive);
 		cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 		glow.style.width = `${width.toFixed(1)}px`;
 		glow.style.height = `${height.toFixed(1)}px`;
@@ -158,6 +181,7 @@ export function initSiteCursor() {
 			x = event.clientX;
 			y = event.clientY;
 			visible = true;
+			hoveringInteractive = isInteractiveTarget(event.target);
 			schedule();
 		},
 		{ passive: true },
@@ -168,6 +192,7 @@ export function initSiteCursor() {
 
 	document.documentElement.addEventListener('mouseleave', () => {
 		visible = false;
+		hoveringInteractive = false;
 		schedule();
 	});
 

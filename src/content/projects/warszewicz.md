@@ -1,8 +1,8 @@
 ---
 title: Warszewicz
 client: Warszewicz
-tags: ['AI Video Generation', 'Art Direction', 'Print']
-categories: ['branding', 'ai-engineering']
+tags: ['Branding', 'AI']
+categories: ['branding', 'ai']
 thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
 order: 9

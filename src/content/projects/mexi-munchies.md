@@ -1,7 +1,7 @@
 ---
 title: Mexi Munchies
 client: Mexi Munchies
-tags: ['Branding', 'Visual Identity', 'Webflow']
+tags: ['Branding', 'Development']
 categories: ['branding', 'development']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'

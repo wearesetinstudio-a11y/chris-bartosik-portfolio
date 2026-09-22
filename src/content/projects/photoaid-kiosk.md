@@ -3,7 +3,7 @@ title: PhotoAiD - Self Service Kiosks
 client: PhotoAiD
 tags:
   - UX/UI
-  - motion
+  - Motion
 categories:
   - ux-ui
   - motion
