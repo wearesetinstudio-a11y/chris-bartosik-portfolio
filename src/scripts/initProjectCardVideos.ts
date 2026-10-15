@@ -30,6 +30,7 @@ export function initProjectCardVideos() {
 	initObservedProjectVideos({
 		selector: '.project-card__video',
 		cleanupKey: '__projectCardVideosCleanup',
+		eagerWarm: true,
 		onWarm: (video) => {
 			markReady(video);
 		},

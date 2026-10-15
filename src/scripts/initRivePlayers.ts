@@ -179,10 +179,12 @@ export function initRivePlayers() {
 		}
 
 		for (const host of hosts) {
+			const inProjectCard = Boolean(host.closest('.project-card__media'));
 			warmObserver.observe(host);
 			playObserver?.observe(host);
-			if (isRoughlyInView(host, 2)) warmHost(host);
-			if (!reduceMotion && isRoughlyInView(host, 1)) playHost(host);
+			// Project grid covers must start loading immediately, not on scroll.
+			if (inProjectCard || isRoughlyInView(host, 2)) warmHost(host);
+			if (!reduceMotion && (inProjectCard || isRoughlyInView(host, 1))) playHost(host);
 		}
 	} else if (!reduceMotion) {
 		for (const host of hosts) {

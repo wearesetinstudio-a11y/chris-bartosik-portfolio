@@ -37,6 +37,8 @@ type ObservedVideoOptions = {
 	selector: string;
 	warmMargin?: string;
 	playMargin?: string;
+	/** Start downloading every matched video immediately (project grid covers). */
+	eagerWarm?: boolean;
 	cleanupKey: string;
 	onWarm?: (video: HTMLVideoElement) => void;
 };
@@ -45,6 +47,7 @@ export function initObservedProjectVideos({
 	selector,
 	warmMargin = PROJECT_VIDEO_WARM_MARGIN,
 	playMargin = PROJECT_VIDEO_PLAY_MARGIN,
+	eagerWarm = false,
 	cleanupKey,
 	onWarm,
 }: ObservedVideoOptions) {
@@ -62,7 +65,13 @@ export function initObservedProjectVideos({
 	const cleanups: Array<() => void> = [];
 
 	if (reduceMotion) {
-		videos.forEach(pauseProjectVideo);
+		videos.forEach((video) => {
+			if (eagerWarm) {
+				warmProjectVideo(video);
+				onWarm?.(video);
+			}
+			pauseProjectVideo(video);
+		});
 		win[cleanupKey] = () => {
 			videos.forEach(pauseProjectVideo);
 		};
@@ -81,17 +90,26 @@ export function initObservedProjectVideos({
 		return;
 	}
 
-	const warmObserver = new IntersectionObserver(
-		(entries) => {
-			entries.forEach((entry) => {
-				if (!entry.isIntersecting) return;
-				const video = entry.target as HTMLVideoElement;
-				warmProjectVideo(video);
-				onWarm?.(video);
-			});
-		},
-		{ root: null, rootMargin: warmMargin, threshold: 0 },
-	);
+	if (eagerWarm) {
+		videos.forEach((video) => {
+			warmProjectVideo(video);
+			onWarm?.(video);
+		});
+	}
+
+	const warmObserver = eagerWarm
+		? undefined
+		: new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						const video = entry.target as HTMLVideoElement;
+						warmProjectVideo(video);
+						onWarm?.(video);
+					});
+				},
+				{ root: null, rootMargin: warmMargin, threshold: 0 },
+			);
 
 	const playObserver = new IntersectionObserver(
 		(entries) => {
@@ -109,9 +127,9 @@ export function initObservedProjectVideos({
 	);
 
 	for (const video of videos) {
-		warmObserver.observe(video);
+		warmObserver?.observe(video);
 		playObserver.observe(video);
-		if (isNearViewport(video, warmMargin)) {
+		if (!eagerWarm && isNearViewport(video, warmMargin)) {
 			warmProjectVideo(video);
 			onWarm?.(video);
 		}
@@ -121,7 +139,7 @@ export function initObservedProjectVideos({
 	}
 
 	cleanups.push(() => {
-		warmObserver.disconnect();
+		warmObserver?.disconnect();
 		playObserver.disconnect();
 		videos.forEach(pauseProjectVideo);
 	});

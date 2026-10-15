@@ -63,7 +63,7 @@ const Tag = comingSoon ? 'div' : 'a';
 					muted
 					loop
 					playsinline
-					preload="metadata"
+					preload="auto"
 					aria-hidden="true"
 				/>
 			) : isImage && coverSrc ? (
@@ -74,7 +74,8 @@ const Tag = comingSoon ? 'div' : 'a';
 					height="600"
 					class="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 					loading="eager"
-					decoding="auto"
+					decoding="async"
+					fetchpriority="high"
 				/>
 			) : null
 		}
