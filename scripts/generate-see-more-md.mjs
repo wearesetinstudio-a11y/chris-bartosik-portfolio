@@ -47,7 +47,7 @@ async function run() {
     tools: data.tools.en,
     year: 2026,
     liveLabel: data.liveLabel.en || 'seemorelogistics',
-    liveUrl: data.liveUrl.en || 'https://seemore-logistics.webflow.io',
+    liveUrl: data.liveUrl.en || 'https://see-more-wine.vercel.app/',
     overviewLabel: data.overviewLabel.en || 'Intro',
     overviewTitle: data.overviewTitle.en,
     overviewText: data.overviewText.en,

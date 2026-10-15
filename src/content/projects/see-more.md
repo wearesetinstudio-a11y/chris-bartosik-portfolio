@@ -27,7 +27,7 @@ market: Panama
 tools: Figma, Webflow, Rive
 year: 2026
 liveLabel: seemorelogistics
-liveUrl: https://seemore-logistics.webflow.io
+liveUrl: https://see-more-wine.vercel.app/
 overviewLabel: Intro
 overviewTitle: Digital debut and brand refresh for SeeMore Logistics
 overviewText: SeeMore Logistics reached out to me needing a comprehensive brand
