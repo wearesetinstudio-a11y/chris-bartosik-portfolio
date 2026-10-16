@@ -156,6 +156,7 @@ export const dictionary = {
 			filterEngineering: 'Engineering',
 			filterBrandDesign: 'Brand Design',
 			filterProductDesign: 'Product Design',
+			filterApplications: 'Applications',
 		},
 		clients: {
 			line1: 'Brands & products',
@@ -400,6 +401,7 @@ export const dictionary = {
 			filterEngineering: 'Engineering',
 			filterBrandDesign: 'Brand Design',
 			filterProductDesign: 'Product Design',
+			filterApplications: 'Applications',
 		},
 		clients: {
 			line1: 'Marki i produkty, z którymi',
@@ -644,6 +646,7 @@ export const dictionary = {
 			filterEngineering: 'Engineering',
 			filterBrandDesign: 'Brand Design',
 			filterProductDesign: 'Product Design',
+			filterApplications: 'Applications',
 		},
 		clients: {
 			line1: 'Marcas con los',

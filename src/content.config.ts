@@ -60,6 +60,7 @@ const workItemSchema = z.object({
 				'engineering',
 				'brand-design',
 				'product-design',
+				'applications',
 			]),
 		)
 		.optional()

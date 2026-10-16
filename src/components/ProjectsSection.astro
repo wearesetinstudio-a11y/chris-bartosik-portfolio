@@ -18,7 +18,8 @@ type ProjectCategory =
 	| 'websites'
 	| 'engineering'
 	| 'brand-design'
-	| 'product-design';
+	| 'product-design'
+	| 'applications';
 
 const countByCategory = (id: ProjectCategory) =>
 	projects.filter((project) => project.data.categories.includes(id)).length;
@@ -31,6 +32,7 @@ const projectFilters = [
 	{ id: 'engineering', labelKey: 'work.filterEngineering' as const, count: countByCategory('engineering') },
 	{ id: 'brand-design', labelKey: 'work.filterBrandDesign' as const, count: countByCategory('brand-design') },
 	{ id: 'product-design', labelKey: 'work.filterProductDesign' as const, count: countByCategory('product-design') },
+	{ id: 'applications', labelKey: 'work.filterApplications' as const, count: countByCategory('applications') },
 ] as const;
 ---
 

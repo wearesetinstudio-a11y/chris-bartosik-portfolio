@@ -1,8 +1,8 @@
 ---
 title: WCR Kraków
 client: WCR Kraków
-tags: ['Brand Design', 'Motion']
-categories: ['brand-design', 'motion']
+tags: ['Motion']
+categories: ['motion']
 thumbnail: '/portfolio/wcr-krakow/cover.webm'
 folderName: 'wcr-krakow'
 video: '/portfolio/wcr-krakow/cover.webm'

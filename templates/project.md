@@ -20,7 +20,7 @@
 #
 # PUSTE POLE = element ukryty na stronie (label / title / text / info row / live…)
 # theme sekcji: light | dark | muted
-# categories: ai-direction | motion | websites | engineering | brand-design | product-design
+# categories: ai-direction | motion | websites | engineering | brand-design | product-design | applications
 # overviewYoutube: optional YouTube URL shown as first overview media (replaces gallery group 1)
 # =============================================================================
 

@@ -4,9 +4,11 @@ client: PhotoAiD
 tags:
   - Product Design
   - Motion
+  - AI Direction
 categories:
   - product-design
   - motion
+  - ai-direction
 thumbnail: /portfolio/photoaid-kiosk/cover.webm
 folderName: photoaid-kiosk
 order: 2
@@ -208,7 +210,7 @@ i18n:
   pl:
     title: PhotoAiD - Kioski samoobsługowe
     clientLabel: Klient
-    category: Product Design, Motion
+    category: Product Design, Motion, AI Direction
     heroSubtitle: Samoobsługowe ekrany stacjonarne łączące fotografię dokumentową z
       ofertą pamiątkową.
     service: UX/UI design, motion design
@@ -415,7 +417,7 @@ i18n:
   pa:
     title: PhotoAiD - Quioscos de Autoservicio
     clientLabel: Cliente
-    category: Product Design, Motion
+    category: Product Design, Motion, AI Direction
     heroSubtitle: Terminales de autoservicio que integran fotografía documental y
       productos impresos personalizados.
     service: UX/UI design, motion design
