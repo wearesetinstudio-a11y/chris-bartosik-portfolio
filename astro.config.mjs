@@ -8,7 +8,8 @@ export default defineConfig({
   redirects: {
     '/projects/see-more-rebranding': '/projects/see-more',
     '/projects/see-more-web': '/projects/see-more',
-    '/projects/detalles': '/projects/mi-pronto',
+    '/projects/detalles': '/projects',
+    '/projects/mi-pronto': '/projects',
   },
   vite: {
     plugins: [tailwindcss()]

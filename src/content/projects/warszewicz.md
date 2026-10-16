@@ -2,11 +2,11 @@
 title: The Pole Who Documented Panama's National Symbol
 client: Self-initiated Project
 tags:
+  - AI Direction
   - Motion
-  - AI
 categories:
+  - ai-direction
   - motion
-  - ai
 thumbnail: /portfolio/warszewicz/cover.mp4
 folderName: warszewicz
 order: 9

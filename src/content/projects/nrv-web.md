@@ -2,13 +2,15 @@
 title: Web Platform for Control System Provider
 client: NRV Control Systems
 tags:
-  - UX/UI
-  - Development
-  - AI
+  - Motion
+  - Websites
+  - Engineering
+  - Product Design
 categories:
-  - ux-ui
-  - development
-  - ai
+  - motion
+  - websites
+  - engineering
+  - product-design
 thumbnail: /portfolio/nrv-web/cover.webm
 folderName: nrv-web
 order: 12

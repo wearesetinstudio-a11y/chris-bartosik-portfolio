@@ -52,7 +52,16 @@ const workItemSchema = z.object({
 	client: z.string(),
 	tags: z.array(z.string()),
 	categories: z
-		.array(z.enum(['ux-ui', 'motion', 'branding', 'development', 'ai']))
+		.array(
+			z.enum([
+				'ai-direction',
+				'motion',
+				'websites',
+				'engineering',
+				'brand-design',
+				'product-design',
+			]),
+		)
 		.optional()
 		.default([]),
 	thumbnail: z.string().optional().default(''),

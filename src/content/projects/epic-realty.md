@@ -2,13 +2,17 @@
 title: Epic Realty
 client: Epic Realty
 tags:
-  - Branding
-  - UX/UI
-  - Development
+  - Brand Design
+  - Motion
+  - Websites
+  - Engineering
+  - Product Design
 categories:
-  - branding
-  - ux-ui
-  - development
+  - brand-design
+  - motion
+  - websites
+  - engineering
+  - product-design
 thumbnail: /portfolio/epic-realty/cover.riv
 folderName: epic-realty
 order: 1
@@ -57,7 +61,7 @@ i18n:
   pl:
     title: Epic Realty
     clientLabel: Klient
-    category: branding, ux-ui, webflow
+    category: Brand Design, Motion, Websites, Engineering, Product Design
     heroSubtitle: Cyfrowa i wizerunkowa transformacja luksusowej agencji nieruchomości w Panamie.
     service: identyfikacja wizualna, web design, wdrożenie webflow, cms
     industry: Nieruchomości Premium, Inwestycje
@@ -90,7 +94,7 @@ i18n:
   pa:
     title: Epic Realty
     clientLabel: Cliente
-    category: branding, ux-ui, webflow
+    category: Brand Design, Motion, Websites, Engineering, Product Design
     heroSubtitle: Transformando la presencia de la agencia inmobiliaria boutique más exclusiva de Panamá.
     service: identidad de marca, diseño web, desarrollo webflow, cms
     industry: Bienes Raíces de Lujo, Inversiones

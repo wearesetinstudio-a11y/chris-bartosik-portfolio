@@ -20,15 +20,15 @@
 #
 # PUSTE POLE = element ukryty na stronie (label / title / text / info row / live…)
 # theme sekcji: light | dark | muted
-# categories: ux-ui | motion | branding | development | ai
+# categories: ai-direction | motion | websites | engineering | brand-design | product-design
 # overviewYoutube: optional YouTube URL shown as first overview media (replaces gallery group 1)
 # =============================================================================
 
 # --- Karta / lista projektów ---
 title: 'Project Name'
 client: 'Client Name'
-tags: ['Branding']
-categories: ['branding']
+tags: ['Brand Design']
+categories: ['brand-design']
 order: 99
 comingSoon: false
 

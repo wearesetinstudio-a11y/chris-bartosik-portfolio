@@ -2,11 +2,13 @@
 title: Rebranding NRV Control Systems
 client: NRV Control Systems
 tags:
-  - Branding
+  - Brand Design
   - Motion
+  - Product Design
 categories:
-  - branding
+  - brand-design
   - motion
+  - product-design
 thumbnail: /portfolio/nrv/cover.webm
 folderName: nrv
 order: 11

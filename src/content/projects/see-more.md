@@ -2,15 +2,19 @@
 title: See More Logistics
 client: See More Logistics
 tags:
-  - Branding
-  - UX/UI
-  - Development
+  - AI Direction
   - Motion
+  - Websites
+  - Engineering
+  - Brand Design
+  - Product Design
 categories:
-  - branding
-  - ux-ui
-  - development
+  - ai-direction
   - motion
+  - websites
+  - engineering
+  - brand-design
+  - product-design
 thumbnail: /portfolio/see-more/cover.riv
 folderName: see-more
 order: 3
@@ -136,7 +140,7 @@ i18n:
   pl:
     title: See More Logistics
     clientLabel: Klient
-    category: branding, ux-ui, webflow
+    category: AI Direction, Motion, Websites, Engineering, Brand Design, Product Design
     heroSubtitle: Ewolucja wizerunku i budowa pierwszej strony internetowej dla
       panamskiej firmy logistycznej.
     service: identyfikacja wizualna, web design, wdrożenie webflow, motion
@@ -260,7 +264,7 @@ i18n:
   pa:
     title: See More Logistics
     clientLabel: Cliente
-    category: branding, ux-ui, webflow
+    category: AI Direction, Motion, Websites, Engineering, Brand Design, Product Design
     heroSubtitle: Evolución de marca y primer sitio web para empresa logística en Panamá.
     service: identidad de marca, diseño web, desarrollo webflow, animación
     industry: Logística Corporativa, Cadena de Suministro

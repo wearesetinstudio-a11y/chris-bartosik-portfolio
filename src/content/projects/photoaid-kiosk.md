@@ -2,10 +2,10 @@
 title: PhotoAiD - Self Service Kiosks
 client: PhotoAiD
 tags:
-  - UX/UI
+  - Product Design
   - Motion
 categories:
-  - ux-ui
+  - product-design
   - motion
 thumbnail: /portfolio/photoaid-kiosk/cover.webm
 folderName: photoaid-kiosk
@@ -208,7 +208,7 @@ i18n:
   pl:
     title: PhotoAiD - Kioski samoobsługowe
     clientLabel: Klient
-    category: ux-ui, motion
+    category: Product Design, Motion
     heroSubtitle: Samoobsługowe ekrany stacjonarne łączące fotografię dokumentową z
       ofertą pamiątkową.
     service: UX/UI design, motion design
@@ -415,7 +415,7 @@ i18n:
   pa:
     title: PhotoAiD - Quioscos de Autoservicio
     clientLabel: Cliente
-    category: ux-ui, motion
+    category: Product Design, Motion
     heroSubtitle: Terminales de autoservicio que integran fotografía documental y
       productos impresos personalizados.
     service: UX/UI design, motion design

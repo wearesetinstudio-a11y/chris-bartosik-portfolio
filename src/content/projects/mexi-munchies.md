@@ -2,9 +2,11 @@
 title: MexiMunchies Rebranding
 client: MexiMunchies
 tags:
-  - Branding
+  - Brand Design
+  - Motion
 categories:
-  - branding
+  - brand-design
+  - motion
 thumbnail: /portfolio/mexi-munchies/cover.webp
 folderName: mexi-munchies
 order: 8

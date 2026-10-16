@@ -1,9 +1,8 @@
 ---
 title: PhotoAiD Photo App
 client: PhotoAiD
-tags: ['UX/UI', 'Motion']
-
-categories: ['ux-ui', 'motion']
+tags: ['Product Design', 'Motion']
+categories: ['product-design', 'motion']
 thumbnail: /portfolio/photoaid-photo-app/cover.webp
 folderName: photoaid-photo-app
 order: 3
@@ -74,7 +73,7 @@ i18n:
   pl:
     title: PhotoAiD — Aplikacja fotoproduktów
     clientLabel: Klient
-    category: ux-ui, motion
+    category: Product Design, Motion
     heroSubtitle: Aplikacja mobilna e-commerce w systemie strategii cyfrowej PhotoAiD
     service: UX/UI design, motion design
     industry: Handel detaliczny, Fotografia
@@ -137,7 +136,7 @@ i18n:
   pa:
     title: PhotoAiD — Aplicación Móvil de Fotoproductos
     clientLabel: Cliente
-    category: ux-ui, motion
+    category: Product Design, Motion
     heroSubtitle: Aplicación móvil de e-commerce para el pedido e impresión inmediata de fotoproductos personalizados.
     service: UX/UI design, motion design
     industry: Comercio minorista, Fotografía

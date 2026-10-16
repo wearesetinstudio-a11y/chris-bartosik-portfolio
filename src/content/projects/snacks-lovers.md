@@ -2,9 +2,11 @@
 title: Snacks Lovers Rebranding
 client: Snacks Lovers
 tags:
-  - Branding
+  - Brand Design
+  - Motion
 categories:
-  - branding
+  - brand-design
+  - motion
 thumbnail: /portfolio/snacks-lovers/snacks-lovers-cover.webp
 folderName: snacks-lovers
 order: 5

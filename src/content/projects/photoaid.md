@@ -2,13 +2,13 @@
 title: PhotoAiD Biometric App
 client: PhotoAiD
 tags:
-  - UX/UI
+  - Product Design
   - Motion
-  - AI
+  - AI Direction
 categories:
-  - ux-ui
+  - product-design
   - motion
-  - ai
+  - ai-direction
 thumbnail: /portfolio/photoaid-biometric-app/cover.webp
 folderName: photoaid-biometric-app
 order: 2
@@ -223,7 +223,7 @@ i18n:
   pl:
     title: Aplikacja Biometryczna PhotoAiD
     clientLabel: Klient
-    category: ux/ui, motion, app, A/B tests
+    category: Product Design, Motion, AI Direction
     heroSubtitle: Globalna aplikacja biometryczna AI do zdjęć dokumentowych.
     service: UX/UI Design, Product Strategy, User Research
     industry: AI, Biometryka
@@ -441,7 +441,7 @@ i18n:
   pa:
     title: Aplicación Biométrica PhotoAiD
     clientLabel: Cliente
-    category: ux/ui, motion, app, A/B tests
+    category: Product Design, Motion, AI Direction
     heroSubtitle: Aplicación biométrica global de IA para fotografías documentales.
     service: Diseño UX/UI, Estrategia de Producto, Investigación de Usuarios
     industry: IA, Biometría

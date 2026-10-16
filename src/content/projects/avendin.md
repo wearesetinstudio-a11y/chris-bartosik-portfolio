@@ -2,9 +2,11 @@
 title: Avendin Branding
 client: Avendin
 tags:
-  - Branding
+  - Brand Design
+  - Motion
 categories:
-  - branding
+  - brand-design
+  - motion
 thumbnail: /portfolio/avendin/Cover.webm
 folderName: avendin
 order: 13

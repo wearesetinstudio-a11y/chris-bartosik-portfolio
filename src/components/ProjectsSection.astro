@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
 import SeeAllProjectsCard from './SeeAllProjectsCard.astro';
-import { t } from '../utils/i18n.ts';
+import { formatLabel, t } from '../utils/i18n.ts';
 
 interface Props {
 	projects: CollectionEntry<'projects'>[];
@@ -12,13 +12,25 @@ interface Props {
 const { projects, standalone = false } = Astro.props;
 const displayedProjects = standalone ? projects : projects.slice(0, 5);
 
+type ProjectCategory =
+	| 'ai-direction'
+	| 'motion'
+	| 'websites'
+	| 'engineering'
+	| 'brand-design'
+	| 'product-design';
+
+const countByCategory = (id: ProjectCategory) =>
+	projects.filter((project) => project.data.categories.includes(id)).length;
+
 const projectFilters = [
-	{ id: 'all', labelKey: 'work.filterAll' as const },
-	{ id: 'ux-ui', labelKey: 'work.filterUxUi' as const },
-	{ id: 'motion', labelKey: 'work.filterMotion' as const },
-	{ id: 'branding', labelKey: 'work.filterBranding' as const },
-	{ id: 'development', labelKey: 'work.filterDev' as const },
-	{ id: 'ai', labelKey: 'work.filterAi' as const },
+	{ id: 'all', labelKey: 'work.filterAll' as const, count: projects.length },
+	{ id: 'ai-direction', labelKey: 'work.filterAiDirection' as const, count: countByCategory('ai-direction') },
+	{ id: 'motion', labelKey: 'work.filterMotion' as const, count: countByCategory('motion') },
+	{ id: 'websites', labelKey: 'work.filterWebsites' as const, count: countByCategory('websites') },
+	{ id: 'engineering', labelKey: 'work.filterEngineering' as const, count: countByCategory('engineering') },
+	{ id: 'brand-design', labelKey: 'work.filterBrandDesign' as const, count: countByCategory('brand-design') },
+	{ id: 'product-design', labelKey: 'work.filterProductDesign' as const, count: countByCategory('product-design') },
 ] as const;
 ---
 
@@ -56,9 +68,10 @@ const projectFilters = [
 						class:list={['projects-filters__btn', index === 0 && 'is-active']}
 						data-project-filter={filter.id}
 						data-i18n={filter.labelKey}
+						data-i18n-count={filter.count}
 						aria-pressed={index === 0 ? 'true' : 'false'}
 					>
-						{t(filter.labelKey, 'en')}
+						{formatLabel(filter.labelKey, filter.count, 'en')}
 					</button>
 				))}
 			</div>
