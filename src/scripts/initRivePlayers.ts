@@ -148,8 +148,8 @@ export function initRivePlayers() {
 	if (!hosts.length) return;
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const warmMargin = '200% 0px';
-	const playMargin = '100% 0px';
+	const warmMargin = '300% 0px';
+	const playMargin = '200% 0px';
 
 	let warmObserver: IntersectionObserver | undefined;
 	let playObserver: IntersectionObserver | undefined;
@@ -171,7 +171,11 @@ export function initRivePlayers() {
 					entries.forEach((entry) => {
 						const host = entry.target as RiveHost;
 						if (entry.isIntersecting) playHost(host);
-						else pauseHost(host);
+						else {
+							// Keep project-grid covers playing; only pause gallery/overview Rives.
+							if (host.closest('.project-card__media')) return;
+							pauseHost(host);
+						}
 					});
 				},
 				{ root: null, rootMargin: playMargin, threshold: 0 },
@@ -182,9 +186,9 @@ export function initRivePlayers() {
 			const inProjectCard = Boolean(host.closest('.project-card__media'));
 			warmObserver.observe(host);
 			playObserver?.observe(host);
-			// Project grid covers must start loading immediately, not on scroll.
-			if (inProjectCard || isRoughlyInView(host, 2)) warmHost(host);
-			if (!reduceMotion && (inProjectCard || isRoughlyInView(host, 1))) playHost(host);
+			// Project grid covers must start loading + playing immediately.
+			if (inProjectCard || isRoughlyInView(host, 3)) warmHost(host);
+			if (!reduceMotion && (inProjectCard || isRoughlyInView(host, 2))) playHost(host);
 		}
 	} else if (!reduceMotion) {
 		for (const host of hosts) {

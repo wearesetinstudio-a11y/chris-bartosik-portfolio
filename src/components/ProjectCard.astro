@@ -35,6 +35,11 @@ const categoryMap = JSON.stringify({
 
 const coverMedia = getProjectCoverMedia(project);
 const coverSrc = coverMedia.src ? withPublicAssetVersion(coverMedia.src) : '';
+const posterSrc = project.data.heroImage
+	? withPublicAssetVersion(project.data.heroImage)
+	: coverMedia.type === 'image' || coverMedia.type === 'svg'
+		? coverSrc
+		: '';
 const isRive = coverMedia.type === 'rive';
 const isVideo = coverMedia.type === 'video';
 const isImage = coverMedia.type === 'image' || coverMedia.type === 'svg';
@@ -49,21 +54,25 @@ const Tag = comingSoon ? 'div' : 'a';
 	data-project-id={project.id}
 	data-client={clientSlug || undefined}
 	data-transition-label={comingSoon ? undefined : client}
-	data-hero-bg={project.data.heroImage ? withPublicAssetVersion(project.data.heroImage) : undefined}
+	data-hero-bg={posterSrc || undefined}
 >
-	<div class="project-card__media overflow-hidden">
+	<div
+		class="project-card__media overflow-hidden"
+		style={posterSrc ? `background-image: url('${posterSrc}')` : undefined}
+	>
 		{
 			isRive && coverSrc ? (
 				<RivePlayer src={coverSrc} fit="cover" class="project-card__rive" />
 			) : isVideo && coverSrc ? (
 				<video
 					src={coverSrc}
-					poster={project.data.heroImage ? withPublicAssetVersion(project.data.heroImage) : undefined}
+					poster={posterSrc || undefined}
 					class="project-card__video block h-full w-full object-cover"
 					muted
 					loop
 					playsinline
 					preload="auto"
+					autoplay
 					aria-hidden="true"
 				/>
 			) : isImage && coverSrc ? (
@@ -128,8 +137,10 @@ const Tag = comingSoon ? 'div' : 'a';
 		position: relative;
 		aspect-ratio: var(--project-cover-aspect);
 		width: 100%;
-		/* Match projects section so an unloaded shell doesn't flash a darker gray tile. */
-		background-color: transparent;
+		/* Still poster shows immediately while video/rive warm up. */
+		background-color: #e8e8e8;
+		background-size: cover;
+		background-position: center;
 	}
 
 	.project-card__media img {

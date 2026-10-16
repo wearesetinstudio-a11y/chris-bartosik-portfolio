@@ -1,7 +1,7 @@
-/** Start loading/decoding before the element is near the viewport. */
-export const PROJECT_VIDEO_WARM_MARGIN = '200% 0px';
-/** Start playback while still off-screen (one viewport ahead). */
-export const PROJECT_VIDEO_PLAY_MARGIN = '100% 0px';
+/** Start loading/decoding well before the element nears the viewport. */
+export const PROJECT_VIDEO_WARM_MARGIN = '300% 0px';
+/** Start playback while still off-screen (two viewports ahead). */
+export const PROJECT_VIDEO_PLAY_MARGIN = '200% 0px';
 
 export function prepareProjectVideo(video: HTMLVideoElement) {
 	video.loop = true;

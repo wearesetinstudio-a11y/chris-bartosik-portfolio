@@ -27,6 +27,30 @@ function initProjectCardImages() {
 export function initProjectCardVideos() {
 	initProjectCardImages();
 
+	const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('.project-card__video'));
+
+	// Grid covers: download + play immediately so cards are ready before scroll.
+	for (const video of videos) {
+		video.preload = 'auto';
+		video.muted = true;
+		video.playsInline = true;
+		video.autoplay = true;
+		video.dataset.warmed = 'true';
+		try {
+			video.load();
+		} catch {
+			/* ignore */
+		}
+		const reveal = () => markReady(video);
+		if (video.readyState >= 2) reveal();
+		else {
+			video.addEventListener('loadeddata', reveal, { once: true });
+			video.addEventListener('error', reveal, { once: true });
+		}
+		const play = video.play();
+		if (play) play.catch(() => {});
+	}
+
 	initObservedProjectVideos({
 		selector: '.project-card__video',
 		cleanupKey: '__projectCardVideosCleanup',
@@ -35,16 +59,4 @@ export function initProjectCardVideos() {
 			markReady(video);
 		},
 	});
-
-	const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('.project-card__video'));
-	for (const video of videos) {
-		if (video.dataset.warmed === 'true') markReady(video);
-		else {
-			video.addEventListener(
-				'loadeddata',
-				() => markReady(video),
-				{ once: true },
-			);
-		}
-	}
 }

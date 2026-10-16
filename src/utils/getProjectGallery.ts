@@ -1,5 +1,8 @@
-import { readdirSync } from 'node:fs';
+import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+
+/** Tiny .riv stubs fail silently in the grid — skip and fall back. */
+const MIN_RIVE_COVER_BYTES = 20_000;
 
 const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm', '.riv', '.svg']);
 const DEFAULT_EXCLUDED = new Set([
@@ -61,13 +64,22 @@ export function resolveProjectFolderName(project: {
 
 export function getProjectCoverMedia(project: {
 	id: string;
-	data: { folderName?: string; thumbnail?: string; video?: string };
+	data: { folderName?: string; thumbnail?: string; video?: string; heroImage?: string };
 }): { src: string; type: GalleryMediaItem['type'] } {
 	const folder = resolveProjectFolderName(project);
 	const folderDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folder);
 	try {
 		const files = readdirSync(folderDir);
-		const coverFiles = files.filter((f) => /^cover\.(riv|webm|mp4|webp|svg)$/i.test(f));
+		const coverFiles = files.filter((f) => {
+			if (!/^cover\.(riv|webm|mp4|webp|svg)$/i.test(f)) return false;
+			const ext = f.slice(f.lastIndexOf('.')).toLowerCase();
+			if (!isRiveExtension(ext)) return true;
+			try {
+				return statSync(join(folderDir, f)).size >= MIN_RIVE_COVER_BYTES;
+			} catch {
+				return false;
+			}
+		});
 		const preferred = preferRiveFilenames(coverFiles)[0];
 		if (preferred) {
 			const ext = preferred.slice(preferred.lastIndexOf('.')).toLowerCase();
@@ -76,11 +88,19 @@ export function getProjectCoverMedia(project: {
 				type: mediaTypeFromExtension(ext),
 			};
 		}
+
+		if (files.some((f) => /^bg\.webp$/i.test(f))) {
+			return {
+				src: `/${PROJECT_MEDIA_DIR}/${folder}/bg.webp`,
+				type: 'image',
+			};
+		}
 	} catch {
 		/* ignore */
 	}
 
-	const explicit = project.data.video || project.data.thumbnail || '';
+	const explicit =
+		project.data.video || project.data.thumbnail || project.data.heroImage || '';
 	const ext = explicit.slice(explicit.lastIndexOf('.')).toLowerCase();
 	return {
 		src: explicit,
