@@ -1,4 +1,8 @@
-import { hasCompletedIntro, isIntroSequenceRunning } from './introState.ts';
+import {
+	forceDismissIntroCover,
+	hasCompletedIntro,
+	isIntroSequenceRunning,
+} from './introState.ts';
 import {
 	completeMobileNavNavigation,
 	isMobileNavLink,
@@ -39,6 +43,10 @@ function setPhase(phase: TransitionPhase) {
 }
 
 function cleanupIntroState() {
+	if (document.documentElement.classList.contains('intro-pending') && hasCompletedIntro()) {
+		forceDismissIntroCover();
+		return;
+	}
 	if (!hasCompletedIntro()) return;
 	document.body.classList.remove('intro-active');
 }
@@ -142,7 +150,14 @@ export function initPageTransitionOverlay() {
 			return;
 		}
 
-		if (getPhase() !== 'covered') return;
+		if (getPhase() !== 'covered') {
+			// Soft nav can leave a covered overlay if the cover phase was interrupted.
+			const overlay = getPageTransitionOverlay();
+			if (overlay?.classList.contains('is-covered') || overlay?.classList.contains('is-active')) {
+				if (!isIntroSequenceRunning()) resetPageTransitionOverlay(overlay);
+			}
+			return;
+		}
 
 		setPhase('revealing');
 		void animatePageTransitionReveal().finally(() => setPhase('idle'));

@@ -1,6 +1,7 @@
 import {
 	clearIntroPending,
 	dispatchIntroComplete,
+	forceDismissIntroCover,
 	hasCompletedIntro,
 	isIntroSequenceRunning,
 	markIntroComplete,
@@ -17,6 +18,9 @@ import {
 	resetPageTransitionOverlay,
 } from './pageTransitionPanel.ts';
 
+/** Hard ceiling so a hung animation never leaves the site covered after deploy. */
+const INTRO_HARD_TIMEOUT_MS = 4500;
+
 function lockIntroCover(): HTMLElement | null {
 	const overlay = getPageTransitionOverlay();
 	setIntroPending();
@@ -29,56 +33,71 @@ function lockIntroCover(): HTMLElement | null {
 	return overlay;
 }
 
+function releaseIntroCover(overlay: HTMLElement | null) {
+	clearIntroPending();
+	document.body.classList.remove('intro-active');
+	setIntroSequenceRunning(false);
+	if (overlay) resetPageTransitionOverlay(overlay);
+	markIntroComplete();
+	dispatchIntroComplete();
+}
+
 async function runIntroSequence() {
 	const overlay = getPageTransitionOverlay();
 	if (!overlay) {
-		markIntroComplete();
-		clearIntroPending();
-		document.body.classList.remove('intro-active');
-		dispatchIntroComplete();
+		releaseIntroCover(null);
 		return;
 	}
 
+	let hardTimeoutId = 0;
+	const hardTimeout = new Promise<void>((resolve) => {
+		hardTimeoutId = window.setTimeout(resolve, INTRO_HARD_TIMEOUT_MS);
+	});
+
 	try {
-		await animateIntroCover();
-		markIntroComplete();
-		setIntroRevealing();
-		window.dispatchEvent(new CustomEvent('intro-revealing'));
-		await animatePageTransitionReveal();
+		await Promise.race([
+			(async () => {
+				await animateIntroCover();
+				markIntroComplete();
+				setIntroRevealing();
+				window.dispatchEvent(new CustomEvent('intro-revealing'));
+				await animatePageTransitionReveal();
+			})(),
+			hardTimeout,
+		]);
 	} catch {
-		clearIntroPending();
-		resetPageTransitionOverlay(overlay);
-		markIntroComplete();
+		/* fall through to forced release */
 	} finally {
-		clearIntroPending();
-		document.body.classList.remove('intro-active');
-		setIntroSequenceRunning(false);
-		dispatchIntroComplete();
+		window.clearTimeout(hardTimeoutId);
+		releaseIntroCover(overlay);
 	}
 }
 
 export function initGlobalPreloader() {
 	if (!document.getElementById('hero-section')) {
-		clearIntroPending();
+		forceDismissIntroCover();
 		return;
 	}
 
 	if (isMobileNavNavigationActive()) {
-		clearIntroPending();
-		const overlay = getPageTransitionOverlay();
-		if (overlay) resetPageTransitionOverlay(overlay);
-		markIntroComplete();
-		dispatchIntroComplete();
+		forceDismissIntroCover();
 		return;
 	}
 
 	if (hasCompletedIntro()) {
-		clearIntroPending();
-		dispatchIntroComplete();
+		forceDismissIntroCover();
 		return;
 	}
 
-	if (isIntroSequenceRunning()) return;
+	if (isIntroSequenceRunning()) {
+		// Previous run may have stalled — never leave pending forever.
+		window.setTimeout(() => {
+			if (document.documentElement.classList.contains('intro-pending')) {
+				forceDismissIntroCover();
+			}
+		}, INTRO_HARD_TIMEOUT_MS);
+		return;
+	}
 
 	setIntroSequenceRunning(true);
 	lockIntroCover();

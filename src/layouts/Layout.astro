@@ -70,8 +70,26 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 		<script is:inline>
 			(function () {
 				var path = window.location.pathname.replace(/\/$/, '') || '/';
-				if (path === '/' || path.endsWith('/index.html')) {
+				var isHome = path === '/' || path.endsWith('/index.html');
+				if (isHome) {
 					document.documentElement.classList.add('intro-pending');
+					// Failsafe: if the app bundle never boots (common after deploy),
+					// never leave the preloader covering the site.
+					window.setTimeout(function () {
+						if (!document.documentElement.classList.contains('intro-pending')) return;
+						document.documentElement.classList.remove('intro-pending', 'intro-revealing');
+						var overlay = document.getElementById('page-transition-overlay');
+						if (overlay) {
+							overlay.classList.remove('is-covering', 'is-revealing', 'is-covered', 'is-active');
+							overlay.style.pointerEvents = 'none';
+							var bars = overlay.querySelectorAll('.page-transition-bar');
+							for (var i = 0; i < bars.length; i++) {
+								bars[i].style.animation = 'none';
+								bars[i].style.transform = '';
+							}
+						}
+						if (document.body) document.body.classList.remove('intro-active');
+					}, 4500);
 				}
 				try {
 					var locale = window.localStorage.getItem('portfolio-locale');

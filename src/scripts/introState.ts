@@ -40,3 +40,23 @@ export function setIntroRevealing(): void {
 export function setIntroSequenceRunning(running: boolean): void {
 	introWindow().__setinIntroRunning = running;
 }
+
+/** Force-clear every intro/preloader lock so the site never stays covered. */
+export function forceDismissIntroCover(): void {
+	clearIntroPending();
+	setIntroSequenceRunning(false);
+	markIntroComplete();
+	document.body?.classList.remove('intro-active');
+
+	const overlay = document.getElementById('page-transition-overlay');
+	if (overlay) {
+		overlay.classList.remove('is-covering', 'is-revealing', 'is-covered', 'is-active');
+		overlay.style.pointerEvents = 'none';
+		overlay.querySelectorAll<HTMLElement>('.page-transition-bar').forEach((bar) => {
+			bar.style.animation = 'none';
+			bar.style.transform = '';
+		});
+	}
+
+	dispatchIntroComplete();
+}
