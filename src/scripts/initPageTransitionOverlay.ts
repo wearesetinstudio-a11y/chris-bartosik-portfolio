@@ -42,9 +42,19 @@ function setPhase(phase: TransitionPhase) {
 	transitionWindow.__setinPageTransitionPhase = phase;
 }
 
+/** True while cover/reveal owns the overlay — callers must not reset it. */
+export function isPageTransitionBusy(): boolean {
+	return getPhase() !== 'idle';
+}
+
 function cleanupIntroState() {
 	if (document.documentElement.classList.contains('intro-pending') && hasCompletedIntro()) {
-		forceDismissIntroCover();
+		// Don't wipe the overlay if a page transition is mid cover/reveal.
+		if (!isPageTransitionBusy()) forceDismissIntroCover();
+		else {
+			document.documentElement.classList.remove('intro-pending', 'intro-revealing');
+			document.body.classList.remove('intro-active');
+		}
 		return;
 	}
 	if (!hasCompletedIntro()) return;

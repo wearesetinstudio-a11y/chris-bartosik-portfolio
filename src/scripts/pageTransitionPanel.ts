@@ -48,10 +48,12 @@ async function waitForBarsAnimation(
 		return;
 	}
 
+	// Cover and reveal both stagger across BAR_COUNT bars (reveal is reversed),
+	// so every bar needs the full wave window — not index * delay alone.
+	const totalMs = durationMs + (BAR_COUNT - 1) * BAR_STAGGER_MS;
+
 	await Promise.all(
-		bars.map((bar, index) =>
-			waitForAnimation(bar, animationName, durationMs + index * BAR_STAGGER_MS),
-		),
+		bars.map((bar) => waitForAnimation(bar, animationName, totalMs)),
 	);
 }
 
@@ -108,9 +110,18 @@ export async function slidePanelOut(overlay: HTMLElement): Promise<void> {
 	}
 
 	overlay.classList.remove('is-covering');
-	resetBarAnimations(overlay);
+	for (const bar of getBars(overlay)) {
+		bar.style.animation = 'none';
+	}
 	void overlay.offsetWidth;
+	// Apply reveal while still covered so bars never snap to -100%, then
+	// drop is-covered once the animation (fill-mode: both) owns transform.
 	overlay.classList.add('is-revealing');
+	for (const bar of getBars(overlay)) {
+		bar.style.animation = '';
+	}
+	void overlay.offsetWidth;
+	overlay.classList.remove('is-covered');
 	await waitForBarsAnimation(overlay, BAR_REVEAL_ANIMATION, PANEL_SLIDE_MS);
 	resetPageTransitionOverlay(overlay);
 }

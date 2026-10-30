@@ -112,40 +112,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 </section>
 
 <style is:global>
-	.contact-parallax-shell {
-		--contact-parallax-overlap: min(40vh, 360px);
-		position: relative;
-		z-index: 10;
-		margin-top: calc(-1 * var(--contact-parallax-overlap));
-	}
-
-	.contact-parallax-track {
-		position: relative;
-		transform: translateZ(0);
-		backface-visibility: hidden;
-		will-change: transform;
-	}
-
-	@media (max-width: 767px) {
-		.contact-parallax-shell {
-			margin-top: 0;
-		}
-
-		.contact-parallax-track {
-			will-change: auto;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.contact-parallax-shell {
-			margin-top: 0;
-		}
-
-		.contact-parallax-track {
-			will-change: auto;
-		}
-	}
-
 	.contact-heading {
 		font-size: 1.4rem;
 		line-height: 1.15;
@@ -395,7 +361,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 
 <script>
 	import { initScrollLetterReveals } from '../scripts/initScrollLetterReveal.ts';
-	import { initContactParallax } from '../scripts/initContactParallax.ts';
 
 	function initContactHeadingReveal() {
 		initScrollLetterReveals(['contact-heading']);
@@ -506,7 +471,6 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 	function bootContactSection() {
 		initContactHeadingReveal();
 		initContactEmailButton();
-		initContactParallax();
 	}
 
 	if (document.readyState === 'loading') {

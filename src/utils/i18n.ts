@@ -182,10 +182,28 @@ export const dictionary = {
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
 			quote4:
 				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
+			quote5:
+				'Krzysiek is not only a great UI Designer with a fantastic eye for motion design, but also someone with an incredible drive for self-improvement. Everything he’s capable of is the result of his own hard work and constant hunger for knowledge.',
+			quote6:
+				'Krzysiek is a true Figma ninja, his mastery of the tool and meticulous attention to keeping design files organized significantly sped up the work of the entire team. His skill with animations brought a level of polish and lightness to projects that made a huge difference in how the final product was received.',
+			quote7:
+				'Krzysztof is the kind of designer whose layers aren’t called “Rectangle 12.” Sounds like an urban legend, I know. On top of that, he genuinely thinks about the user and ships UI that doesn’t need fixing during implementation. I’d recommend him to anyone.',
+			quote8:
+				'I worked with Krzysztof on the same design team for over two years, and during that time I got to know him as a very talented and dedicated designer. He is a true Figma virtuoso with a great eye for design and a genuine passion for what he does.',
+			quote9:
+				'I had the opportunity to work with Krzysztof on several mobile apps, and it was a very positive experience. Communication was always smooth, and we had no trouble finding solutions that worked well from both the design and implementation perspectives.',
+			quote10:
+				"I can't recommend Krzysztof Bartosik highly enough - he is easily one of the most versatile, high-impact designers I've worked with. We teamed up on everything from mobile and web apps to complex IoT interfaces and slick motion design. What sets Krzysztof apart is his rare mix of top-tier product sense, attention to micro-interactions, and a deep understanding of technical constraints, which makes cross-functional collaboration effortless. He takes full ownership, brings great energy to the team, and consistently raises the bar on design quality. Any high-growth team or product org would be lucky to have him!",
 			role1: 'CEO of NRV',
 			role2: 'CEO of See More Logistics',
 			role3: 'Owner of TRG',
 			role4: 'Developer',
+			role5: 'UX/UI Designer at PhotoAiD',
+			role6: 'Product Designer at PhotoAiD',
+			role7: 'Frontend Team Lead at PhotoAiD',
+			role8: 'Designer at PhotoAiD',
+			role9: 'Mobile Developer at PhotoAiD',
+			role10: 'Product Manager at PhotoAiD',
 		},
 		about: {
 			eyebrow: 'My story',
@@ -427,10 +445,28 @@ export const dictionary = {
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
 			quote4:
 				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
+			quote5:
+				'Krzysiek is not only a great UI Designer with a fantastic eye for motion design, but also someone with an incredible drive for self-improvement. Everything he’s capable of is the result of his own hard work and constant hunger for knowledge.',
+			quote6:
+				'Krzysiek is a true Figma ninja, his mastery of the tool and meticulous attention to keeping design files organized significantly sped up the work of the entire team. His skill with animations brought a level of polish and lightness to projects that made a huge difference in how the final product was received.',
+			quote7:
+				'Krzysztof is the kind of designer whose layers aren’t called “Rectangle 12.” Sounds like an urban legend, I know. On top of that, he genuinely thinks about the user and ships UI that doesn’t need fixing during implementation. I’d recommend him to anyone.',
+			quote8:
+				'I worked with Krzysztof on the same design team for over two years, and during that time I got to know him as a very talented and dedicated designer. He is a true Figma virtuoso with a great eye for design and a genuine passion for what he does.',
+			quote9:
+				'I had the opportunity to work with Krzysztof on several mobile apps, and it was a very positive experience. Communication was always smooth, and we had no trouble finding solutions that worked well from both the design and implementation perspectives.',
+			quote10:
+				"I can't recommend Krzysztof Bartosik highly enough - he is easily one of the most versatile, high-impact designers I've worked with. We teamed up on everything from mobile and web apps to complex IoT interfaces and slick motion design. What sets Krzysztof apart is his rare mix of top-tier product sense, attention to micro-interactions, and a deep understanding of technical constraints, which makes cross-functional collaboration effortless. He takes full ownership, brings great energy to the team, and consistently raises the bar on design quality. Any high-growth team or product org would be lucky to have him!",
 			role1: 'CEO NRV',
 			role2: 'CEO See More Logistics',
 			role3: 'CEO TRG',
 			role4: 'Developer',
+			role5: 'UX/UI Designer w PhotoAiD',
+			role6: 'Product Designer w PhotoAiD',
+			role7: 'Frontend Team Lead w PhotoAiD',
+			role8: 'Designer w PhotoAiD',
+			role9: 'Mobile Developer w PhotoAiD',
+			role10: 'Product Manager w PhotoAiD',
 		},
 		about: {
 			eyebrow: 'Moja historia',
@@ -672,10 +708,28 @@ export const dictionary = {
 				'Thank you again, I really like how elegant it looks but also showing a youth image as I asked you!',
 			quote4:
 				'I had the pleasure of working with Chris across multiple projects, and he consistently stands out for his work ethic, professionalism, and user-first mindset. He has exceptional attention to detail and a real talent for crafting slick micro-animations that elevate the user experience. Beyond his strong UX/UI skills, Chris is deeply proactive, always experimenting with new tools and techniques. The fact that he can also build fully functional web applications makes him a uniquely versatile team member. Any team would be lucky to have him.',
+			quote5:
+				'Krzysiek is not only a great UI Designer with a fantastic eye for motion design, but also someone with an incredible drive for self-improvement. Everything he’s capable of is the result of his own hard work and constant hunger for knowledge.',
+			quote6:
+				'Krzysiek is a true Figma ninja, his mastery of the tool and meticulous attention to keeping design files organized significantly sped up the work of the entire team. His skill with animations brought a level of polish and lightness to projects that made a huge difference in how the final product was received.',
+			quote7:
+				'Krzysztof is the kind of designer whose layers aren’t called “Rectangle 12.” Sounds like an urban legend, I know. On top of that, he genuinely thinks about the user and ships UI that doesn’t need fixing during implementation. I’d recommend him to anyone.',
+			quote8:
+				'I worked with Krzysztof on the same design team for over two years, and during that time I got to know him as a very talented and dedicated designer. He is a true Figma virtuoso with a great eye for design and a genuine passion for what he does.',
+			quote9:
+				'I had the opportunity to work with Krzysztof on several mobile apps, and it was a very positive experience. Communication was always smooth, and we had no trouble finding solutions that worked well from both the design and implementation perspectives.',
+			quote10:
+				"I can't recommend Krzysztof Bartosik highly enough - he is easily one of the most versatile, high-impact designers I've worked with. We teamed up on everything from mobile and web apps to complex IoT interfaces and slick motion design. What sets Krzysztof apart is his rare mix of top-tier product sense, attention to micro-interactions, and a deep understanding of technical constraints, which makes cross-functional collaboration effortless. He takes full ownership, brings great energy to the team, and consistently raises the bar on design quality. Any high-growth team or product org would be lucky to have him!",
 			role1: 'CEO de NRV',
 			role2: 'CEO de See More Logistics',
 			role3: 'Propietaria de TRG',
 			role4: 'Developer',
+			role5: 'Diseñador UX/UI en PhotoAiD',
+			role6: 'Diseñadora de producto en PhotoAiD',
+			role7: 'Frontend Team Lead en PhotoAiD',
+			role8: 'Diseñadora en PhotoAiD',
+			role9: 'Desarrollador móvil en PhotoAiD',
+			role10: 'Product Manager en PhotoAiD',
 		},
 		about: {
 			eyebrow: 'Mi historia',

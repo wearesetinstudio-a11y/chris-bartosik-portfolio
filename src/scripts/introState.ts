@@ -48,6 +48,14 @@ export function forceDismissIntroCover(): void {
 	markIntroComplete();
 	document.body?.classList.remove('intro-active');
 
+	const phase = (window as Window & { __setinPageTransitionPhase?: string })
+		.__setinPageTransitionPhase;
+	// Leave the overlay alone while page transitions animate the stripe reveal.
+	if (phase === 'covering' || phase === 'covered' || phase === 'revealing') {
+		dispatchIntroComplete();
+		return;
+	}
+
 	const overlay = document.getElementById('page-transition-overlay');
 	if (overlay) {
 		overlay.classList.remove('is-covering', 'is-revealing', 'is-covered', 'is-active');

@@ -1,8 +1,5 @@
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-
-/** Tiny .riv stubs fail silently in the grid — skip and fall back. */
-const MIN_RIVE_COVER_BYTES = 20_000;
 
 const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm', '.riv', '.svg']);
 const DEFAULT_EXCLUDED = new Set([
@@ -70,16 +67,7 @@ export function getProjectCoverMedia(project: {
 	const folderDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folder);
 	try {
 		const files = readdirSync(folderDir);
-		const coverFiles = files.filter((f) => {
-			if (!/^cover\.(riv|webm|mp4|webp|svg)$/i.test(f)) return false;
-			const ext = f.slice(f.lastIndexOf('.')).toLowerCase();
-			if (!isRiveExtension(ext)) return true;
-			try {
-				return statSync(join(folderDir, f)).size >= MIN_RIVE_COVER_BYTES;
-			} catch {
-				return false;
-			}
-		});
+		const coverFiles = files.filter((f) => /^cover\.(riv|webm|mp4|webp|svg)$/i.test(f));
 		const preferred = preferRiveFilenames(coverFiles)[0];
 		if (preferred) {
 			const ext = preferred.slice(preferred.lastIndexOf('.')).toLowerCase();

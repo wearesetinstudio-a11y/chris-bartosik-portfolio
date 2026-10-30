@@ -10,6 +10,7 @@ import {
 	setIntroSequenceRunning,
 } from './introState.ts';
 import { isMobileNavNavigationActive } from './mobileNavPanel.ts';
+import { isPageTransitionBusy } from './initPageTransitionOverlay.ts';
 import {
 	animateIntroCover,
 	animatePageTransitionReveal,
@@ -20,6 +21,14 @@ import {
 
 /** Hard ceiling so a hung animation never leaves the site covered after deploy. */
 const INTRO_HARD_TIMEOUT_MS = 4500;
+
+/** Clear intro locks without touching an in-flight page-transition overlay. */
+function dismissIntroFlagsOnly() {
+	clearIntroPending();
+	document.body.classList.remove('intro-active');
+	setIntroSequenceRunning(false);
+	markIntroComplete();
+}
 
 function lockIntroCover(): HTMLElement | null {
 	const overlay = getPageTransitionOverlay();
@@ -74,6 +83,13 @@ async function runIntroSequence() {
 }
 
 export function initGlobalPreloader() {
+	// astro:page-load fires while the stripe reveal is still playing.
+	// Never nuke the overlay mid-transition — that caused the blink exit.
+	if (isPageTransitionBusy()) {
+		dismissIntroFlagsOnly();
+		return;
+	}
+
 	if (!document.getElementById('hero-section')) {
 		forceDismissIntroCover();
 		return;
@@ -92,7 +108,7 @@ export function initGlobalPreloader() {
 	if (isIntroSequenceRunning()) {
 		// Previous run may have stalled — never leave pending forever.
 		window.setTimeout(() => {
-			if (document.documentElement.classList.contains('intro-pending')) {
+			if (document.documentElement.classList.contains('intro-pending') && !isPageTransitionBusy()) {
 				forceDismissIntroCover();
 			}
 		}, INTRO_HARD_TIMEOUT_MS);
