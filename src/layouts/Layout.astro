@@ -185,12 +185,14 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
 			import { initSmoothHashScroll } from '../scripts/initSmoothHashScroll.ts';
+			import { initTabTitle } from '../scripts/initTabTitle.ts';
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
 			import { initRivePlayers } from '../scripts/initRivePlayers.ts';
 
 			initLoadScroll();
 			initI18n();
+			initTabTitle();
 			initPageTransitionOverlay();
 			initGlobalPreloader();
 			initSiteCursor();
@@ -200,6 +202,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			initRivePlayers();
 			document.addEventListener('astro:page-load', () => {
 				initI18n();
+				initTabTitle();
 				initGlobalPreloader();
 				initSiteCursor();
 				initSmoothHashScroll();
