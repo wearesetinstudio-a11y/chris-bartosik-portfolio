@@ -1,5 +1,3 @@
-import type { Locale } from './i18n.ts';
-
 export type ProjectSectionTheme = 'light' | 'dark' | 'muted';
 
 export type ProjectSectionFields = {

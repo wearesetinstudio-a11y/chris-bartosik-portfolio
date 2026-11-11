@@ -1,7 +1,6 @@
 ---
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
-import LanguageSwitcher from './LanguageSwitcher.astro';
 import ChrisLogo from './ChrisLogo.astro';
 import { t } from '../utils/i18n.ts';
 
@@ -74,7 +73,6 @@ const headerClass = waitForIntro
 				))
 			}
 			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
-			<LanguageSwitcher />
 		</nav>
 
 		<div class="header-mobile-tools relative z-[60] flex items-center gap-5 md:hidden">
@@ -137,9 +135,6 @@ const headerClass = waitForIntro
 			}
 		</nav>
 
-		<div class="mobile-nav-panel__langs flex items-start" data-mobile-nav-link>
-			<LanguageSwitcher />
-		</div>
 	</div>
 </div>
 
@@ -259,11 +254,6 @@ const headerClass = waitForIntro
 	.site-header--light-bg:not(.header-solid) .site-header__logo-mark .logo-mark__name,
 	.site-header--light-bg.header-solid .site-header__logo-mark .logo-mark__name {
 		filter: brightness(0);
-	}
-
-	.site-header--light-bg:not(.header-solid) .lang-switcher,
-	.site-header--light-bg.header-solid .lang-switcher {
-		color: #000000;
 	}
 
 	.site-header--light-bg:not(.header-solid) .rolling-link,
@@ -388,10 +378,6 @@ const headerClass = waitForIntro
 		right: 1px;
 	}
 
-	.site-header:not(.site-header--light-bg) .lang-switcher {
-		color: #f5f5f5;
-	}
-
 	.site-header:not(.site-header--light-bg) .mobile-nav-toggle {
 		color: #f5f5f5;
 	}
@@ -411,16 +397,6 @@ const headerClass = waitForIntro
 
 	.mobile-nav-toggle.is-open .mobile-nav-toggle__dot:nth-child(4) {
 		transform: translate3d(-2.25px, -2.25px, 0) scale(1.35);
-	}
-
-	.mobile-nav-panel__langs .lang-switcher {
-		color: #f5f5f5;
-		gap: 0.75rem;
-	}
-
-	.mobile-nav-panel__langs .lang-switcher__btn,
-	.mobile-nav-panel__langs .lang-switcher__sep {
-		font-size: 0.95rem;
 	}
 
 	@keyframes mobile-nav-bar-cover {
@@ -530,21 +506,18 @@ const headerClass = waitForIntro
 		pointer-events: auto;
 	}
 
-	.mobile-nav-panel .mobile-nav-link,
-	.mobile-nav-panel .mobile-nav-panel__langs {
+	.mobile-nav-panel .mobile-nav-link {
 		opacity: 0;
 		transform: translateX(-1.75rem);
 	}
 
-	.mobile-nav-panel.is-open.is-covered .mobile-nav-link,
-	.mobile-nav-panel.is-open.is-covered .mobile-nav-panel__langs {
+	.mobile-nav-panel.is-open.is-covered .mobile-nav-link {
 		transition:
 			opacity 0.35s ease,
 			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link,
-	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__langs {
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link {
 		opacity: 1;
 		transform: translateX(0);
 	}
@@ -565,18 +538,9 @@ const headerClass = waitForIntro
 		transition-delay: 165ms;
 	}
 
-	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-panel__langs {
-		transition-delay: 220ms;
-	}
-
-	.mobile-nav-panel.is-content-exiting .mobile-nav-link,
-	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__langs {
+	.mobile-nav-panel.is-content-exiting .mobile-nav-link {
 		opacity: 0;
 		transform: translateX(-1.75rem);
-	}
-
-	.mobile-nav-panel.is-content-exiting .mobile-nav-panel__langs {
-		transition-delay: 0ms;
 	}
 
 	.mobile-nav-panel.is-content-exiting .mobile-nav-link:nth-child(4) {
@@ -607,8 +571,7 @@ const headerClass = waitForIntro
 		.mobile-nav-toggle__ring,
 		.mobile-nav-panel.is-covering .mobile-nav-bar,
 		.mobile-nav-panel.is-revealing .mobile-nav-bar,
-		.mobile-nav-panel .mobile-nav-link,
-		.mobile-nav-panel .mobile-nav-panel__langs {
+		.mobile-nav-panel .mobile-nav-link {
 			transition: none !important;
 			animation: none !important;
 			transition-delay: 0ms !important;
@@ -622,8 +585,7 @@ const headerClass = waitForIntro
 			transform: translateY(-100%);
 		}
 
-		.mobile-nav-panel .mobile-nav-link,
-		.mobile-nav-panel .mobile-nav-panel__langs {
+		.mobile-nav-panel .mobile-nav-link {
 			opacity: 1 !important;
 			transform: none !important;
 		}

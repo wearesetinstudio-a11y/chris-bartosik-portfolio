@@ -24,6 +24,8 @@ industry: AI, Biometrics
 market: Global (USA, UK, DE, FR, PL)
 tools: Figma, Clarity, Rive, Google Analytics
 year: 2026
+liveLabel: photoaid.com
+liveUrl: https://photoaid.com/
 overviewLabel: Intro
 overviewTitle: Scaling a Global Leader in Biometric Photography
 overviewText: >-

@@ -1,4 +1,6 @@
 ---
+import ProjectLiveResultButton from './ProjectLiveResultButton.astro';
+
 export interface SidebarNavItem {
 	id: string;
 	num: string;
@@ -10,48 +12,62 @@ export interface SidebarNavItem {
 
 interface Props {
 	items: SidebarNavItem[];
+	liveUrl?: string;
 }
 
-const { items } = Astro.props;
+const { items, liveUrl = '' } = Astro.props;
+const resolvedLiveUrl = liveUrl.trim();
 ---
 
 <aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
-	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)]">
-		<nav class="project-sidebar__nav flex flex-col gap-4.5" aria-label="Spis sekcji projektu">
-			{
-				items.map((item, idx) => (
-					<a
-						href={`#${item.id}`}
-						class:list={[
-							'project-sidebar__link group flex items-baseline gap-2.5 text-[1rem] transition-colors duration-200',
-							idx === 0 && 'is-active',
-						]}
-						data-section-target={item.id}
-						data-project-section={item.sectionIndex != null ? item.sectionIndex : undefined}
-					>
-						<span class="project-sidebar__num font-semibold text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
-							{item.num}
-						</span>
-						<span class="project-sidebar__label font-semibold uppercase tracking-[0.03em] text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
-							[
-							{item.isOverview ? (
-								<span
-									data-project-field="overviewLabel"
-									data-i18n={item.labelKey}
-								>
-									{item.label}
+	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)] flex min-h-[calc(100svh-100px-5rem)] flex-col pb-8">
+		{
+			items.length > 0 ? (
+				<nav class="project-sidebar__nav flex flex-col gap-4.5" aria-label="Spis sekcji projektu">
+					{
+						items.map((item, idx) => (
+							<a
+								href={`#${item.id}`}
+								class:list={[
+									'project-sidebar__link group flex items-baseline gap-2.5 text-[1rem] transition-colors duration-200',
+									idx === 0 && 'is-active',
+								]}
+								data-section-target={item.id}
+								data-project-section={item.sectionIndex != null ? item.sectionIndex : undefined}
+							>
+								<span class="project-sidebar__num font-semibold text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
+									{item.num}
 								</span>
-							) : (
-								<span data-project-section-field="label">
-									{item.label}
+								<span class="project-sidebar__label font-semibold uppercase tracking-[0.03em] text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
+									[
+									{item.isOverview ? (
+										<span
+											data-project-field="overviewLabel"
+											data-i18n={item.labelKey}
+										>
+											{item.label}
+										</span>
+									) : (
+										<span data-project-section-field="label">
+											{item.label}
+										</span>
+									)}
+									]
 								</span>
-							)}
-							]
-						</span>
-					</a>
-				))
-			}
-		</nav>
+							</a>
+						))
+					}
+				</nav>
+			) : null
+		}
+
+		{
+			resolvedLiveUrl ? (
+				<div class="project-sidebar__live mt-auto pt-10">
+					<ProjectLiveResultButton href={resolvedLiveUrl} />
+				</div>
+			) : null
+		}
 	</div>
 </aside>
 

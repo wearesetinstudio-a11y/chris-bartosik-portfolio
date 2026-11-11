@@ -21,17 +21,7 @@ const clientSlug = client
 	.toLowerCase()
 	.replace(/[^a-z0-9]+/g, '-')
 	.replace(/^-|-$/g, '');
-const titleMap = JSON.stringify({
-	en: copy.en.title ?? title,
-	pl: copy.pl.title ?? title,
-	pa: copy.pa.title ?? title,
-});
 const tagsList = tags.length > 0 ? tags : category ? category.split(',').map((s) => s.trim()).filter(Boolean) : [];
-const categoryMap = JSON.stringify({
-	en: copy.en.category ?? category,
-	pl: copy.pl.category ?? copy.en.category ?? category,
-	pa: copy.pa.category ?? copy.en.category ?? category,
-});
 
 const coverMedia = getProjectCoverMedia(project);
 const coverSrc = coverMedia.src ? withPublicAssetVersion(coverMedia.src) : '';
@@ -104,14 +94,14 @@ const Tag = comingSoon ? 'div' : 'a';
 			<h3 class="project-card__title min-w-0 font-semibold uppercase tracking-[0.02em] text-black">
 				<span class="project-card__title-roll">
 					<span class="project-card__title-track">
-						<span class="project-card__title-line" data-locale-copy={titleMap}>{label}</span>
-						<span class="project-card__title-line" aria-hidden="true" data-locale-copy={titleMap}>{label}</span>
+						<span class="project-card__title-line">{label}</span>
+						<span class="project-card__title-line" aria-hidden="true">{label}</span>
 					</span>
 				</span>
 			</h3>
 			{
 				tagsList && tagsList.length > 0 ? (
-					<div class="project-card__tags flex flex-wrap items-center gap-1.5" data-locale-tags={categoryMap}>
+					<div class="project-card__tags flex flex-wrap items-center gap-1.5">
 						{tagsList.map((tag) => (
 							<span class="project-card__tag inline-flex items-center bg-[#FFFFFF] px-2.5 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.04em] text-black">
 								{tag}

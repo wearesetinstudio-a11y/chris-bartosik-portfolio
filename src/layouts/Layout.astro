@@ -93,11 +93,6 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 						if (document.body) document.body.classList.remove('intro-active');
 					}, 4500);
 				}
-				try {
-					var locale = window.localStorage.getItem('portfolio-locale');
-					if (locale) document.documentElement.dataset.locale = locale;
-				} catch (e) {}
-
 				var KEY = 'cb-load-scroll';
 				var TOP = 24;
 				if ('scrollRestoration' in history) {
@@ -188,18 +183,30 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			import { initTabTitle } from '../scripts/initTabTitle.ts';
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
-			import { initRivePlayers } from '../scripts/initRivePlayers.ts';
 
-			initLoadScroll();
-			initI18n();
-			initTabTitle();
-			initPageTransitionOverlay();
-			initGlobalPreloader();
-			initSiteCursor();
-			initSmoothHashScroll();
-			initHeroParticles();
-			initHandParticles();
-			initRivePlayers();
+			function bootRivePlayers() {
+				// Dynamic import so a Rive/Vite dep failure can't block hero boot.
+				void import('../scripts/initRivePlayers.ts')
+					.then(({ initRivePlayers }) => initRivePlayers())
+					.catch((error) => {
+						console.warn('Rive players failed to load', error);
+					});
+			}
+
+			function bootSite() {
+				initLoadScroll();
+				initI18n();
+				initTabTitle();
+				initPageTransitionOverlay();
+				initGlobalPreloader();
+				initSiteCursor();
+				initSmoothHashScroll();
+				initHeroParticles();
+				initHandParticles();
+				bootRivePlayers();
+			}
+
+			bootSite();
 			document.addEventListener('astro:page-load', () => {
 				initI18n();
 				initTabTitle();
@@ -208,7 +215,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				initSmoothHashScroll();
 				initHeroParticles();
 				initHandParticles();
-				initRivePlayers();
+				bootRivePlayers();
 			});
 		</script>
 	</body>

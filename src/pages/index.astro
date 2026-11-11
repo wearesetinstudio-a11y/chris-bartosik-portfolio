@@ -25,18 +25,11 @@ const { projectCount } = await getSiteCounts();
 		<HeroSection />
 
 		<script>
-			import { initHeroSparks } from '../scripts/initHeroSparks.ts';
 			import { initHeroTime } from '../scripts/initHeroTime.ts';
 
-			function initHeroInteractions() {
-				initHeroSparks();
-			}
-
-			initHeroInteractions();
 			initHeroTime();
 
 			document.addEventListener('astro:page-load', () => {
-				initHeroInteractions();
 				initHeroTime();
 			});
 		</script>

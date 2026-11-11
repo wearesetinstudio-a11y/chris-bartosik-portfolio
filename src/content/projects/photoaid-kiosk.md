@@ -24,6 +24,8 @@ industry: Retail, Photography
 market: Poland
 tools: Figma, Cavalry, Rive
 year: 2026
+liveLabel: photoaid.com
+liveUrl: https://photoaid.com/
 overviewLabel: Intro
 overviewTitle: Designing a Physical Print Ecosystem from Scratch
 overviewText: >-

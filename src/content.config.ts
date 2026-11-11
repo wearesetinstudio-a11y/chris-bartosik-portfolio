@@ -2,14 +2,6 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-const projectSectionCopyFields = z
-	.object({
-		label: z.string().optional(),
-		title: z.string().optional(),
-		text: z.string().optional(),
-	})
-	.partial();
-
 const projectSectionSchema = z.object({
 	label: z.string().optional().default(''),
 	title: z.string().optional().default(''),
@@ -17,35 +9,6 @@ const projectSectionSchema = z.object({
 	theme: z.enum(['light', 'dark', 'muted']).optional().default('light'),
 	afterGroup: z.number().optional(),
 });
-
-const projectCopyFields = z
-	.object({
-		title: z.string().optional(),
-		client: z.string().optional(),
-		clientLabel: z.string().optional(),
-		category: z.string().optional(),
-		heroSubtitle: z.string().optional(),
-		service: z.string().optional(),
-		industry: z.string().optional(),
-		market: z.string().optional(),
-		tools: z.string().optional(),
-		liveLabel: z.string().optional(),
-		overviewLabel: z.string().optional(),
-		overviewTitle: z.string().optional(),
-		overviewText: z.string().optional(),
-		challengesTitle: z.string().optional(),
-		challengesText: z.string().optional(),
-		strategyTitle: z.string().optional(),
-		strategyText: z.string().optional(),
-		summaryTitle: z.string().optional(),
-		summaryText: z.string().optional(),
-		quote: z.string().optional(),
-		quoteAuthor: z.string().optional(),
-		quoteRole: z.string().optional(),
-		quoteLabel: z.string().optional(),
-		sections: z.array(projectSectionCopyFields).max(10).optional(),
-	})
-	.partial();
 
 const workItemSchema = z.object({
 	title: z.string(),
@@ -107,12 +70,8 @@ const workItemSchema = z.object({
 	summaryLabel: z.string().optional().default('Summary'),
 	summaryTitle: z.string().optional().default(''),
 	summaryText: z.string().optional().default(''),
-	i18n: z
-		.object({
-			pl: projectCopyFields.optional(),
-			pa: projectCopyFields.optional(),
-		})
-		.optional(),
+	/** Legacy PL/ES project translations — ignored (English-only site). */
+	i18n: z.record(z.string(), z.unknown()).optional(),
 });
 
 const projects = defineCollection({

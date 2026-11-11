@@ -6,7 +6,7 @@
 # JAK UŻYWAĆ
 # 1. Skopiuj ten plik jako: public/portfolio/{folderName}/project.md
 #    (obok cover, bg, 1.webp, 2.1.webp itd.)
-# 2. Uzupełnij pola EN na górze + tłumaczenia w i18n.pl / i18n.pa
+# 2. Uzupełnij pola EN na górze (site is English-only)
 # 3. Napisz do mnie: „zaktualizuj projekt z folderu {folderName}”
 #    — przepiszę treść do src/content/projects/{slug}.md i podepnę media
 #
@@ -103,86 +103,10 @@ sections:
   #   text: ''
 
 # --- Cytat / Opinia klienta (pod ostatnią sekcją summary, opcjonalnie) ---
-quoteLabel: '' # Puste = domyślne [CLIENT REVIEW] / [OPINIA KLIENTA] / [OPINIÓN DEL CLIENTE]
-quote: '' # Treść cytatu / opinii klienta
-quoteAuthor: '' # Imię i nazwisko (np. NEDELKA VELASCO)
-quoteRole: '' # Stanowisko / firma (np. CEO OF NRV)
-
-# --- Tłumaczenia: tylko pola do nadpisania (reszta bierze EN) ---
-i18n:
-  pl:
-    clientLabel: ''
-    heroSubtitle: |-
-      Krótka linia hero jeden
-      Krótka linia hero dwa
-    service: ''
-    industry: ''
-    market: ''
-    tools: ''
-    liveLabel: ''
-    overviewLabel: ''
-    overviewTitle: 'Nagłówek kontekstu'
-    overviewText: |-
-      Pierwszy akapit.
-
-      Drugi akapit.
-    quoteLabel: ''
-    quote: ''
-    quoteAuthor: ''
-    quoteRole: ''
-    sections:
-      - label: Sekcja 01
-        title: 'Nagłówek sekcji jeden'
-        text: |-
-          Treść sekcji jeden.
-
-          - **Punkt jeden**: Opis.
-          - **Punkt dwa**: Opis.
-      - label: Sekcja 02
-        title: 'Nagłówek sekcji dwa'
-        text: |-
-          Treść sekcji dwa.
-      - label: Sekcja 03
-        title: 'Nagłówek sekcji trzy'
-        text: |-
-          Treść sekcji trzy.
-
-  pa:
-    clientLabel: ''
-    heroSubtitle: |-
-      Línea hero uno
-      Línea hero dos
-    service: ''
-    industry: ''
-    market: ''
-    tools: ''
-    liveLabel: ''
-    overviewLabel: ''
-    overviewTitle: 'Título del overview'
-    overviewText: |-
-      Primer párrafo.
-
-      Segundo párrafo.
-    quoteLabel: ''
-    quote: ''
-    quoteAuthor: ''
-    quoteRole: ''
-    sections:
-      - label: Sección 01
-        title: 'Título sección uno'
-        text: |-
-          Texto sección uno.
-
-          - **Punto uno**: Detalle.
-          - **Punto dos**: Detalle.
-      - label: Sección 02
-        title: 'Título sección dos'
-        text: |-
-          Texto sección dos.
-      - label: Sección 03
-        title: 'Título sección tres'
-        text: |-
-          Texto sección tres.
+quoteLabel: '' # Empty = default [CLIENT REVIEW]
+quote: '' # Client quote / review
+quoteAuthor: '' # Name (e.g. NEDELKA VELASCO)
+quoteRole: '' # Role / company (e.g. CEO OF NRV)
 ---
 
 <!-- Body markdown nie jest używane — cała treść jest w frontmatterze powyżej. -->

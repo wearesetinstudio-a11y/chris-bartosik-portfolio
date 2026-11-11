@@ -7,11 +7,17 @@ type Particle = {
 	vy: number;
 	size: number;
 	alpha: number;
-	phase: number;
-	freq: number;
-	amp: number;
 	bucket: number;
-	zone: 'bottom' | 'top';
+	flickerFreq: number;
+	flickerPhase: number;
+	color: string;
+	glitchTimer: number;
+	glitchDur: number;
+	glitchOx: number;
+	glitchOy: number;
+	glitchHidden: boolean;
+	/** 0..1 — when during the circular field reveal this square pops in. */
+	revealAt: number;
 };
 
 type Spark = {
@@ -33,10 +39,10 @@ type Spark = {
 	fromWhite: boolean;
 };
 
-const REPULSE_RADIUS = 170;
+const REPULSE_RADIUS = 48;
 const REPULSE_RADIUS_SQ = REPULSE_RADIUS * REPULSE_RADIUS;
-const DAMPING = 0.82;
-const MAX_FORCE = 5.4;
+const DAMPING = 0.78;
+const MAX_FORCE = 7.2;
 const BUCKETS = 8;
 const MAX_SPARKS = 220;
 const HEART_FADE = 18;
@@ -44,26 +50,32 @@ const CTA_HOVER_EMIT_INTERVAL = 0.11;
 const CTA_FALL_GRAVITY = 520;
 const SPRAY_GRAVITY = 780;
 const TAP_HOLD_MS = 520;
+/** How long the clear hole eases back in after finger lift (seconds). */
+const TAP_RELEASE_SEC = 1.35;
+const TAP_RADIUS = 56;
+const TAP_RADIUS_SQ = TAP_RADIUS * TAP_RADIUS;
 const HOLD_EMIT_MS = 90;
 const HOLD_EMIT_DELAY_MS = 180;
 const DRAG_EMIT_PX = 10;
 const SCROLL_INTENT_PX = 14;
-const TOP_DRIP_INTERVAL = 0.42;
 /** Ignore tiny viewport jitter from mobile browser chrome (URL bar show/hide). */
-const RESIZE_EPSILON_PX = 96;
-/** Extra particle field below the fold so chrome collapse never shows a hard edge. */
-const MOBILE_FIELD_PAD_PX = 180;
+const RESIZE_EPSILON_PX = 24;
+/** Accent pixel block size in CSS pixels. */
+const PIXEL_SIZE = 6;
+/** Gap between squares (CSS px) — tight so the field reads dense, not screen-door. */
+const PIXEL_GAP = 1;
+const CELL_STRIDE = PIXEL_SIZE + PIXEL_GAP;
+/** Exact ABOUT ME / primary CTA orange. */
+const FIELD_COLOR = '#F54100';
+/** Circular field reveal after hero content intro (seconds). */
+const FIELD_REVEAL_SEC = 1.35;
 
 function sparkSize() {
 	return 3;
 }
 
-function gauss() {
-	let u = 0;
-	let v = 0;
-	while (u === 0) u = Math.random();
-	while (v === 0) v = Math.random();
-	return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+function fieldPixelSize() {
+	return PIXEL_SIZE;
 }
 
 let cleanupHeroParticles: (() => void) | null = null;
@@ -101,6 +113,7 @@ export function initHeroParticles() {
 		sparkCanvas?.getContext('2d', { alpha: true, desynchronized: false }) ?? ctx;
 
 	canvas.dataset.particlesInit = 'true';
+	if (sparkCanvas) sparkCanvas.dataset.sparksInit = 'true';
 
 	const animate = !reduceMotion;
 
@@ -111,7 +124,7 @@ export function initHeroParticles() {
 	let glowHeartX = 0;
 	let glowHeartY = 0;
 	let glowHeight = 0;
-	let topGlowHeight = 0;
+	let fieldMinY = 0;
 	let particles: Particle[] = [];
 	let buckets: Particle[][] = Array.from({ length: BUCKETS }, () => []);
 	let sparks: Spark[] = [];
@@ -120,7 +133,6 @@ export function initHeroParticles() {
 	let prevMouseX = -9999;
 	let prevMouseY = -9999;
 	let emitAcc = 0;
-	let topDripAcc = 0;
 	let lastTime = 0;
 	let rafId = 0;
 	let visible = true;
@@ -138,57 +150,77 @@ export function initHeroParticles() {
 	let motionTime = 0;
 	let clipFrame = 0;
 	let lastClipPath = '';
+	/** 1 = full tap clear, 0 = none. Decays after finger lift for a soft return. */
+	let tapClear = 0;
+	let tapReleasing = false;
+	/** False until hero content intro finishes — field stays hidden. */
+	let fieldUnlocked = false;
+	/** 0..1 circular reveal progress from corners + middle. */
+	let revealT = 0;
+	let revealActive = false;
 
 	const ctaButtons = [...hero.querySelectorAll<HTMLElement>('.hero-cta')];
 
-	function sampleGlowHome() {
-		const rise = Math.pow(Math.random(), 1.55);
-		const y = height - rise * glowHeight + gauss() * 3;
-		const bottomWeight = 1 - rise;
-		const sigma = width * (0.14 + bottomWeight * 0.3);
-		const x = glowOriginX + gauss() * sigma;
-		const core = Math.pow(Math.max(0, bottomWeight), 1.45);
-		const edge = Math.exp(-Math.pow((x - glowOriginX) / (width * 0.48), 2));
-		const alpha = (0.05 + core * 0.72) * (0.32 + edge * 0.68);
-		const bucket = Math.min(BUCKETS - 1, Math.max(0, Math.floor(alpha * BUCKETS)));
+	function clearRadius() {
+		if (!mobileHero) return REPULSE_RADIUS;
+		const t = Math.max(0, Math.min(1, tapClear));
+		// Ease-out: hole stays large longer, then shrinks so squares ease back in.
+		const eased = 1 - Math.pow(1 - t, 2.2);
+		return TAP_RADIUS * (0.2 + 0.8 * eased);
+	}
 
+	function clearRadiusSq() {
+		const r = clearRadius();
+		return r * r;
+	}
+
+	/**
+	 * 0..1 spawn weight.
+	 * Desktop: bottom-corner U framing. Mobile: wide shallow bottom arch.
+	 */
+	function bottomCornerWeight(x: number, y: number) {
+		const maxX = Math.max(1, width - PIXEL_SIZE);
+		const nx = x / maxX;
+		const floorY = height - PIXEL_SIZE;
+		const rise = (floorY - y) / Math.max(1, glowHeight);
+		if (rise < 0 || rise > 1 || y < fieldMinY) return 0;
+
+		const bottom = Math.pow(1 - rise, mobileHero ? 1.55 : 2.15);
+
+		if (mobileHero) {
+			// Wide shallow arch: dense bottom center, fades at sides, low peak.
+			const centerDist = Math.abs(nx - 0.5) * 2; // 0 at center → 1 at edges
+			const cosArch = Math.pow(Math.cos(centerDist * Math.PI * 0.5), 1.25);
+			const archCeiling = 0.18 + cosArch * 0.82;
+			if (rise > archCeiling) return 0;
+			const archDepth = Math.max(0, 1 - rise / Math.max(0.08, archCeiling));
+			const centerBias = 0.55 + 0.45 * cosArch;
+			return Math.min(1, centerBias * (0.28 + Math.pow(archDepth, 1.2) * 0.9));
+		}
+
+		const edgeDist = Math.min(nx, 1 - nx);
+		const strokeWidth = 0.03 + bottom * 0.28;
+		const sideMask = Math.exp(-Math.pow(edgeDist / Math.max(0.001, strokeWidth), 1.75));
+		if (sideMask < 0.04) return 0;
+
+		return Math.min(1, sideMask * (0.25 + bottom * 1.05));
+	}
+
+	function homeFromWeight(x: number, y: number, weight: number) {
+		// Always near-solid so #F54100 matches the CTA (no washed peach from low alpha).
+		const alpha = 1;
+		const bucket = Math.min(BUCKETS - 1, Math.max(0, Math.floor(weight * BUCKETS)));
 		return {
 			x,
 			y,
-			size: sparkSize(),
+			size: fieldPixelSize(),
 			alpha,
 			bucket,
-			zone: 'bottom' as const,
+			color: FIELD_COLOR,
 		};
 	}
 
-	/** Inverted cone along the top edge — fewer / shallower than the bottom glow. */
-	function sampleTopGlowHome() {
-		const drop = Math.pow(Math.random(), 2.05);
-		const y = drop * topGlowHeight + gauss() * 2.4;
-		const topWeight = 1 - drop;
-		const sigma = width * (0.1 + topWeight * 0.3);
-		const x = glowOriginX + gauss() * sigma;
-		const core = Math.pow(Math.max(0, topWeight), 1.7);
-		const edge = Math.exp(-Math.pow((x - glowOriginX) / (width * 0.42), 2));
-		const alpha = (0.04 + core * 0.55) * (0.28 + edge * 0.72);
-		const bucket = Math.min(BUCKETS - 1, Math.max(0, Math.floor(alpha * BUCKETS)));
-
-		return {
-			x,
-			y,
-			size: sparkSize(),
-			alpha,
-			bucket,
-			zone: 'top' as const,
-		};
-	}
-
-	function addFieldParticle(
-		home: ReturnType<typeof sampleGlowHome> | ReturnType<typeof sampleTopGlowHome>,
-		x = home.x,
-		y = home.y,
-	) {
+	function addFieldParticle(home: ReturnType<typeof homeFromWeight>, x = home.x, y = home.y) {
 		const particle: Particle = {
 			x,
 			y,
@@ -198,67 +230,169 @@ export function initHeroParticles() {
 			vy: 0,
 			size: home.size,
 			alpha: home.alpha,
-			phase: Math.random() * Math.PI * 2,
-			freq: 0.95 + Math.random() * 1.55,
-			amp: 2.4 + Math.random() * 4.2,
 			bucket: home.bucket,
-			zone: home.zone,
+			flickerFreq: 0.25 + Math.random() * 0.55,
+			flickerPhase: Math.random() * Math.PI * 2,
+			color: home.color,
+			glitchTimer: 1.2 + Math.random() * 2.8,
+			glitchDur: 0,
+			glitchOx: 0,
+			glitchOy: 0,
+			glitchHidden: false,
+			revealAt: 0,
 		};
 
 		particles.push(particle);
 		buckets[home.bucket].push(particle);
 	}
 
+	/**
+	 * Delay each square by circular distance from the bottom-left and
+	 * bottom-right corners — both wavefronts run at once (no middle start).
+	 */
+	function assignRevealTimes() {
+		if (!particles.length) return;
+
+		if (reduceMotion || (fieldUnlocked && revealT >= 1)) {
+			for (const particle of particles) particle.revealAt = 0;
+			return;
+		}
+
+		const floorY = height - PIXEL_SIZE;
+		const origins = [
+			{ x: 0, y: floorY },
+			{ x: Math.max(0, width - PIXEL_SIZE), y: floorY },
+		];
+
+		let maxDist = 0;
+		const dists = new Array<number>(particles.length);
+		for (let i = 0; i < particles.length; i += 1) {
+			const p = particles[i];
+			let best = Infinity;
+			for (const origin of origins) {
+				const d = Math.hypot(p.ox - origin.x, p.oy - origin.y);
+				if (d < best) best = d;
+			}
+			dists[i] = best;
+			if (best > maxDist) maxDist = best;
+		}
+
+		maxDist = Math.max(1, maxDist);
+		for (let i = 0; i < particles.length; i += 1) {
+			const ring = dists[i] / maxDist;
+			// Tiny jitter so squares read as one-by-one inside each ring.
+			particles[i].revealAt = Math.min(1, ring * 0.9 + Math.random() * 0.1);
+		}
+	}
+
+	function startFieldReveal() {
+		if (fieldUnlocked && !revealActive && revealT >= 1) return;
+
+		fieldUnlocked = true;
+		if (reduceMotion || !animate) {
+			revealT = 1;
+			revealActive = false;
+			assignRevealTimes();
+			if (!animate) drawStatic();
+			else startLoop();
+			return;
+		}
+
+		revealT = 0;
+		revealActive = true;
+		assignRevealTimes();
+		startLoop();
+	}
+
+	function resetFieldReveal() {
+		fieldUnlocked = false;
+		revealT = 0;
+		revealActive = false;
+		assignRevealTimes();
+		ctx.clearRect(0, 0, width, height);
+		if (sparkCtx !== ctx) sparkCtx.clearRect(0, 0, width, height);
+	}
+
+	/** Walk grid X from left edge through right edge (last column flush to width). */
+	function forEachGridX(callback: (x: number) => void) {
+		const maxX = width - PIXEL_SIZE;
+		if (maxX < 0) return;
+		let last = -1;
+		for (let x = 0; x <= maxX; x += CELL_STRIDE) {
+			callback(x);
+			last = x;
+		}
+		if (last !== maxX) callback(maxX);
+	}
+
+	/** Walk grid Y from bottom edge upward (bottom row flush to height). */
+	function forEachGridY(callback: (y: number) => void) {
+		const maxY = height - PIXEL_SIZE;
+		const minY = Math.max(fieldMinY, 0);
+		if (maxY < minY) return;
+		let last = -1;
+		for (let y = maxY; y >= minY; y -= CELL_STRIDE) {
+			callback(y);
+			last = y;
+		}
+		if (last !== maxY) callback(maxY);
+	}
+
 	function spawnParticles() {
-		const bottomCount = reduceMotion ? 1200 : isTouch ? 2800 : 7000;
-		const topCount = reduceMotion ? 260 : isTouch ? 560 : 1500;
 		particles = [];
 		buckets = Array.from({ length: BUCKETS }, () => []);
 		sparks = [];
-		topDripAcc = 0;
 
 		glowOriginX = width * 0.5;
 		glowHeartX = glowOriginX;
 		glowHeartY = height - 6;
-		glowHeight = height * 0.72;
-		topGlowHeight = Math.min(height * 0.24, 220);
 
-		for (let i = 0; i < bottomCount; i += 1) {
-			addFieldParticle(sampleGlowHome());
-		}
+		// Desktop: lower third. Mobile: short wide mound (~3 rows shorter than prior).
+		fieldMinY = Math.ceil(height * (mobileHero ? 0.87 : 0.64));
+		if (mobileHero) fieldMinY += CELL_STRIDE * 3;
+		glowHeight = Math.max(CELL_STRIDE * 4, height - fieldMinY);
 
-		for (let i = 0; i < topCount; i += 1) {
-			addFieldParticle(sampleTopGlowHome());
-		}
-	}
+		const densityBoost = reduceMotion ? 0.65 : 1;
+		const minKeep = reduceMotion ? 0.16 : mobileHero ? 0.08 : 0.06;
+		const edgeBand = CELL_STRIDE * 2;
+		const floorY = height - PIXEL_SIZE;
+		const centerHalf = width * (mobileHero ? 0.42 : 0.22);
+		// ~1 square of soft crest — density collapses so the top ends as sparse singles.
+		const topFeather = CELL_STRIDE;
 
-	function dripTopParticle() {
-		const tops: Particle[] = [];
-		for (const particle of particles) {
-			if (particle.zone === 'top') tops.push(particle);
-		}
-		if (!tops.length) return;
+		forEachGridY((y) => {
+			forEachGridX((x) => {
+				const weight = bottomCornerWeight(x, y);
+				if (weight <= minKeep) return;
+				let keep = Math.min(1, Math.pow(weight, mobileHero ? 0.42 : 0.55) * densityBoost);
+				const onSide = x <= edgeBand || x >= width - PIXEL_SIZE - edgeBand;
+				const rowsFromFloor = Math.round((floorY - y) / CELL_STRIDE);
+				const onBottom = rowsFromFloor <= (mobileHero ? 3 : 1);
+				const inCenter = Math.abs(x + PIXEL_SIZE * 0.5 - width * 0.5) <= centerHalf;
+				// Desktop: pin side/bottom corners. Mobile: glue a short dense base to the floor.
+				const sidePin = !mobileHero && onSide && y > fieldMinY + topFeather * 4;
+				if (mobileHero && onBottom) {
+					const edgeFade = Math.pow(
+						Math.max(0, 1 - Math.abs(x / Math.max(1, width - PIXEL_SIZE) - 0.5) * 2),
+						0.85,
+					);
+					keep = Math.max(keep, (inCenter ? 0.98 : 0.55) * (0.35 + 0.65 * edgeFade));
+				} else if (onBottom) keep = Math.max(keep, 0.94);
+				else if (sidePin) keep = Math.max(keep, 0.94);
 
-		const count = 1 + (Math.random() < 0.35 ? 1 : 0);
-		for (let n = 0; n < count; n += 1) {
-			const particle = tops[Math.floor(Math.random() * tops.length)];
-			emitSpark(
-				particle.x,
-				particle.y,
-				(Math.random() - 0.5) * 18,
-				28 + Math.random() * 55,
-				1.15,
-			);
+				// Feather the top ~1 cell so the silhouette dissolves instead of cutting sharp.
+				const fromTop = y - fieldMinY;
+				if (fromTop < topFeather * 2) {
+					const t = Math.max(0, fromTop / (topFeather * 2));
+					keep *= 0.1 + 0.5 * t * t;
+				}
 
-			const home = sampleTopGlowHome();
-			particle.ox = home.x;
-			particle.oy = home.y;
-			particle.x = home.x;
-			particle.y = home.y;
-			particle.vx = 0;
-			particle.vy = 0;
-			particle.alpha = home.alpha;
-		}
+				if (Math.random() > keep) return;
+				addFieldParticle(homeFromWeight(x, y, weight));
+			});
+		});
+
+		assignRevealTimes();
 	}
 
 	function emitSpark(x: number, y: number, mvx: number, mvy: number, pullScale = 1) {
@@ -377,16 +511,19 @@ export function initHeroParticles() {
 
 	function sizeSurface(target: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-		const bufferW = Math.max(1, Math.floor(width * dpr));
-		const bufferH = Math.max(1, Math.floor(height * dpr));
+		// Pin to the hero-bg box — top/left + exact size so the bottom row hits the section edge.
+		target.style.top = '0';
+		target.style.left = '0';
+		target.style.right = 'auto';
+		target.style.bottom = 'auto';
+		target.style.width = `${width}px`;
+		target.style.height = `${height}px`;
+		const bufferW = Math.max(1, Math.round(width * dpr));
+		const bufferH = Math.max(1, Math.round(height * dpr));
 
 		// Assigning width/height resets the context (incl. transform)
 		target.width = bufferW;
 		target.height = bufferH;
-		// Lock CSS box to the measured logical size so the bitmap never stretches
-		// after mobile chrome UI / tab-resume viewport changes.
-		target.style.width = `${width}px`;
-		target.style.height = `${height}px`;
 
 		context.setTransform(1, 0, 0, 1, 0, 0);
 		context.clearRect(0, 0, bufferW, bufferH);
@@ -396,16 +533,17 @@ export function initHeroParticles() {
 
 	function measureHeroSize() {
 		const bg = hero.querySelector<HTMLElement>('.hero-bg');
-		const rect = bg?.getBoundingClientRect();
-		const nextWidth = Math.max(1, Math.floor(rect?.width || window.innerWidth));
-		let nextHeight = Math.max(1, Math.floor(rect?.height || window.innerHeight));
-
-		if (isMobileHero()) {
-			const visualH = Math.ceil(window.visualViewport?.height ?? 0);
-			const layoutH = Math.ceil(window.innerHeight);
-			nextHeight = Math.max(nextHeight, visualH, layoutH) + MOBILE_FIELD_PAD_PX;
-		}
-
+		// Prefer the live section box so the field floor tracks 110svh (and layout) changes.
+		const sectionRect = hero.getBoundingClientRect();
+		const bgRect = bg?.getBoundingClientRect();
+		const nextWidth = Math.max(
+			1,
+			Math.round(bgRect?.width || sectionRect.width || bg?.clientWidth || hero.clientWidth || window.innerWidth),
+		);
+		const nextHeight = Math.max(
+			1,
+			Math.round(bgRect?.height || sectionRect.height || bg?.clientHeight || hero.clientHeight || window.innerHeight),
+		);
 		return { nextWidth, nextHeight };
 	}
 
@@ -415,7 +553,7 @@ export function initHeroParticles() {
 
 		const rect = hero.getBoundingClientRect();
 		const viewH = window.innerHeight;
-		const viewW = window.innerWidth;
+		const viewW = document.documentElement.clientWidth || window.innerWidth;
 
 		if (rect.bottom <= 0 || rect.top >= viewH) {
 			if (lastClipPath !== 'hidden') {
@@ -426,11 +564,25 @@ export function initHeroParticles() {
 			return;
 		}
 
-		const top = Math.max(0, Math.round(rect.top));
-		const bottom = Math.min(viewH, Math.round(rect.bottom));
-		const left = Math.max(0, Math.round(rect.left));
-		const right = Math.min(viewW, Math.round(rect.right));
-		const nextClip = `inset(${top}px ${Math.max(0, viewW - right)}px ${Math.max(0, viewH - bottom)}px ${left}px)`;
+		// Insets must be relative to the ELEMENT box. Never clip the bottom —
+		// hero-bg can't paint past the section, and bottom inset was leaving a
+		// white strip above Tools.
+		const visibleTop = Math.max(0, rect.top);
+		const visibleLeft = Math.max(0, rect.left);
+		const visibleRight = Math.min(viewW, rect.right);
+
+		let insetTop = Math.max(0, Math.round(visibleTop - rect.top));
+		const insetBottom = 0;
+		let insetLeft = Math.max(0, Math.round(visibleLeft - rect.left));
+		let insetRight = Math.max(0, Math.round(rect.right - visibleRight));
+
+		// Full-bleed: ignore 1–2px horizontal rounding noise.
+		if (insetLeft <= 2 && insetRight <= 2) {
+			insetLeft = 0;
+			insetRight = 0;
+		}
+
+		const nextClip = `inset(${insetTop}px ${insetRight}px ${insetBottom}px ${insetLeft}px)`;
 
 		if (nextClip === lastClipPath) return;
 
@@ -469,12 +621,82 @@ export function initHeroParticles() {
 		lastTime = 0;
 	}
 
+	function tickGlitch(particle: Particle, dt: number) {
+		if (particle.glitchDur > 0) {
+			particle.glitchDur -= dt;
+			if (particle.glitchDur <= 0) {
+				particle.glitchDur = 0;
+				particle.glitchOx = 0;
+				particle.glitchOy = 0;
+			}
+			return;
+		}
+
+		particle.glitchTimer -= dt;
+		if (particle.glitchTimer > 0) return;
+
+		particle.glitchTimer = 1.4 + Math.random() * 3.2;
+		// Horizontal tear only — vertical shifts open a white gap on the bottom edge.
+		if (Math.random() < 0.22) {
+			particle.glitchOx = (Math.random() < 0.5 ? -1 : 1) * CELL_STRIDE * (1 + (Math.random() < 0.22 ? 1 : 0));
+			particle.glitchOy = 0;
+			particle.glitchDur = 0.1 + Math.random() * 0.22;
+			return;
+		}
+
+		particle.glitchOx = 0;
+		particle.glitchOy = 0;
+	}
+
+	function drawFieldParticle(
+		particle: Particle,
+		_baseAlpha: number,
+		time: number,
+		pointerActive: boolean,
+	) {
+		if (!fieldUnlocked || particle.revealAt > revealT) return;
+
+		const wave = 0.5 + 0.5 * Math.sin(time * particle.flickerFreq + particle.flickerPhase);
+		// Stay in the solid CTA range — subtle shimmer only, never pale/peach.
+		let alpha = 0.9 + 0.1 * wave;
+
+		// Keep edge homes glued to the canvas bounds (no inset gap from glitch/mouse).
+		const maxX = Math.max(0, width - PIXEL_SIZE);
+		const maxY = Math.max(0, height - PIXEL_SIZE);
+		let drawX = particle.x + particle.glitchOx;
+		let drawY = particle.y + particle.glitchOy;
+		// Only the true bottom row — snapping the row above caused the empty line.
+		if (particle.oy >= maxY - 0.5) drawY = maxY;
+		if (particle.ox <= 0.5) drawX = 0;
+		if (particle.ox >= maxX - 0.5) drawX = maxX;
+		drawX = Math.min(maxX, Math.max(0, drawX));
+		drawY = Math.min(maxY, Math.max(0, drawY));
+
+		// Hard hide near the cursor / tap — no soft alpha falloff (that reads as a white glow).
+		const clearing = pointerActive || (mobileHero && tapClear > 0.02);
+		if (clearing) {
+			const dx = drawX - mouseX;
+			const dy = drawY - mouseY;
+			const hideRadiusSq = mobileHero ? clearRadiusSq() : REPULSE_RADIUS_SQ;
+			if (dx * dx + dy * dy < hideRadiusSq) return;
+		}
+
+		ctx.globalAlpha = alpha;
+		ctx.fillStyle = FIELD_COLOR;
+		ctx.fillRect(drawX, drawY, particle.size, particle.size);
+	}
+
 	function drawStatic() {
 		ctx.clearRect(0, 0, width, height);
-		ctx.fillStyle = '#F54100';
+		if (!fieldUnlocked) {
+			ctx.globalAlpha = 1;
+			return;
+		}
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = FIELD_COLOR;
 		for (let i = 0; i < BUCKETS; i += 1) {
-			ctx.globalAlpha = (i + 0.55) / BUCKETS;
 			for (const particle of buckets[i]) {
+				if (particle.revealAt > revealT) continue;
 				ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
 			}
 		}
@@ -490,8 +712,22 @@ export function initHeroParticles() {
 		const dt = lastTime ? Math.min(0.033, (now - lastTime) / 1000) : 0.016;
 		lastTime = now;
 
+		if (revealActive) {
+			revealT = Math.min(1, revealT + dt / FIELD_REVEAL_SEC);
+			if (revealT >= 1) revealActive = false;
+		}
+
 		const pointerActive = mouseX > -9000;
 		const mouseActive = !mobileHero && pointerActive;
+
+		if (mobileHero && tapReleasing && tapClear > 0) {
+			tapClear = Math.max(0, tapClear - dt / TAP_RELEASE_SEC);
+			if (tapClear <= 0.001) {
+				tapClear = 0;
+				tapReleasing = false;
+				onLeave();
+			}
+		}
 
 		if (!mobileHero && hoveredCta) {
 			hoverEmitAcc += dt;
@@ -519,14 +755,6 @@ export function initHeroParticles() {
 			}
 		}
 
-		if (animate) {
-			topDripAcc += dt;
-			while (topDripAcc >= TOP_DRIP_INTERVAL) {
-				topDripAcc -= TOP_DRIP_INTERVAL * (0.75 + Math.random() * 0.7);
-				dripTopParticle();
-			}
-		}
-
 		prevMouseX = mouseX;
 		prevMouseY = mouseY;
 
@@ -534,26 +762,31 @@ export function initHeroParticles() {
 		const t = motionTime;
 
 		for (const particle of particles) {
-			const nx = Math.sin(t * particle.freq + particle.phase) * particle.amp;
-			const ny = Math.cos(t * particle.freq * 0.84 + particle.phase) * particle.amp * 0.7;
+			if (!reduceMotion) tickGlitch(particle, dt);
 
-			if (pointerActive) {
-				const dx = particle.ox + nx + particle.vx - mouseX;
-				const dy = particle.oy + ny + particle.vy - mouseY;
+			const clearing = pointerActive || (mobileHero && tapClear > 0.02);
+			if (clearing) {
+				const radius = mobileHero ? clearRadius() : REPULSE_RADIUS;
+				const radiusSq = radius * radius;
+				const dx = particle.ox + particle.vx - mouseX;
+				const dy = particle.oy + particle.vy - mouseY;
 				const distSq = dx * dx + dy * dy;
 
-				if (distSq < REPULSE_RADIUS_SQ && distSq > 0.0001) {
+				if (distSq < radiusSq && distSq > 0.0001) {
 					const dist = Math.sqrt(distSq);
-					const force = ((REPULSE_RADIUS - dist) / REPULSE_RADIUS) * MAX_FORCE;
+					const force = ((radius - dist) / radius) * MAX_FORCE * (mobileHero ? 0.55 + 0.45 * tapClear : 1);
 					particle.vx += (dx / dist) * force;
 					particle.vy += (dy / dist) * force;
 				}
 			}
 
-			particle.vx *= DAMPING;
-			particle.vy *= DAMPING;
-			particle.x = particle.ox + nx + particle.vx;
-			particle.y = particle.oy + ny + particle.vy;
+			// Softer settle after a tap so squares ease home instead of snapping.
+			const damp = mobileHero && tapReleasing ? 0.9 : DAMPING;
+			particle.vx *= damp;
+			particle.vy *= damp;
+			// Homes stay on the non-overlapping grid; only cursor force offsets them.
+			particle.x = particle.ox + particle.vx;
+			particle.y = particle.oy + particle.vy;
 		}
 
 		const sinkX = glowHeartX;
@@ -636,14 +869,14 @@ export function initHeroParticles() {
 		}
 
 		ctx.clearRect(0, 0, width, height);
-		ctx.fillStyle = '#F54100';
 
-		for (let i = 0; i < BUCKETS; i += 1) {
-			ctx.globalAlpha = (i + 0.55) / BUCKETS;
-			const group = buckets[i];
-			for (let j = 0; j < group.length; j += 1) {
-				const particle = group[j];
-				ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+		if (fieldUnlocked) {
+			for (let i = 0; i < BUCKETS; i += 1) {
+				const baseAlpha = (i + 0.55) / BUCKETS;
+				const group = buckets[i];
+				for (let j = 0; j < group.length; j += 1) {
+					drawFieldParticle(group[j], baseAlpha, t, pointerActive);
+				}
 			}
 		}
 
@@ -702,6 +935,9 @@ export function initHeroParticles() {
 		prevMouseX = -9999;
 		prevMouseY = -9999;
 		emitAcc = 0;
+		if (!tapReleasing) {
+			tapClear = 0;
+		}
 	}
 
 	function emitTapBurst() {
@@ -748,6 +984,7 @@ export function initHeroParticles() {
 		const target = event.target as HTMLElement | null;
 		const cta = target?.closest<HTMLElement>('.hero-cta');
 		const onCta = Boolean(cta && hero.contains(cta));
+		const onPillar = Boolean(target?.closest('.hero-pillar') && hero.contains(target));
 
 		if (!mobileHero && event.pointerType === 'mouse') {
 			return;
@@ -761,17 +998,22 @@ export function initHeroParticles() {
 		isScrollGesture = false;
 		clearPointerHold();
 		clearHoldEmit();
+		tapReleasing = false;
+		tapClear = mobileHero ? 1 : 0;
 		setPointerFromClient(event.clientX, event.clientY);
-		emitTapBurst();
+		startLoop();
 
+		// Mobile field tap: squares clear around the finger (like hover). Sparks only on CTA.
 		if (onCta && cta) {
 			emitCtaFall(cta, 8 + Math.floor(Math.random() * 5));
+		} else if (!mobileHero && !onPillar) {
+			emitTapBurst();
 		}
 
 		pointerHoldTimer = window.setTimeout(() => {
 			pointerHoldTimer = 0;
 			if (activePointerId === null || isScrollGesture) return;
-			startHoldEmit();
+			if (!mobileHero) startHoldEmit();
 		}, HOLD_EMIT_DELAY_MS);
 	}
 
@@ -786,6 +1028,8 @@ export function initHeroParticles() {
 			activePointerId = null;
 			clearPointerHold();
 			clearHoldEmit();
+			tapReleasing = false;
+			tapClear = 0;
 			onLeave();
 			return;
 		}
@@ -793,6 +1037,9 @@ export function initHeroParticles() {
 		setPointerFromClient(event.clientX, event.clientY);
 
 		if (mobileHero) {
+			lastDragEmitX = event.clientX;
+			lastDragEmitY = event.clientY;
+		} else {
 			const dragDx = event.clientX - lastDragEmitX;
 			const dragDy = event.clientY - lastDragEmitY;
 			const dragDist = Math.hypot(dragDx, dragDy);
@@ -814,12 +1061,27 @@ export function initHeroParticles() {
 
 		if (isScrollGesture) {
 			clearPointerHold();
+			tapReleasing = false;
+			tapClear = 0;
 			onLeave();
 			return;
 		}
 
 		setPointerFromClient(event.clientX, event.clientY);
 		clearPointerHold();
+
+		if (mobileHero) {
+			// Hold the hole briefly, then ease radius down so squares return smoothly.
+			tapClear = 1;
+			tapReleasing = false;
+			pointerHoldTimer = window.setTimeout(() => {
+				tapReleasing = true;
+				pointerHoldTimer = 0;
+				startLoop();
+			}, TAP_HOLD_MS);
+			return;
+		}
+
 		pointerHoldTimer = window.setTimeout(() => {
 			onLeave();
 			pointerHoldTimer = 0;
@@ -905,6 +1167,20 @@ export function initHeroParticles() {
 	resize(true);
 	syncHeroBgClip();
 
+	function onHeroContentIntroComplete() {
+		startFieldReveal();
+	}
+
+	function onHeroContentIntroReset() {
+		resetFieldReveal();
+	}
+
+	document.addEventListener('hero-content-intro-complete', onHeroContentIntroComplete);
+	document.addEventListener('hero-content-intro-reset', onHeroContentIntroReset);
+	if (hero.classList.contains('is-hero-intro-complete')) {
+		startFieldReveal();
+	}
+
 	if (animate) {
 		draw(performance.now());
 	} else {
@@ -947,7 +1223,8 @@ export function initHeroParticles() {
 
 	const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onResize) : null;
 	const heroBg = hero.querySelector<HTMLElement>('.hero-bg');
-	resizeObserver?.observe(heroBg ?? hero);
+	resizeObserver?.observe(hero);
+	if (heroBg) resizeObserver?.observe(heroBg);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -982,6 +1259,8 @@ export function initHeroParticles() {
 		observer.disconnect();
 		resizeObserver?.disconnect();
 		window.removeEventListener('intro-revealing', refreshForReveal);
+		document.removeEventListener('hero-content-intro-complete', onHeroContentIntroComplete);
+		document.removeEventListener('hero-content-intro-reset', onHeroContentIntroReset);
 		window.removeEventListener('pointermove', onPointerMove);
 		window.removeEventListener('pointerup', onPointerEnd);
 		window.removeEventListener('pointercancel', onPointerEnd);
@@ -1007,6 +1286,9 @@ export function initHeroParticles() {
 		}
 		lastClipPath = '';
 		delete canvas.dataset.particlesInit;
-		if (sparkCanvas) delete sparkCanvas.dataset.particlesInit;
+		if (sparkCanvas) {
+			delete sparkCanvas.dataset.particlesInit;
+			delete sparkCanvas.dataset.sparksInit;
+		}
 	};
 }

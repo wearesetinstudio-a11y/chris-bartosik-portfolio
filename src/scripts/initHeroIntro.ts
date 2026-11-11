@@ -101,6 +101,10 @@ function hideAllFollowItems(hero: HTMLElement) {
 	hero.classList.remove('is-hero-follow-complete');
 }
 
+function notifyHeroContentIntroComplete() {
+	document.dispatchEvent(new CustomEvent('hero-content-intro-complete'));
+}
+
 function setFinalState(hero: HTMLElement) {
 	heroIntroHasRun = true;
 	getIntroGroups(hero).forEach((group) => {
@@ -110,6 +114,7 @@ function setFinalState(hero: HTMLElement) {
 	hero.classList.add('is-hero-intro-complete');
 	showAllFollowItems(hero);
 	startHandWaveLoop(hero);
+	notifyHeroContentIntroComplete();
 }
 
 function resetHeroIntro(hero: HTMLElement) {
@@ -143,6 +148,7 @@ export function prepareHeroIntroReplay() {
 
 	heroIntroRunId++;
 	resetHeroIntro(hero);
+	document.dispatchEvent(new CustomEvent('hero-content-intro-reset'));
 }
 
 export function replayHeroIntro() {
@@ -217,6 +223,8 @@ async function runIntroSequence(hero: HTMLElement) {
 	hero.classList.add('is-hero-intro-complete');
 	startHandWaveLoop(hero);
 	await followPromise;
+	if (!isActive()) return;
+	notifyHeroContentIntroComplete();
 }
 
 function startHeroIntro() {

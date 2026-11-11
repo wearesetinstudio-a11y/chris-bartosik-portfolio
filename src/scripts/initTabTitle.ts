@@ -1,4 +1,4 @@
-const AWAY_TITLE = "I'm waiting for U👀";
+const AWAY_TITLE = 'Hi there!';
 
 type TabTitleWindow = Window &
 	typeof globalThis & {

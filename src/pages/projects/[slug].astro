@@ -55,8 +55,7 @@ const service = data.service ?? '';
 const industry = data.industry ?? '';
 const market = data.market ?? '';
 const tools = data.tools ?? '';
-const liveLabel = data.liveLabel ?? '';
-const liveUrl = data.liveUrl ?? '';
+const liveUrl = (data.liveUrl ?? '').trim();
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
 const galleryLayout = buildGalleryLayout(folderName, coverFilename);
@@ -117,26 +116,12 @@ type InfoRow = {
 	fieldKey?: string;
 };
 
-const liveDisplay =
-	liveLabel || (liveUrl ? liveUrl.replace(/^https?:\/\//, '') : '');
-
 const infoRows = [
 	service ? { label: t('project.service', 'en'), labelKey: 'project.service', value: service, fieldKey: 'service' } : null,
 	industry ? { label: t('project.industry', 'en'), labelKey: 'project.industry', value: industry, fieldKey: 'industry' } : null,
 	market ? { label: t('project.market', 'en'), labelKey: 'project.market', value: market, fieldKey: 'market' } : null,
 	tools ? { label: t('project.tools', 'en'), labelKey: 'project.tools', value: tools, fieldKey: 'tools' } : null,
 	year ? { label: t('project.year', 'en'), labelKey: 'project.year', value: String(year) } : null,
-	liveDisplay
-		? {
-				label: t('project.live', 'en'),
-				labelKey: 'project.live',
-				value: liveDisplay,
-				href: liveUrl || undefined,
-				isLink: Boolean(liveUrl),
-				underlined: true,
-				fieldKey: 'liveLabel',
-			}
-		: null,
 ].filter((row): row is InfoRow => row !== null);
 
 const showOverview = Boolean(overviewTitle || overviewText || infoRows.length || overviewGraphicSrc);
@@ -213,12 +198,15 @@ const navItems: SidebarNavItem[] = [
 			clientLabel={clientLabel}
 		/>
 
-		<div class="project-page__body relative z-10 bg-white pb-20 transition-colors duration-500 lg:pb-0">
-			<div class="project-page__container relative mx-auto w-full px-[var(--page-gutter)] pt-24 pb-12 md:pt-36 md:pb-20 lg:pt-48 lg:pb-24">
-				<div class="project-page__layout grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_65%] lg:gap-14 xl:gap-20">
-					{navItems.length > 0 ? <ProjectSidebar items={navItems} /> : null}
+		<div class="project-page__body relative z-10 transition-colors duration-500">
+			<div class="project-page__layout grid grid-cols-1 items-start lg:grid-cols-[minmax(0,1fr)_minmax(0,65%)]">
+					{
+						navItems.length > 0 || liveUrl ? (
+							<ProjectSidebar items={navItems} liveUrl={liveUrl} />
+						) : null
+					}
 
-					<div class="project-page__content flex min-w-0 flex-col gap-20 md:gap-28 lg:gap-36">
+					<div class="project-page__content flex min-w-0 flex-col gap-20 px-[var(--page-gutter)] pt-24 pb-20 md:gap-28 md:pt-36 md:pb-24 lg:gap-36 lg:pt-48 lg:pb-24 lg:pl-10 xl:pl-14">
 						{
 							showOverview ? (
 								<ProjectOverviewSection
@@ -291,7 +279,6 @@ const navItems: SidebarNavItem[] = [
 							) : null
 						}
 					</div>
-				</div>
 			</div>
 		</div>
 
@@ -350,7 +337,22 @@ const navItems: SidebarNavItem[] = [
 		max-width: 100%;
 	}
 
-	.project-page__body :global(img),
+	.project-page__content {
+		background: #ffffff;
+	}
+
+	@media (min-width: 1024px) {
+		.project-page__layout {
+			align-items: stretch;
+		}
+
+		.project-page__layout :global(.project-sidebar) {
+			background: #fafafa;
+			padding: 12rem var(--page-gutter) 6rem;
+		}
+	}
+
+	.project-page__body :global(img:not(.project-live-result__arrow)),
 	.project-page__body :global(video),
 	.project-page__body :global(object),
 	.project-page__body :global(canvas),

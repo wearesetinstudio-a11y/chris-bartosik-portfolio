@@ -35,6 +35,8 @@ export function initSiteCursor() {
 	let vy = 0;
 	let glowAngle = 0;
 	let motion = 0;
+	let stretch = 0;
+	let tip = 50;
 	let hasAngle = false;
 	let visible = false;
 	let hoveringInteractive = false;
@@ -124,30 +126,50 @@ export function initSiteCursor() {
 		return headerSurface ?? (isOverHero(px, py) || isLightSurface(px, py));
 	}
 
+	function easeOutCubic(t: number) {
+		return 1 - (1 - t) ** 3;
+	}
+
 	function render() {
 		const dx = x - lastX;
 		const dy = y - lastY;
 		lastX = x;
 		lastY = y;
-		vx += (dx - vx) * 0.12;
-		vy += (dy - vy) * 0.12;
+		vx += (dx - vx) * 0.14;
+		vy += (dy - vy) * 0.14;
+		vx *= 0.9;
+		vy *= 0.9;
 
 		const speed = Math.hypot(vx, vy);
-		const targetMotion = reduceMotion ? 0 : Math.min(1, Math.max(0, (speed - 0.18) / 1.9));
-		motion = lerp(motion, targetMotion, 0.08);
+		const targetMotion = reduceMotion ? 0 : Math.min(1, Math.max(0, (speed - 0.22) / 3.2));
+		const motionEase = targetMotion > motion ? 0.12 : 0.055;
+		motion = lerp(motion, targetMotion, motionEase);
 
-		if (motion > 0.08) {
+		const targetStretch = reduceMotion
+			? 0
+			: Math.min(1, Math.max(0, (speed - 0.18) / 4.2));
+		const stretchEase = targetStretch > stretch ? 0.14 : 0.06;
+		stretch = lerp(stretch, targetStretch, stretchEase);
+
+		if (speed > 0.12 || motion > 0.05) {
 			const targetAngle = Math.atan2(vy, vx);
-			glowAngle = hasAngle ? lerpAngle(glowAngle, targetAngle, 0.1) : targetAngle;
+			const turnRate = lerp(0.16, 0.05, Math.min(1, speed / 4));
+			glowAngle = hasAngle ? lerpAngle(glowAngle, targetAngle, turnRate) : targetAngle;
 			hasAngle = true;
 		}
 
-		const width = lerp(72, 98, motion);
-		const height = lerp(72, 16, motion);
-		const originX = lerp(50, 100, motion);
-		const tx = lerp(-50, -100, motion);
-		const gx = lerp(50, 90, motion);
-		const length = lerp(1, 0.72 + Math.min(1.7, speed * 0.08), motion);
+		const m = easeOutCubic(motion);
+		const s = easeOutCubic(stretch);
+		const tipTarget = lerp(50, 100, m);
+		tip = lerp(tip, tipTarget, tipTarget > tip ? 0.14 : 0.07);
+
+		const width = lerp(72, 96, s);
+		const height = lerp(72, 18, m);
+		const originX = tip;
+		const tx = -tip;
+		const gx = tip;
+		const length = lerp(1, 0.78 + Math.min(1.35, speed * 0.07), s);
+		const glowAlpha = lerp(0.55, 0.82, s);
 
 		const projectActive = Boolean(document.querySelector('.project-cursor.is-active'));
 		cursor.classList.toggle('is-visible', visible && !projectActive);
@@ -156,6 +178,7 @@ export function initSiteCursor() {
 		cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 		glow.style.width = `${width.toFixed(1)}px`;
 		glow.style.height = `${height.toFixed(1)}px`;
+		glow.style.opacity = glowAlpha.toFixed(3);
 		glow.style.transformOrigin = `${originX.toFixed(1)}% 50%`;
 		glow.style.setProperty('--gx', `${gx.toFixed(1)}%`);
 		glow.style.transform = `translate(${tx.toFixed(1)}%, -50%) rotate(${glowAngle}rad) scale(${length.toFixed(3)}, 1)`;
@@ -163,7 +186,7 @@ export function initSiteCursor() {
 
 	function tick() {
 		render();
-		if (visible && (Math.hypot(vx, vy) > 0.03 || motion > 0.01)) {
+		if (visible && (Math.hypot(vx, vy) > 0.02 || motion > 0.008 || stretch > 0.008)) {
 			rafId = window.requestAnimationFrame(tick);
 			return;
 		}

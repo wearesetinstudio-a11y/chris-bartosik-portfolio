@@ -5,7 +5,8 @@ import { formatPanamaTimeLabel } from '../scripts/initHeroTime.ts';
 const pillars = [
 	{ key: 'hero.pillar1', label: t('hero.pillar1', 'en'), href: '/skills#product-ux-ui' },
 	{ key: 'hero.pillar2', label: t('hero.pillar2', 'en'), href: '/skills#interactive-motion' },
-	{ key: 'hero.pillar3', label: t('hero.pillar3', 'en'), href: '/skills#no-code-handoff' },
+	{ key: 'hero.pillar3', label: t('hero.pillar3', 'en'), href: '/projects?filter=brand-design' },
+	{ key: 'hero.pillar4', label: t('hero.pillar4', 'en'), href: '/skills#no-code-handoff' },
 ];
 
 const panamaTime = formatPanamaTimeLabel();
@@ -16,7 +17,15 @@ const panamaTime = formatPanamaTimeLabel();
 	class="hero-section"
 >
 	<div class="hero-bg" aria-hidden="true">
-		<canvas id="hero-sparks" class="pointer-events-none absolute inset-0 z-[1] h-full w-full" aria-hidden="true"
+		<canvas
+			id="hero-particles"
+			class="pointer-events-none absolute top-0 left-0 z-0"
+			aria-hidden="true"
+		></canvas>
+		<canvas
+			id="hero-sparks"
+			class="pointer-events-none absolute top-0 left-0 z-[1]"
+			aria-hidden="true"
 		></canvas>
 	</div>
 
@@ -149,8 +158,10 @@ const panamaTime = formatPanamaTimeLabel();
 		position: relative;
 		background-color: #ffffff;
 		color: #000000;
-		--hero-height: 120vh;
-		--hero-pin-height: 100vh;
+		/* Same height as the layout — no extra scroll range / parallax pin. */
+		--hero-height: 110svh;
+		--hero-pin-height: 110svh;
+		height: var(--hero-height);
 		min-height: var(--hero-height);
 		--hero-duration: 600ms;
 		--hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -158,12 +169,13 @@ const panamaTime = formatPanamaTimeLabel();
 		--hero-photo-duration: 600ms;
 		--hero-hand-size: 0.85em;
 		--hero-photo-size: 1.15em;
-		--hero-photo-height: 1.28em;
+		--hero-photo-height: 1.15em;
 		--hero-headline-gap: 0.15em;
 		--hero-stage-gap: 4.25rem;
-		--hero-badge-headline-gap: 3rem;
-		--hero-headline-bottom-gap: 2.5rem;
+		--hero-badge-headline-gap: 2.5rem;
+		--hero-headline-bottom-gap: 1.5rem;
 		--hero-layout-padding-top: 120px;
+		--hero-layout-padding-bottom: 4.5rem;
 		--hero-inline-icon-offset: -0.1em;
 	}
 
@@ -171,21 +183,28 @@ const panamaTime = formatPanamaTimeLabel();
 		position: absolute;
 		inset: 0;
 		z-index: 0;
+		width: 100%;
+		height: 100%;
 		pointer-events: none;
 		overflow: hidden;
 	}
 
+	.hero-bg canvas {
+		display: block;
+		max-width: none;
+		/* Width/height set in JS to match hero-bg exactly (avoids stretch gaps). */
+	}
+
 	.hero-layout {
-		position: sticky;
-		top: 0;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		height: var(--hero-pin-height);
 		min-height: var(--hero-pin-height);
 		box-sizing: border-box;
-		padding: var(--hero-layout-padding-top) var(--page-gutter) 2.5rem;
+		padding: var(--hero-layout-padding-top) var(--page-gutter) var(--hero-layout-padding-bottom);
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 		overflow: hidden;
 	}
 
@@ -391,11 +410,16 @@ const panamaTime = formatPanamaTimeLabel();
 		width: var(--hero-photo-size);
 		min-width: var(--hero-photo-size);
 		height: var(--hero-photo-height);
-		object-fit: contain;
+		object-fit: cover;
 		object-position: center center;
 		filter: grayscale(1);
 		will-change: transform;
 		transform-style: preserve-3d;
+		/* Avoid subpixel gaps showing page white during 3D tilt. */
+		background-color: #111111;
+		box-shadow:
+			0 0.1em 0.28em rgba(0, 0, 0, 0.16),
+			0 0.02em 0.08em rgba(0, 0, 0, 0.1);
 	}
 
 	.hero-glitch {
@@ -688,15 +712,19 @@ const panamaTime = formatPanamaTimeLabel();
 
 	@media (max-width: 767px) {
 		.hero-section {
-			--hero-height: 100svh;
-			--hero-pin-height: 100svh;
+			/* Grow with content so the 4th pillar clears the particle crest. */
+			--hero-height: auto;
+			--hero-pin-height: auto;
 			--hero-headline-bottom-gap: 1.25rem;
 			--hero-layout-padding-top: 90px;
 			--hero-headline-line-height: 1.08;
 			--hero-headline-line-gap: 0.03em;
 			--hero-photo-size: 1.22em;
-			--hero-photo-height: 1.32em;
-			min-height: 100svh;
+			--hero-photo-height: 1.22em;
+			/* Bottom pad ≈ mobile particle mound (~13svh) + ~10px gap under last link. */
+			--hero-layout-padding-bottom: calc(14svh + 10px);
+			height: auto;
+			min-height: 110svh;
 			overflow: hidden;
 		}
 
@@ -780,9 +808,9 @@ const panamaTime = formatPanamaTimeLabel();
 			position: relative;
 			top: auto;
 			height: auto;
-			min-height: 100svh;
+			min-height: 110svh;
 			justify-content: flex-start;
-			padding-bottom: 2rem;
+			padding-bottom: var(--hero-layout-padding-bottom);
 			overflow: hidden;
 		}
 
