@@ -71,6 +71,18 @@ const resolvedLiveUrl = liveUrl.trim();
 	</div>
 </aside>
 
+{
+	resolvedLiveUrl ? (
+		<div
+			class="project-live-result-mobile lg:hidden"
+			data-project-live-mobile
+			aria-hidden="true"
+		>
+			<ProjectLiveResultButton href={resolvedLiveUrl} />
+		</div>
+	) : null
+}
+
 <!-- Mobile collapsible section dropdown list (fixed to bottom) -->
 <div class="project-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white/95 px-[var(--page-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden" data-project-sidebar-mobile>
 	<div
@@ -150,7 +162,86 @@ const resolvedLiveUrl = liveUrl.trim();
 	</button>
 </div>
 
+<script>
+	let cleanupLiveMobile: (() => void) | null = null;
+
+	function initProjectLiveMobile() {
+		cleanupLiveMobile?.();
+		cleanupLiveMobile = null;
+
+		const bar = document.querySelector<HTMLElement>('[data-project-live-mobile]');
+		const content = document.querySelector('.project-page__body');
+		if (!bar || !(content instanceof HTMLElement)) return;
+
+		const sync = (visible: boolean) => {
+			bar.classList.toggle('is-visible', visible);
+			bar.setAttribute('aria-hidden', visible ? 'false' : 'true');
+		};
+
+		const observer = new IntersectionObserver(
+			([entry]) => sync(Boolean(entry?.isIntersecting)),
+			{ root: null, threshold: 0 },
+		);
+
+		observer.observe(content);
+		sync(content.getBoundingClientRect().top < window.innerHeight);
+
+		cleanupLiveMobile = () => {
+			observer.disconnect();
+			sync(false);
+		};
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initProjectLiveMobile, { once: true });
+	} else {
+		initProjectLiveMobile();
+	}
+
+	document.addEventListener('astro:page-load', initProjectLiveMobile);
+</script>
+
 <style>
+	.project-live-result-mobile {
+		position: fixed;
+		top: 72px;
+		left: var(--page-gutter);
+		z-index: 44;
+		display: flex;
+		justify-content: flex-start;
+		width: max-content;
+		max-width: calc(100vw - (var(--page-gutter) * 2));
+		transform: translateY(-6px);
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 0.28s ease,
+			transform 0.28s ease;
+	}
+
+	.project-live-result-mobile.is-visible {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(10px);
+	}
+
+	:global(body.mobile-nav-open) .project-live-result-mobile {
+		opacity: 0 !important;
+		pointer-events: none !important;
+	}
+
+	@media (min-width: 768px) {
+		.project-live-result-mobile {
+			top: 100px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.project-live-result-mobile {
+			transition: none;
+		}
+	}
+
 	.project-sidebar__num,
 	.project-sidebar-mobile__link-num,
 	.project-sidebar-mobile__current-num {
