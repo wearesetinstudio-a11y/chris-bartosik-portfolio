@@ -136,7 +136,9 @@ export const dictionary = {
 			viewWork: 'Selected projects',
 			aboutMe: 'About me',
 			specialization:
-				'I design UX/UI, brands, and animations, while delivering functional products through no-code and AI.',
+				'I design business-first solutions for ambitious brands and successful products.',
+			specializationLine1: 'I design business-first solutions for ambitious',
+			specializationLine2: 'brands and successful products.',
 		},
 		work: {
 			heading: 'Selected projects & collaborations',

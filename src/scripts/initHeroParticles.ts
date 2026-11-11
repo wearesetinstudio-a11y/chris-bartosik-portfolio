@@ -31,7 +31,6 @@ type Spark = {
 	baseAlpha: number;
 	life: number;
 	pullScale: number;
-	fountain: boolean;
 	falling: boolean;
 	spray: boolean;
 	gravity: number;
@@ -45,10 +44,9 @@ const DAMPING = 0.78;
 const MAX_FORCE = 7.2;
 const BUCKETS = 8;
 const MAX_SPARKS = 220;
-const HEART_FADE = 18;
-const CTA_HOVER_EMIT_INTERVAL = 0.11;
-const CTA_FALL_GRAVITY = 520;
 const SPRAY_GRAVITY = 780;
+/** Cursor trail squares — fall straight down, no bottom-center sink. */
+const CURSOR_FALL_GRAVITY = 420;
 const TAP_HOLD_MS = 520;
 /** How long the clear hole eases back in after finger lift (seconds). */
 const TAP_RELEASE_SEC = 1.35;
@@ -145,8 +143,6 @@ export function initHeroParticles() {
 	let isScrollGesture = false;
 	let pointerHoldTimer = 0;
 	let holdEmitTimer = 0;
-	let hoveredCta: HTMLElement | null = null;
-	let hoverEmitAcc = 0;
 	let motionTime = 0;
 	let clipFrame = 0;
 	let lastClipPath = '';
@@ -158,8 +154,6 @@ export function initHeroParticles() {
 	/** 0..1 circular reveal progress from corners + middle. */
 	let revealT = 0;
 	let revealActive = false;
-
-	const ctaButtons = [...hero.querySelectorAll<HTMLElement>('.hero-cta')];
 
 	function clearRadius() {
 		if (!mobileHero) return REPULSE_RADIUS;
@@ -404,18 +398,18 @@ export function initHeroParticles() {
 		sparks.push({
 			x,
 			y,
-			vx: mvx * 0.28,
-			vy: mvy * 0.28,
+			// Light cursor momentum, then slow gravity drop.
+			vx: mvx * 4 + (Math.random() - 0.5) * 8,
+			vy: Math.max(12, mvy * 4) + 18 + Math.random() * 28,
 			size,
 			baseSize: size,
 			alpha,
 			baseAlpha: alpha,
 			life: 0,
 			pullScale,
-			fountain: false,
-			falling: false,
+			falling: true,
 			spray: false,
-			gravity: 0,
+			gravity: CURSOR_FALL_GRAVITY * (0.85 + Math.random() * 0.2),
 			color: '#F54100',
 			fromWhite: false,
 		});
@@ -442,69 +436,11 @@ export function initHeroParticles() {
 				baseAlpha: alpha,
 				life: 0,
 				pullScale: 1,
-				fountain: false,
 				falling: true,
 				spray: true,
 				gravity: SPRAY_GRAVITY * (0.85 + Math.random() * 0.35),
 				color: '#F54100',
 				fromWhite: false,
-			});
-		}
-	}
-
-	function getCtaBox(cta: HTMLElement | null) {
-		if (!cta) return null;
-
-		const canvasRect = canvas.getBoundingClientRect();
-		const rect = cta.getBoundingClientRect();
-
-		return {
-			x: rect.left - canvasRect.left,
-			y: rect.top - canvasRect.top,
-			w: rect.width,
-			h: rect.height,
-		};
-	}
-
-	/** Few particles leave the CTA and stream straight down off-screen at bottom center. */
-	function emitCtaFall(cta: HTMLElement | null, count: number) {
-		const box = getCtaBox(cta);
-		if (!box) return;
-
-		const fromWhite = cta?.classList.contains('hero-cta--secondary') === true;
-		const color = fromWhite ? '#FFFFFF' : '#F54100';
-		const targetX = glowHeartX;
-		const targetY = height + 36;
-
-		for (let n = 0; n < count; n += 1) {
-			if (sparks.length >= MAX_SPARKS) sparks.shift();
-
-			const size = sparkSize();
-			const alpha = 0.82 + Math.random() * 0.18;
-			const x = box.x + box.w * (0.2 + Math.random() * 0.6);
-			const y = box.y + box.h * (0.35 + Math.random() * 0.55);
-			const dx = targetX - x;
-			const dy = targetY - y;
-			const dist = Math.hypot(dx, dy) || 1;
-			const speed = 320 + Math.random() * 220;
-
-			sparks.push({
-				x,
-				y,
-				vx: (dx / dist) * speed * (0.08 + Math.random() * 0.12) + (Math.random() - 0.5) * 28,
-				vy: (dy / dist) * speed * (0.9 + Math.random() * 0.2),
-				size,
-				baseSize: size,
-				alpha,
-				baseAlpha: alpha,
-				life: 0,
-				pullScale: 1,
-				fountain: true,
-				falling: true,
-				spray: false,
-				gravity: CTA_FALL_GRAVITY,
-				color,
-				fromWhite,
 			});
 		}
 	}
@@ -729,29 +665,19 @@ export function initHeroParticles() {
 			}
 		}
 
-		if (!mobileHero && hoveredCta) {
-			hoverEmitAcc += dt;
-			if (hoverEmitAcc >= CTA_HOVER_EMIT_INTERVAL) {
-				hoverEmitAcc = 0;
-				emitCtaFall(hoveredCta, 1 + Math.floor(Math.random() * 2));
-			}
-		} else {
-			hoverEmitAcc = 0;
-		}
-
 		if (mouseActive && prevMouseX > -9000) {
 			const mvx = mouseX - prevMouseX;
 			const mvy = mouseY - prevMouseY;
 			const speed = Math.hypot(mvx, mvy) / Math.max(dt, 0.008);
 
-			if (speed > 8) {
-				emitAcc += dt * (0.16 + (speed / 150) ** 1.15 * 2.7);
+			if (speed > 18) {
+				emitAcc += dt * (0.05 + (speed / 280) ** 1.2 * 0.85);
 				while (emitAcc >= 1 && sparks.length < MAX_SPARKS) {
 					emitSpark(mouseX, mouseY, mvx, mvy, 1.05);
 					emitAcc -= 1;
 				}
 			} else {
-				emitAcc *= 0.62;
+				emitAcc *= 0.55;
 			}
 		}
 
@@ -789,9 +715,6 @@ export function initHeroParticles() {
 			particle.y = particle.oy + particle.vy;
 		}
 
-		const sinkX = glowHeartX;
-		const sinkY = height + 28;
-
 		for (let i = sparks.length - 1; i >= 0; i -= 1) {
 			const spark = sparks[i];
 			spark.life += dt;
@@ -818,54 +741,17 @@ export function initHeroParticles() {
 				continue;
 			}
 
-			if (spark.fountain) {
-				spark.vy += spark.gravity * dt;
-
-				const dx = sinkX - spark.x;
-				const dy = sinkY - spark.y;
-				const distSq = dx * dx + dy * dy;
-				const dist = Math.sqrt(Math.max(distSq, 0.0001));
-
-				if (spark.y >= height - 1 || spark.life > 1.6) {
-					sparks.splice(i, 1);
-					continue;
-				}
-
-				const inv = 1 / dist;
-				spark.vx += dx * inv * 480 * dt;
-				spark.vy += dy * inv * 760 * dt;
-				spark.vx *= 0.94;
-				spark.vy *= 0.985;
-
-				spark.x += spark.vx * dt;
-				spark.y += spark.vy * dt;
-				spark.alpha = spark.baseAlpha;
-				spark.size = spark.baseSize;
-				continue;
-			}
-
-			const dx = sinkX - spark.x;
-			const dy = sinkY - spark.y;
-			const distSq = dx * dx + dy * dy;
-			const dist = Math.sqrt(Math.max(distSq, 0.0001));
-
-			if (dist < HEART_FADE || spark.y >= height - 1 || spark.life > 2.9) {
-				sparks.splice(i, 1);
-				continue;
-			}
-
-			const inv = 1 / dist;
-			const pull = (0.2 + 360 / (distSq + 120)) * spark.pullScale;
-			spark.vx += dx * inv * pull;
-			spark.vy += dy * inv * pull * 1.12;
-			spark.vx *= 0.905;
-			spark.vy *= 0.905;
-			spark.x += spark.vx;
-			spark.y += spark.vy;
-
-			const fade = Math.max(0, (dist - HEART_FADE) / 180);
-			spark.alpha = spark.baseAlpha * fade;
+			// Cursor trail: drop straight down under the pointer (no center sink).
+			spark.vy += spark.gravity * dt;
+			spark.vx *= 0.99;
+			spark.x += spark.vx * dt;
+			spark.y += spark.vy * dt;
+			spark.alpha = spark.baseAlpha * Math.max(0, 1 - spark.life / 3.4);
 			spark.size = spark.baseSize;
+
+			if (spark.y >= height + 24 || spark.life > 3.6 || spark.alpha <= 0.02) {
+				sparks.splice(i, 1);
+			}
 		}
 
 		ctx.clearRect(0, 0, width, height);
@@ -965,25 +851,9 @@ export function initHeroParticles() {
 		}, HOLD_EMIT_MS);
 	}
 
-	function onCtaEnter(event: Event) {
-		if (mobileHero) return;
-		const cta = event.currentTarget as HTMLElement;
-		hoveredCta = cta;
-		hoverEmitAcc = CTA_HOVER_EMIT_INTERVAL;
-		emitCtaFall(cta, 6 + Math.floor(Math.random() * 4));
-	}
-
-	function onCtaLeave(event: Event) {
-		if (hoveredCta === event.currentTarget) {
-			hoveredCta = null;
-			hoverEmitAcc = 0;
-		}
-	}
-
 	function onPointerDown(event: PointerEvent) {
 		const target = event.target as HTMLElement | null;
-		const cta = target?.closest<HTMLElement>('.hero-cta');
-		const onCta = Boolean(cta && hero.contains(cta));
+		const onCta = Boolean(target?.closest('.hero-cta') && hero.contains(target));
 		const onPillar = Boolean(target?.closest('.hero-pillar') && hero.contains(target));
 
 		if (!mobileHero && event.pointerType === 'mouse') {
@@ -1003,10 +873,8 @@ export function initHeroParticles() {
 		setPointerFromClient(event.clientX, event.clientY);
 		startLoop();
 
-		// Mobile field tap: squares clear around the finger (like hover). Sparks only on CTA.
-		if (onCta && cta) {
-			emitCtaFall(cta, 8 + Math.floor(Math.random() * 5));
-		} else if (!mobileHero && !onPillar) {
+		// Mobile field tap: squares clear around the finger (like hover). Skip CTA / pillars.
+		if (!onCta && !mobileHero && !onPillar) {
 			emitTapBurst();
 		}
 
@@ -1203,10 +1071,6 @@ export function initHeroParticles() {
 	if (!reduceMotion) {
 		if (!mobileHero) {
 			window.addEventListener('mousemove', onMove, { passive: true });
-			for (const cta of ctaButtons) {
-				cta.addEventListener('mouseenter', onCtaEnter);
-				cta.addEventListener('mouseleave', onCtaLeave);
-			}
 		}
 
 		hero.addEventListener('pointerdown', onPointerDown, { passive: true });
@@ -1275,10 +1139,6 @@ export function initHeroParticles() {
 		}
 		window.removeEventListener('mousemove', onMove);
 		hero.removeEventListener('pointerdown', onPointerDown);
-		for (const cta of ctaButtons) {
-			cta.removeEventListener('mouseenter', onCtaEnter);
-			cta.removeEventListener('mouseleave', onCtaLeave);
-		}
 		const bg = hero.querySelector<HTMLElement>('.hero-bg');
 		if (bg) {
 			bg.style.clipPath = '';

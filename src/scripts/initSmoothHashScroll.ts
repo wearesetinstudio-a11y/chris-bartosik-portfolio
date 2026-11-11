@@ -1,5 +1,9 @@
 import { animateMobileNavClose, isMobileNavOpen } from './mobileNavPanel.ts';
+import { getLenis, smoothScrollTo } from './initSmoothScroll.ts';
 import { prefersReducedMotion } from './sygnetFlipAnimation.ts';
+
+/** Homepage blocks use content-visibility with a guessed height. Reveal them so anchor math matches the real page. */
+const OFFSCREEN_SECTIONS = '#clients-section, #testimonials, .tools-section, #contact, .site-footer';
 
 type SmoothHashWindow = Window &
 	typeof globalThis & {
@@ -40,7 +44,15 @@ function revealForMeasure(element: HTMLElement) {
 	};
 }
 
+function stabilizeOffscreenLayout() {
+	for (const node of document.querySelectorAll<HTMLElement>(OFFSCREEN_SECTIONS)) {
+		node.style.contentVisibility = 'visible';
+	}
+	getLenis()?.resize();
+}
+
 function measureScrollTop(element: Element) {
+	stabilizeOffscreenLayout();
 	const el = element instanceof HTMLElement ? element : null;
 	const restore = el ? revealForMeasure(el) : null;
 	const scrollMarginTop = Number.parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
@@ -57,6 +69,8 @@ function animateScrollTo(top: number) {
 		window.scrollTo(0, top);
 		return;
 	}
+
+	if (smoothScrollTo(top)) return;
 
 	const navWindow = window as SmoothHashWindow;
 	const start = window.scrollY || document.documentElement.scrollTop || 0;

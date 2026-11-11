@@ -48,10 +48,10 @@ const headerClass = waitForIntro
 		headerClass,
 	]}
 >
-	<div class="site-header__inner grid h-[72px] w-full grid-cols-[1fr_auto] items-center md:h-[100px]">
+	<div class="site-header__inner grid h-[72px] w-full grid-cols-[1fr_auto] items-center md:h-[100px] md:grid-cols-[1fr_auto_1fr]">
 		<a
 			href="/"
-			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
+			class="site-header__logo-link block w-fit justify-self-start transition-opacity hover:opacity-70"
 			aria-label={t('nav.homeAria', 'en')}
 			data-i18n-aria="nav.homeAria"
 		>
@@ -60,7 +60,11 @@ const headerClass = waitForIntro
 			</div>
 		</a>
 
-		<nav class="hidden items-center justify-end gap-8 md:flex lg:gap-10" aria-label={t('nav.main', 'en')} data-i18n-aria="nav.main">
+		<nav
+			class="site-header__nav hidden items-center justify-center gap-8 md:flex lg:gap-10"
+			aria-label={t('nav.main', 'en')}
+			data-i18n-aria="nav.main"
+		>
 			{
 				nav.map((item) => (
 					<RollingLink
@@ -72,8 +76,11 @@ const headerClass = waitForIntro
 					/>
 				))
 			}
-			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
 		</nav>
+
+		<div class="site-header__cta hidden justify-self-end md:block">
+			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
+		</div>
 
 		<div class="header-mobile-tools relative z-[60] flex items-center gap-5 md:hidden">
 			<WorkWithUsButton
@@ -145,6 +152,7 @@ const headerClass = waitForIntro
 
 	.site-header__logo-link,
 	.site-header nav,
+	.site-header__cta,
 	.header-mobile-tools,
 	.mobile-nav-toggle {
 		pointer-events: auto;

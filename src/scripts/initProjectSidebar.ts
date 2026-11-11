@@ -1,3 +1,5 @@
+import { smoothScrollTo } from './initSmoothScroll.ts';
+
 export function initProjectSidebar() {
 	const sidebarLinks = Array.from(
 		document.querySelectorAll<HTMLAnchorElement>('[data-section-target]'),
@@ -87,10 +89,13 @@ export function initProjectSidebar() {
 			const headerHeight = header ? header.offsetHeight : 80;
 			const targetTop = targetEl.getBoundingClientRect().top + window.scrollY - headerHeight - 32;
 
-			window.scrollTo({
-				top: Math.max(0, targetTop),
-				behavior: 'smooth',
-			});
+			const top = Math.max(0, targetTop);
+			if (!smoothScrollTo(top)) {
+				window.scrollTo({
+					top,
+					behavior: 'smooth',
+				});
+			}
 
 			setActiveLink(targetId);
 		});

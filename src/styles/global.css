@@ -102,6 +102,11 @@ html {
 	--project-cover-aspect: 1500 / 1064;
 }
 
+/* Lenis interpolates wheel scrolling itself. Native smooth scroll would lag on top of it. */
+html.lenis {
+	scroll-behavior: auto;
+}
+
 @media (hover: none) and (pointer: coarse) {
 	html {
 		scroll-behavior: auto;
