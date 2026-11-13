@@ -133,8 +133,8 @@ export const dictionary = {
 			aboutMe: 'About me',
 			specialization:
 				'I design business-focused brands and products that actually work and scale.',
-			specializationLine1: 'I design business-focused brands and products that',
-			specializationLine2: 'actually work and scale.',
+			specializationLine1: 'I design business-focused brands',
+			specializationLine2: 'and products that actually work and scale.',
 		},
 		work: {
 			heading: 'Selected projects & collaborations',
