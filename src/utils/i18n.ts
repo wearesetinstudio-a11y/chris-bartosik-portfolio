@@ -219,28 +219,27 @@ export const dictionary = {
 				'Chris Bartosik — independent digital creator, design engineer, and developer.',
 		},
 		aboutPage: {
-			role: '[Product designer & AI design specialist]',
-			heading:
-				'I combine UX/UI, motion design, and AI agents to build production-ready digital products.',
+			role: '[DIGITAL PRODUCT DESIGNER]',
+			heading: 'I turn complex problems into clear, working solutions.',
 			intro:
 				'Over the last 5 years at PhotoAiD, I designed end-to-end product experiences—from web and mobile apps to interactive physical kiosks. I built Design Systems, analyzed user behavior, and optimized conversions through structured A/B testing.',
 			timelineHeading: '[My timeline]',
 			job1Date: '[2021]',
-			job1Title: 'Junior UX/UI designer',
+			job1Title: 'Junior UX/UI Designer',
 			job1Body:
-				'NeuroN is a European edtech startup aimed at younger audiences. I handled the complete design cycle, covering early discovery research and wireframing, user testing, and full developer handoff. Designing accessible, high-engagement interfaces laid the groundwork for my core design habits and structured team workflows.',
-			job2Date: '[2022-2026]',
-			job2Title: 'Product designer / Motion & AI',
+				'NeurOn is a European edtech startup aimed at younger audiences. I handled the complete design cycle, covering early discovery research and wireframing, user testing, and full developer handoff. Designing accessible, high-engagement interfaces laid the groundwork for my core design habits and structured team workflows.',
+			job2Date: '[2022–2026]',
+			job2Title: 'Product Designer / Motion & AI',
 			job2Body:
 				'Over 5 years at PhotoAiD, I scaled a global product ecosystem spanning digital platforms and physical hardware. My work covered everything from web and native mobile apps to kiosk hardware interfaces and design systems.',
-			job2Item1: 'Building and managing a scalable multi platform Design System in Figma.',
-			job2Item2: 'Designing mobile first web applications, native mobile screens, and hardware kiosk interfaces.',
+			job2Item1: 'Building and managing a scalable multi-platform Design System in Figma.',
+			job2Item2: 'Designing mobile-first web applications, native mobile screens, and hardware kiosk interfaces.',
 			job2Item3: 'Analyzing user behavior with Clarity and Google Analytics to drive A/B test iterations.',
 			job2Item4: 'Integrating lightweight Rive animations for interactive feedback and polished UX.',
 			job2Item5: 'Defining clean token structures and clear technical specifications for seamless engineering handoffs.',
 			seeMore: 'See more',
-			job3Date: '[2021 — present]',
-			job3Title: 'Freelance brand & web designer',
+			job3Date: '[2021 – Present]',
+			job3Title: 'Freelance Brand & Web Designer',
 			job3Body:
 				'Parallel to my core roles, I design brands and digital products for external clients. I deliver cohesive visual identities and modern web platforms across logistics, real estate, public sector, and tech startups.',
 			exploreWork: 'View projects',
