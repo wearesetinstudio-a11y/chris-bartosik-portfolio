@@ -54,50 +54,47 @@ export const dictionary = {
 		skills: {
 			pageTitle: 'Skills',
 			pageDescription:
-				'Where design, technology, and strategy overlap — product UX/UI, motion, generative AI, and AI-assisted development.',
-			headingLine1: 'Where design, technology,',
-			headingLine2: 'and strategy overlap.',
+				'Where design, technology, and strategy overlap — product design, brand design, and design engineering.',
+			headingLine1: 'I build digital experiences rooted',
+			headingLine2: 'in strategy, design, and code.',
 			headingLine3: '',
+			headingLine1Mobile: 'I build digital experiences',
+			headingLine2Mobile: 'rooted in strategy, design, and code.',
+			headingLine3Mobile: '',
 			tools: 'Tools',
-			s1Title: 'UX/UI Design',
+			s1Title: 'Product Design',
 			s1Intro:
-				'I design functional interfaces and complete digital experiences. I connect business requirements with aesthetic precision, delivering solutions crafted thoughtfully from strategy through execution.',
-			s1F1Title: 'Research & Strategy',
+				'I design digital products built around real business goals. Over the last five years I have worked on mobile apps, websites, design systems, and custom IoT interfaces. My work focuses on solving actual user problems while driving measurable business growth.',
+			s1F1Title: 'Research and User Testing',
 			s1F1Body:
-				'In the beginning was the... insight. As a digital product designer, I always start with a deep understanding of the problem space. Gathering business requirements, analyzing user behavior, and setting clear objectives are foundational steps I have refined over five years in the industry.',
-			s1F2Title: 'ARCHITECTURE & WIREFRAMING',
+				'Before jumping into layouts, I need to understand how people actually interact with a product. I run AB tests, user interviews, and behavioral observations using tools like Hotjar and Clarity. Every design choice is backed by real user data rather than guesswork.',
+			s1F2Title: 'Flows and Structure',
 			s1F2Body:
-				'A pretty interface by itself does not drive product adoption. Functionality and delivered value do. That is why before reaching Pixel Perfect UI, I begin with quick sketches, user journey mapping, and Low-Fi wireframes to address the core challenges users face.',
-			s1F3Title: 'HIGH-FIDELITY INTERFACES',
+				'A good product starts with logic, not decoration. I map out user journeys and build early wireframes to make sure the core structure works smoothly. Once the foundation is solid, I scale it up into clean, accessible interfaces and reusable design systems.',
+			s1F3Title: 'Motion and Micro-interactions',
 			s1F3Body:
-				'My UI designs combine a distinct sense of style with brand alignment, while maintaining absolute structural logic. While I focus on detail and striking visual presentation, I consistently integrate standards like accessibility (WCAG) and cohesive visual strategy.',
-			s1F4Title: 'DESIGN SYSTEMS & DEV-CENTERED HANDOFF',
-			s1F4Body:
-				'Creating an attractive mockup in Figma is only half the battle. The real skill lies in delivering a solution engineered for fast and straightforward implementation. Having worked with various Design System architectures, I build systems that are transparent, consistent, and development-oriented.',
-			s1F5Title: 'EVALUATION & OPTIMIZATION',
-			s1F5Body:
-				'Every solution can be refined further, and every flow can be higher-converting. A/B testing, user behavior observation, and heatmap analysis allow me to validate hypotheses and uncover new growth opportunities. I measure the success of a design by its direct impact on the product.',
-			s2Title: 'Motion Design',
-			s2Intro: 
-				'Over the years I have learned that every detail matters in design. I create motion and interactions that make digital products feel alive, responsive, and engaging.',
-			s2F1Title: 'Micro-interactions & UX Polish',
-			s2F1Body: 
-				'I design every UI element with user interaction in mind. From subtle button states defined directly for code implementation to complex interactive components built in Rive. My time at PhotoAid gave me the space to explore creative solutions. I map out the strategy, design the assets, and handle handoff and testing myself. I view microinteractions as building a journey step by step. A solid flow is the baseline, but refined microinteractions deliver instant visual feedback that makes an interface feel truly tactile.',
-			s2F2Title: 'Advanced Animations & Macro Motion',
-			s2F2Body: 
-				'Beyond microinteractions, I design motion graphics that cover the whole screen and become an integral part of the visual experience. My work ranges from stepped sliders for big or custom displays to interactive mobile onboarding flows. These complex animations are not decorative because they act as essential components of the user flow that help products stand out.',
-			s2F3Title: 'Generative AI & Video Edition',
-			s2F3Body: 
-				'I integrate generative AI video workflows directly into my creative process to accelerate production and elevate output quality. I produce concise tutorial videos featuring realistic AI avatars that instruct users on actions like proper photo setup, giving them the feeling of interacting with a real expert. I also create hobby historical short films using models like Midjourney, Kling, Seedance, and Magnific AI, bringing static artwork to life through motion.',
-			s3Title: 'No-Code & AI-Code',
-			s3Intro: 
-				'Evolving technologies and market shifts create new opportunities for professionals who previously only understood code. Today those same professionals can build and deploy working products independently.',
-			s3F1Title: 'AI Assisted Development',
-			s3F1Body: 
-				'Using tools like Claude, Cursor, and VS Code, I build digital products directly within production environments. I create functional solutions ranging from early test prototypes to complete production deployments, bridging the gap between design and real code.',
-			s3F2Title: 'No-Code & Web Platforms',
-			s3F2Body: 
-				'Working on diverse projects required me to bring UX and UI designs to life independently without relying on developers. I learned to build web applications using No-Code platforms such as Webflow and Framer. I deliver scalable, well animated websites with strong SEO optimization that perform exceptionally in the browser.',
+				'Details shape how a product feels in daily use. I create subtle UI feedback and interactive components in Rive and Lottie to guide users naturally through the interface. Good motion is never just eye candy, it makes the entire experience feel responsive and intuitive.',
+			s2Title: 'Brand Design',
+			s2Intro:
+				'My approach to brand design comes straight from my background in UX and product. Instead of treating branding as a purely visual exercise, I build identities as practical business tools designed to increase company value and revenue.',
+			s2F1Title: 'Business and Customer Research',
+			s2F1Body:
+				'Every brand project starts with deep research into business goals and customer behavior. I analyze how a brand communicates across different touchpoints, from websites to Instagram and social channels, to spot friction and define what the audience truly needs.',
+			s2F2Title: 'Identity and Experience',
+			s2F2Body:
+				'Once the strategy is clear, I translate those insights into cohesive visual systems. I design brands across all touchpoints so that every element works together consistently. The goal is simple, to create a memorable customer experience that performs in the real market.',
+			s3Title: 'Design Engineering',
+			s3Intro:
+				'I bridge the gap between design and development by taking products from an initial concept all the way to live code. Understanding how things are built allows me to ship faster and push visual polish much further.',
+			s3F1Title: 'AI-Assisted Code and No-Code',
+			s3F1Body:
+				'Today I rely heavily on AI-assisted workflows using Cursor and Claude, alongside Figma layers, to build everything from functional prototypes to production websites. I also have extensive hands-on experience with Webflow and Framer, which gives me a deep understanding of web limitations, layouts, and performance.',
+			s3F2Title: 'Analytics and Iteration',
+			s3F2Body:
+				'Shipping a website is only half the job. I connect analytics tools like Google Analytics to track how visitors behave after launch. When I spot anomalies or drop-offs, I adjust the interface and refine the experience based on real traffic data.',
+			s3F3Title: 'Developer Collaboration',
+			s3F3Body:
+				'Because I understand code and have worked closely with engineers across different tech stacks for years, handoffs are smooth and practical. When I deliver a working front-end foundation, developers can focus on heavy logic while I fine-tune micro-interactions and every visual detail.',
 		},
 		hero: {
 			badgeLocation: 'Panama',
@@ -129,16 +126,15 @@ export const dictionary = {
 			descriptionLine2: 'I design data-driven products powered',
 			descriptionLine3: 'by AI agents for ultimate efficiency.',
 			portraitCaption: '[ Hi! My name is Chris\u00a0Bartosik ]',
-			pillar1: 'UX/UI Design',
-			pillar2: 'Motion Design',
-			pillar3: 'Brand Design',
-			pillar4: 'No-Code & AI-Code',
+			pillar1: 'Product Design',
+			pillar2: 'Brand Design',
+			pillar3: 'Design Engineering',
 			viewWork: 'Selected projects',
 			aboutMe: 'About me',
 			specialization:
-				'I design business-first solutions for ambitious brands and successful products.',
-			specializationLine1: 'I design business-first solutions for ambitious',
-			specializationLine2: 'brands and successful products.',
+				'I design business-focused brands and products that actually work and scale.',
+			specializationLine1: 'I design business-focused brands and products that',
+			specializationLine2: 'actually work and scale.',
 		},
 		work: {
 			heading: 'Selected projects & collaborations',

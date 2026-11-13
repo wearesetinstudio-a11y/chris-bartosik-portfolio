@@ -5,6 +5,7 @@ export function formatPanamaTime(date = new Date()): string {
 		timeZone: PANAMA_TZ,
 		hour: 'numeric',
 		minute: '2-digit',
+		second: '2-digit',
 		hour12: true,
 	}).format(date);
 }

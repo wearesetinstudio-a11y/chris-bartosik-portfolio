@@ -18,6 +18,8 @@ type Particle = {
 	glitchHidden: boolean;
 	/** 0..1 — when during the circular field reveal this square pops in. */
 	revealAt: number;
+	/** 0..1 — scroll progress at which this square flips to the dark section color. */
+	colorFlipAt: number;
 };
 
 type Spark = {
@@ -39,7 +41,6 @@ type Spark = {
 };
 
 const REPULSE_RADIUS = 48;
-const REPULSE_RADIUS_SQ = REPULSE_RADIUS * REPULSE_RADIUS;
 const DAMPING = 0.78;
 const MAX_FORCE = 7.2;
 const BUCKETS = 8;
@@ -51,7 +52,6 @@ const TAP_HOLD_MS = 520;
 /** How long the clear hole eases back in after finger lift (seconds). */
 const TAP_RELEASE_SEC = 1.35;
 const TAP_RADIUS = 56;
-const TAP_RADIUS_SQ = TAP_RADIUS * TAP_RADIUS;
 const HOLD_EMIT_MS = 90;
 const HOLD_EMIT_DELAY_MS = 180;
 const DRAG_EMIT_PX = 10;
@@ -65,6 +65,8 @@ const PIXEL_GAP = 1;
 const CELL_STRIDE = PIXEL_SIZE + PIXEL_GAP;
 /** Exact ABOUT ME / primary CTA orange. */
 const FIELD_COLOR = '#F54100';
+/** Tools / site bg — field squares flip into this while scrolling. */
+const FIELD_SCROLL_COLOR = '#131415';
 /** Circular field reveal after hero content intro (seconds). */
 const FIELD_REVEAL_SEC = 1.35;
 
@@ -154,6 +156,8 @@ export function initHeroParticles() {
 	/** 0..1 circular reveal progress from corners + middle. */
 	let revealT = 0;
 	let revealActive = false;
+	/** 0..1 — how far the hero has scrolled out; drives orange → dark flips. */
+	let scrollColorProgress = 0;
 
 	function clearRadius() {
 		if (!mobileHero) return REPULSE_RADIUS;
@@ -163,9 +167,35 @@ export function initHeroParticles() {
 		return TAP_RADIUS * (0.2 + 0.8 * eased);
 	}
 
-	function clearRadiusSq() {
-		const r = clearRadius();
-		return r * r;
+	/** Organic hover hole — jagged rim + soft scatter, not a perfect circle. */
+	function shouldClearAt(drawX: number, drawY: number, radius: number, time: number) {
+		const cx = drawX + PIXEL_SIZE * 0.5;
+		const cy = drawY + PIXEL_SIZE * 0.5;
+		const dx = cx - mouseX;
+		const dy = cy - mouseY;
+		const dist = Math.hypot(dx, dy);
+		const ang = Math.atan2(dy, dx);
+		const cellX = Math.round(drawX / CELL_STRIDE);
+		const cellY = Math.round(drawY / CELL_STRIDE);
+		const noisePhase = time * 1.8;
+		const wobble =
+			Math.sin(ang * 3.0 + cellX * 0.37 + noisePhase) * 0.11 +
+			Math.sin(ang * 7.0 - cellY * 0.29 + noisePhase * 1.3) * 0.07 +
+			((((cellX * 73856093) ^ (cellY * 19349663)) >>> 0) % 1000) / 1000 * 0.1 -
+			0.05;
+		const localR = radius * (0.88 + wobble);
+		const feather = Math.max(CELL_STRIDE * 2.2, radius * 0.38);
+		const inner = Math.max(0, localR - feather);
+
+		if (dist < inner) return true;
+		if (dist < localR + feather * 0.35) {
+			const t = (dist - inner) / Math.max(1, localR + feather * 0.35 - inner);
+			const rimNoise =
+				(((cellX * 50331653) ^ (cellY * 12582917) ^ Math.floor(time * 9)) >>> 0) % 1000;
+			const keepChance = t * t * (0.55 + (rimNoise / 1000) * 0.55);
+			return rimNoise / 1000 > keepChance;
+		}
+		return false;
 	}
 
 	/**
@@ -234,6 +264,7 @@ export function initHeroParticles() {
 			glitchOy: 0,
 			glitchHidden: false,
 			revealAt: 0,
+			colorFlipAt: 0,
 		};
 
 		particles.push(particle);
@@ -387,6 +418,39 @@ export function initHeroParticles() {
 		});
 
 		assignRevealTimes();
+		assignColorFlipTimes();
+	}
+
+	/**
+	 * Bottom rows flip first (meet the dark section), with jitter so neighbors
+	 * don't switch in lockstep — reads as one-by-one, not a hard wipe.
+	 */
+	function assignColorFlipTimes() {
+		if (!particles.length) return;
+
+		const range = Math.max(1, glowHeight);
+		const floorY = height - PIXEL_SIZE;
+
+		for (const particle of particles) {
+			const fromBottom = Math.max(0, (floorY - particle.oy) / range);
+			const jitter = (Math.random() - 0.5) * 0.24;
+			particle.colorFlipAt = Math.min(1, Math.max(0, fromBottom + jitter));
+		}
+	}
+
+	function updateScrollColorProgress() {
+		const heroRect = hero.getBoundingClientRect();
+		if (heroRect.height <= 0) {
+			scrollColorProgress = 0;
+			return;
+		}
+
+		const raw = Math.min(1, Math.max(0, -heroRect.top / heroRect.height));
+		scrollColorProgress = Math.pow(raw, 1.1);
+	}
+
+	function fieldFillColor(particle: Particle) {
+		return scrollColorProgress >= particle.colorFlipAt ? FIELD_SCROLL_COLOR : FIELD_COLOR;
 	}
 
 	function emitSpark(x: number, y: number, mvx: number, mvy: number, pullScale = 1) {
@@ -608,31 +672,30 @@ export function initHeroParticles() {
 		drawX = Math.min(maxX, Math.max(0, drawX));
 		drawY = Math.min(maxY, Math.max(0, drawY));
 
-		// Hard hide near the cursor / tap — no soft alpha falloff (that reads as a white glow).
+		// Organic hide near the cursor / tap — irregular rim, no soft alpha glow.
 		const clearing = pointerActive || (mobileHero && tapClear > 0.02);
 		if (clearing) {
-			const dx = drawX - mouseX;
-			const dy = drawY - mouseY;
-			const hideRadiusSq = mobileHero ? clearRadiusSq() : REPULSE_RADIUS_SQ;
-			if (dx * dx + dy * dy < hideRadiusSq) return;
+			const radius = mobileHero ? clearRadius() : REPULSE_RADIUS;
+			if (shouldClearAt(drawX, drawY, radius, time)) return;
 		}
 
 		ctx.globalAlpha = alpha;
-		ctx.fillStyle = FIELD_COLOR;
+		ctx.fillStyle = fieldFillColor(particle);
 		ctx.fillRect(drawX, drawY, particle.size, particle.size);
 	}
 
 	function drawStatic() {
+		updateScrollColorProgress();
 		ctx.clearRect(0, 0, width, height);
 		if (!fieldUnlocked) {
 			ctx.globalAlpha = 1;
 			return;
 		}
 		ctx.globalAlpha = 1;
-		ctx.fillStyle = FIELD_COLOR;
 		for (let i = 0; i < BUCKETS; i += 1) {
 			for (const particle of buckets[i]) {
 				if (particle.revealAt > revealT) continue;
+				ctx.fillStyle = fieldFillColor(particle);
 				ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
 			}
 		}
@@ -647,6 +710,8 @@ export function initHeroParticles() {
 
 		const dt = lastTime ? Math.min(0.033, (now - lastTime) / 1000) : 0.016;
 		lastTime = now;
+
+		updateScrollColorProgress();
 
 		if (revealActive) {
 			revealT = Math.min(1, revealT + dt / FIELD_REVEAL_SEC);
@@ -961,6 +1026,12 @@ export function initHeroParticles() {
 
 	function onScroll() {
 		scheduleHeroBgClip();
+		updateScrollColorProgress();
+		if (!animate) {
+			drawStatic();
+			return;
+		}
+		startLoop();
 	}
 
 	function onResize() {
