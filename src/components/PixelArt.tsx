@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react';
 const BRAND_ORANGE = '#F54100';
 const DEFAULT_SRC = '/chris-portrait-dither.png';
 /** Shared CSS px per grid cell — About face & Skills icons (desktop + mobile). */
-export const PIXEL_ART_CELL_CSS = 4.5;
+/** Finer grid — face detail matches the reference dither (mobile + desktop). */
+export const PIXEL_ART_CELL_CSS = 3;
 
 /** 8×8 Bayer matrix (0–63) — rebuilds face detail when squares get larger. */
 const BAYER_8 = [
