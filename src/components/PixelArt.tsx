@@ -54,6 +54,11 @@ type PixelArtProps = {
 	 * icons dissolve into each other as exact squares (not opacity fades).
 	 */
 	presence?: number;
+	/**
+	 * When true, squares assemble pixel-by-pixel the first time the art
+	 * scrolls into view (and again if it leaves and re-enters).
+	 */
+	intro?: boolean;
 	className?: string;
 	'aria-label'?: string;
 };
@@ -132,6 +137,7 @@ export default function PixelArt({
 	subjectFill = 0.88,
 	frame = 'subject',
 	presence = 1,
+	intro = false,
 	className = '',
 	'aria-label': ariaLabel = 'Pixel art',
 }: PixelArtProps) {
@@ -139,8 +145,10 @@ export default function PixelArt({
 	const wrapRef = useRef<HTMLDivElement>(null);
 	const activeRef = useRef(active);
 	const presenceRef = useRef(presence);
+	const introRef = useRef(intro);
 	activeRef.current = active;
 	presenceRef.current = presence;
+	introRef.current = intro;
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -159,6 +167,8 @@ export default function PixelArt({
 		let ghostCells: Cell[] = [];
 		let built = false;
 		let presenceSmooth = Math.min(1, Math.max(0, presenceRef.current));
+		let introTarget = introRef.current ? 0 : 1;
+		let introSmooth = introTarget;
 
 		let pointerX = -9999;
 		let pointerY = -9999;
@@ -386,13 +396,19 @@ export default function PixelArt({
 			const presenceTarget = Math.min(1, Math.max(0, presenceRef.current));
 			if (reduceMotion.matches) {
 				presenceSmooth = presenceTarget;
+				introSmooth = introTarget;
 			} else {
 				presenceSmooth += (presenceTarget - presenceSmooth) * 0.14;
 				if (Math.abs(presenceTarget - presenceSmooth) < 0.002) {
 					presenceSmooth = presenceTarget;
 				}
+				// Slower than morph — squares assemble one-by-one on scroll-in.
+				introSmooth += (introTarget - introSmooth) * 0.055;
+				if (Math.abs(introTarget - introSmooth) < 0.002) {
+					introSmooth = introTarget;
+				}
 			}
-			const morphGate = presenceSmooth;
+			const morphGate = presenceSmooth * introSmooth;
 
 			const drawCell = (c: Cell, a: number) => {
 				// Discrete square dissolve — same rank order on every layer.
@@ -462,8 +478,11 @@ export default function PixelArt({
 		function tick(now: number) {
 			if (cancelled) return;
 			const p = presenceRef.current;
-			const morphing = Math.abs(p - presenceSmooth) > 0.002 || (p > 0.01 && p < 0.99);
-			if (activeRef.current || morphing || p > 0.01) paint(now);
+			const morphing =
+				Math.abs(p - presenceSmooth) > 0.002 ||
+				(p > 0.01 && p < 0.99) ||
+				Math.abs(introTarget - introSmooth) > 0.002;
+			if (activeRef.current || morphing || (p > 0.01 && introSmooth > 0.01)) paint(now);
 			else if (built && canvas) {
 				const ctx = canvas.getContext('2d');
 				if (ctx) {
@@ -472,6 +491,33 @@ export default function PixelArt({
 				}
 			}
 			raf = requestAnimationFrame(tick);
+		}
+
+		const io =
+			typeof IntersectionObserver !== 'undefined'
+				? new IntersectionObserver(
+						(entries) => {
+							for (const entry of entries) {
+								if (!introRef.current) {
+									introTarget = 1;
+									continue;
+								}
+								if (entry.isIntersecting && entry.intersectionRatio >= 0.18) {
+									introTarget = 1;
+								} else if (!entry.isIntersecting) {
+									// Reset so re-entering replays the pixel assemble.
+									introTarget = 0;
+									if (reduceMotion.matches) introSmooth = 0;
+								}
+							}
+						},
+						{ threshold: [0, 0.18, 0.35], rootMargin: '0px 0px -8% 0px' },
+					)
+				: null;
+		if (io) io.observe(wrap);
+		if (!introRef.current) {
+			introTarget = 1;
+			introSmooth = 1;
 		}
 
 		function rebuildAndStart() {
@@ -587,6 +633,7 @@ export default function PixelArt({
 			cancelAnimationFrame(raf);
 			img.removeEventListener('load', onLoad);
 			ro.disconnect();
+			io?.disconnect();
 			window.removeEventListener('scroll', onScroll);
 			wrap.removeEventListener('pointerenter', onPointerEnter);
 			wrap.removeEventListener('pointermove', onPointerMove);
@@ -596,7 +643,7 @@ export default function PixelArt({
 			wrap.removeEventListener('pointerup', onPointerUp);
 			wrap.removeEventListener('pointercancel', onPointerUp);
 		};
-	}, [src, cellCss, subjectFill, frame]);
+	}, [src, cellCss, subjectFill, frame, intro]);
 
 	return (
 		<div

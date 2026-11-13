@@ -107,6 +107,7 @@ export default function SkillsPixelStage({
 							src={item.src}
 							subjectFill={0.88}
 							presence={w}
+							intro
 							active={i === activeIndex || w > 0.08}
 							aria-label={item.label}
 						/>
