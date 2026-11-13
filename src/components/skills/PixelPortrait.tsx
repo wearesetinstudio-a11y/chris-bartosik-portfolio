@@ -371,16 +371,52 @@ export default function PixelPortrait({
 			releaseStart = performance.now();
 		}
 
+		let touchStartX = 0;
+		let touchStartY = 0;
+		let touchScrolling = false;
+		let touchPointerId: number | null = null;
+
 		function onPointerDown(event: PointerEvent) {
 			if (event.pointerType !== 'touch') return;
+			touchPointerId = event.pointerId;
+			touchStartX = event.clientX;
+			touchStartY = event.clientY;
+			touchScrolling = false;
 			releasing = false;
 			clearStrength = 1;
 			pointerActive = true;
 			setPointerFromClient(event.clientX, event.clientY);
 		}
 
+		function onTouchPointerMove(event: PointerEvent) {
+			if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
+			const dx = event.clientX - touchStartX;
+			const dy = event.clientY - touchStartY;
+			// Vertical drag = page scroll — drop the clear hole immediately.
+			if (!touchScrolling && Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.1) {
+				touchScrolling = true;
+				pointerActive = false;
+				releasing = false;
+				clearStrength = 0;
+				pointerX = -9999;
+				pointerY = -9999;
+				smoothX = -9999;
+				smoothY = -9999;
+				return;
+			}
+			if (touchScrolling) return;
+			setPointerFromClient(event.clientX, event.clientY);
+		}
+
 		function onPointerUp(event: PointerEvent) {
-			if (event.pointerType !== 'touch') return;
+			if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
+			touchPointerId = null;
+			if (touchScrolling) {
+				touchScrolling = false;
+				pointerActive = false;
+				clearStrength = 0;
+				return;
+			}
 			setPointerFromClient(event.clientX, event.clientY);
 			pointerActive = false;
 			releasing = true;
@@ -399,6 +435,7 @@ export default function PixelPortrait({
 
 		wrap.addEventListener('pointerenter', onPointerEnter);
 		wrap.addEventListener('pointermove', onPointerMove);
+		wrap.addEventListener('pointermove', onTouchPointerMove);
 		wrap.addEventListener('pointerleave', onPointerLeave);
 		wrap.addEventListener('pointerdown', onPointerDown);
 		wrap.addEventListener('pointerup', onPointerUp);
@@ -412,6 +449,7 @@ export default function PixelPortrait({
 			window.removeEventListener('scroll', onScroll);
 			wrap.removeEventListener('pointerenter', onPointerEnter);
 			wrap.removeEventListener('pointermove', onPointerMove);
+			wrap.removeEventListener('pointermove', onTouchPointerMove);
 			wrap.removeEventListener('pointerleave', onPointerLeave);
 			wrap.removeEventListener('pointerdown', onPointerDown);
 			wrap.removeEventListener('pointerup', onPointerUp);
