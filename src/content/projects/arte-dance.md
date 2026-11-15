@@ -4,9 +4,11 @@ client: Arte de Baile
 tags:
   - Brand Design
   - Motion Design
+  - AI Direction
 categories:
   - brand-design
   - motion
+  - ai-direction
 thumbnail: /portfolio/arte-dance/cover.webm
 folderName: arte-dance
 order: 1
@@ -15,40 +17,45 @@ video: /portfolio/arte-dance/cover.webm
 heroImage: /portfolio/arte-dance/bg.webp
 clientLabel: Client
 heroSubtitle: Stripping away commercial noise for boutique movement.
-service: Brand Design, Motion Design
+service: Brand Design, Motion Design, AI Direction
 industry: Dance Studio
 market: Poznań, Poland
-tools: Figma, Affinity
+tools: Figma, Affinity, Magnific, SeaDream
 year: 2026
 liveLabel: arte-viktoriaoskaldowicz.pl
 liveUrl: https://www.arte-viktoriaoskaldowicz.pl/
 overviewLabel: Intro
-overviewTitle: Beyond the standard template
+overviewTitle: Beyond mass-market studios
 overviewText: |-
-  Most dance studios rely on loud colors, generic fitness imagery, and overcrowded visual noise that treats movement as a mass product. Arte de Baile needed a complete departure from this convention. The objective was to design a brand identity that mirrors its core philosophy: absolute focus on body mechanics, motor control, and technical precision. Instead of following fleeting market trends, we built a timeless, editorial framework that elevates the studio from a recreational hobby space to an elite boutique discipline.
+  Most dance schools rely on loud colors, generic templates, and overcrowded classes that treat movement as a mass product. Arte de Baile was built to break away from this convention. The objective was to create a space centered on technical guidance, body awareness, and genuine personal progress. Whether you are stepping onto the dance floor for the very first time or refining advanced skills, the studio offers a focused, supportive environment that rejects chaotic mass-market workflows in favor of real quality.
 sections:
   - label: Palette
-    title: The power of absolute contrast
+    title: The power of contrast
     text: |-
-      While a strict black and white palette is often dismissed as safe, when executed with absolute rigor it becomes the ultimate statement of distinction. By stripping away chromatic distraction, the brand commands immediate attention through pure contrast. This stark reduction is not about minimalism for aesthetic vanity, it is a deliberate strategic choice that creates instant recognition in a saturated market and establishes an authoritative, premium tone across every touchpoint.
+      A strict black and white palette is often dismissed as safe. Executed with rigor, it becomes a clear statement of distinction. By removing chromatic distraction, the brand commands attention through pure contrast. This reduction is not for aesthetic vanity, it is a strategic choice that creates instant recognition in a saturated market and establishes a direct tone across every touchpoint.
     afterGroup: 1
   - label: Logotype
-    title: Fluid motion through structural simplicity
+    title: Fluid motion through structure
     text: |-
-      The logotype is built as a custom typographical mark rather than a standard symbol. It features a deliberate, continuous single-stroke flow that mimics the fluidity of human movement and dance dynamics. The letterforms balance architectural sharpness with organic rhythm, creating a distinct visual signature that feels both modern and deeply tied to the art of bodily control. It is designed to scale effortlessly across large digital formats, apparel, and tactile print materials.
+      The logotype functions as a custom typographical mark rather than a standard symbol. It features a continuous single-stroke flow that mimics human movement and dance dynamics. The letterforms balance architectural sharpness with organic rhythm, creating a distinct visual signature tied to bodily control. It scales across digital formats, apparel, and print materials.
     afterGroup: 2
   - label: Workflow
-    title: Engineered for solo scale and high-frequency impact
+    title: Engineered for solo scale
     text: |-
-      A brand identity must function as a practical business tool, not just a static asset package. Because Viktoria runs the studio independently, the entire visual system was engineered for friction-free maintenance. Combining modular layout logic with high-impact social grids, the framework allows her to produce consistent, gallery-quality materials and schedule drops instantly. It eliminates design overhead while maintaining absolute brand authority across digital touchpoints.
+      A brand identity must function as a practical tool, not a static asset package. Because Viktoria runs the studio independently, the visual system was engineered for low-maintenance upkeep. Combining modular layout logic with structured social grids, the framework allows her to produce consistent materials and schedule drops instantly. It removes design overhead while maintaining brand authority.
     afterGroup: 3
   - label: Positioning
-    title: Shifting from recreational classes to professional mastery
+    title: Welcoming growth at every level
     text: |-
-      To repel amateur expectations and attract dedicated practitioners, the visual storytelling relies heavily on raw editorial photography, spatial framing, and stark typography. Every visual asset emphasizes posture, anatomical precision, and intensity over flashy studio lights. This positions the brand not as a place where people passively follow choreography, but as an uncompromising environment where individuals build a strong, conscious, and controlled body.
+      To stand out from impersonal schools, the visual storytelling relies on raw framing and stark typography. Every asset emphasizes posture, movement, and individual engagement over flashy studio lights. This positions the brand as an accessible yet uncompromising environment where anyone—from complete beginners to dedicated practitioners—can build a conscious and controlled body without getting lost in the crowd.
     afterGroup: 4
-  - label: Summary
-    title: A timeless foundation for elite movement
+  - label: AI Art Direction
+    title: Engineering visual consistency
     text: |-
-      The resulting visual identity for Arte de Baile proves that true distinction comes from subtraction, not addition. By fusing a stark black and white palette, a fluid custom logotype, and an operationally smart framework, the brand successfully breaks away from mass-market templates. It delivers an authentic, authoritative platform that honours Viktoria’s vision and sets a new benchmark for boutique movement studios.
+      Traditional photo shoots often fail to capture a cohesive brand vision, leaving creators with fragmented assets. To solve this, we developed a photographic art direction using generative AI. By synthesizing reference portraits of Viktoria with curated benchmarks across her core disciplines - Broadway Jazz, Jazz, High Heels, Performance, and Personal Training - we established a master style guide. Using upscaling via Magnific and generation through SeaDream 5.5, we produced tailored assets that match the studio identity. This approach gives Viktoria precise visual references for future shoots and ensures consistency across touchpoints.
+    afterGroup: 5
+  - label: Summary
+    title: A foundation for conscious movement
+    text: |-
+      The visual identity for Arte de Baile proves distinction comes from subtraction. By combining a stark palette, a fluid logotype, and a smart framework, the brand breaks away from mass-market templates. It delivers a direct platform that honors Viktoria’s vision and sets a benchmark for boutique studios that value people over volume.
 ---
