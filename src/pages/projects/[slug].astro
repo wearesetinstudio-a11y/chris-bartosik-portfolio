@@ -206,7 +206,7 @@ const navItems: SidebarNavItem[] = [
 						) : null
 					}
 
-					<div class="project-page__content flex min-w-0 flex-col gap-20 px-[var(--page-gutter)] pt-24 pb-20 md:gap-28 md:pt-36 md:pb-24 lg:gap-36 lg:pt-48 lg:pb-24 lg:pl-10 xl:pl-14">
+					<div class="project-page__content flex min-w-0 flex-col gap-20 px-[var(--page-gutter)] pt-24 pb-20 md:gap-28 md:pt-36 md:pb-24 lg:gap-36 lg:pt-48 lg:pb-24 lg:pl-16 xl:pl-20">
 						{
 							showOverview ? (
 								<ProjectOverviewSection
@@ -348,15 +348,15 @@ const navItems: SidebarNavItem[] = [
 
 		.project-page__layout :global(.project-sidebar) {
 			background: #fafafa;
-			/* Right padding matches .project-page__content lg:pl-10 */
-			padding: 12rem 2.5rem 6rem var(--page-gutter);
+			/* Right padding matches .project-page__content lg:pl-16 */
+			padding: 12rem 4rem 6rem var(--page-gutter);
 		}
 	}
 
 	@media (min-width: 1280px) {
 		.project-page__layout :global(.project-sidebar) {
-			/* Matches .project-page__content xl:pl-14 */
-			padding-right: 3.5rem;
+			/* Matches .project-page__content xl:pl-20 */
+			padding-right: 5rem;
 		}
 	}
 

@@ -19,6 +19,8 @@ const { items, liveUrl = '' } = Astro.props;
 const resolvedLiveUrl = liveUrl.trim();
 ---
 
+{/* One grid child on mobile; lg:contents lets the desktop aside join the page grid. */}
+<div class="project-sidebar-shell lg:contents">
 <aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
 	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)] min-h-[calc(100svh-100px-5rem)] pb-8">
 		{/* Invisible sizer: sidebar width = "06 [AI ART DIRECTION]" (Arte reference). */}
@@ -168,6 +170,7 @@ const resolvedLiveUrl = liveUrl.trim();
 		</svg>
 	</button>
 </div>
+</div>
 
 <script>
 	let cleanupLiveMobile: (() => void) | null = null;
@@ -209,75 +212,92 @@ const resolvedLiveUrl = liveUrl.trim();
 </script>
 
 <style>
-	.project-sidebar {
-		width: max-content;
+	.project-sidebar__width-ref {
+		display: none;
 	}
 
 	.project-sidebar__inner {
-		display: grid;
-		grid-template-columns: max-content;
-		grid-template-rows: auto 1fr;
-		align-content: stretch;
-	}
-
-	/* Sizes the column to the real rendered width of "06 [AI ART DIRECTION]". */
-	.project-sidebar__width-ref {
-		grid-column: 1;
-		grid-row: 1;
 		display: flex;
-		align-items: baseline;
-		gap: 0.625rem;
-		width: max-content;
-		height: 0;
-		overflow: hidden;
-		visibility: hidden;
-		pointer-events: none;
-		white-space: nowrap;
-		font-size: 1rem;
-		font-weight: 600;
-		letter-spacing: 0.03em;
-		text-transform: uppercase;
+		flex-direction: column;
 	}
 
-	.project-sidebar__nav {
-		grid-column: 1;
-		grid-row: 1;
-		/* Don't let long labels expand the column — width comes from the sizer. */
-		width: 0;
-		min-width: 100%;
-		align-self: start;
-	}
+	@media (min-width: 1024px) {
+		.project-sidebar {
+			width: max-content;
+		}
 
-	.project-sidebar__live {
-		grid-column: 1;
-		grid-row: 2;
-		width: 0;
-		min-width: 100%;
-		align-self: end;
-	}
+		.project-sidebar__inner {
+			display: grid;
+			grid-template-columns: max-content;
+			grid-template-rows: auto 1fr;
+			align-content: stretch;
+		}
 
-	.project-sidebar__live :global(.project-live-result) {
-		max-width: 100%;
-	}
+		/* Sizes the column: num + gap + [label capped at 200px]. */
+		.project-sidebar__width-ref {
+			grid-column: 1;
+			grid-row: 1;
+			display: flex;
+			align-items: baseline;
+			gap: 0.625rem;
+			width: max-content;
+			height: 0;
+			overflow: hidden;
+			visibility: hidden;
+			pointer-events: none;
+			white-space: nowrap;
+			font-size: 1rem;
+			font-weight: 600;
+			letter-spacing: 0.03em;
+			text-transform: uppercase;
+		}
 
-	.project-sidebar__link {
-		min-width: 0;
-		max-width: 100%;
-	}
+		.project-sidebar__width-ref .project-sidebar__label-text {
+			display: inline-block;
+			width: 200px;
+		}
 
-	.project-sidebar__label {
-		display: inline-flex;
-		min-width: 0;
-		overflow: hidden;
-		white-space: nowrap;
-	}
+		.project-sidebar__nav {
+			grid-column: 1;
+			grid-row: 1;
+			/* Don't let long labels expand the column — width comes from the sizer. */
+			width: 0;
+			min-width: 100%;
+			align-self: start;
+		}
 
-	.project-sidebar__label-text {
-		display: block;
-		min-width: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		.project-sidebar__live {
+			grid-column: 1;
+			grid-row: 2;
+			width: 0;
+			min-width: 100%;
+			align-self: end;
+		}
+
+		.project-sidebar__live :global(.project-live-result) {
+			max-width: 100%;
+		}
+
+		.project-sidebar__link {
+			min-width: 0;
+			max-width: 100%;
+		}
+
+		.project-sidebar__label {
+			display: inline-flex;
+			min-width: 0;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.project-sidebar__label-text {
+			display: block;
+			min-width: 0;
+			max-width: 200px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 	}
 
 	.project-live-result-mobile {
