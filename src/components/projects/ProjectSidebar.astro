@@ -20,7 +20,13 @@ const resolvedLiveUrl = liveUrl.trim();
 ---
 
 <aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
-	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)] flex min-h-[calc(100svh-100px-5rem)] flex-col pb-8">
+	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)] min-h-[calc(100svh-100px-5rem)] pb-8">
+		{/* Invisible sizer: sidebar width = "06 [AI ART DIRECTION]" (Arte reference). */}
+		<span class="project-sidebar__width-ref" aria-hidden="true">
+			<span class="project-sidebar__num">06</span>
+			<span class="project-sidebar__label">[<span class="project-sidebar__label-text">AI ART DIRECTION</span>]</span>
+		</span>
+
 		{
 			items.length > 0 ? (
 				<nav class="project-sidebar__nav flex flex-col gap-4.5" aria-label="Spis sekcji projektu">
@@ -42,13 +48,14 @@ const resolvedLiveUrl = liveUrl.trim();
 									[
 									{item.isOverview ? (
 										<span
+											class="project-sidebar__label-text"
 											data-project-field="overviewLabel"
 											data-i18n={item.labelKey}
 										>
 											{item.label}
 										</span>
 									) : (
-										<span data-project-section-field="label">
+										<span class="project-sidebar__label-text" data-project-section-field="label">
 											{item.label}
 										</span>
 									)}
@@ -202,6 +209,77 @@ const resolvedLiveUrl = liveUrl.trim();
 </script>
 
 <style>
+	.project-sidebar {
+		width: max-content;
+	}
+
+	.project-sidebar__inner {
+		display: grid;
+		grid-template-columns: max-content;
+		grid-template-rows: auto 1fr;
+		align-content: stretch;
+	}
+
+	/* Sizes the column to the real rendered width of "06 [AI ART DIRECTION]". */
+	.project-sidebar__width-ref {
+		grid-column: 1;
+		grid-row: 1;
+		display: flex;
+		align-items: baseline;
+		gap: 0.625rem;
+		width: max-content;
+		height: 0;
+		overflow: hidden;
+		visibility: hidden;
+		pointer-events: none;
+		white-space: nowrap;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+
+	.project-sidebar__nav {
+		grid-column: 1;
+		grid-row: 1;
+		/* Don't let long labels expand the column — width comes from the sizer. */
+		width: 0;
+		min-width: 100%;
+		align-self: start;
+	}
+
+	.project-sidebar__live {
+		grid-column: 1;
+		grid-row: 2;
+		width: 0;
+		min-width: 100%;
+		align-self: end;
+	}
+
+	.project-sidebar__live :global(.project-live-result) {
+		max-width: 100%;
+	}
+
+	.project-sidebar__link {
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.project-sidebar__label {
+		display: inline-flex;
+		min-width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.project-sidebar__label-text {
+		display: block;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
 	.project-live-result-mobile {
 		position: fixed;
 		top: 72px;

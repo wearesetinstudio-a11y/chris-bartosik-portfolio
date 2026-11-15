@@ -199,7 +199,7 @@ const navItems: SidebarNavItem[] = [
 		/>
 
 		<div class="project-page__body relative z-10 transition-colors duration-500">
-			<div class="project-page__layout grid grid-cols-1 items-start lg:grid-cols-[minmax(0,1fr)_minmax(0,65%)]">
+			<div class="project-page__layout grid grid-cols-1 items-start lg:grid-cols-[max-content_minmax(0,1fr)]">
 					{
 						navItems.length > 0 || liveUrl ? (
 							<ProjectSidebar items={navItems} liveUrl={liveUrl} />
@@ -348,7 +348,15 @@ const navItems: SidebarNavItem[] = [
 
 		.project-page__layout :global(.project-sidebar) {
 			background: #fafafa;
-			padding: 12rem var(--page-gutter) 6rem;
+			/* Right padding matches .project-page__content lg:pl-10 */
+			padding: 12rem 2.5rem 6rem var(--page-gutter);
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.project-page__layout :global(.project-sidebar) {
+			/* Matches .project-page__content xl:pl-14 */
+			padding-right: 3.5rem;
 		}
 	}
 
