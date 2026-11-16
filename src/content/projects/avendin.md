@@ -9,7 +9,7 @@ categories:
   - motion
 thumbnail: /portfolio/avendin/Cover.webm
 folderName: avendin
-order: 13
+order: 16
 comingSoon: false
 video: /portfolio/avendin/Cover.webm
 heroImage: /portfolio/avendin/bg.webp

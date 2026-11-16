@@ -5,7 +5,7 @@ tags: ['AI Direction', 'Motion']
 categories: ['ai-direction', 'motion']
 thumbnail: '/portfolio/les-negres-de-europe/cover.webm'
 folderName: 'les-negres-de-europe'
-order: 6
+order: 10
 comingSoon: true
 video: '/portfolio/les-negres-de-europe/cover.webm'
 heroSubtitle: Coming soon

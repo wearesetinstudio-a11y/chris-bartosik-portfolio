@@ -11,7 +11,7 @@ categories:
   - ai-direction
 thumbnail: /portfolio/photoaid-kiosk/cover.webm
 folderName: photoaid-kiosk
-order: 2
+order: 3
 comingSoon: false
 video: /portfolio/photoaid-kiosk/cover.webm
 heroImage: /portfolio/photoaid-kiosk/bg.webp

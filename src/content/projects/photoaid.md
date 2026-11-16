@@ -13,7 +13,7 @@ categories:
   - applications
 thumbnail: /portfolio/photoaid-biometric-app/cover.webp
 folderName: photoaid-biometric-app
-order: 2
+order: 1
 comingSoon: false
 heroImage: /portfolio/photoaid-biometric-app/bg.webp
 logo: /logos/photoaid.svg

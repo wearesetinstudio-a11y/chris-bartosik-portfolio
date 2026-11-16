@@ -9,7 +9,7 @@ categories:
   - motion
 thumbnail: /portfolio/app/Cover.webm
 folderName: app
-order: 4
+order: 7
 comingSoon: false
 video: /portfolio/app/Cover.webm
 heroImage: /portfolio/app/bg.webp

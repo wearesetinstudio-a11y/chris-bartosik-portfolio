@@ -17,7 +17,7 @@ categories:
   - product-design
 thumbnail: /portfolio/see-more/cover.riv
 folderName: see-more
-order: 3
+order: 6
 comingSoon: false
 video: /portfolio/see-more/cover.riv
 heroImage: /portfolio/see-more/bg.webp

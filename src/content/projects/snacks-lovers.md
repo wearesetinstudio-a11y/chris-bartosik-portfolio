@@ -9,7 +9,7 @@ categories:
   - motion
 thumbnail: /portfolio/snacks-lovers/snacks-lovers-cover.webp
 folderName: snacks-lovers
-order: 5
+order: 9
 comingSoon: false
 heroImage: /portfolio/snacks-lovers/bg.webp
 logo: /logos/snacks-lovers.svg

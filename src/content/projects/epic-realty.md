@@ -15,7 +15,7 @@ categories:
   - product-design
 thumbnail: /portfolio/epic-realty/cover.riv
 folderName: epic-realty
-order: 7
+order: 11
 comingSoon: false
 video: /portfolio/epic-realty/cover.riv
 heroImage: /portfolio/epic-realty/bg.webp
