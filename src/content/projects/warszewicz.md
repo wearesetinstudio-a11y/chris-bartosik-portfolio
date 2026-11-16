@@ -9,7 +9,7 @@ categories:
   - motion
 thumbnail: /portfolio/warszewicz/cover.mp4
 folderName: warszewicz
-order: 13
+order: 16
 comingSoon: false
 video: /portfolio/warszewicz/cover.mp4
 heroImage: /portfolio/warszewicz/bg.webp

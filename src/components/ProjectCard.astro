@@ -153,6 +153,15 @@ const Tag = comingSoon ? 'div' : 'a';
 		transition: opacity 0.35s ease;
 	}
 
+	/* Desktop-only: nudge video to hide GPU decode lines (media already overflow:hidden). */
+	@media (min-width: 1024px) {
+		.project-card__media video {
+			top: -10px;
+			bottom: -10px;
+			height: calc(100% + 20px);
+		}
+	}
+
 	.project-card__media.is-ready img,
 	.project-card__media.is-ready video,
 	.project-card__media.is-ready .rive-player {

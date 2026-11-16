@@ -141,15 +141,17 @@ const hasGraphic = Boolean(graphicSrc);
 									/>
 								</object>
 							) : graphicType === 'video' ? (
-								<video
-									src={graphicSrc}
-									class="project-overview__video block h-auto w-full"
-									muted
-									loop
-									playsinline
-									preload="metadata"
-									aria-label={graphicAlt}
-								/>
+								<div class="project-overview__video-wrap">
+									<video
+										src={graphicSrc}
+										class="project-overview__video block h-auto w-full"
+										muted
+										loop
+										playsinline
+										preload="metadata"
+										aria-label={graphicAlt}
+									/>
+								</div>
 							) : (
 								<img
 									src={graphicSrc}
@@ -329,5 +331,25 @@ const hasGraphic = Boolean(graphicSrc);
 
 	.project-overview__visual {
 		border-radius: 0;
+	}
+
+	.project-overview__video-wrap {
+		width: 100%;
+	}
+
+	/* Desktop-only: clip GPU decode artifact lines at video edges. */
+	@media (min-width: 1024px) {
+		.project-overview__video-wrap {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.project-overview__video-wrap .project-overview__video {
+			margin-top: -10px;
+			margin-bottom: -10px;
+			width: 100%;
+			height: auto;
+			object-fit: cover;
+		}
 	}
 </style>

@@ -9,7 +9,7 @@ video: '/portfolio/wcr-krakow/cover.webm'
 heroImage: '/portfolio/wcr-krakow/bg.webp'
 logo: '/logos/wcr-krakow.svg'
 comingSoon: true
-order: 14
+order: 17
 heroSubtitle: 'Military social media visual campaign'
 service: 'Social media campaign'
 industry: 'Army'

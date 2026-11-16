@@ -11,7 +11,7 @@ categories:
   - motion
 thumbnail: /portfolio/arte-dance-web/cover.webm
 folderName: arte-dance-web
-order: 2
+order: 3
 comingSoon: false
 video: /portfolio/arte-dance-web/cover.webm
 heroImage: /portfolio/arte-dance-web/bg.webp

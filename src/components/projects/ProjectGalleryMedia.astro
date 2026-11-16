@@ -47,7 +47,7 @@ const src = withPublicAssetVersion(item.src);
 			<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
 				<video
 					src={src}
-					class="block h-auto w-full"
+					class="project-gallery__video block h-auto w-full"
 					muted
 					loop
 					playsinline
@@ -62,6 +62,22 @@ const src = withPublicAssetVersion(item.src);
 	.project-gallery__item {
 		min-width: 0;
 		max-width: 100%;
+	}
+
+	/* Desktop-only: clip GPU decode artifact lines at video edges. */
+	@media (min-width: 1024px) {
+		.project-gallery__item--video {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.project-gallery__item--video .project-gallery__video {
+			margin-top: -10px;
+			margin-bottom: -10px;
+			width: 100%;
+			height: auto;
+			object-fit: cover;
+		}
 	}
 
 	.project-gallery__item--svg .project-gallery__svg {

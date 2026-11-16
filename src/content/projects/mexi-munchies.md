@@ -9,7 +9,7 @@ categories:
   - motion
 thumbnail: /portfolio/mexi-munchies/cover.webp
 folderName: mexi-munchies
-order: 12
+order: 15
 comingSoon: false
 heroImage: /portfolio/mexi-munchies/bg.webp
 logo: /logos/meximunchies.svg

@@ -11,7 +11,7 @@ categories:
   - ai-direction
 thumbnail: /portfolio/arte-dance/cover.webm
 folderName: arte-dance
-order: 5
+order: 6
 comingSoon: false
 video: /portfolio/arte-dance/cover.webm
 heroImage: /portfolio/arte-dance/bg.webp

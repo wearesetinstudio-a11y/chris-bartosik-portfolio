@@ -11,7 +11,7 @@ categories:
   - product-design
 thumbnail: /portfolio/nrv/cover.webm
 folderName: nrv
-order: 8
+order: 9
 comingSoon: false
 video: /portfolio/nrv/cover.webm
 heroImage: /portfolio/nrv/bg.webp

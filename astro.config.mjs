@@ -9,7 +9,6 @@ export default defineConfig({
   integrations: [react()],
   redirects: {
     '/projects/see-more-rebranding': '/projects/see-more',
-    '/projects/see-more-web': '/projects/see-more',
     '/projects/detalles': '/projects',
     '/projects/mi-pronto': '/projects',
   },
