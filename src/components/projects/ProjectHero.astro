@@ -78,7 +78,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 					{
 						hasTagline ? (
 							<div class="min-w-0 w-full" data-hero-part="tagline">
-								<h1 id="project-hero-headline" class="project-hero__title w-full uppercase text-white">
+								<h1 id="project-hero-headline" class="project-hero__title w-full text-white">
 									{heroLines.map((line) => (
 										<span class="block">{line}</span>
 									))}
@@ -155,10 +155,11 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 	}
 
 	.project-hero__title {
-		font-size: 1.75rem;
-		font-weight: 600;
-		line-height: 1.15;
+		font-size: 2.1rem;
+		font-weight: 500;
+		line-height: 1.12;
 		letter-spacing: var(--letter-spacing-ui);
+		text-transform: none;
 		user-select: none;
 		-webkit-user-select: none;
 		-webkit-touch-callout: none;
@@ -166,7 +167,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 	.project-hero__client-label {
 		margin: 0;
-		font-size: var(--label-text-size);
+		font-size: 1rem;
 		font-weight: 600;
 		letter-spacing: 0;
 		line-height: 1.2;
@@ -178,14 +179,14 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 
 	.project-hero__client-name {
 		font-size: 1.6rem;
-		font-weight: 600;
+		font-weight: 500;
 		line-height: 1.15;
 		letter-spacing: var(--letter-spacing-ui);
 	}
 
 	@media (min-width: 768px) {
 		.project-hero__title {
-			font-size: 2.35rem;
+			font-size: 3.2rem;
 		}
 	}
 </style>

@@ -1,0 +1,57 @@
+---
+import type { CaseMediaGroup } from '../../utils/getCaseGallery';
+import CaseMedia from './CaseMedia.astro';
+
+interface Props {
+	group: CaseMediaGroup | null | undefined;
+	label?: string;
+	priority?: boolean;
+	class?: string;
+}
+
+const { group, label = '', priority = false, class: className = '' } = Astro.props;
+const items = group?.items ?? [];
+---
+
+{
+	items.length > 0 ? (
+		<div
+			class:list={[
+				'case-media-stack',
+				items.length > 1 && 'case-media-stack--multi',
+				className,
+			]}
+		>
+			{items.map((item, index) => (
+				<CaseMedia
+					item={item}
+					label={label ? `${label} — ${index + 1}` : ''}
+					priority={priority && index === 0}
+				/>
+			))}
+		</div>
+	) : (
+		<div class:list={['case-media-stack', 'case-media-stack--placeholder', className]} aria-hidden="true" />
+	)
+}
+
+<style is:global>
+	.case-media-stack {
+		display: grid;
+		gap: 0.75rem;
+		width: 100%;
+		min-width: 0;
+		align-content: start;
+	}
+
+	.case-media-stack--placeholder {
+		aspect-ratio: 4 / 3;
+		background-color: #d9d9d9;
+	}
+
+	@media (min-width: 900px) {
+		.case-media-stack--multi {
+			gap: 1rem;
+		}
+	}
+</style>

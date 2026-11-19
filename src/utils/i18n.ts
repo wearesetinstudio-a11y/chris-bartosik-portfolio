@@ -23,6 +23,7 @@ export const dictionary = {
 			home: 'Home',
 			skills: 'Skills',
 			projects: 'Projects',
+			cases: 'Cases',
 			about: 'About me',
 			openMenu: 'Open menu',
 			closeMenu: 'Close menu',
@@ -200,6 +201,16 @@ export const dictionary = {
 			role8: 'Designer at PhotoAiD',
 			role9: 'Mobile Developer at PhotoAiD',
 			role10: 'Product Manager at PhotoAiD',
+		},
+		cases: {
+			pageTitle: 'Cases',
+			pageDescription:
+				'Case studies on identities and products built to solve real business problems.',
+			headingDesktop1: 'I solve the real',
+			headingDesktop2: 'business problems',
+			headingDesktop3: '',
+			headingMobile1: 'I solve the real',
+			headingMobile2: 'business problems',
 		},
 		about: {
 			eyebrow: 'My story',

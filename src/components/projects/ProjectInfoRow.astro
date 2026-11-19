@@ -69,7 +69,7 @@ const linkClass =
 	.project-info-row__label {
 		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
 		font-size: 0.85rem;
-		font-weight: 600;
+		font-weight: 500;
 		letter-spacing: var(--label-text-tracking);
 		line-height: 1.35;
 		text-transform: uppercase;
@@ -79,21 +79,17 @@ const linkClass =
 		font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
 		font-size: 0.85rem;
 		font-weight: 500;
-		letter-spacing: 0;
+		letter-spacing: var(--label-text-tracking);
 		line-height: 1.4;
 		text-transform: uppercase;
 		margin: 0;
 	}
 
 	@media (min-width: 768px) {
-		.project-info-row__label {
-			font-size: var(--label-text-size);
-			line-height: var(--body-text-lh);
-		}
-
+		.project-info-row__label,
 		.project-info-row__value {
-			font-size: var(--body-text-size);
-			line-height: var(--body-text-lh);
+			font-size: 0.95rem;
+			line-height: 1.4;
 		}
 	}
 </style>

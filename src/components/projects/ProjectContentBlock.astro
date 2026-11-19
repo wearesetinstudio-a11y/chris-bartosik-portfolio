@@ -136,14 +136,14 @@ const hasBody = hasTitle || hasText;
 	}
 
 	.project-content-block__label {
-		font-size: var(--label-text-size);
+		font-size: 1rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0;
 		line-height: 1.2;
 		color: rgba(0, 0, 0, 0.4);
 		margin-top: 0;
-		margin-bottom: 1.75rem;
+		margin-bottom: 0.75rem;
 		flex-wrap: nowrap;
 		word-break: normal;
 		overflow-wrap: normal;
@@ -172,13 +172,13 @@ const hasBody = hasTitle || hasText;
 
 	.project-content-block__heading {
 		font-size: var(--heading-h2-size);
-		font-weight: 600;
-		text-transform: uppercase;
+		font-weight: 500;
+		text-transform: none;
 		line-height: var(--heading-h2-lh);
 		letter-spacing: var(--letter-spacing-ui);
 		color: #131415;
 		margin-top: 0;
-		margin-bottom: 1.75rem;
+		margin-bottom: 0.85rem;
 		width: 100%;
 		max-width: 100%;
 	}
@@ -201,17 +201,20 @@ const hasBody = hasTitle || hasText;
 
 	.project-content-block__copy {
 		color: rgba(0, 0, 0, 0.7);
-		gap: 2rem;
+		gap: 0.85rem;
 	}
 
 	@media (min-width: 768px) {
-		.project-content-block__label,
+		.project-content-block__label {
+			margin-bottom: 1rem;
+		}
+
 		.project-content-block__heading {
-			margin-bottom: 3rem;
+			margin-bottom: 1.15rem;
 		}
 
 		.project-content-block__copy {
-			gap: 2.25rem;
+			gap: 1rem;
 		}
 	}
 
@@ -225,32 +228,40 @@ const hasBody = hasTitle || hasText;
 		color: inherit;
 	}
 
-	.project-content-block__list {
+	/* Global: initProjectCopy re-renders list HTML without Astro scope attrs. */
+	:global(.project-content-block__list) {
 		margin: 0;
-		padding-left: 1.35em;
-		list-style-type: disc;
-		list-style-position: outside;
+		padding-left: 0;
+		list-style: none;
 		font-size: var(--body-text-size);
 		font-weight: 400;
 		line-height: var(--body-text-lh);
 		color: inherit;
 	}
 
-	.project-content-block__list li {
-		display: list-item;
+	:global(.project-content-block__list li) {
+		position: relative;
+		display: block;
 		margin: 0;
-		padding-left: 0.35em;
+		padding-left: 1.15em;
 	}
 
-	.project-content-block__list li + li {
-		margin-top: 1.35rem;
+	:global(.project-content-block__list li::before) {
+		content: '';
+		position: absolute;
+		top: 0.65em;
+		left: 0;
+		width: 0.35em;
+		height: 0.35em;
+		border-radius: 999px;
+		background-color: currentColor;
 	}
 
-	.project-content-block__list li::marker {
-		color: currentColor;
+	:global(.project-content-block__list li + li) {
+		margin-top: 0.55rem;
 	}
 
-	.project-content-block__list :global(strong) {
+	:global(.project-content-block__list strong) {
 		font-weight: 700;
 		color: #131415;
 	}
@@ -287,7 +298,7 @@ const hasBody = hasTitle || hasText;
 		color: rgba(255, 255, 255, 0.75);
 	}
 
-	:global(.project-page--dark) .project-content-block__list :global(strong) {
+	:global(.project-page--dark .project-content-block__list strong) {
 		color: #f5f5f5;
 	}
 </style>

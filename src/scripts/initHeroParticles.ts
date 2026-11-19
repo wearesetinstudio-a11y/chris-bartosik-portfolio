@@ -60,8 +60,8 @@ const SCROLL_INTENT_PX = 14;
 const RESIZE_EPSILON_PX = 24;
 /** Accent pixel block size in CSS pixels. */
 const PIXEL_SIZE = 6;
-/** Gap between squares (CSS px) — tight so the field reads dense, not screen-door. */
-const PIXEL_GAP = 1;
+/** Gap between squares (CSS px) — 0 so adjacent squares touch. */
+const PIXEL_GAP = 0;
 const CELL_STRIDE = PIXEL_SIZE + PIXEL_GAP;
 /** Exact ABOUT ME / primary CTA orange. */
 const FIELD_COLOR = '#F54100';
@@ -212,22 +212,24 @@ export function initHeroParticles() {
 		const bottom = Math.pow(1 - rise, mobileHero ? 1.55 : 2.15);
 
 		if (mobileHero) {
-			// Wide shallow arch: dense bottom center, fades at sides, low peak.
+			// Wide flat mound — low peak, not a tall circular hump.
 			const centerDist = Math.abs(nx - 0.5) * 2; // 0 at center → 1 at edges
-			const cosArch = Math.pow(Math.cos(centerDist * Math.PI * 0.5), 1.25);
-			const archCeiling = 0.18 + cosArch * 0.82;
+			const cosArch = Math.pow(Math.cos(centerDist * Math.PI * 0.5), 0.85);
+			const archCeiling = 0.32 + cosArch * 0.48;
 			if (rise > archCeiling) return 0;
 			const archDepth = Math.max(0, 1 - rise / Math.max(0.08, archCeiling));
-			const centerBias = 0.55 + 0.45 * cosArch;
-			return Math.min(1, centerBias * (0.28 + Math.pow(archDepth, 1.2) * 0.9));
+			const centerBias = 0.62 + 0.38 * cosArch;
+			return Math.min(1, centerBias * (0.3 + Math.pow(archDepth, 1.35) * 0.85));
 		}
 
+		// Keep side stacks short — dense near the floor, sparse crest.
+		if (rise > 0.72) return 0;
 		const edgeDist = Math.min(nx, 1 - nx);
-		const strokeWidth = 0.03 + bottom * 0.28;
-		const sideMask = Math.exp(-Math.pow(edgeDist / Math.max(0.001, strokeWidth), 1.75));
-		if (sideMask < 0.04) return 0;
+		const strokeWidth = 0.025 + bottom * 0.22;
+		const sideMask = Math.exp(-Math.pow(edgeDist / Math.max(0.001, strokeWidth), 1.9));
+		if (sideMask < 0.05) return 0;
 
-		return Math.min(1, sideMask * (0.25 + bottom * 1.05));
+		return Math.min(1, sideMask * (0.2 + bottom * 1.1));
 	}
 
 	function homeFromWeight(x: number, y: number, weight: number) {
@@ -372,13 +374,13 @@ export function initHeroParticles() {
 		glowHeartX = glowOriginX;
 		glowHeartY = height - 6;
 
-		// Desktop: lower third. Mobile: short wide mound (~3 rows shorter than prior).
-		fieldMinY = Math.ceil(height * (mobileHero ? 0.87 : 0.64));
-		if (mobileHero) fieldMinY += CELL_STRIDE * 3;
+		// Desktop: shorter side stacks. Mobile: flatter wide mound (less circular).
+		fieldMinY = Math.ceil(height * (mobileHero ? 0.9 : 0.78));
+		if (mobileHero) fieldMinY += CELL_STRIDE * 2;
 		glowHeight = Math.max(CELL_STRIDE * 4, height - fieldMinY);
 
 		const densityBoost = reduceMotion ? 0.65 : 1;
-		const minKeep = reduceMotion ? 0.16 : mobileHero ? 0.08 : 0.06;
+		const minKeep = reduceMotion ? 0.16 : mobileHero ? 0.08 : 0.08;
 		const edgeBand = CELL_STRIDE * 2;
 		const floorY = height - PIXEL_SIZE;
 		const centerHalf = width * (mobileHero ? 0.42 : 0.22);
@@ -389,13 +391,13 @@ export function initHeroParticles() {
 			forEachGridX((x) => {
 				const weight = bottomCornerWeight(x, y);
 				if (weight <= minKeep) return;
-				let keep = Math.min(1, Math.pow(weight, mobileHero ? 0.42 : 0.55) * densityBoost);
+				let keep = Math.min(1, Math.pow(weight, mobileHero ? 0.42 : 0.62) * densityBoost);
 				const onSide = x <= edgeBand || x >= width - PIXEL_SIZE - edgeBand;
 				const rowsFromFloor = Math.round((floorY - y) / CELL_STRIDE);
 				const onBottom = rowsFromFloor <= (mobileHero ? 3 : 1);
 				const inCenter = Math.abs(x + PIXEL_SIZE * 0.5 - width * 0.5) <= centerHalf;
-				// Desktop: pin side/bottom corners. Mobile: glue a short dense base to the floor.
-				const sidePin = !mobileHero && onSide && y > fieldMinY + topFeather * 4;
+				// Desktop: only pin the lowest side rows so stacks stay short.
+				const sidePin = !mobileHero && onSide && rowsFromFloor <= 5;
 				if (mobileHero && onBottom) {
 					const edgeFade = Math.pow(
 						Math.max(0, 1 - Math.abs(x / Math.max(1, width - PIXEL_SIZE) - 0.5) * 2),
@@ -403,7 +405,7 @@ export function initHeroParticles() {
 					);
 					keep = Math.max(keep, (inCenter ? 0.98 : 0.55) * (0.35 + 0.65 * edgeFade));
 				} else if (onBottom) keep = Math.max(keep, 0.94);
-				else if (sidePin) keep = Math.max(keep, 0.94);
+				else if (sidePin) keep = Math.max(keep, 0.88);
 
 				// Feather the top ~1 cell so the silhouette dissolves instead of cutting sharp.
 				const fromTop = y - fieldMinY;
@@ -656,10 +658,6 @@ export function initHeroParticles() {
 	) {
 		if (!fieldUnlocked || particle.revealAt > revealT) return;
 
-		const wave = 0.5 + 0.5 * Math.sin(time * particle.flickerFreq + particle.flickerPhase);
-		// Stay in the solid CTA range — subtle shimmer only, never pale/peach.
-		let alpha = 0.9 + 0.1 * wave;
-
 		// Keep edge homes glued to the canvas bounds (no inset gap from glitch/mouse).
 		const maxX = Math.max(0, width - PIXEL_SIZE);
 		const maxY = Math.max(0, height - PIXEL_SIZE);
@@ -679,7 +677,8 @@ export function initHeroParticles() {
 			if (shouldClearAt(drawX, drawY, radius, time)) return;
 		}
 
-		ctx.globalAlpha = alpha;
+		// Solid fills only — no alpha shimmer (that read as multiple orange/grey tones).
+		ctx.globalAlpha = 1;
 		ctx.fillStyle = fieldFillColor(particle);
 		ctx.fillRect(drawX, drawY, particle.size, particle.size);
 	}

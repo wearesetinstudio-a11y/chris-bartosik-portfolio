@@ -1,7 +1,7 @@
 import { initObservedProjectVideos } from './projectVideoPlayback.ts';
 
 const PROJECT_VIDEO_SELECTOR =
-	'.project-gallery__item--video video, .project-overview__video';
+	'.project-gallery__item--video video, .project-overview__video, .case-media__video, .cases-page__thumb-video';
 
 export function initProjectGalleryVideos() {
 	initObservedProjectVideos({

@@ -1,0 +1,266 @@
+---
+import { t } from '../utils/i18n.ts';
+import { encodePublicAssetPath, getCaseCover } from '../utils/getCaseGallery';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
+
+const arteFolder =
+	'How to Design a Dance Studio Identity That Doesn’t Shout, But Stands Out';
+const arteCover = getCaseCover(arteFolder);
+
+const cases = [
+	{
+		href: '/cases/arte-de-baile',
+		client: 'Arte de Baile',
+		date: 'Nov 19, 2026',
+		title: 'How to design a dance studio identity that doesn’t shout, but stands out?',
+		image: arteCover ? encodePublicAssetPath(withPublicAssetVersion(arteCover.src)) : '',
+		imageType: arteCover?.type ?? 'image',
+	},
+];
+---
+
+<section class="cases-page">
+	<div class="cases-page__layout">
+		<h1 class="cases-page__heading">
+			<span class="cases-page__line cases-page__line--desktop" data-i18n="cases.headingDesktop1">
+				{t('cases.headingDesktop1', 'en')}
+			</span>
+			<span class="cases-page__line cases-page__line--desktop" data-i18n="cases.headingDesktop2">
+				{t('cases.headingDesktop2', 'en')}
+			</span>
+			<span class="cases-page__line cases-page__line--mobile" data-i18n="cases.headingMobile1">
+				{t('cases.headingMobile1', 'en')}
+			</span>
+			<span class="cases-page__line cases-page__line--mobile" data-i18n="cases.headingMobile2">
+				{t('cases.headingMobile2', 'en')}
+			</span>
+		</h1>
+
+		<ul class="cases-page__list">
+			{
+				cases.map((item) => (
+					<li>
+						<a class="cases-page__item" href={item.href}>
+							<span class="cases-page__thumb" aria-hidden="true">
+								{item.image && item.imageType === 'image' ? (
+									<img
+										src={item.image}
+										alt=""
+										loading="eager"
+										decoding="async"
+									/>
+								) : item.image && item.imageType === 'video' ? (
+									<video
+										src={item.image}
+										muted
+										loop
+										playsinline
+										preload="metadata"
+										class="cases-page__thumb-video"
+									/>
+								) : null}
+							</span>
+							<span class="cases-page__copy">
+								<span class="cases-page__meta">
+									<span class="cases-page__client">{item.client}</span>
+									<span class="cases-page__meta-sep" aria-hidden="true">|</span>
+									<span class="cases-page__date">{item.date}</span>
+								</span>
+								<span class="cases-page__title">{item.title}</span>
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style is:global>
+	.cases-page {
+		box-sizing: border-box;
+		width: 100%;
+		flex: 1 1 auto;
+		background-color: #ffffff;
+		color: #111111;
+		padding: calc(72px + 2.75rem) var(--page-gutter) 5.5rem;
+	}
+
+	.cases-page__layout {
+		display: flex;
+		flex-direction: column;
+		gap: 2.75rem;
+	}
+
+	.cases-page__heading {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		/* 14.5 is the measured em width of the first mobile line, so that line fills the row. */
+		font-size: min(2.6rem, calc((100vw - 2 * var(--page-gutter) - 0.5rem) / 14.5));
+		font-weight: 600;
+		line-height: var(--heading-h2-lh);
+		letter-spacing: var(--letter-spacing-ui);
+		text-transform: uppercase;
+		color: #000000;
+	}
+
+	.cases-page__line {
+		display: block;
+		white-space: nowrap;
+		overflow-wrap: normal;
+		word-break: normal;
+	}
+
+	.cases-page__line--desktop {
+		display: none;
+	}
+
+	.cases-page__list {
+		display: flex;
+		flex-direction: column;
+		gap: 2.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.cases-page__item {
+		display: flex;
+		align-items: center;
+		gap: 1.15rem;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.cases-page__thumb {
+		flex: 0 0 auto;
+		width: 8.5rem;
+		overflow: hidden;
+		background-color: #d9d9d9;
+	}
+
+	.cases-page__thumb:empty {
+		aspect-ratio: 1;
+	}
+
+	.cases-page__thumb img,
+	.cases-page__thumb-video {
+		display: block;
+		width: 100%;
+		height: auto;
+		object-fit: contain;
+		object-position: center;
+	}
+
+	.cases-page__copy {
+		display: flex;
+		flex: 1 1 auto;
+		min-width: 0;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.85rem;
+	}
+
+	.cases-page__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.45rem 0.65rem;
+		font-size: 0.85rem;
+		font-weight: 500;
+		line-height: 1.3;
+		letter-spacing: var(--label-text-tracking);
+		text-transform: uppercase;
+		color: rgba(0, 0, 0, 0.4);
+	}
+
+	.cases-page__client,
+	.cases-page__date,
+	.cases-page__meta-sep {
+		font: inherit;
+		letter-spacing: inherit;
+		color: inherit;
+	}
+
+	.cases-page__title {
+		max-width: none;
+		font-size: 1.2rem;
+		font-weight: 500;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		color: #000000;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.cases-page__item {
+			transition: opacity 0.25s ease;
+		}
+
+		.cases-page__item:hover {
+			opacity: 0.62;
+		}
+	}
+
+	.cases-page__item:focus-visible {
+		outline: 1px solid #111111;
+		outline-offset: 6px;
+	}
+
+	@media (min-width: 768px) {
+		.cases-page {
+			padding-top: calc(100px + 4.5rem);
+			padding-bottom: 7rem;
+		}
+
+		.cases-page__copy {
+			gap: 1.15rem;
+		}
+
+		.cases-page__title {
+			font-size: 1.45rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.cases-page {
+			padding-top: calc(100px + 5.5rem);
+			padding-bottom: 8rem;
+		}
+
+		.cases-page__layout {
+			display: grid;
+			grid-template-columns: max-content minmax(0, 1fr);
+			align-items: start;
+			column-gap: clamp(4.5rem, 8vw, 8.5rem);
+		}
+
+		.cases-page__heading {
+			font-size: var(--heading-h2-size);
+		}
+
+		.cases-page__line--desktop {
+			display: block;
+		}
+
+		.cases-page__line--mobile {
+			display: none;
+		}
+
+		.cases-page__list {
+			gap: 4.25rem;
+		}
+
+		.cases-page__item {
+			gap: 1.75rem;
+		}
+
+		.cases-page__thumb {
+			width: 11.5rem;
+		}
+
+		.cases-page__meta {
+			font-size: 0.95rem;
+		}
+	}
+</style>

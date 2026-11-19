@@ -56,6 +56,8 @@ const industry = data.industry ?? '';
 const market = data.market ?? '';
 const tools = data.tools ?? '';
 const liveUrl = (data.liveUrl ?? '').trim();
+const caseUrl = (data.caseUrl ?? '').trim();
+const caseLabel = (data.caseLabel ?? '').trim();
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
 const galleryLayout = buildGalleryLayout(folderName, coverFilename);
@@ -220,6 +222,8 @@ const navItems: SidebarNavItem[] = [
 									graphicType={overviewGraphicType}
 									graphicAlt={client || title}
 									rows={infoRows}
+									caseUrl={caseUrl}
+									caseLabel={caseLabel}
 								/>
 							) : null
 						}

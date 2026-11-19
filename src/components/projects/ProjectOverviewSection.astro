@@ -14,6 +14,8 @@ interface Props {
 	graphicType?: 'image' | 'video' | 'rive' | 'svg' | 'youtube';
 	graphicAlt?: string;
 	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
+	caseUrl?: string;
+	caseLabel?: string;
 }
 
 const {
@@ -27,7 +29,13 @@ const {
 	graphicType = 'image',
 	graphicAlt = '',
 	rows,
+	caseUrl = '',
+	caseLabel = '',
 } = Astro.props;
+
+const resolvedCaseUrl = caseUrl.trim();
+const resolvedCaseLabel = caseLabel.trim();
+const hasCaseLink = Boolean(resolvedCaseUrl && resolvedCaseLabel);
 
 const titleChars = title.split('');
 const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
@@ -101,6 +109,29 @@ const hasGraphic = Boolean(graphicSrc);
 						))}
 					</dl>
 				</div>
+			) : null
+		}
+
+		{
+			hasCaseLink ? (
+				<a class="project-overview__case-link" href={resolvedCaseUrl}>
+					<span class="project-overview__case-link-label">{resolvedCaseLabel}</span>
+					<svg
+						class="project-overview__case-link-arrow"
+						viewBox="0 0 18 15"
+						width="18"
+						height="15"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						></path>
+					</svg>
+				</a>
 			) : null
 		}
 
@@ -190,7 +221,7 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__label {
-		font-size: var(--label-text-size);
+		font-size: 1rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0;
@@ -224,13 +255,13 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__heading {
-		margin-top: 2.25rem;
+		margin-top: 0.75rem;
 		margin-bottom: 0;
 		width: 100%;
 		max-width: 100%;
 		font-size: var(--heading-h2-size);
-		font-weight: 600;
-		text-transform: uppercase;
+		font-weight: 500;
+		text-transform: none;
 		line-height: var(--heading-h2-lh);
 		letter-spacing: var(--letter-spacing-ui);
 		color: #131415;
@@ -293,21 +324,21 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__text-wrap {
-		margin-top: 1.75rem;
+		margin-top: 0.85rem;
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 0.85rem;
 		color: rgba(0, 0, 0, 0.7);
 	}
 
 	@media (min-width: 768px) {
-		.project-overview__heading,
-		.project-overview__text-wrap {
-			margin-top: 4rem;
+		.project-overview__heading {
+			margin-top: 1rem;
 		}
 
 		.project-overview__text-wrap {
-			gap: 2.25rem;
+			margin-top: 1.15rem;
+			gap: 1rem;
 		}
 	}
 
@@ -321,6 +352,73 @@ const hasGraphic = Boolean(graphicSrc);
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: inherit;
+	}
+
+	.project-overview__case-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		width: fit-content;
+		max-width: 100%;
+		margin-top: 1.5rem;
+		padding: 0.7rem 0.85rem;
+		border: 0;
+		border-radius: 0;
+		background-color: #f2f2f2;
+		color: #131415;
+		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+		font-size: 0.95rem;
+		font-weight: 500;
+		letter-spacing: 0.01em;
+		line-height: 1.25;
+		text-decoration: none;
+		text-transform: none;
+		transition: background-color 0.2s ease;
+	}
+
+	.project-overview__case-link-label {
+		min-width: 0;
+	}
+
+	.project-overview__case-link-arrow {
+		display: block;
+		flex-shrink: 0;
+		width: auto;
+		height: 0.85em;
+		transform: rotate(-45deg) translateZ(0);
+		transform-origin: center;
+		backface-visibility: hidden;
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.project-overview__case-link:hover,
+		.project-overview__case-link:focus-visible {
+			background-color: #e8e8e8;
+		}
+
+		.project-overview__case-link:hover .project-overview__case-link-arrow,
+		.project-overview__case-link:focus-visible .project-overview__case-link-arrow {
+			transform: rotate(0deg) translateZ(0);
+		}
+	}
+
+	.project-overview__case-link:focus-visible {
+		outline: 2px solid #131415;
+		outline-offset: 3px;
+	}
+
+	@media (min-width: 768px) {
+		.project-overview__case-link {
+			margin-top: 1.85rem;
+			padding: 0.8rem 1rem;
+			font-size: 1.05rem;
+			gap: 0.65rem;
+		}
+
+		.project-overview__case-link-arrow {
+			height: 0.95em;
+		}
 	}
 
 	.project-overview__visual,

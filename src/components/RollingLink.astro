@@ -6,7 +6,10 @@ interface Props {
 	countStyle?: 'brackets' | 'plus';
 	inverted?: boolean;
 	i18nKey?: string;
+	/** Exact listing page — dimmed “selected” state. */
 	current?: boolean;
+	/** Child page within this section — underlined “active” state. */
+	active?: boolean;
 	variant?: 'nav' | 'footer';
 	underlined?: boolean;
 }
@@ -19,6 +22,7 @@ const {
 	inverted = false,
 	i18nKey,
 	current = false,
+	active = false,
 	variant = 'nav',
 	underlined = false,
 } = Astro.props;
@@ -39,13 +43,14 @@ const lineClass = isFooter
 
 <a
 	href={href}
-	aria-current={current ? 'page' : undefined}
+	aria-current={current ? 'page' : active ? 'true' : undefined}
 	class:list={[
 		'rolling-link group relative inline-flex',
 		isFooter
 			? 'rolling-link--footer'
 			: ['flex-col -mx-1 -my-2 px-1 py-2', inverted ? 'text-black' : 'text-setin-fg'],
 		current && 'rolling-link--current',
+		active && !current && 'rolling-link--active',
 		underlined && 'rolling-link--underlined',
 	]}
 >

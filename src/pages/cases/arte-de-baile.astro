@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArteDeBaileCase from '../../components/cases/ArteDeBaileCase.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import { getSiteCounts } from '../../utils/getSiteCounts.ts';
+
+const { projectCount } = await getSiteCounts();
+---
+
+<Layout
+	title="Arte de Baile Case"
+	description="How to design a dance studio identity that doesn’t shout, but stands out — Arte de Baile case study."
+>
+	<Header theme="light-bg" projectCount={projectCount} />
+
+	<main class="relative z-20 flex flex-1 flex-col">
+		<ArteDeBaileCase />
+		<ContactSection />
+	</main>
+
+	<Footer />
+</Layout>
+
+<script>
+	import { initProjectGalleryVideos } from '../../scripts/initProjectGalleryVideos.ts';
+
+	function initCasePage() {
+		initProjectGalleryVideos();
+	}
+
+	initCasePage();
+	document.addEventListener('astro:page-load', initCasePage);
+</script>

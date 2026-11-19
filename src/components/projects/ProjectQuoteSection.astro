@@ -97,21 +97,24 @@ const hasMeta = hasAuthor || hasRole;
 	}
 
 	.project-quote__label {
-		font-size: var(--label-text-size);
+		font-size: 1rem;
 		font-weight: 600;
 		letter-spacing: 0;
 		line-height: 1.2;
-		margin-bottom: 1.75rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.project-quote__blockquote {
-		margin: 0 0 1.75rem;
+		margin: 0 0 0.85rem;
 	}
 
 	@media (min-width: 768px) {
-		.project-quote__label,
+		.project-quote__label {
+			margin-bottom: 1rem;
+		}
+
 		.project-quote__blockquote {
-			margin-bottom: 3rem;
+			margin-bottom: 1.15rem;
 		}
 	}
 

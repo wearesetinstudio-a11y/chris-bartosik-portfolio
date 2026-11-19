@@ -20,16 +20,23 @@ const workWithUsHref = '#contact';
 const isLightBg = theme === 'light-bg';
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-function isNavCurrent(href: string) {
+function isNavSelected(href: string) {
 	const target = href.replace(/\/$/, '') || '/';
-	if (target === '/projects') return currentPath === '/projects' || currentPath.startsWith('/projects/');
 	return currentPath === target;
+}
+
+function isNavActive(href: string) {
+	const target = href.replace(/\/$/, '') || '/';
+	if (target === '/projects') return currentPath.startsWith('/projects/');
+	if (target === '/cases') return currentPath.startsWith('/cases/');
+	return false;
 }
 
 const nav = [
 	{ href: '/', label: t('nav.home', 'en'), i18nKey: 'nav.home' },
 	{ href: '/skills', label: t('nav.skills', 'en'), i18nKey: 'nav.skills' },
 	{ href: '/projects', label: t('nav.projects', 'en'), i18nKey: 'nav.projects' },
+	{ href: '/cases', label: t('nav.cases', 'en'), i18nKey: 'nav.cases' },
 	{ href: '/about', label: t('nav.about', 'en'), i18nKey: 'nav.about' },
 ];
 
@@ -61,7 +68,7 @@ const headerClass = waitForIntro
 		</a>
 
 		<nav
-			class="site-header__nav hidden items-center justify-center gap-8 md:flex lg:gap-10"
+			class="site-header__nav hidden items-center justify-center gap-5 md:flex lg:gap-8 xl:gap-10"
 			aria-label={t('nav.main', 'en')}
 			data-i18n-aria="nav.main"
 		>
@@ -72,7 +79,8 @@ const headerClass = waitForIntro
 						label={item.label}
 						inverted={isLightBg}
 						i18nKey={item.i18nKey}
-						current={isNavCurrent(item.href)}
+						current={isNavSelected(item.href)}
+						active={isNavActive(item.href)}
 					/>
 				))
 			}
@@ -125,20 +133,25 @@ const headerClass = waitForIntro
 	<div class="mobile-nav-panel__content flex w-full flex-col gap-10 px-[var(--page-gutter)]">
 		<nav class="flex flex-col gap-8" aria-label={t('nav.mobile', 'en')} data-i18n-aria="nav.mobile">
 			{
-				nav.map((item) => (
+				nav.map((item) => {
+					const selected = isNavSelected(item.href);
+					const active = isNavActive(item.href);
+					return (
 						<a
 							href={item.href}
 							class:list={[
 								'mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg',
-								isNavCurrent(item.href) && 'mobile-nav-link--current',
+								selected && 'mobile-nav-link--current',
+								active && !selected && 'mobile-nav-link--active',
 							]}
-							aria-current={isNavCurrent(item.href) ? 'page' : undefined}
+							aria-current={selected ? 'page' : active ? 'true' : undefined}
 							data-mobile-nav-link
 							data-i18n={item.i18nKey}
 						>
 							{item.label}
 						</a>
-					))
+					);
+				})
 			}
 		</nav>
 
@@ -544,6 +557,10 @@ const headerClass = waitForIntro
 
 	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(4) {
 		transition-delay: 165ms;
+	}
+
+	.mobile-nav-panel.is-open.is-content-ready .mobile-nav-link:nth-child(5) {
+		transition-delay: 220ms;
 	}
 
 	.mobile-nav-panel.is-content-exiting .mobile-nav-link {
