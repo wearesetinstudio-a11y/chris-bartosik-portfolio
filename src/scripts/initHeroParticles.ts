@@ -529,7 +529,8 @@ export function initHeroParticles() {
 
 		context.setTransform(1, 0, 0, 1, 0, 0);
 		context.clearRect(0, 0, bufferW, bufferH);
-		context.setTransform(dpr, 0, 0, dpr, 0, 0);
+		// Map CSS pixels exactly onto the rounded buffer to avoid seam gaps on mobile DPR.
+		context.setTransform(bufferW / width, 0, 0, bufferH / height, 0, 0);
 		context.imageSmoothingEnabled = false;
 	}
 
@@ -678,9 +679,10 @@ export function initHeroParticles() {
 		}
 
 		// Solid fills only — no alpha shimmer (that read as multiple orange/grey tones).
+		// Overdraw 1px so retina/mobile DPR rounding can't leave white hairlines.
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = fieldFillColor(particle);
-		ctx.fillRect(drawX, drawY, particle.size, particle.size);
+		ctx.fillRect(Math.floor(drawX), Math.floor(drawY), PIXEL_SIZE + 1, PIXEL_SIZE + 1);
 	}
 
 	function drawStatic() {
@@ -695,7 +697,7 @@ export function initHeroParticles() {
 			for (const particle of buckets[i]) {
 				if (particle.revealAt > revealT) continue;
 				ctx.fillStyle = fieldFillColor(particle);
-				ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+				ctx.fillRect(Math.floor(particle.x), Math.floor(particle.y), PIXEL_SIZE + 1, PIXEL_SIZE + 1);
 			}
 		}
 		ctx.globalAlpha = 1;

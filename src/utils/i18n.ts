@@ -209,8 +209,8 @@ export const dictionary = {
 			headingDesktop1: 'I solve the real',
 			headingDesktop2: 'business problems',
 			headingDesktop3: '',
-			headingMobile1: 'I solve the real',
-			headingMobile2: 'business problems',
+			headingMobile1: 'I solve the real problems',
+			headingMobile2: 'of real businesses',
 		},
 		about: {
 			eyebrow: 'My story',

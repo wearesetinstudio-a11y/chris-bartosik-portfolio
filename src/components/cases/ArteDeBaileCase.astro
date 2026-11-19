@@ -482,14 +482,16 @@ const results = [
 		display: grid;
 		gap: 0;
 		min-width: 0;
+		/* Mobile: text first, media second. */
+		order: -1;
 	}
 
 	.case-study__step-copy .case-study__label {
-		margin-bottom: 0.75rem;
+		margin-bottom: 1.35rem;
 	}
 
 	.case-study__step-title {
-		margin-bottom: 0.85rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.case-study__copy {
@@ -579,11 +581,11 @@ const results = [
 		}
 
 		.case-study__step-copy .case-study__label {
-			margin-bottom: 1rem;
+			margin-bottom: 1.35rem;
 		}
 
 		.case-study__step-title {
-			margin-bottom: 1.15rem;
+			margin-bottom: 1.5rem;
 		}
 
 		.case-study__copy {
@@ -638,6 +640,10 @@ const results = [
 		.case-study__step {
 			grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
 			column-gap: clamp(2.5rem, 5vw, 4.5rem);
+		}
+
+		.case-study__step-copy {
+			order: 0;
 		}
 
 		.case-study__result-copy {

@@ -96,8 +96,8 @@ const cases = [
 		display: flex;
 		flex-direction: column;
 		margin: 0;
-		/* 14.5 is the measured em width of the first mobile line, so that line fills the row. */
-		font-size: min(2.6rem, calc((100vw - 2 * var(--page-gutter) - 0.5rem) / 14.5));
+		/* 16 fits the longer mobile first line across the content width. */
+		font-size: min(2.35rem, calc((100vw - 2 * var(--page-gutter) - 0.5rem) / 16));
 		font-weight: 600;
 		line-height: var(--heading-h2-lh);
 		letter-spacing: var(--letter-spacing-ui);
@@ -119,15 +119,26 @@ const cases = [
 	.cases-page__list {
 		display: flex;
 		flex-direction: column;
-		gap: 2.75rem;
+		gap: 0;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
+	.cases-page__list > li {
+		padding: 2.5rem 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	.cases-page__list > li:first-child {
+		border-top: 0;
+		padding-top: 0;
+	}
+
 	.cases-page__item {
 		display: flex;
-		align-items: center;
+		flex-direction: column;
+		align-items: stretch;
 		gap: 1.15rem;
 		color: inherit;
 		text-decoration: none;
@@ -135,13 +146,13 @@ const cases = [
 
 	.cases-page__thumb {
 		flex: 0 0 auto;
-		width: 8.5rem;
+		width: 100%;
 		overflow: hidden;
 		background-color: #d9d9d9;
 	}
 
 	.cases-page__thumb:empty {
-		aspect-ratio: 1;
+		aspect-ratio: 4 / 3;
 	}
 
 	.cases-page__thumb img,
@@ -159,15 +170,16 @@ const cases = [
 		min-width: 0;
 		flex-direction: column;
 		align-items: stretch;
-		gap: 0.85rem;
+		gap: 0.65rem;
 	}
 
 	.cases-page__meta {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-		gap: 0.45rem 0.65rem;
-		font-size: 0.85rem;
+		justify-content: flex-start;
+		gap: 0.4rem 0.55rem;
+		font-size: 0.8rem;
 		font-weight: 500;
 		line-height: 1.3;
 		letter-spacing: var(--label-text-tracking);
@@ -185,9 +197,9 @@ const cases = [
 
 	.cases-page__title {
 		max-width: none;
-		font-size: 1.2rem;
+		font-size: 1.25rem;
 		font-weight: 500;
-		line-height: 1.2;
+		line-height: 1.25;
 		letter-spacing: 0.02em;
 		color: #000000;
 	}
@@ -211,6 +223,25 @@ const cases = [
 		.cases-page {
 			padding-top: calc(100px + 4.5rem);
 			padding-bottom: 7rem;
+		}
+
+		.cases-page__list > li {
+			padding: 3rem 0;
+		}
+
+		.cases-page__item {
+			flex-direction: row;
+			align-items: center;
+			gap: 1.5rem;
+		}
+
+		.cases-page__thumb {
+			width: 10rem;
+		}
+
+		.cases-page__meta {
+			gap: 0.45rem 0.65rem;
+			font-size: 0.85rem;
 		}
 
 		.cases-page__copy {
@@ -245,6 +276,11 @@ const cases = [
 
 		.cases-page__line--mobile {
 			display: none;
+		}
+
+		.cases-page__list > li {
+			padding: 0;
+			border-top: 0;
 		}
 
 		.cases-page__list {
