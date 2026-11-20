@@ -210,12 +210,40 @@ const Tag = comingSoon ? 'div' : 'a';
 	}
 
 	@media (hover: none), (pointer: coarse) {
-		.project-card__title-line[aria-hidden='true'] {
+		.project-card:not(.is-pressed) .project-card__title-line[aria-hidden='true'] {
 			display: none;
 		}
 
-		.project-card__title-track {
+		.project-card:not(.is-pressed) .project-card__title-track {
 			transform: none;
+		}
+
+		.project-card.is-pressed .project-card__title-roll {
+			height: 1.25em;
+		}
+
+		.project-card.is-pressed .project-card__title-line {
+			height: 1.25em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.project-card.is-pressed .project-card__title-track,
+		.project-card:active .project-card__title-track {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+
+		.project-card.is-pressed img.object-cover,
+		.project-card:active img.object-cover {
+			transform: scale(1.02);
+		}
+
+		.project-card.is-pressed .project-card__arrow,
+		.project-card:active .project-card__arrow {
+			transform: rotate(0deg) translateX(2px);
 		}
 	}
 

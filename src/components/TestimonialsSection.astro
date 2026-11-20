@@ -310,6 +310,26 @@ const testimonials = [
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.testimonials-slider__arrow.is-pressed {
+			transform: scale(1.04);
+			color: #ffffff;
+		}
+
+		.testimonials-slider__arrow.is-pressed::before {
+			background-color: #000000;
+			opacity: 1;
+		}
+
+		.testimonials-slider__arrow--next.is-pressed svg {
+			transform: translateX(2px);
+		}
+
+		.testimonials-slider__arrow--prev.is-pressed svg {
+			transform: rotate(180deg) translateX(2px);
+		}
+	}
+
 	.testimonials-slider__arrow:active {
 		transform: scale(0.96);
 		color: #ffffff;

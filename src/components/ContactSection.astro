@@ -248,6 +248,12 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta.is-pressed .contact-email-cta__hand {
+			animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s infinite;
+		}
+	}
+
 	.contact-email-cta__hand {
 		display: inline-flex;
 		align-items: center;
@@ -308,11 +314,11 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 			overflow: visible;
 		}
 
-		.contact-social__roll {
+		.contact-social__link:not(.is-pressed) .contact-social__roll {
 			transform: none !important;
 		}
 
-		.contact-social__roll .contact-social__label-line:last-child {
+		.contact-social__link:not(.is-pressed) .contact-social__roll .contact-social__label-line:last-child {
 			display: none;
 		}
 

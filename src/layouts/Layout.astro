@@ -184,6 +184,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			import { initTabTitle } from '../scripts/initTabTitle.ts';
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
+			import { initPressFeedback } from '../scripts/initPressFeedback.ts';
 
 			function bootRivePlayers() {
 				// Dynamic import so a Rive/Vite dep failure can't block hero boot.
@@ -205,6 +206,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				initSmoothHashScroll();
 				initHeroParticles();
 				initHandParticles();
+				initPressFeedback();
 				bootRivePlayers();
 			}
 
@@ -218,6 +220,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				initSmoothHashScroll();
 				initHeroParticles();
 				initHandParticles();
+				initPressFeedback();
 				bootRivePlayers();
 			});
 		</script>

@@ -1,7 +1,8 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const CASES_MEDIA_DIR = 'cases';
+/** Git-tracked name. Resolved against disk so Windows/Linux URL casing matches the real folder. */
+const CASES_MEDIA_DIR_PREFERRED = 'Cases';
 const MEDIA_EXTENSIONS = new Set(['.webp', '.jpg', '.jpeg', '.png', '.mp4', '.webm']);
 const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|jpg|jpeg|png|mp4|webm)$/i;
 
@@ -13,6 +14,25 @@ export type CaseMediaGroup = {
 	group: number;
 	items: CaseMediaItem[];
 };
+
+function resolveDirName(parentDir: string, preferredName: string): string {
+	try {
+		const match = readdirSync(parentDir).find(
+			(entry) => entry.toLowerCase() === preferredName.toLowerCase(),
+		);
+		return match ?? preferredName;
+	} catch {
+		return preferredName;
+	}
+}
+
+function getCasesMediaDir(): string {
+	return resolveDirName(join(process.cwd(), 'public'), CASES_MEDIA_DIR_PREFERRED);
+}
+
+function resolveCaseFolderName(casesDir: string, folderName: string): string {
+	return resolveDirName(join(process.cwd(), 'public', casesDir), folderName);
+}
 
 function isVideoExtension(extension: string): boolean {
 	return extension === '.mp4' || extension === '.webm';
@@ -36,8 +56,8 @@ function preferVideoOverStill(filenames: string[]): string[] {
 	});
 }
 
-function toPublicPath(folderName: string, filename: string): string {
-	return `/${CASES_MEDIA_DIR}/${folderName}/${filename}`;
+function toPublicPath(casesDir: string, folderName: string, filename: string): string {
+	return `/${casesDir}/${folderName}/${filename}`;
 }
 
 /** Encode a public asset path for use in HTML `src` attributes (keeps `?v=` query intact). */
@@ -64,7 +84,9 @@ function parseCaseFilename(filename: string): { group: number; part: number | nu
 
 /** Read numbered case media and group by index (`1`, `2`, `3.1`+`3.2`, …). */
 export function getCaseMediaGroups(folderName: string): CaseMediaGroup[] {
-	const dir = join(process.cwd(), 'public', CASES_MEDIA_DIR, folderName);
+	const casesDir = getCasesMediaDir();
+	const resolvedFolder = resolveCaseFolderName(casesDir, folderName);
+	const dir = join(process.cwd(), 'public', casesDir, resolvedFolder);
 
 	try {
 		const filenames = preferVideoOverStill(
@@ -83,7 +105,7 @@ export function getCaseMediaGroups(folderName: string): CaseMediaGroup[] {
 			const item: CaseMediaItem & { part: number | null } = {
 				type: isVideoExtension(parsed.extension) ? 'video' : 'image',
 				filename,
-				src: toPublicPath(folderName, filename),
+				src: toPublicPath(casesDir, resolvedFolder, filename),
 				part: parsed.part,
 			};
 

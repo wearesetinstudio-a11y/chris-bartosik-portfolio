@@ -17,38 +17,82 @@
 }
 
 @media (hover: none), (pointer: coarse) {
-	.hero-pillar__label-line[aria-hidden='true'],
-	.hero-cta__label-line[aria-hidden='true'],
-	.contact-email-cta__label-line[aria-hidden='true'],
-	.rolling-link__label [aria-hidden='true'] {
+	/* Idle: collapse duplicate roll lines. Pressed: allow the same roll as desktop hover. */
+	.hero-pillar:not(.is-pressed) .hero-pillar__label-line[aria-hidden='true'],
+	.hero-cta:not(.is-pressed) .hero-cta__label-line[aria-hidden='true'],
+	.contact-email-cta:not(.is-pressed) .contact-email-cta__label-line[aria-hidden='true'],
+	.rolling-link:not(.is-pressed) .rolling-link__label [aria-hidden='true'] {
 		display: none;
 	}
 
-	.hero-pillar__roll-inner,
-	.hero-cta__roll-inner,
-	.contact-email-cta__roll-inner,
-	.rolling-link .flex.flex-col.transition-transform,
-	.work-with-us-button .flex.flex-col.transition-transform,
-	.see-all-projects .flex.flex-col.transition-transform,
-	.contact-social__roll {
+	.hero-pillar:not(.is-pressed) .hero-pillar__roll-inner,
+	.hero-cta:not(.is-pressed) .hero-cta__roll-inner,
+	.contact-email-cta:not(.is-pressed) .contact-email-cta__roll-inner,
+	.rolling-link:not(.is-pressed) .flex.flex-col.transition-transform,
+	.work-with-us-button:not(.is-pressed) .flex.flex-col.transition-transform,
+	.see-all-projects:not(.is-pressed) .flex.flex-col.transition-transform,
+	.contact-social__link:not(.is-pressed) .contact-social__roll {
 		transform: none !important;
 	}
 
-	.work-with-us-button .flex.h-\[1\.5em\].flex-col.overflow-hidden > .flex.flex-col > span:last-child,
-	.see-all-projects__label:last-child,
-	.contact-social__roll .contact-social__label-line:last-child {
+	.work-with-us-button:not(.is-pressed) .flex.h-\[1\.5em\].flex-col.overflow-hidden > .flex.flex-col > span:last-child,
+	.see-all-projects:not(.is-pressed) .see-all-projects__label:last-child,
+	.contact-social__link:not(.is-pressed) .contact-social__roll .contact-social__label-line:last-child {
 		display: none;
 	}
 
-	.contact-email-cta.is-hovering {
+	.hero-cta.is-pressed .hero-cta__roll-inner,
+	.hero-pillar.is-pressed .hero-pillar__roll-inner,
+	.contact-email-cta.is-pressed .contact-email-cta__roll-inner,
+	.rolling-link.is-pressed .flex.flex-col.transition-transform,
+	.work-with-us-button.is-pressed .flex.flex-col.transition-transform,
+	.see-all-projects.is-pressed .flex.flex-col.transition-transform,
+	.contact-social__link.is-pressed .contact-social__roll {
+		transform: translateY(-50%);
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	.work-with-us-button.is-pressed .work-with-us-button__underline,
+	.see-all-projects.is-pressed .absolute.bottom-0,
+	.rolling-link.is-pressed .rolling-link__underline {
+		transform-origin: right;
+		transform: scaleX(0);
+	}
+
+	.see-all-projects.is-pressed .see-all-projects__surface {
+		background-color: #d6d6d6;
+	}
+
+	.contact-email-cta.is-pressed {
+		background-color: #ffffff;
+	}
+
+	.contact-email-cta.is-pressed .contact-email-cta__label-line--default {
+		color: #18191b;
+	}
+
+	.contact-email-cta.is-pressed .contact-email-cta__hand img {
+		filter: none;
+	}
+
+	.contact-social__link.is-pressed {
+		border-color: #ffffff;
+	}
+
+	.contact-social__link.is-pressed .contact-social__arrow {
+		transform: translateX(-6px) rotate(45deg);
+	}
+
+	.contact-email-cta.is-hovering:not(.is-pressed) {
 		background-color: #252628;
 	}
 
-	.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
+	.contact-email-cta.is-hovering:not(.is-pressed) .contact-email-cta__label-line--default {
 		color: #f5f5f5;
 	}
 
-	.contact-email-cta.is-hovering .contact-email-cta__hand img {
+	.contact-email-cta.is-hovering:not(.is-pressed) .contact-email-cta__hand img {
 		filter: brightness(0) invert(1);
 	}
 }

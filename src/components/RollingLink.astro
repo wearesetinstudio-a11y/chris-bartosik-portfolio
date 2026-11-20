@@ -138,6 +138,18 @@ const lineClass = isFooter
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.rolling-link--footer.is-pressed,
+		.rolling-link--footer:active {
+			color: rgba(245, 245, 245, 0.45);
+		}
+
+		.rolling-link--footer.is-pressed .rolling-link__arrow,
+		.rolling-link--footer:active .rolling-link__arrow {
+			transform: rotate(0deg) translateZ(0);
+		}
+	}
+
 	.rolling-link--footer .site-footer__roll-line {
 		font-size: inherit;
 		font-weight: 500;

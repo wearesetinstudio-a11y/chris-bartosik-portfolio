@@ -115,6 +115,19 @@ const label = t('project.seeResult', 'en');
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.project-live-result.is-pressed,
+		.project-live-result:active {
+			background-color: #000000;
+			transform: translateY(-1px);
+		}
+
+		.project-live-result.is-pressed img.project-live-result__arrow,
+		.project-live-result:active img.project-live-result__arrow {
+			transform: rotate(0deg);
+		}
+	}
+
 	.project-live-result:focus-visible {
 		outline: 2px solid #ffffff;
 		outline-offset: 3px;

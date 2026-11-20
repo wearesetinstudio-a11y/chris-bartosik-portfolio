@@ -131,6 +131,18 @@
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.case-study__chip.is-pressed,
+		.case-study__chip:active {
+			background-color: #e8e8e8;
+		}
+
+		.case-study__chip.is-pressed .case-study__chip-arrow,
+		.case-study__chip:active .case-study__chip-arrow {
+			transform: rotate(0deg) translateZ(0);
+		}
+	}
+
 	.case-study__chip:focus-visible {
 		outline: 2px solid #131415;
 		outline-offset: 3px;

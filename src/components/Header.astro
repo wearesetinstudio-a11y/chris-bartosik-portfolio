@@ -259,6 +259,13 @@ const headerClass = waitForIntro
 		}
 	}
 
+	@media (hover: none), (pointer: coarse) {
+		.rolling-link--current.is-pressed,
+		.mobile-nav-link--current.is-pressed {
+			opacity: 1;
+		}
+	}
+
 	.site-header__logo-text {
 		white-space: nowrap;
 	}

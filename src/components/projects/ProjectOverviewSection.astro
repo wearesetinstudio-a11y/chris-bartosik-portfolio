@@ -375,7 +375,7 @@ const hasGraphic = Boolean(graphicSrc);
 
 	.project-overview__case-link {
 		display: inline-flex;
-		align-items: center;
+		align-items: flex-end;
 		gap: 0.55rem;
 		width: fit-content;
 		max-width: 100%;
@@ -418,6 +418,18 @@ const hasGraphic = Boolean(graphicSrc);
 
 		.project-overview__case-link:hover .project-overview__case-link-arrow,
 		.project-overview__case-link:focus-visible .project-overview__case-link-arrow {
+			transform: rotate(0deg) translateZ(0);
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.project-overview__case-link.is-pressed,
+		.project-overview__case-link:active {
+			background-color: #e8e8e8;
+		}
+
+		.project-overview__case-link.is-pressed .project-overview__case-link-arrow,
+		.project-overview__case-link:active .project-overview__case-link-arrow {
 			transform: rotate(0deg) translateZ(0);
 		}
 	}
