@@ -58,6 +58,12 @@ const tools = data.tools ?? '';
 const liveUrl = (data.liveUrl ?? '').trim();
 const caseUrl = (data.caseUrl ?? '').trim();
 const caseLabel = (data.caseLabel ?? '').trim();
+const caseLinks = (data.caseLinks ?? [])
+	.map((link) => ({
+		label: (link.label ?? '').trim(),
+		url: (link.url ?? '').trim(),
+	}))
+	.filter((link) => link.label && link.url);
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
 const galleryLayout = buildGalleryLayout(folderName, coverFilename);
@@ -224,6 +230,7 @@ const navItems: SidebarNavItem[] = [
 									rows={infoRows}
 									caseUrl={caseUrl}
 									caseLabel={caseLabel}
+									caseLinks={caseLinks}
 								/>
 							) : null
 						}

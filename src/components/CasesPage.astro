@@ -7,6 +7,10 @@ const arteFolder =
 	'How to Design a Dance Studio Identity That Doesn’t Shout, But Stands Out';
 const arteCover = getCaseCover(arteFolder);
 
+const arteAiFolder =
+	'How to build an AI art direction pipeline when launching without a photographer';
+const arteAiCover = getCaseCover(arteAiFolder);
+
 const cases = [
 	{
 		href: '/cases/arte-de-baile',
@@ -15,6 +19,14 @@ const cases = [
 		title: 'How to design a dance studio identity that doesn’t shout, but stands out?',
 		image: arteCover ? encodePublicAssetPath(withPublicAssetVersion(arteCover.src)) : '',
 		imageType: arteCover?.type ?? 'image',
+	},
+	{
+		href: '/cases/arte-ai-pipeline',
+		client: 'Arte de Baile',
+		date: 'Nov 20, 2026',
+		title: 'How to build an AI art direction pipeline when launching without a photographer?',
+		image: arteAiCover ? encodePublicAssetPath(withPublicAssetVersion(arteAiCover.src)) : '',
+		imageType: arteAiCover?.type ?? 'image',
 	},
 ];
 ---
@@ -162,6 +174,8 @@ const cases = [
 		height: auto;
 		object-fit: contain;
 		object-position: center;
+		transform-origin: center;
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.cases-page__copy {
@@ -171,6 +185,10 @@ const cases = [
 		flex-direction: column;
 		align-items: stretch;
 		gap: 0.65rem;
+		opacity: 1;
+		transition:
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.cases-page__meta {
@@ -188,11 +206,16 @@ const cases = [
 	}
 
 	.cases-page__client,
-	.cases-page__date,
-	.cases-page__meta-sep {
+	.cases-page__date {
 		font: inherit;
 		letter-spacing: inherit;
 		color: inherit;
+	}
+
+	.cases-page__meta-sep {
+		font: inherit;
+		letter-spacing: inherit;
+		color: rgba(0, 0, 0, 0.2);
 	}
 
 	.cases-page__title {
@@ -204,19 +227,24 @@ const cases = [
 		color: #000000;
 	}
 
-	@media (hover: hover) and (pointer: fine) {
-		.cases-page__item {
-			transition: opacity 0.25s ease;
-		}
-
-		.cases-page__item:hover {
-			opacity: 0.62;
-		}
-	}
-
 	.cases-page__item:focus-visible {
 		outline: 1px solid #111111;
 		outline-offset: 6px;
+	}
+
+	/* Mobile tap: same zoom + text fade as desktop hover */
+	@media (hover: none), (pointer: coarse) {
+		.cases-page__item.is-pressed .cases-page__copy,
+		.cases-page__item:active .cases-page__copy {
+			opacity: 0.5;
+		}
+
+		.cases-page__item.is-pressed .cases-page__thumb img,
+		.cases-page__item.is-pressed .cases-page__thumb-video,
+		.cases-page__item:active .cases-page__thumb img,
+		.cases-page__item:active .cases-page__thumb-video {
+			transform: scale(1.05);
+		}
 	}
 
 	@media (min-width: 768px) {
@@ -233,6 +261,30 @@ const cases = [
 			flex-direction: row;
 			align-items: center;
 			gap: 1.5rem;
+		}
+
+		.cases-page__thumb {
+			transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.cases-page__item:hover .cases-page__thumb,
+			.cases-page__item:focus-visible .cases-page__thumb {
+				transform: translateX(0.2rem);
+			}
+
+			.cases-page__item:hover .cases-page__copy,
+			.cases-page__item:focus-visible .cases-page__copy {
+				transform: translateX(-0.2rem);
+				opacity: 0.5;
+			}
+
+			.cases-page__item:hover .cases-page__thumb img,
+			.cases-page__item:hover .cases-page__thumb-video,
+			.cases-page__item:focus-visible .cases-page__thumb img,
+			.cases-page__item:focus-visible .cases-page__thumb-video {
+				transform: scale(1.05);
+			}
 		}
 
 		.cases-page__thumb {
@@ -278,17 +330,46 @@ const cases = [
 			display: none;
 		}
 
-		.cases-page__list > li {
-			padding: 0;
-			border-top: 0;
+		.cases-page__list {
+			gap: 0;
 		}
 
-		.cases-page__list {
-			gap: 4.25rem;
+		.cases-page__list > li {
+			padding: 2.75rem 0;
+			border-top: 1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		.cases-page__list > li:first-child {
+			border-top: 0;
+			padding-top: 0;
+		}
+
+		.cases-page__list > li:last-child {
+			padding-bottom: 0;
 		}
 
 		.cases-page__item {
 			gap: 1.75rem;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.cases-page__item:hover .cases-page__thumb,
+			.cases-page__item:focus-visible .cases-page__thumb {
+				transform: translateX(0.28rem);
+			}
+
+			.cases-page__item:hover .cases-page__copy,
+			.cases-page__item:focus-visible .cases-page__copy {
+				transform: translateX(-0.28rem);
+				opacity: 0.5;
+			}
+
+			.cases-page__item:hover .cases-page__thumb img,
+			.cases-page__item:hover .cases-page__thumb-video,
+			.cases-page__item:focus-visible .cases-page__thumb img,
+			.cases-page__item:focus-visible .cases-page__thumb-video {
+				transform: scale(1.05);
+			}
 		}
 
 		.cases-page__thumb {
@@ -300,3 +381,48 @@ const cases = [
 		}
 	}
 </style>
+
+<script>
+	function initCasesPressFeedback() {
+		const items = document.querySelectorAll<HTMLAnchorElement>('.cases-page__item');
+
+		items.forEach((item) => {
+			if (item.dataset.pressBound === 'true') return;
+			item.dataset.pressBound = 'true';
+
+			let startY = 0;
+
+			item.addEventListener(
+				'touchstart',
+				(event) => {
+					startY = event.touches[0]?.clientY ?? 0;
+					items.forEach((other) => other.classList.remove('is-pressed'));
+					item.classList.add('is-pressed');
+				},
+				{ passive: true },
+			);
+
+			item.addEventListener(
+				'touchmove',
+				(event) => {
+					const y = event.touches[0]?.clientY ?? startY;
+					if (Math.abs(y - startY) > 10) {
+						item.classList.remove('is-pressed');
+					}
+				},
+				{ passive: true },
+			);
+
+			item.addEventListener(
+				'touchcancel',
+				() => {
+					item.classList.remove('is-pressed');
+				},
+				{ passive: true },
+			);
+		});
+	}
+
+	initCasesPressFeedback();
+	document.addEventListener('astro:page-load', initCasesPressFeedback);
+</script>

@@ -43,6 +43,15 @@ const workItemSchema = z.object({
 	liveUrl: z.string().optional().default(''),
 	caseLabel: z.string().optional().default(''),
 	caseUrl: z.string().optional().default(''),
+	caseLinks: z
+		.array(
+			z.object({
+				label: z.string(),
+				url: z.string(),
+			}),
+		)
+		.optional()
+		.default([]),
 	logo: z.string().optional().default(''),
 	heroImage: z.string().optional().default(''),
 	heroBackground: z.string().optional().default(''),

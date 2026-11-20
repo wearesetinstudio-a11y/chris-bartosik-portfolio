@@ -24,8 +24,11 @@ tools: Figma, Affinity, Magnific, SeaDream
 year: 2026
 liveLabel: arte-viktoriaoskaldowicz.pl
 liveUrl: https://www.arte-viktoriaoskaldowicz.pl/
-caseLabel: How to design a dance studio identity that doesn’t shout, but stands out?
-caseUrl: /cases/arte-de-baile
+caseLinks:
+  - label: How to design a dance studio identity that doesn’t shout, but stands out?
+    url: /cases/arte-de-baile
+  - label: How to build an AI art direction pipeline when launching without a photographer?
+    url: /cases/arte-ai-pipeline
 overviewLabel: Intro
 overviewTitle: Beyond mass-market studios
 overviewText: |-

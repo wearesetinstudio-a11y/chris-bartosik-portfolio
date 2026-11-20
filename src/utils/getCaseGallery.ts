@@ -1,7 +1,7 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const CASES_MEDIA_DIR = 'Cases';
+const CASES_MEDIA_DIR = 'cases';
 const MEDIA_EXTENSIONS = new Set(['.webp', '.jpg', '.jpeg', '.png', '.mp4', '.webm']);
 const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|jpg|jpeg|png|mp4|webm)$/i;
 

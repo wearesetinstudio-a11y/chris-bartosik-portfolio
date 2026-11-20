@@ -1,0 +1,233 @@
+---
+import CaseMediaStack from './CaseMediaStack.astro';
+import { getCaseMediaGroups } from '../../utils/getCaseGallery';
+import '../../styles/case-study.css';
+
+const projectUrl = '/projects/arte-dance';
+const liveUrl = 'https://www.arte-viktoriaoskaldowicz.pl/';
+const caseFolder =
+	'How to build an AI art direction pipeline when launching without a photographer';
+
+const mediaGroups = getCaseMediaGroups(caseFolder);
+const mediaByGroup = new Map(mediaGroups.map((group) => [group.group, group]));
+const heroMedia = mediaByGroup.get(1);
+const stepMedia = [mediaByGroup.get(2), mediaByGroup.get(3), mediaByGroup.get(4)];
+const resultMedia = mediaByGroup.get(5);
+
+const challenges = [
+	{
+		title: 'The speed-to-market gap',
+		body: 'The brand required immediate, high-end visual assets to support its market entry, but coordinating a full-scale professional photoshoot introduced unacceptable scheduling delays.',
+	},
+	{
+		title: 'Avoiding photographic drift',
+		body: 'Relying on standard stock imagery or unguided AI generation introduces visual noise and destroys brand consistency. The challenge was maintaining the strict editorial typography and minimalist baseline established in the core identity system.',
+	},
+	{
+		title: 'Bridging the gap for future production',
+		body: 'The client needed a reference standard that could be easily handed over to a human photographer later, ensuring zero misalignment between early promotional assets and future shoots.',
+	},
+];
+
+const steps = [
+	{
+		label: 'Step 01',
+		title: 'Establishing visual constraints',
+		paragraphs: [
+			'Before generating any assets, we locked down the core identity parameters: high-contrast monochrome aesthetics, architectural framing, and brutalist typographic hierarchy.',
+		],
+	},
+	{
+		label: 'Step 02',
+		title: 'Training the visual style via minimal references',
+		paragraphs: [
+			'Using a tightly controlled set of source photographs (including key reference angles of the founder’s face), we trained a customized generation pipeline.',
+			'This converted abstract brand guidelines into concrete, photorealistic asset series without requiring a physical studio session, preserving both time and financial capital.',
+		],
+	},
+	{
+		label: 'Step 03',
+		title: 'Engineering the photographer’s reference brief',
+		paragraphs: [
+			'We compiled the generated assets into a structured visual moodboard and reference guide.',
+			'Instead of relying on ambiguous verbal descriptions, the client now possesses precise visual specifications to brief any future photographer on set, completely eliminating stylistic drift.',
+		],
+	},
+];
+
+const results = [
+	{
+		title: 'Immediate high-end launch',
+		body: 'The brand entered the market with flawless, photorealistic assets that project uncompromised professionalism from day one.',
+	},
+	{
+		title: 'Controlled production pipeline',
+		body: 'Future photoshoots operate against an exact visual benchmark rather than guesswork, protecting the integrity of the design system.',
+	},
+	{
+		title: 'Operational efficiency',
+		body: 'Maximum visual impact achieved with minimum resource consumption—proving that AI, when directed by rigorous strategy, acts as a structural multiplier rather than a gimmick.',
+	},
+];
+---
+
+<article class="case-study">
+	<header
+		class:list={[
+			'case-study__hero',
+			(heroMedia?.items.length ?? 0) > 1 ? 'case-study__hero--multi' : 'case-study__hero--single',
+		]}
+	>
+		<div class="case-study__hero-copy">
+			<p class="case-study__meta">
+				<span class="case-study__meta-item">Arte de Baile</span>
+				<span class="case-study__meta-sep" aria-hidden="true">|</span>
+				<time class="case-study__meta-item" datetime="2026-11-20">Nov 20, 2026</time>
+			</p>
+
+			<h1 class="case-study__title">
+				How to build an AI art direction pipeline when launching without a photographer?
+			</h1>
+
+			<div class="case-study__chips">
+				<a class="case-study__chip" href={projectUrl}>
+					<span class="case-study__chip-label">Arte de Baile</span>
+					<svg
+						class="case-study__chip-arrow"
+						viewBox="0 0 18 15"
+						width="18"
+						height="15"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						></path>
+					</svg>
+				</a>
+				<a class="case-study__chip case-study__chip--live" href={liveUrl} target="_blank" rel="noreferrer">
+					<span class="case-study__chip-label">Live</span>
+					<span class="case-study__chip-dot" aria-hidden="true"></span>
+					<svg
+						class="case-study__chip-arrow"
+						viewBox="0 0 18 15"
+						width="18"
+						height="15"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						></path>
+					</svg>
+				</a>
+			</div>
+
+			<div class="case-study__overview">
+				<p class="case-study__label">
+					[
+					<span class="case-study__label-text">Overview</span>
+					]
+				</p>
+				<p class="case-study__body">
+					When launching a brand under strict time constraints, a recurring bottleneck emerges: the
+					visual gap between the foundational identity and actual photographic assets. Traditional
+					shoots are slow, expensive, and frequently result in misaligned outputs that break brand
+					coherence. For Arte de Baile, we bypassed this friction by engineering an AI-driven art
+					direction pipeline. Using minimal source references, we established a scalable visual
+					standard that launched the brand with immediate market authority while providing a precise
+					baseline for future photography.
+				</p>
+			</div>
+		</div>
+
+		<CaseMediaStack
+			group={heroMedia}
+			label="AI art direction pipeline cover"
+			priority
+			class="case-study__media case-study__media--hero"
+		/>
+	</header>
+
+	<section class="case-study__challenges" aria-labelledby="case-ai-challenges-label">
+		<p class="case-study__label" id="case-ai-challenges-label">
+			[
+			<span class="case-study__label-text">Challenge Definition</span>
+			]
+		</p>
+		<div class="case-study__challenge-list">
+			{
+				challenges.map((item) => (
+					<div class="case-study__challenge">
+						<h2 class="case-study__challenge-title">{item.title}</h2>
+						<p class="case-study__body">{item.body}</p>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	{
+		steps.map((step, index) => {
+			const mediaCount = stepMedia[index]?.items.length ?? 0;
+			return (
+				<section
+					class:list={[
+						'case-study__step',
+						mediaCount > 1 ? 'case-study__step--multi' : 'case-study__step--single',
+					]}
+				>
+					<CaseMediaStack
+						group={stepMedia[index]}
+						label={step.title}
+						class="case-study__media case-study__media--step"
+					/>
+					<div class="case-study__step-copy">
+						<p class="case-study__label">
+							[
+							<span class="case-study__label-text">{step.label}</span>
+							]
+						</p>
+						<h2 class="case-study__step-title">{step.title}</h2>
+						<div class="case-study__copy">
+							{step.paragraphs.map((paragraph) => (
+								<p class="case-study__body">{paragraph}</p>
+							))}
+						</div>
+					</div>
+				</section>
+			);
+		})
+	}
+
+	<section class="case-study__result">
+		<CaseMediaStack
+			group={resultMedia}
+			label="The Result"
+			class="case-study__media case-study__media--result"
+		/>
+		<div class="case-study__result-copy" aria-labelledby="case-ai-result-label">
+			<p class="case-study__label" id="case-ai-result-label">
+				[
+				<span class="case-study__label-text">The Result</span>
+				]
+			</p>
+			<div class="case-study__result-list">
+				{
+					results.map((item) => (
+						<div class="case-study__result-item">
+							<h2 class="case-study__result-title">{item.title}</h2>
+							<p class="case-study__body">{item.body}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</article>

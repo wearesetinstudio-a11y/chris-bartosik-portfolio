@@ -16,6 +16,7 @@ interface Props {
 	rows: { label: string; labelKey?: string; value: string; href?: string; isLink?: boolean; underlined?: boolean; fieldKey?: string }[];
 	caseUrl?: string;
 	caseLabel?: string;
+	caseLinks?: { label: string; url: string }[];
 }
 
 const {
@@ -31,11 +32,17 @@ const {
 	rows,
 	caseUrl = '',
 	caseLabel = '',
+	caseLinks = [],
 } = Astro.props;
 
-const resolvedCaseUrl = caseUrl.trim();
-const resolvedCaseLabel = caseLabel.trim();
-const hasCaseLink = Boolean(resolvedCaseUrl && resolvedCaseLabel);
+const resolvedCaseLinks = (
+	caseLinks.length > 0
+		? caseLinks
+		: caseUrl.trim() && caseLabel.trim()
+			? [{ label: caseLabel.trim(), url: caseUrl.trim() }]
+			: []
+).filter((link) => link.label.trim() && link.url.trim());
+const hasCaseLinks = resolvedCaseLinks.length > 0;
 
 const titleChars = title.split('');
 const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
@@ -113,25 +120,29 @@ const hasGraphic = Boolean(graphicSrc);
 		}
 
 		{
-			hasCaseLink ? (
-				<a class="project-overview__case-link" href={resolvedCaseUrl}>
-					<span class="project-overview__case-link-label">{resolvedCaseLabel}</span>
-					<svg
-						class="project-overview__case-link-arrow"
-						viewBox="0 0 18 15"
-						width="18"
-						height="15"
-						fill="none"
-						aria-hidden="true"
-					>
-						<path
-							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linejoin="bevel"
-						></path>
-					</svg>
-				</a>
+			hasCaseLinks ? (
+				<div class="project-overview__case-links">
+					{resolvedCaseLinks.map((link) => (
+						<a class="project-overview__case-link" href={link.url}>
+							<span class="project-overview__case-link-label">{link.label}</span>
+							<svg
+								class="project-overview__case-link-arrow"
+								viewBox="0 0 18 15"
+								width="18"
+								height="15"
+								fill="none"
+								aria-hidden="true"
+							>
+								<path
+									d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linejoin="bevel"
+								></path>
+							</svg>
+						</a>
+					))}
+				</div>
 			) : null
 		}
 
@@ -354,13 +365,21 @@ const hasGraphic = Boolean(graphicSrc);
 		color: inherit;
 	}
 
+	.project-overview__case-links {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.65rem;
+		margin-top: 1.5rem;
+	}
+
 	.project-overview__case-link {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.55rem;
 		width: fit-content;
 		max-width: 100%;
-		margin-top: 1.5rem;
+		margin-top: 0;
 		padding: 0.7rem 0.85rem;
 		border: 0;
 		border-radius: 0;
@@ -409,8 +428,12 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	@media (min-width: 768px) {
-		.project-overview__case-link {
+		.project-overview__case-links {
 			margin-top: 1.85rem;
+			gap: 0.75rem;
+		}
+
+		.project-overview__case-link {
 			padding: 0.8rem 1rem;
 			font-size: 1.05rem;
 			gap: 0.65rem;

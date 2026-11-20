@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArteAiPipelineCase from '../../components/cases/ArteAiPipelineCase.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import { getSiteCounts } from '../../utils/getSiteCounts.ts';
+
+const { projectCount } = await getSiteCounts();
+---
+
+<Layout
+	title="Arte AI Pipeline Case"
+	description="How to build an AI art direction pipeline when launching without a photographer? — Arte de Baile case study."
+>
+	<Header theme="light-bg" projectCount={projectCount} />
+
+	<main class="relative z-20 flex flex-1 flex-col">
+		<ArteAiPipelineCase />
+		<ContactSection />
+	</main>
+
+	<Footer />
+</Layout>
+
+<script>
+	import { initProjectGalleryVideos } from '../../scripts/initProjectGalleryVideos.ts';
+
+	function initCasePage() {
+		initProjectGalleryVideos();
+	}
+
+	initCasePage();
+	document.addEventListener('astro:page-load', initCasePage);
+</script>
