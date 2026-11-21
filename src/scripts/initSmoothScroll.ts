@@ -20,12 +20,30 @@ function isScrollLocked() {
 	if (!body) return false;
 	if (html.classList.contains('intro-pending')) return true;
 	if (body.classList.contains('mobile-nav-open')) return true;
+	if (body.classList.contains('contact-modal-open')) return true;
 	if (body.style.position === 'fixed') return true;
 	return false;
 }
 
 export function getLenis() {
 	return smoothWindow().__cbLenis ?? null;
+}
+
+export function stopSmoothScroll() {
+	getLenis()?.stop();
+}
+
+export function startSmoothScroll() {
+	getLenis()?.start();
+}
+
+export function scrollToImmediate(y: number) {
+	const instance = getLenis();
+	if (instance) {
+		instance.scrollTo(y, { immediate: true, force: true });
+		return;
+	}
+	window.scrollTo(0, y);
 }
 
 /** Glide to a pixel offset. Returns false when native scrolling is in use. */

@@ -6,6 +6,7 @@ const PRESS_SELECTOR = [
 	'.work-with-us-button',
 	'.rolling-link',
 	'.contact-email-cta',
+	'.contact-modal__submit',
 	'.contact-social__link',
 	'.project-live-result',
 	'.case-study__chip',

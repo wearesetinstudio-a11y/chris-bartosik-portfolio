@@ -8,6 +8,7 @@ interface Props {
 	size?: 'default' | 'large';
 	i18nKey?: string;
 	count?: number;
+	openContact?: boolean;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
 	size = 'default',
 	i18nKey,
 	count,
+	openContact,
 } = Astro.props;
 
 const isDark = variant === 'dark';
@@ -26,10 +28,18 @@ const textSize = size === 'large' ? 'text-[2rem]' : 'text-[1.05rem]';
 const lineClass = `flex h-[1.5em] items-center leading-none ${textSize} font-semibold uppercase ${textColor}`;
 const isStatic = size === 'large';
 const displayLabel = count !== undefined ? `${label} [${count}]` : label;
+const opensContact =
+	openContact === true ||
+	((openContact !== false) &&
+		(href === '#contact' || href.endsWith('#contact') || href.includes('/#contact')));
 ---
 
 <div class="work-with-us-button group relative inline-block">
-	<a href={href} class={`relative -mx-1 -my-2 block px-1 py-2 ${textColor}`}>
+	<a
+		href={href}
+		class={`relative -mx-1 -my-2 block px-1 py-2 ${textColor}`}
+		data-open-contact={opensContact ? '' : undefined}
+	>
 		<span class="work-with-us-button__label relative inline-block">
 			{
 				isStatic ? (

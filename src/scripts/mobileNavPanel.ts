@@ -55,6 +55,13 @@ function lockBodyScroll() {
 function unlockBodyScroll() {
 	if (!document.body.classList.contains('mobile-nav-open')) return;
 
+	/* Contact modal owns the scroll lock — only clear mobile-nav classes. */
+	if (document.body.classList.contains('contact-modal-open')) {
+		document.body.classList.remove('mobile-nav-open');
+		document.documentElement.classList.remove('mobile-nav-open');
+		return;
+	}
+
 	const scrollY = navWindow.__mobileNavLockedScrollY ?? 0;
 	document.body.classList.remove('mobile-nav-open');
 	document.documentElement.classList.remove('mobile-nav-open');

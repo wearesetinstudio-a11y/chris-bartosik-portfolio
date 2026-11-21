@@ -40,10 +40,11 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 			</p>
 
 			<div id="contact-email-wrap" class="contact-email-cta-wrap mt-10">
-				<a
-					href={emailHref}
+				<button
+					type="button"
 					id="contact-email-cta"
 					class="contact-email-cta group relative flex w-full items-center px-8 md:px-10"
+					data-open-contact
 				>
 					<span class="contact-email-cta__inner">
 						<span class="contact-email-cta__label-wrap">
@@ -64,7 +65,7 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 							<img src="/chris-hand-logo.svg" alt="" width="28" height="30" />
 						</span>
 					</span>
-				</a>
+				</button>
 			</div>
 		</div>
 
@@ -155,10 +156,14 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 
 	.contact-email-cta {
 		height: 80px;
+		border: 0;
+		font: inherit;
 		font-size: 1rem;
 		font-weight: 600;
 		line-height: 1;
 		text-transform: uppercase;
+		color: inherit;
+		cursor: pointer;
 		background-color: #252628;
 		transition:
 			transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),

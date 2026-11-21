@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import ChrisLogo from '../components/ChrisLogo.astro';
+import ContactModal from '../components/ContactModal.astro';
 import { t } from '../utils/i18n.ts';
 
 interface Props {
@@ -162,6 +163,8 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 		</div>
 
 		<slot />
+
+		<ContactModal />
 
 		<div
 			id="site-cursor"

@@ -142,6 +142,7 @@ export function initSmoothHashScroll() {
 				target.closest('.work-with-us-button')?.querySelector('a') ??
 				null;
 			if (!(anchor instanceof HTMLAnchorElement)) return;
+			if (anchor.hasAttribute('data-open-contact')) return;
 
 			const hash = samePageHashLink(anchor);
 			if (!hash) return;

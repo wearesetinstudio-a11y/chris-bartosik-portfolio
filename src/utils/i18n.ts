@@ -33,7 +33,7 @@ export const dictionary = {
 			mobile: 'Mobile',
 		},
 		cta: {
-			workWithMe: 'Get in touch',
+			workWithMe: 'Contact me',
 		},
 		project: {
 			client: 'Client',
@@ -265,8 +265,19 @@ export const dictionary = {
 			line1: "Let's build something",
 			line2: 'great together',
 			description:
-				'There is no better start to a successful business partnership than a friendly chat. Get in touch today and we will craft together your perfect solution.',
-			sendEmail: 'Get in touch',
+				'There is no better start to a successful business partnership than a friendly chat. Contact me today and we will craft together your perfect solution.',
+			sendEmail: 'Contact me',
+			modal: {
+				title: 'Contact me',
+				firstName: 'First name',
+				secondName: 'Second name',
+				contact: 'E-mail / WhatsApp number',
+				message: 'Text message',
+				send: 'Send message',
+				footnote: 'I will respond within 48 hours',
+				toast: 'We are in touch',
+				close: 'Close',
+			},
 		},
 		meta: {
 			title: 'Chris Bartosik',
