@@ -24,6 +24,9 @@ tools: Cursor
 year: 2026
 liveLabel: arte-viktoriaoskaldowicz.pl
 liveUrl: https://www.arte-viktoriaoskaldowicz.pl/
+caseLinks:
+  - label: How we engineered a thumb-driven conversion funnel for mobile-first user journeys?
+    url: /cases/arte-thumb-funnel
 overviewLabel: Intro
 overviewTitle: From brand identity to digital execution
 overviewText: |-

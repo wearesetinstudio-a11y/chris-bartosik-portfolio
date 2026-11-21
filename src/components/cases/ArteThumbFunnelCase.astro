@@ -1,0 +1,236 @@
+---
+import CaseMediaStack from './CaseMediaStack.astro';
+import { getCaseMediaGroups } from '../../utils/getCaseGallery';
+import '../../styles/case-study.css';
+
+const projectUrl = '/projects/arte-dance-web';
+const liveUrl = 'https://www.arte-viktoriaoskaldowicz.pl/';
+const caseFolder =
+	'How we engineered a thumb-driven conversion funnel for mobile-first user journeys';
+
+const mediaGroups = getCaseMediaGroups(caseFolder);
+const mediaByGroup = new Map(mediaGroups.map((group) => [group.group, group]));
+const heroMedia = mediaByGroup.get(1);
+const stepMedia = [mediaByGroup.get(2), mediaByGroup.get(3), mediaByGroup.get(4)];
+const resultMedia = mediaByGroup.get(5);
+
+const challenges = [
+	{
+		title: 'The top-bar blind spot',
+		body: 'Standard desktop navigation patterns (placing contact CTAs in the top right corner) fail completely on mobile devices, where single-handed thumb reach dictates interaction efficiency.',
+	},
+	{
+		title: 'Balancing brand identity vs. conversion',
+		body: 'The top header needed to remain clean—housing only the logotype for brand recognition and the menu toggle—preventing visual clutter at the viewport’s edge.',
+	},
+	{
+		title: 'Avoiding generic solutions',
+		body: 'Relying on a single, lazy WhatsApp button or standard static forms ignores user intent and fails to provide flexible communication channels.',
+	},
+];
+
+const steps = [
+	{
+		label: 'Step 01',
+		title: 'Optimizing for the natural thumb zone',
+		paragraphs: [
+			'We analyzed mobile ergonomics and mapped the bottom third of the viewport as the primary action zone where physical effort and cognitive friction are lowest.',
+			'Positioning high-intent interactive elements within immediate thumb reach drastically accelerates the decision-making process for users coming from social media links.',
+		],
+	},
+	{
+		label: 'Step 02',
+		title: 'Deploying the contextual sticky bottom bar',
+		paragraphs: [
+			'We engineered a lightweight, non-intrusive bottom panel that seamlessly activates upon scrolling past the hero section and remains accessible until reaching the footer.',
+			'This keeps the core conversion trigger persistently available across all intermediate sections without disrupting the immersive editorial typography and photography.',
+		],
+	},
+	{
+		label: 'Step 03',
+		title: 'Integrating multi-channel direct access',
+		paragraphs: [
+			'We avoided the lazy industry cliché of a single-channel widget. Instead, we combined a direct booking trigger (“Umów się”) with instant shortcuts to the region’s high-frequency communication channels: WhatsApp, Instagram, and Messenger.',
+			'Giving users real freedom of choice based on their immediate context removes form-fatigue and converts casual page visitors into direct business inquiries instantly.',
+		],
+	},
+];
+
+const results = [
+	{
+		title: 'Zero-friction conversion funnel',
+		body: 'Users can initiate contact or booking from anywhere on the page with a single natural thumb movement.',
+	},
+	{
+		title: 'Preserved brand hierarchy',
+		body: 'Clean isolation of the top header protected brand equity and visual recognition.',
+	},
+	{
+		title: 'Measurable business alignment',
+		body: 'Direct alignment between social traffic acquisition (Instagram-first mobile traffic) and high-conversion communication endpoints.',
+	},
+];
+---
+
+<article class="case-study">
+	<header
+		class:list={[
+			'case-study__hero',
+			(heroMedia?.items.length ?? 0) > 1 ? 'case-study__hero--multi' : 'case-study__hero--single',
+		]}
+	>
+		<div class="case-study__hero-copy">
+			<p class="case-study__meta">
+				<span class="case-study__meta-item">Arte de Baile</span>
+				<span class="case-study__meta-sep" aria-hidden="true">|</span>
+				<time class="case-study__meta-item" datetime="2026-11-21">Nov 21, 2026</time>
+			</p>
+
+			<h1 class="case-study__title">
+				How we engineered a thumb-driven conversion funnel for mobile-first user journeys?
+			</h1>
+
+			<div class="case-study__chips">
+				<a class="case-study__chip" href={projectUrl}>
+					<span class="case-study__chip-label">Arte de Baile</span>
+					<svg
+						class="case-study__chip-arrow"
+						viewBox="0 0 18 15"
+						width="18"
+						height="15"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						></path>
+					</svg>
+				</a>
+				<a class="case-study__chip case-study__chip--live" href={liveUrl} target="_blank" rel="noreferrer">
+					<span class="case-study__chip-label">Live</span>
+					<span class="case-study__chip-dot" aria-hidden="true"></span>
+					<svg
+						class="case-study__chip-arrow"
+						viewBox="0 0 18 15"
+						width="18"
+						height="15"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7.5H17M10.6552 14L17 7.5L10.6552 1"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="bevel"
+						></path>
+					</svg>
+				</a>
+			</div>
+
+			<div class="case-study__overview">
+				<p class="case-study__label">
+					[
+					<span class="case-study__label-text">Overview</span>
+					]
+				</p>
+				<p class="case-study__body">
+					Traditional web architecture frequently hides primary conversion actions inside top-bar
+					hamburger menus, forcing unnecessary friction during mobile navigation. For Arte de Baile, we
+					restructured the mobile experience around natural ergonomics. By replacing a hidden menu link
+					with a persistent, thumb-optimized sticky bottom bar, we bridged the gap between brand
+					awareness and direct lead generation without cluttering the editorial interface.
+				</p>
+			</div>
+		</div>
+
+		<CaseMediaStack
+			group={heroMedia}
+			label="Thumb-driven conversion funnel cover"
+			priority
+			class="case-study__media case-study__media--hero"
+		/>
+	</header>
+
+	<section class="case-study__challenges" aria-labelledby="case-funnel-challenges-label">
+		<p class="case-study__label" id="case-funnel-challenges-label">
+			[
+			<span class="case-study__label-text">Challenge Definition</span>
+			]
+		</p>
+		<div class="case-study__challenge-list">
+			{
+				challenges.map((item) => (
+					<div class="case-study__challenge">
+						<h2 class="case-study__challenge-title">{item.title}</h2>
+						<p class="case-study__body">{item.body}</p>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	{
+		steps.map((step, index) => {
+			const mediaCount = stepMedia[index]?.items.length ?? 0;
+			return (
+				<section
+					class:list={[
+						'case-study__step',
+						mediaCount > 1 ? 'case-study__step--multi' : 'case-study__step--single',
+					]}
+				>
+					<CaseMediaStack
+						group={stepMedia[index]}
+						label={step.title}
+						class="case-study__media case-study__media--step"
+					/>
+					<div class="case-study__step-copy">
+						<p class="case-study__label">
+							[
+							<span class="case-study__label-text">{step.label}</span>
+							]
+						</p>
+						<h2 class="case-study__step-title">{step.title}</h2>
+						<div class="case-study__copy">
+							{step.paragraphs.map((paragraph) => (
+								<p class="case-study__body">{paragraph}</p>
+							))}
+						</div>
+					</div>
+				</section>
+			);
+		})
+	}
+
+	<section class="case-study__result">
+		{
+			(resultMedia?.items.length ?? 0) > 0 ? (
+				<CaseMediaStack
+					group={resultMedia}
+					label="The Result"
+					class="case-study__media case-study__media--result"
+				/>
+			) : null
+		}
+		<div class="case-study__result-copy" aria-labelledby="case-funnel-result-label">
+			<p class="case-study__label" id="case-funnel-result-label">
+				[
+				<span class="case-study__label-text">The Result</span>
+				]
+			</p>
+			<div class="case-study__result-list">
+				{
+					results.map((item) => (
+						<div class="case-study__result-item">
+							<h2 class="case-study__result-title">{item.title}</h2>
+							<p class="case-study__body">{item.body}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</article>

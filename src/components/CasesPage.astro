@@ -11,14 +11,18 @@ const arteAiFolder =
 	'How to build an AI art direction pipeline when launching without a photographer';
 const arteAiCover = getCaseCover(arteAiFolder);
 
+const arteFunnelFolder =
+	'How we engineered a thumb-driven conversion funnel for mobile-first user journeys';
+const arteFunnelCover = getCaseCover(arteFunnelFolder);
+
 const cases = [
 	{
-		href: '/cases/arte-de-baile',
+		href: '/cases/arte-thumb-funnel',
 		client: 'Arte de Baile',
-		date: 'Nov 19, 2026',
-		title: 'How to design a dance studio identity that doesn’t shout, but stands out?',
-		image: arteCover ? encodePublicAssetPath(withPublicAssetVersion(arteCover.src)) : '',
-		imageType: arteCover?.type ?? 'image',
+		date: 'Nov 21, 2026',
+		title: 'How we engineered a thumb-driven conversion funnel for mobile-first user journeys?',
+		image: arteFunnelCover ? encodePublicAssetPath(withPublicAssetVersion(arteFunnelCover.src)) : '',
+		imageType: arteFunnelCover?.type ?? 'image',
 	},
 	{
 		href: '/cases/arte-ai-pipeline',
@@ -27,6 +31,14 @@ const cases = [
 		title: 'How to build an AI art direction pipeline when launching without a photographer?',
 		image: arteAiCover ? encodePublicAssetPath(withPublicAssetVersion(arteAiCover.src)) : '',
 		imageType: arteAiCover?.type ?? 'image',
+	},
+	{
+		href: '/cases/arte-de-baile',
+		client: 'Arte de Baile',
+		date: 'Nov 19, 2026',
+		title: 'How to design a dance studio identity that doesn’t shout, but stands out?',
+		image: arteCover ? encodePublicAssetPath(withPublicAssetVersion(arteCover.src)) : '',
+		imageType: arteCover?.type ?? 'image',
 	},
 ];
 ---
