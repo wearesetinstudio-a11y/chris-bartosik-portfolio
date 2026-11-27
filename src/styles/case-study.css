@@ -173,7 +173,7 @@
 	.case-study__body {
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 400;
+		font-weight: var(--body-text-weight);
 		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: rgba(0, 0, 0, 0.7);

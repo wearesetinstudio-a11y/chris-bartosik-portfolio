@@ -138,10 +138,10 @@ const hasBody = hasTitle || hasText;
 
 	.project-content-block__label {
 		font-size: var(--body-text-size);
-		font-weight: 600;
+		font-weight: var(--body-text-weight);
 		text-transform: lowercase;
 		letter-spacing: 0;
-		line-height: 1.6;
+		line-height: var(--body-text-lh);
 		color: inherit;
 		margin-top: 0;
 		margin-bottom: 1.35rem;
@@ -225,8 +225,8 @@ const hasBody = hasTitle || hasText;
 	.project-content-block__text {
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 600;
-		line-height: 1.6;
+		font-weight: var(--body-text-weight);
+		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 		color: inherit;
 	}
@@ -237,8 +237,8 @@ const hasBody = hasTitle || hasText;
 		padding-left: 0;
 		list-style: none;
 		font-size: var(--body-text-size);
-		font-weight: 600;
-		line-height: 1.6;
+		font-weight: var(--body-text-weight);
+		line-height: var(--body-text-lh);
 		color: inherit;
 	}
 
@@ -247,10 +247,9 @@ const hasBody = hasTitle || hasText;
 		display: block;
 		margin: 0;
 		padding-left: 1.15em;
-		/* Override global `li { font-weight: 400 }` */
 		font-size: var(--body-text-size);
-		font-weight: 600;
-		line-height: 1.6;
+		font-weight: var(--body-text-weight);
+		line-height: var(--body-text-lh);
 		letter-spacing: 0;
 	}
 

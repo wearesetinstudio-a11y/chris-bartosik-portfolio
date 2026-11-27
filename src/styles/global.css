@@ -136,7 +136,8 @@
 	--page-gutter: 16px;
 	--section-padding-y: 60px;
 	--body-text-size: 1.05rem;
-	--body-text-lh: 1.8;
+	--body-text-lh: 1.6;
+	--body-text-weight: 600;
 	--heading-h1-size: 2rem;
 	--heading-h1-lh: 1.08;
 	--heading-h1-tracking: -0.03em;
@@ -151,7 +152,7 @@
 		--page-gutter: 60px;
 		--section-padding-y: 200px;
 		--body-text-size: 1.05rem;
-		--body-text-lh: 1.8;
+		--body-text-lh: 1.6;
 		--heading-h1-size: 3.8rem;
 		--heading-h2-size: 2rem;
 		--label-text-size: 1.1rem;
@@ -161,7 +162,7 @@
 @media (max-width: 767px) {
 	:root {
 		--body-text-size: 1rem;
-		--body-text-lh: 1.8;
+		--body-text-lh: 1.6;
 		--label-text-size: 0.95rem;
 	}
 }
@@ -229,7 +230,7 @@ blockquote,
 .about-team-member__bio {
 	letter-spacing: var(--letter-spacing-body);
 	font-size: var(--body-text-size);
-	font-weight: 400;
+	font-weight: var(--body-text-weight);
 	line-height: var(--body-text-lh);
 }
 
@@ -318,7 +319,7 @@ label,
 	.skills-block__intro,
 	.skills-block__body {
 		font-size: var(--body-text-size);
-		font-weight: 400;
+		font-weight: var(--body-text-weight);
 		line-height: var(--body-text-lh);
 	}
 }
@@ -352,9 +353,9 @@ label,
 	.about-page__list li,
 	.skills-block__intro,
 	.skills-block__body {
-		font-size: 1.05rem;
-		font-weight: 400;
-		line-height: 1.8;
+		font-size: var(--body-text-size);
+		font-weight: var(--body-text-weight);
+		line-height: var(--body-text-lh);
 	}
 }
 .clients-heading,
@@ -382,7 +383,7 @@ body.intro-active {
 }
 
 .prose-setin {
-	@apply text-setin-muted leading-relaxed;
+	@apply text-setin-muted;
 
 	& h2 {
 		@apply mt-12 mb-4 text-setin-fg text-xl font-medium;
