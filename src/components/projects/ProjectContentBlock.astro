@@ -50,9 +50,10 @@ const hasBody = hasTitle || hasText;
 			<div class="project-content-block__stack flex w-full flex-col">
 				{
 					hasLabel ? (
-						<p class="project-content-block__label flex items-baseline gap-2.5">
-							<span class="project-content-block__num font-semibold text-black/35">{resolvedNum}</span>
-							<span class="project-content-block__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
+						<p class="project-content-block__label flex items-baseline gap-2">
+							<span class="project-content-block__num">{resolvedNum}</span>
+							<span class="project-content-block__sep" aria-hidden="true">/</span>
+							<span class="project-content-block__label-bracket">
 								[
 								<span
 									class="project-content-block__label-text"
@@ -136,12 +137,12 @@ const hasBody = hasTitle || hasText;
 	}
 
 	.project-content-block__label {
-		font-size: 1rem;
+		font-size: var(--body-text-size);
 		font-weight: 600;
-		text-transform: uppercase;
+		text-transform: lowercase;
 		letter-spacing: 0;
-		line-height: 1.2;
-		color: rgba(0, 0, 0, 0.4);
+		line-height: 1.6;
+		color: inherit;
 		margin-top: 0;
 		margin-bottom: 1.35rem;
 		flex-wrap: nowrap;
@@ -149,7 +150,8 @@ const hasBody = hasTitle || hasText;
 		overflow-wrap: normal;
 	}
 
-	.project-content-block__num {
+	.project-content-block__num,
+	.project-content-block__sep {
 		display: inline-block;
 		flex: 0 0 auto;
 		flex-shrink: 0;
@@ -167,7 +169,8 @@ const hasBody = hasTitle || hasText;
 	}
 
 	.project-content-block__label-text {
-		letter-spacing: var(--label-text-tracking);
+		letter-spacing: 0;
+		text-transform: lowercase;
 	}
 
 	.project-content-block__heading {
@@ -201,7 +204,7 @@ const hasBody = hasTitle || hasText;
 
 	.project-content-block__copy {
 		color: rgba(0, 0, 0, 0.7);
-		gap: 0.85rem;
+		gap: 1.75rem;
 	}
 
 	@media (min-width: 768px) {
@@ -214,7 +217,7 @@ const hasBody = hasTitle || hasText;
 		}
 
 		.project-content-block__copy {
-			gap: 1rem;
+			gap: 2rem;
 		}
 	}
 
@@ -222,8 +225,8 @@ const hasBody = hasTitle || hasText;
 	.project-content-block__text {
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 400;
-		line-height: var(--body-text-lh);
+		font-weight: 600;
+		line-height: 1.6;
 		letter-spacing: 0;
 		color: inherit;
 	}
@@ -234,8 +237,8 @@ const hasBody = hasTitle || hasText;
 		padding-left: 0;
 		list-style: none;
 		font-size: var(--body-text-size);
-		font-weight: 400;
-		line-height: var(--body-text-lh);
+		font-weight: 600;
+		line-height: 1.6;
 		color: inherit;
 	}
 
@@ -244,6 +247,11 @@ const hasBody = hasTitle || hasText;
 		display: block;
 		margin: 0;
 		padding-left: 1.15em;
+		/* Override global `li { font-weight: 400 }` */
+		font-size: var(--body-text-size);
+		font-weight: 600;
+		line-height: 1.6;
+		letter-spacing: 0;
 	}
 
 	:global(.project-content-block__list li::before) {
@@ -268,18 +276,6 @@ const hasBody = hasTitle || hasText;
 
 	:global(.project-page--dark) .project-content-block {
 		color: #f5f5f5;
-	}
-
-	:global(.project-page--dark) .project-content-block__label {
-		color: rgba(255, 255, 255, 0.4);
-	}
-
-	:global(.project-page--dark) .project-content-block__label-bracket {
-		color: rgba(255, 255, 255, 0.45) !important;
-	}
-
-	:global(.project-page--dark) .project-content-block__num {
-		color: rgba(255, 255, 255, 0.4) !important;
 	}
 
 	:global(.project-page--dark) .project-content-block__heading {

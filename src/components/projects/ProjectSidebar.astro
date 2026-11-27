@@ -1,6 +1,4 @@
 ---
-import ProjectLiveResultButton from './ProjectLiveResultButton.astro';
-
 export interface SidebarNavItem {
 	id: string;
 	num: string;
@@ -12,41 +10,32 @@ export interface SidebarNavItem {
 
 interface Props {
 	items: SidebarNavItem[];
-	liveUrl?: string;
 }
 
-const { items, liveUrl = '' } = Astro.props;
-const resolvedLiveUrl = liveUrl.trim();
+const { items } = Astro.props;
 ---
 
 {/* One grid child on mobile; lg:contents lets the desktop aside join the page grid. */}
 <div class="project-sidebar-shell lg:contents">
 <aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
-	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem)] min-h-[calc(100svh-100px-5rem)] pb-8">
-		{/* Invisible sizer: sidebar width = "06 [AI ART DIRECTION]" (Arte reference). */}
-		<span class="project-sidebar__width-ref" aria-hidden="true">
-			<span class="project-sidebar__num">06</span>
-			<span class="project-sidebar__label">[<span class="project-sidebar__label-text">AI ART DIRECTION</span>]</span>
-		</span>
-
+	<div class="project-sidebar__inner">
 		{
 			items.length > 0 ? (
-				<nav class="project-sidebar__nav flex flex-col gap-4.5" aria-label="Spis sekcji projektu">
+				<nav class="project-sidebar__nav" aria-label="Project sections" data-project-nav-pill>
 					{
 						items.map((item, idx) => (
 							<a
 								href={`#${item.id}`}
 								class:list={[
-									'project-sidebar__link group flex items-baseline gap-2.5 text-[1rem] transition-colors duration-200',
+									'project-sidebar__link group',
 									idx === 0 && 'is-active',
 								]}
 								data-section-target={item.id}
 								data-project-section={item.sectionIndex != null ? item.sectionIndex : undefined}
 							>
-								<span class="project-sidebar__num font-semibold text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
-									{item.num}
-								</span>
-								<span class="project-sidebar__label font-semibold uppercase tracking-[0.03em] text-black/35 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
+								<span class="project-sidebar__num">{item.num}</span>
+								<span class="project-sidebar__divider" aria-hidden="true">/</span>
+								<span class="project-sidebar__label">
 									[
 									{item.isOverview ? (
 										<span
@@ -69,28 +58,8 @@ const resolvedLiveUrl = liveUrl.trim();
 				</nav>
 			) : null
 		}
-
-		{
-			resolvedLiveUrl ? (
-				<div class="project-sidebar__live mt-auto pt-10">
-					<ProjectLiveResultButton href={resolvedLiveUrl} />
-				</div>
-			) : null
-		}
 	</div>
 </aside>
-
-{
-	resolvedLiveUrl ? (
-		<div
-			class="project-live-result-mobile lg:hidden"
-			data-project-live-mobile
-			aria-hidden="true"
-		>
-			<ProjectLiveResultButton href={resolvedLiveUrl} />
-		</div>
-	) : null
-}
 
 <!-- Mobile collapsible section dropdown list (fixed to bottom) -->
 <div class="project-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white/95 px-[var(--page-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden" data-project-sidebar-mobile>
@@ -100,13 +69,13 @@ const resolvedLiveUrl = liveUrl.trim();
 		data-mobile-nav-dropdown
 	>
 		<div class="project-sidebar-mobile__dropdown-inner overflow-hidden">
-			<nav class="flex flex-col gap-4 pb-5 pt-4 max-h-[60vh] overflow-y-auto" aria-label="Spis sekcji projektu (mobile)">
+			<nav class="flex flex-col gap-4 pb-5 pt-4 max-h-[60vh] overflow-y-auto" aria-label="Project sections (mobile)">
 				{
 					items.map((item, idx) => (
 						<a
 							href={`#${item.id}`}
 							class:list={[
-								'project-sidebar-mobile__link group flex items-baseline gap-2.5 text-[0.9rem] uppercase transition-colors duration-200',
+								'project-sidebar-mobile__link group flex items-baseline gap-2 text-[0.9rem] transition-colors duration-200',
 								idx === 0 && 'is-active',
 							]}
 							data-section-target={item.id}
@@ -115,7 +84,8 @@ const resolvedLiveUrl = liveUrl.trim();
 							<span class="project-sidebar-mobile__link-num font-semibold text-black/40 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
 								{item.num}
 							</span>
-							<span class="project-sidebar-mobile__link-label font-semibold tracking-[0.03em] text-black/40 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
+							<span class="project-sidebar-mobile__link-sep text-black/40 group-[.is-active]:text-black">/</span>
+							<span class="project-sidebar-mobile__link-label font-semibold lowercase tracking-[0.02em] text-black/40 transition-colors duration-200 group-hover:text-black group-[.is-active]:text-black">
 								[
 								{item.isOverview ? (
 									<span
@@ -140,13 +110,14 @@ const resolvedLiveUrl = liveUrl.trim();
 
 	<button
 		type="button"
-		class="project-sidebar-mobile__trigger flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left text-[0.95rem] font-semibold uppercase tracking-[0.03em] text-black transition-colors"
+		class="project-sidebar-mobile__trigger flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left text-[0.95rem] font-semibold tracking-[0.02em] text-black transition-colors"
 		aria-expanded="false"
 		aria-controls="project-mobile-dropdown"
 		data-mobile-nav-trigger
 	>
-		<span class="project-sidebar-mobile__current flex items-baseline gap-2">
+		<span class="project-sidebar-mobile__current flex items-baseline gap-2 lowercase">
 			<span class="project-sidebar-mobile__current-num" data-mobile-current-num>{items[0]?.num ?? '01'}</span>
+			<span class="project-sidebar-mobile__current-sep">/</span>
 			<span class="project-sidebar-mobile__current-label" data-mobile-current-label>
 				[
 				{items[0]?.isOverview ? (
@@ -172,195 +143,181 @@ const resolvedLiveUrl = liveUrl.trim();
 </div>
 </div>
 
-<script>
-	let cleanupLiveMobile: (() => void) | null = null;
-
-	function initProjectLiveMobile() {
-		cleanupLiveMobile?.();
-		cleanupLiveMobile = null;
-
-		const bar = document.querySelector<HTMLElement>('[data-project-live-mobile]');
-		const content = document.querySelector('.project-page__body');
-		if (!bar || !(content instanceof HTMLElement)) return;
-
-		const sync = (visible: boolean) => {
-			bar.classList.toggle('is-visible', visible);
-			bar.setAttribute('aria-hidden', visible ? 'false' : 'true');
-		};
-
-		const observer = new IntersectionObserver(
-			([entry]) => sync(Boolean(entry?.isIntersecting)),
-			{ root: null, threshold: 0 },
-		);
-
-		observer.observe(content);
-		sync(content.getBoundingClientRect().top < window.innerHeight);
-
-		cleanupLiveMobile = () => {
-			observer.disconnect();
-			sync(false);
-		};
-	}
-
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initProjectLiveMobile, { once: true });
-	} else {
-		initProjectLiveMobile();
-	}
-
-	document.addEventListener('astro:page-load', initProjectLiveMobile);
-</script>
-
 <style>
-	.project-sidebar__width-ref {
-		display: none;
-	}
-
-	.project-sidebar__inner {
-		display: flex;
-		flex-direction: column;
-	}
-
 	@media (min-width: 1024px) {
 		.project-sidebar {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			/* Site grid gutter — same left edge as See live / page chrome */
+			left: var(--page-gutter);
+			z-index: 30;
 			width: max-content;
+			/* Match content top padding so 01 sits level with overview */
+			padding: 12rem 0 6rem;
+			box-sizing: border-box;
+			pointer-events: none;
+			overflow: visible;
 		}
 
 		.project-sidebar__inner {
-			display: grid;
-			grid-template-columns: max-content;
-			grid-template-rows: auto 1fr;
-			align-content: stretch;
-		}
-
-		/* Sizes the column: num + gap + [label capped at 200px]. */
-		.project-sidebar__width-ref {
-			grid-column: 1;
-			grid-row: 1;
-			display: flex;
-			align-items: baseline;
-			gap: 0.625rem;
+			position: sticky;
+			/* Starts at 01; after scrolling past, sticks mid-viewport */
+			top: max(6.5rem, calc(50vh - 8rem));
 			width: max-content;
-			height: 0;
-			overflow: hidden;
-			visibility: hidden;
+			max-width: none;
+			display: block;
 			pointer-events: none;
-			white-space: nowrap;
-			font-size: 1rem;
-			font-weight: 600;
-			letter-spacing: 0.03em;
-			text-transform: uppercase;
-		}
-
-		.project-sidebar__width-ref .project-sidebar__label-text {
-			display: inline-block;
-			width: 200px;
+			overflow: visible;
 		}
 
 		.project-sidebar__nav {
-			grid-column: 1;
-			grid-row: 1;
-			/* Don't let long labels expand the column — width comes from the sizer. */
-			width: 0;
-			min-width: 100%;
-			align-self: start;
+			--pill-ease: cubic-bezier(0.4, 0, 0.2, 1);
+			--pill-duration: 0.28s;
+			--pill-pad: 1.55rem;
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0;
+			width: max-content;
+			min-width: 3.75rem;
+			max-width: none;
+			margin: 0;
+			/* Equal inset on all sides — numbers stay put on expand */
+			padding: var(--pill-pad);
+			border-radius: 20px;
+			background: #ffffff;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.012);
+			overflow: hidden;
+			pointer-events: auto;
+			flex-shrink: 0;
+			transform-origin: left center;
+			transition: box-shadow var(--pill-duration) var(--pill-ease);
 		}
 
-		.project-sidebar__live {
-			grid-column: 1;
-			grid-row: 2;
-			width: 0;
-			min-width: 100%;
-			align-self: end;
-		}
-
-		.project-sidebar__live :global(.project-live-result) {
-			max-width: 100%;
+		.project-sidebar__nav:hover,
+		.project-sidebar__nav:focus-within,
+		.project-sidebar__nav.is-expanded {
+			box-shadow: 0 1px 5px rgba(0, 0, 0, 0.015);
 		}
 
 		.project-sidebar__link {
+			display: flex;
+			align-items: baseline;
+			justify-content: flex-start;
+			gap: 0;
+			flex: 0 0 auto;
+			width: 100%;
 			min-width: 0;
-			max-width: 100%;
+			padding-block: 0.65rem;
+			font-size: 0.92rem;
+			font-weight: 600;
+			line-height: 1.2;
+			letter-spacing: 0.01em;
+			text-decoration: none;
+			color: rgba(0, 0, 0, 0.28);
+			white-space: nowrap;
+			transition:
+				color 0.2s var(--pill-ease),
+				gap var(--pill-duration) var(--pill-ease);
 		}
 
+		.project-sidebar__link:first-child {
+			padding-top: 0;
+		}
+
+		.project-sidebar__link:last-child {
+			padding-bottom: 0;
+		}
+
+		.project-sidebar__link:not(:last-child) {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.035);
+		}
+
+		.project-sidebar__nav:hover .project-sidebar__link,
+		.project-sidebar__nav:focus-within .project-sidebar__link,
+		.project-sidebar__nav.is-expanded .project-sidebar__link {
+			gap: 0.4rem;
+		}
+
+		.project-sidebar__num {
+			display: inline-block;
+			flex: 0 0 auto;
+			min-width: 2ch;
+			font-variant-numeric: tabular-nums;
+			font-weight: 600;
+			text-align: center;
+		}
+
+		/* Stay in flow — animate open without shrinking/clipping names */
+		.project-sidebar__divider,
 		.project-sidebar__label {
-			display: inline-flex;
-			min-width: 0;
+			display: inline-block;
+			flex: 0 0 auto;
+			max-width: 0;
+			opacity: 0;
 			overflow: hidden;
+			text-transform: lowercase;
 			white-space: nowrap;
+			vertical-align: baseline;
+			pointer-events: none;
+			transition:
+				max-width var(--pill-duration) var(--pill-ease),
+				opacity calc(var(--pill-duration) * 0.85) var(--pill-ease);
+		}
+
+		.project-sidebar__nav:hover .project-sidebar__divider,
+		.project-sidebar__nav:focus-within .project-sidebar__divider,
+		.project-sidebar__nav.is-expanded .project-sidebar__divider {
+			max-width: 1.5rem;
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.project-sidebar__nav:hover .project-sidebar__label,
+		.project-sidebar__nav:focus-within .project-sidebar__label,
+		.project-sidebar__nav.is-expanded .project-sidebar__label {
+			max-width: 20rem;
+			opacity: 1;
+			overflow: visible;
+			pointer-events: auto;
 		}
 
 		.project-sidebar__label-text {
-			display: block;
-			min-width: 0;
-			max-width: 200px;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			display: inline;
+			letter-spacing: 0.02em;
 			white-space: nowrap;
 		}
-	}
 
-	.project-live-result-mobile {
-		position: fixed;
-		top: 72px;
-		left: var(--page-gutter);
-		z-index: 44;
-		display: flex;
-		justify-content: flex-start;
-		width: max-content;
-		max-width: calc(100vw - (var(--page-gutter) * 2));
-		transform: translateY(-6px);
-		opacity: 0;
-		pointer-events: none;
-		transition:
-			opacity 0.28s ease,
-			transform 0.28s ease;
-	}
-
-	.project-live-result-mobile.is-visible {
-		opacity: 1;
-		pointer-events: auto;
-		transform: translateY(10px);
-	}
-
-	:global(body.mobile-nav-open) .project-live-result-mobile {
-		opacity: 0 !important;
-		pointer-events: none !important;
-	}
-
-	@media (min-width: 768px) {
-		.project-live-result-mobile {
-			top: 100px;
+		.project-sidebar__link.is-active,
+		.project-sidebar__link:hover {
+			color: #131415;
 		}
-	}
 
-	@media (min-width: 1024px) {
-		.project-live-result-mobile {
-			display: none !important;
+		.project-sidebar__link.is-active {
+			font-weight: 700;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.project-live-result-mobile {
+		.project-sidebar__nav,
+		.project-sidebar__divider,
+		.project-sidebar__label {
 			transition: none;
 		}
 	}
 
-	.project-sidebar__num,
 	.project-sidebar-mobile__link-num,
 	.project-sidebar-mobile__current-num {
 		display: inline-block;
 		flex: 0 0 auto;
 		flex-shrink: 0;
 		white-space: nowrap;
-		word-break: keep-all;
-		overflow-wrap: normal;
 		font-variant-numeric: tabular-nums;
 	}
 
-	.project-sidebar__link.is-active .project-sidebar__num,
-	.project-sidebar__link.is-active .project-sidebar__label,
 	.project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-num,
+	.project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-sep,
 	.project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-label {
 		color: #000000;
 		font-weight: 700;
@@ -377,35 +334,45 @@ const resolvedLiveUrl = liveUrl.trim();
 	.project-sidebar-mobile.is-open .project-sidebar-mobile__dropdown {
 		grid-template-rows: 1fr;
 		border-color: rgba(0, 0, 0, 0.1);
-		transition-timing-function: cubic-bezier(0, 0, 0.2, 1); /* ease-out */
+		transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 		transition-duration: 350ms;
 	}
 
 	.project-sidebar-mobile:not(.is-open) .project-sidebar-mobile__dropdown {
-		transition-timing-function: cubic-bezier(0.4, 0, 1, 1); /* ease-in */
+		transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 		transition-duration: 250ms;
 	}
 
-	/* Dark theme overrides when project body is in dark mode */
-	:global(.project-page--dark) .project-sidebar__link .project-sidebar__num,
-	:global(.project-page--dark) .project-sidebar__link .project-sidebar__label,
+	:global(.project-page--dark) .project-sidebar__nav {
+		background: #1c1d1e;
+		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+	}
+
+	:global(.project-page--dark) .project-sidebar__link {
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	:global(.project-page--dark) .project-sidebar__link.is-active,
+	:global(.project-page--dark) .project-sidebar__link:hover {
+		color: #ffffff;
+	}
+
 	:global(.project-page--dark) .project-sidebar-mobile__link .project-sidebar-mobile__link-num,
+	:global(.project-page--dark) .project-sidebar-mobile__link .project-sidebar-mobile__link-sep,
 	:global(.project-page--dark) .project-sidebar-mobile__link .project-sidebar-mobile__link-label {
 		color: rgba(255, 255, 255, 0.4);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
-		:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__num,
-		:global(.project-page--dark) .project-sidebar__link:hover .project-sidebar__label,
 		:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-num,
+		:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-sep,
 		:global(.project-page--dark) .project-sidebar-mobile__link:hover .project-sidebar-mobile__link-label {
 			color: #ffffff;
 		}
 	}
 
-	:global(.project-page--dark) .project-sidebar__link.is-active .project-sidebar__num,
-	:global(.project-page--dark) .project-sidebar__link.is-active .project-sidebar__label,
 	:global(.project-page--dark) .project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-num,
+	:global(.project-page--dark) .project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-sep,
 	:global(.project-page--dark) .project-sidebar-mobile__link.is-active .project-sidebar-mobile__link-label {
 		color: #ffffff;
 	}

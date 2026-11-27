@@ -6,6 +6,22 @@ export function initProjectSidebar() {
 	);
 	if (!sidebarLinks.length) return;
 
+	const desktopNav = document.querySelector<HTMLElement>('[data-project-nav-pill]');
+
+	if (desktopNav && desktopNav.dataset.expandBound !== 'true') {
+		desktopNav.dataset.expandBound = 'true';
+		const expand = () => desktopNav.classList.add('is-expanded');
+		const collapse = () => desktopNav.classList.remove('is-expanded');
+		desktopNav.addEventListener('mouseenter', expand);
+		desktopNav.addEventListener('mouseleave', collapse);
+		desktopNav.addEventListener('focusin', expand);
+		desktopNav.addEventListener('focusout', (event) => {
+			if (!desktopNav.contains(event.relatedTarget as Node | null)) {
+				collapse();
+			}
+		});
+	}
+
 	const sectionIds = sidebarLinks.map((link) => link.dataset.sectionTarget).filter(Boolean) as string[];
 	const sections = sectionIds
 		.map((id) => document.getElementById(id))
@@ -54,7 +70,11 @@ export function initProjectSidebar() {
 		sidebarLinks.forEach((link) => {
 			const isMatch = link.dataset.sectionTarget === targetId;
 			link.classList.toggle('is-active', isMatch);
-			link.setAttribute('aria-current', isMatch ? 'true' : 'false');
+			if (isMatch) {
+				link.setAttribute('aria-current', 'true');
+			} else {
+				link.removeAttribute('aria-current');
+			}
 			if (isMatch && !activeLinkEl) {
 				activeLinkEl = link;
 			}

@@ -1,5 +1,4 @@
 ---
-import ProjectInfoRow from './ProjectInfoRow.astro';
 import RivePlayer from '../RivePlayer.astro';
 import { t } from '../../utils/i18n.ts';
 
@@ -49,11 +48,85 @@ const overviewParagraphs = text.split('\n\n').map((part) => part.trim()).filter(
 const hasGraphic = Boolean(graphicSrc);
 ---
 
-<section id={id} class="project-overview relative z-10 bg-white">
+<section id={id} class="project-overview relative z-10 bg-[#fafafa]">
 	<div class="project-overview__content w-full min-w-0">
-		<p class="project-overview__label flex items-baseline gap-2.5">
-			<span class="project-overview__num font-semibold text-black/35">{num}</span>
-			<span class="project-overview__label-bracket font-semibold uppercase tracking-[0.03em] text-black/40">
+		{
+			rows.length > 0 ? (
+				<dl class="project-overview__meta">
+					{rows.map((row) => {
+						const linkHref = row.href || (row.isLink ? row.value : '');
+						const showLink = Boolean(linkHref);
+						const resolvedHref = linkHref
+							? linkHref.startsWith('http')
+								? linkHref
+								: `https://${linkHref}`
+							: '';
+
+						return (
+							<div class="project-overview__meta-item">
+								<dt class="project-overview__meta-label" data-i18n={row.labelKey}>
+									[{row.label}]
+								</dt>
+								<dd class="project-overview__meta-value">
+									{showLink ? (
+										<a
+											class="project-overview__meta-link"
+											href={resolvedHref}
+											target="_blank"
+											rel="noreferrer"
+										>
+											<span data-project-field={row.fieldKey}>{row.value}</span>
+											<svg
+												class="project-overview__meta-link-icon"
+												width="14"
+												height="14"
+												viewBox="0 0 14 14"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg"
+												aria-hidden="true"
+											>
+												<path
+													d="M5.5 2.5H2.5C1.94772 2.5 1.5 2.94772 1.5 3.5V11.5C1.5 12.0523 1.94772 12.5 2.5 12.5H10.5C11.0523 12.5 11.5 12.0523 11.5 11.5V8.5"
+													stroke="currentColor"
+													stroke-width="1.4"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+												<path
+													d="M8.5 1.5H12.5V5.5"
+													stroke="currentColor"
+													stroke-width="1.4"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+												<path
+													d="M12.5 1.5L6.5 7.5"
+													stroke="currentColor"
+													stroke-width="1.4"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+											</svg>
+										</a>
+									) : row.underlined ? (
+										<span class="project-overview__meta-link" data-project-field={row.fieldKey}>
+											{row.value}
+										</span>
+									) : (
+										<span data-project-field={row.fieldKey}>{row.value}</span>
+									)}
+								</dd>
+							</div>
+						);
+					})}
+				</dl>
+			) : null
+		}
+
+		<p class="project-overview__label flex items-baseline gap-2">
+			<span class="project-overview__num">{num}</span>
+			<span class="project-overview__sep" aria-hidden="true">/</span>
+			<span class="project-overview__label-bracket">
 				[
 				<span
 					class="project-overview__label-text"
@@ -93,28 +166,6 @@ const hasGraphic = Boolean(graphicSrc);
 							<p class="project-overview__text">{paragraph}</p>
 						))
 					}
-				</div>
-			) : null
-		}
-
-		{
-			rows.length > 0 ? (
-				<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
-					<dl class="m-0">
-						{rows.map((row, index) => (
-							<ProjectInfoRow
-								label={row.label}
-								labelKey={row.labelKey}
-								value={row.value}
-								href={row.href}
-								isLink={row.isLink}
-								underlined={row.underlined}
-								fieldKey={row.fieldKey}
-								isLast={index === rows.length - 1}
-								theme="light"
-							/>
-						))}
-					</dl>
 				</div>
 			) : null
 		}
@@ -217,6 +268,7 @@ const hasGraphic = Boolean(graphicSrc);
 	.project-overview {
 		scroll-margin-top: 160px;
 		padding-bottom: 0;
+		color: #131415;
 	}
 
 	@media (max-width: 767px) {
@@ -232,19 +284,20 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__label {
-		font-size: 1rem;
+		font-size: var(--body-text-size);
 		font-weight: 600;
-		text-transform: uppercase;
+		text-transform: lowercase;
 		letter-spacing: 0;
-		line-height: 1.2;
-		color: rgba(0, 0, 0, 0.4);
+		line-height: 1.6;
+		color: inherit;
 		margin: 0;
 		flex-wrap: nowrap;
 		word-break: normal;
 		overflow-wrap: normal;
 	}
 
-	.project-overview__num {
+	.project-overview__num,
+	.project-overview__sep {
 		display: inline-block;
 		flex: 0 0 auto;
 		flex-shrink: 0;
@@ -262,7 +315,8 @@ const hasGraphic = Boolean(graphicSrc);
 	}
 
 	.project-overview__label-text {
-		letter-spacing: var(--label-text-tracking);
+		letter-spacing: 0;
+		text-transform: lowercase;
 	}
 
 	.project-overview__heading {
@@ -293,10 +347,6 @@ const hasGraphic = Boolean(graphicSrc);
 		color: #000000;
 	}
 
-	:global(.project-page--dark) .project-overview__label {
-		color: rgba(255, 255, 255, 0.4);
-	}
-
 	:global(.project-page--dark) .project-overview__heading {
 		color: #f5f5f5;
 	}
@@ -317,28 +367,127 @@ const hasGraphic = Boolean(graphicSrc);
 		border-color: rgba(255, 255, 255, 0.12) !important;
 	}
 
-	:global(.project-page--dark) .project-overview :global(.project-info-row__label) {
-		color: rgba(255, 255, 255, 0.4) !important;
+	:global(.project-page--dark) .project-overview__meta {
+		border-bottom-color: rgba(255, 255, 255, 0.12);
 	}
 
-	:global(.project-page--dark) .project-overview :global(.project-info-row__value) {
-		color: #f5f5f5 !important;
+	:global(.project-page--dark) .project-overview__meta-item:not(:last-child) {
+		border-right-color: rgba(255, 255, 255, 0.12);
 	}
 
-	:global(.project-page--dark) .project-overview :global(.project-info-row .border-black\/10) {
-		border-color: rgba(255, 255, 255, 0.12) !important;
+	:global(.project-page--dark) .project-overview__meta-label {
+		color: rgba(255, 255, 255, 0.45);
 	}
 
-	:global(.project-page--dark) .project-overview :global(.project-info-row a),
-	:global(.project-page--dark) .project-overview :global(.project-info-row span.underline) {
-		text-decoration-color: rgba(255, 255, 255, 0.5) !important;
+	:global(.project-page--dark) .project-overview__meta-value,
+	:global(.project-page--dark) .project-overview__meta-link {
+		color: #f5f5f5;
+	}
+
+	.project-overview__meta {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		column-gap: 0;
+		row-gap: 1.5rem;
+		margin: 0 0 2.5rem;
+		padding: 0 0 2.5rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	@media (min-width: 768px) {
+		.project-overview__meta {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			row-gap: 0;
+		}
+	}
+
+	.project-overview__meta + .project-overview__label {
+		margin-top: 0;
+	}
+
+	.project-overview__meta-item {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+		margin: 0;
+		min-width: 0;
+		padding-right: 1.5rem;
+	}
+
+	.project-overview__meta-item:not(:last-child) {
+		border-right: none;
+	}
+
+	@media (max-width: 767px) {
+		.project-overview__meta-item {
+			padding-right: 0;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.project-overview__meta-item {
+			padding-inline: 1.75rem;
+		}
+
+		.project-overview__meta-item:not(:last-child) {
+			border-right: 1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		.project-overview__meta-item:first-child {
+			padding-left: 0;
+		}
+
+		.project-overview__meta-item:last-child {
+			padding-right: 0;
+		}
+	}
+
+	.project-overview__meta-label {
+		margin: 0;
+		font-size: var(--body-text-size);
+		font-weight: 600;
+		line-height: 1.6;
+		letter-spacing: 0;
+		text-transform: lowercase;
+		color: rgba(0, 0, 0, 0.4);
+	}
+
+	.project-overview__meta-value {
+		margin: 0;
+		font-size: var(--body-text-size);
+		font-weight: 600;
+		line-height: 1.6;
+		letter-spacing: 0;
+		color: inherit;
+	}
+
+	.project-overview__meta-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: inherit;
+		text-decoration: none;
+		transition: opacity 0.2s ease;
+	}
+
+	.project-overview__meta-link:hover {
+		opacity: 0.7;
+	}
+
+	.project-overview__meta-link-icon {
+		flex-shrink: 0;
+		width: 0.85em;
+		height: 0.85em;
+		display: block;
 	}
 
 	.project-overview__text-wrap {
 		margin-top: 1.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
+		gap: 1.75rem;
 		color: rgba(0, 0, 0, 0.7);
 	}
 
@@ -349,7 +498,7 @@ const hasGraphic = Boolean(graphicSrc);
 
 		.project-overview__text-wrap {
 			margin-top: 1.5rem;
-			gap: 1rem;
+			gap: 2rem;
 		}
 	}
 
@@ -359,8 +508,8 @@ const hasGraphic = Boolean(graphicSrc);
 		max-width: 100%;
 		margin: 0;
 		font-size: var(--body-text-size);
-		font-weight: 400;
-		line-height: var(--body-text-lh);
+		font-weight: 600;
+		line-height: 1.6;
 		letter-spacing: 0;
 		color: inherit;
 	}
@@ -385,7 +534,7 @@ const hasGraphic = Boolean(graphicSrc);
 		border-radius: 0;
 		background-color: #f2f2f2;
 		color: #131415;
-		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+		font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
 		font-size: 0.95rem;
 		font-weight: 500;
 		letter-spacing: 0.01em;

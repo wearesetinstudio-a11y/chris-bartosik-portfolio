@@ -92,7 +92,7 @@ const panamaTime = formatPanamaTimeLabel();
 						<span data-i18n="hero.specializationLine2">{t('hero.specializationLine2', 'en')}</span>
 					</p>
 					<div class="hero-actions">
-					<a href="/about" class="hero-cta hero-cta--primary" data-hero-follow-item>
+					<a href="/about" class="hero-cta hero-cta--primary" data-hero-follow-item data-pixel-hover="orange">
 						<span class="hero-cta__label-wrap">
 							<span class="hero-cta__roll-inner">
 								<span class="hero-cta__label-line">
@@ -105,7 +105,7 @@ const panamaTime = formatPanamaTimeLabel();
 						</span>
 						<img src="/icons/arrow.svg" alt="" width="18" height="15" class="hero-cta__arrow" aria-hidden="true" />
 					</a>
-					<a href="/projects" class="hero-cta hero-cta--secondary" data-hero-follow-item>
+					<a href="/projects" class="hero-cta hero-cta--secondary" data-hero-follow-item data-pixel-hover="dark">
 						<span class="hero-cta__label-wrap">
 							<span class="hero-cta__roll-inner">
 								<span class="hero-cta__label-line">
@@ -515,6 +515,7 @@ const panamaTime = formatPanamaTimeLabel();
 	}
 
 	.hero-cta {
+		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -528,9 +529,14 @@ const panamaTime = formatPanamaTimeLabel();
 		text-transform: uppercase;
 		text-decoration: none;
 		white-space: nowrap;
-		transition:
-			background-color 0.25s ease,
-			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		overflow: hidden;
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.hero-cta__label-wrap,
+	.hero-cta__arrow {
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero-cta--primary {
@@ -579,28 +585,33 @@ const panamaTime = formatPanamaTimeLabel();
 
 	@media (hover: hover) and (pointer: fine) {
 		.hero-cta:hover,
-		.hero-cta:focus-visible {
+		.hero-cta:focus-visible,
+		.hero-cta.is-pixel-hover {
 			transform: scale(1.03);
 		}
 
-		.hero-cta--primary:hover,
-		.hero-cta--primary:focus-visible {
-			background-color: #c73400;
-		}
-
-		.hero-cta--secondary:hover,
-		.hero-cta--secondary:focus-visible {
-			background-color: #222222;
-		}
-
 		.hero-cta:hover .hero-cta__roll-inner,
-		.hero-cta:focus-visible .hero-cta__roll-inner {
+		.hero-cta:focus-visible .hero-cta__roll-inner,
+		.hero-cta.is-pixel-hover .hero-cta__roll-inner {
 			transform: translateY(-50%);
 		}
 
 		.hero-cta:hover .hero-cta__arrow,
-		.hero-cta:focus-visible .hero-cta__arrow {
+		.hero-cta:focus-visible .hero-cta__arrow,
+		.hero-cta.is-pixel-hover .hero-cta__arrow {
 			transform: translateX(-10px) rotate(0deg);
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.hero-cta--primary:hover,
+			.hero-cta--primary:focus-visible {
+				background-color: #c73400;
+			}
+
+			.hero-cta--secondary:hover,
+			.hero-cta--secondary:focus-visible {
+				background-color: #222222;
+			}
 		}
 
 		.hero-pillar:hover .hero-pillar__roll-inner,

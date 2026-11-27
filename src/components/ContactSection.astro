@@ -45,6 +45,7 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 					id="contact-email-cta"
 					class="contact-email-cta group relative flex w-full items-center px-8 md:px-10"
 					data-open-contact
+					data-pixel-hover="dark"
 				>
 					<span class="contact-email-cta__inner">
 						<span class="contact-email-cta__label-wrap">
@@ -155,6 +156,7 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 	}
 
 	.contact-email-cta {
+		position: relative;
 		height: 80px;
 		border: 0;
 		font: inherit;
@@ -164,10 +166,9 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 		text-transform: uppercase;
 		color: inherit;
 		cursor: pointer;
+		overflow: hidden;
 		background-color: #252628;
-		transition:
-			transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-			background-color 0.35s ease;
+		transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 	}
 
 	.contact-email-cta__inner {
@@ -214,37 +215,21 @@ const socialLinks: { label: string; href: string; meta?: string }[] = [
 	}
 
 	.contact-email-cta__label-line--hover {
-		color: #18191b !important;
+		color: #f5f5f5 !important;
 	}
 
 	@media (hover: hover) and (pointer: fine) {
 		.contact-email-cta:hover .contact-email-cta__roll-inner,
 		.contact-email-cta:focus-visible .contact-email-cta__roll-inner,
-		.contact-email-cta.is-hovering .contact-email-cta__roll-inner {
+		.contact-email-cta.is-hovering .contact-email-cta__roll-inner,
+		.contact-email-cta.is-pixel-hover .contact-email-cta__roll-inner {
 			transform: translateY(-50%);
 		}
 
-		.contact-email-cta:hover .contact-email-cta__label-line--default,
-		.contact-email-cta:focus-visible .contact-email-cta__label-line--default,
-		.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
-			color: #18191b;
-		}
-
 		.contact-email-cta:hover .contact-email-cta__hand,
-		.contact-email-cta:focus-visible .contact-email-cta__hand {
+		.contact-email-cta:focus-visible .contact-email-cta__hand,
+		.contact-email-cta.is-pixel-hover .contact-email-cta__hand {
 			animation: contact-cta-hand-wave 0.95s cubic-bezier(0.45, 0, 0.2, 1) 0.12s infinite;
-		}
-
-		.contact-email-cta:hover,
-		.contact-email-cta:focus-visible,
-		.contact-email-cta.is-hovering {
-			background-color: #ffffff;
-		}
-
-		.contact-email-cta:hover .contact-email-cta__hand img,
-		.contact-email-cta:focus-visible .contact-email-cta__hand img,
-		.contact-email-cta.is-hovering .contact-email-cta__hand img {
-			filter: none;
 		}
 
 		.contact-social__link:hover .contact-social__arrow,

@@ -209,7 +209,8 @@ export function applyProjectCopy(locale: Locale) {
 		}
 
 		if (key === 'client') {
-			element.textContent = value.toUpperCase();
+			const inHero = Boolean(element.closest('.project-hero__client-name'));
+			element.textContent = inHero ? value.toUpperCase() : value;
 			element.removeAttribute('hidden');
 			return;
 		}

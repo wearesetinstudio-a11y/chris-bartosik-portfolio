@@ -146,7 +146,7 @@ const socialLinks = [
 					</span>
 				</label>
 
-				<button type="submit" id="contact-modal-submit" class="contact-modal__submit group">
+				<button type="submit" id="contact-modal-submit" class="contact-modal__submit group" data-pixel-hover="dark">
 					<span class="contact-modal__submit-inner">
 						<span class="contact-modal__submit-label-wrap">
 							<span class="contact-modal__submit-roll">
@@ -481,12 +481,11 @@ const socialLinks = [
 		padding: 1.15rem 1.25rem;
 		border: 0;
 		border-radius: 0;
-		background-color: #efefef;
-		color: #18191b;
+		overflow: hidden;
+		background-color: #18191b;
+		color: #f5f5f5;
 		cursor: pointer;
-		transition:
-			transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-			background-color 0.35s ease;
+		transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 	}
 
 	.contact-modal__submit-inner {
@@ -521,13 +520,10 @@ const socialLinks = [
 		font-weight: 600;
 		line-height: 1;
 		text-transform: uppercase;
-		transition: color 0.35s ease;
+		color: #f5f5f5;
 	}
 
-	.contact-modal__submit-line--default {
-		color: #18191b;
-	}
-
+	.contact-modal__submit-line--default,
 	.contact-modal__submit-line--hover {
 		color: #f5f5f5 !important;
 	}
@@ -536,33 +532,19 @@ const socialLinks = [
 		width: 20px;
 		height: auto;
 		flex-shrink: 0;
-		filter: brightness(0);
-		transition: filter 0.35s ease;
+		filter: brightness(0) invert(1);
 	}
 
 	.contact-modal__submit:focus-visible .contact-modal__submit-inner,
-	.contact-modal__submit.is-hovering .contact-modal__submit-inner {
+	.contact-modal__submit.is-hovering .contact-modal__submit-inner,
+	.contact-modal__submit.is-pixel-hover .contact-modal__submit-inner {
 		padding-inline: 8px;
 	}
 
 	.contact-modal__submit:focus-visible .contact-modal__submit-roll,
-	.contact-modal__submit.is-hovering .contact-modal__submit-roll {
+	.contact-modal__submit.is-hovering .contact-modal__submit-roll,
+	.contact-modal__submit.is-pixel-hover .contact-modal__submit-roll {
 		transform: translateY(-50%);
-	}
-
-	.contact-modal__submit:focus-visible .contact-modal__submit-line--default,
-	.contact-modal__submit.is-hovering .contact-modal__submit-line--default {
-		color: #f5f5f5;
-	}
-
-	.contact-modal__submit:focus-visible,
-	.contact-modal__submit.is-hovering {
-		background-color: #18191b;
-	}
-
-	.contact-modal__submit:focus-visible .contact-modal__submit-arrow,
-	.contact-modal__submit.is-hovering .contact-modal__submit-arrow {
-		filter: brightness(0) invert(1);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
@@ -573,18 +555,6 @@ const socialLinks = [
 		.contact-modal__submit:hover .contact-modal__submit-roll {
 			transform: translateY(-50%);
 		}
-
-		.contact-modal__submit:hover .contact-modal__submit-line--default {
-			color: #f5f5f5;
-		}
-
-		.contact-modal__submit:hover {
-			background-color: #18191b;
-		}
-
-		.contact-modal__submit:hover .contact-modal__submit-arrow {
-			filter: brightness(0) invert(1);
-		}
 	}
 
 	@media (hover: none), (pointer: coarse) {
@@ -594,18 +564,6 @@ const socialLinks = [
 
 		.contact-modal__submit:active .contact-modal__submit-roll {
 			transform: translateY(-50%);
-		}
-
-		.contact-modal__submit:active .contact-modal__submit-line--default {
-			color: #f5f5f5;
-		}
-
-		.contact-modal__submit:active {
-			background-color: #18191b;
-		}
-
-		.contact-modal__submit:active .contact-modal__submit-arrow {
-			filter: brightness(0) invert(1);
 		}
 	}
 

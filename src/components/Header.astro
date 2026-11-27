@@ -7,7 +7,7 @@ import { t } from '../utils/i18n.ts';
 interface Props {
 	projectCount?: number;
 	waitForIntro?: boolean;
-	theme?: 'default' | 'light-bg';
+	theme?: 'default' | 'light-bg' | 'over-dark';
 }
 
 const {
@@ -18,6 +18,7 @@ const {
 
 const workWithUsHref = '#contact';
 const isLightBg = theme === 'light-bg';
+const isOverDark = theme === 'over-dark';
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 function isNavSelected(href: string) {
@@ -52,6 +53,7 @@ const headerClass = waitForIntro
 	class:list={[
 		'site-header fixed inset-x-0 top-0 z-50 bg-transparent transition-[background-color] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]',
 		isLightBg && 'site-header--light-bg',
+		isOverDark && 'site-header--over-dark',
 		headerClass,
 	]}
 >
@@ -87,13 +89,13 @@ const headerClass = waitForIntro
 		</nav>
 
 		<div class="site-header__cta hidden justify-self-end md:block">
-			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} i18nKey="cta.workWithMe" />
+			<WorkWithUsButton href={workWithUsHref} variant="solid" i18nKey="cta.workWithMe" />
 		</div>
 
 		<div class="header-mobile-tools relative z-[60] flex items-center gap-5 md:hidden">
 			<WorkWithUsButton
 				href={workWithUsHref}
-				variant={isLightBg ? 'dark' : 'light'}
+				variant="solid"
 				i18nKey="cta.workWithMe"
 			/>
 			<button
@@ -291,15 +293,15 @@ const headerClass = waitForIntro
 		color: #000000 !important;
 	}
 
-	.site-header--light-bg:not(.header-solid) .work-with-us-button,
-	.site-header--light-bg:not(.header-solid) .work-with-us-button span,
-	.site-header--light-bg.header-solid .work-with-us-button,
-	.site-header--light-bg.header-solid .work-with-us-button span {
+	.site-header--light-bg:not(.header-solid) .work-with-us-button:not(.work-with-us-button--solid),
+	.site-header--light-bg:not(.header-solid) .work-with-us-button:not(.work-with-us-button--solid) span,
+	.site-header--light-bg.header-solid .work-with-us-button:not(.work-with-us-button--solid),
+	.site-header--light-bg.header-solid .work-with-us-button:not(.work-with-us-button--solid) span {
 		color: #000000 !important;
 	}
 
-	.site-header--light-bg:not(.header-solid) .work-with-us-button__underline,
-	.site-header--light-bg.header-solid .work-with-us-button__underline {
+	.site-header--light-bg:not(.header-solid) .work-with-us-button:not(.work-with-us-button--solid) .work-with-us-button__underline,
+	.site-header--light-bg.header-solid .work-with-us-button:not(.work-with-us-button--solid) .work-with-us-button__underline {
 		background-color: #000000 !important;
 	}
 
@@ -312,6 +314,51 @@ const headerClass = waitForIntro
 		background-color: rgba(0, 0, 0, 0.12);
 	}
 
+	/* Project heroes: white chrome over dark media, then light solid on scroll */
+	.site-header--over-dark.header-solid,
+	.site-header--over-dark.is-scrolled {
+		background-color: #ffffff;
+	}
+
+	.site-header--over-dark.header-solid .site-header__logo-text,
+	.site-header--over-dark.is-scrolled .site-header__logo-text {
+		color: #000000;
+	}
+
+	.site-header--over-dark.header-solid .site-header__logo-mark .logo-mark__name,
+	.site-header--over-dark.is-scrolled .site-header__logo-mark .logo-mark__name {
+		filter: brightness(0);
+	}
+
+	.site-header--over-dark.header-solid .rolling-link,
+	.site-header--over-dark.header-solid .rolling-link span,
+	.site-header--over-dark.is-scrolled .rolling-link,
+	.site-header--over-dark.is-scrolled .rolling-link span {
+		color: #000000 !important;
+	}
+
+	.site-header--over-dark.header-solid .work-with-us-button:not(.work-with-us-button--solid),
+	.site-header--over-dark.header-solid .work-with-us-button:not(.work-with-us-button--solid) span,
+	.site-header--over-dark.is-scrolled .work-with-us-button:not(.work-with-us-button--solid),
+	.site-header--over-dark.is-scrolled .work-with-us-button:not(.work-with-us-button--solid) span {
+		color: #000000 !important;
+	}
+
+	.site-header--over-dark.header-solid .work-with-us-button:not(.work-with-us-button--solid) .work-with-us-button__underline,
+	.site-header--over-dark.is-scrolled .work-with-us-button:not(.work-with-us-button--solid) .work-with-us-button__underline {
+		background-color: #000000 !important;
+	}
+
+	.site-header--over-dark.header-solid .mobile-nav-toggle,
+	.site-header--over-dark.is-scrolled .mobile-nav-toggle {
+		color: #000000;
+	}
+
+	.site-header--over-dark.header-solid .site-header__inner::after,
+	.site-header--over-dark.is-scrolled .site-header__inner::after {
+		background-color: rgba(0, 0, 0, 0.12);
+	}
+
 	body.mobile-nav-open .site-header--light-bg .site-header__logo-text {
 		color: #f5f5f5;
 	}
@@ -320,12 +367,12 @@ const headerClass = waitForIntro
 		filter: none;
 	}
 
-	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button,
-	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button span {
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button:not(.work-with-us-button--solid),
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button:not(.work-with-us-button--solid) span {
 		color: #f5f5f5 !important;
 	}
 
-	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button__underline {
+	body.mobile-nav-open .site-header--light-bg .header-mobile-tools .work-with-us-button:not(.work-with-us-button--solid) .work-with-us-button__underline {
 		background-color: #f5f5f5 !important;
 	}
 
@@ -408,6 +455,11 @@ const headerClass = waitForIntro
 
 	.site-header:not(.site-header--light-bg) .mobile-nav-toggle {
 		color: #f5f5f5;
+	}
+
+	.site-header--over-dark.is-scrolled .mobile-nav-toggle,
+	.site-header--over-dark.header-solid .mobile-nav-toggle {
+		color: #000000;
 	}
 
 	/* Morphing 4 squares into one solid square (12x12px) centered */
@@ -659,7 +711,9 @@ const headerClass = waitForIntro
 		if (!header) return;
 		const siteHeader = header;
 
-		const isLightBg = siteHeader.dataset.theme === 'light-bg';
+		const theme = siteHeader.dataset.theme;
+		const isLightBg = theme === 'light-bg';
+		const isOverDark = theme === 'over-dark';
 
 		function updateHeaderSolid() {
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
@@ -672,7 +726,7 @@ const headerClass = waitForIntro
 			const isScrolled = window.scrollY > 20;
 			siteHeader.classList.toggle('is-scrolled', isScrolled);
 
-			if (isLightBg) {
+			if (isLightBg || isOverDark) {
 				siteHeader.classList.toggle('header-solid', isScrolled);
 				return;
 			}

@@ -41,7 +41,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Fustat:wght@300;400;500;600;700;800&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
 			rel="stylesheet"
 		/>
 		<title>{pageTitle}</title>
@@ -188,6 +188,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 			import { initHeroParticles } from '../scripts/initHeroParticles.ts';
 			import { initHandParticles } from '../scripts/initHandParticles.ts';
 			import { initPressFeedback } from '../scripts/initPressFeedback.ts';
+			import { initPixelButtonHover } from '../scripts/initPixelButtonHover.ts';
 
 			function bootRivePlayers() {
 				// Dynamic import so a Rive/Vite dep failure can't block hero boot.
@@ -210,6 +211,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				initHeroParticles();
 				initHandParticles();
 				initPressFeedback();
+				initPixelButtonHover();
 				bootRivePlayers();
 			}
 
@@ -224,6 +226,7 @@ const pageTitle = title === brandName ? title : `${title} — ${brandName}`;
 				initHeroParticles();
 				initHandParticles();
 				initPressFeedback();
+				initPixelButtonHover();
 				bootRivePlayers();
 			});
 		</script>

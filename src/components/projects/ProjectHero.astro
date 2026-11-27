@@ -1,19 +1,12 @@
 ---
-import { t } from '../../utils/i18n.ts';
-
 interface Props {
 	heroImage?: string;
 	heroSubtitle?: string;
-	client?: string;
-	/** Override for the [Client] label. Empty = hide label. Undefined = use i18n default when client exists. */
-	clientLabel?: string;
 }
 
 const {
 	heroImage = '',
 	heroSubtitle = '',
-	client = '',
-	clientLabel: clientLabelProp,
 } = Astro.props;
 
 const heroLines = heroSubtitle
@@ -22,14 +15,7 @@ const heroLines = heroSubtitle
 	.filter(Boolean);
 
 const hasTagline = heroLines.length > 0;
-const hasClientName = Boolean(client.trim());
-const defaultClientLabel = t('project.client', 'en');
-const customClientLabel = clientLabelProp?.trim() ?? '';
-const resolvedClientLabel = customClientLabel || (hasClientName ? defaultClientLabel : '');
-const hasClientLabel = Boolean(resolvedClientLabel);
-const hasMeta = hasClientLabel || hasClientName;
-const hasHeroContent = hasTagline || hasMeta;
-const usesI18nClientLabel = !customClientLabel && hasClientLabel;
+const hasHeroContent = true;
 ---
 
 <section id="project-hero" class="project-hero relative h-[100vh]">
@@ -70,7 +56,7 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 				<div
 					class:list={[
 						'project-hero__grid grid w-full items-end gap-[40px] lg:gap-16',
-						hasTagline && hasMeta
+						hasTagline
 							? 'grid-cols-1 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)]'
 							: 'grid-cols-1',
 					]}
@@ -87,46 +73,14 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 						) : null
 					}
 
-					{
-						hasMeta ? (
-							<div
-								class:list={[
-									'project-hero__meta',
-									hasTagline && 'lg:ml-auto lg:max-w-md lg:text-right',
-								]}
-								data-hero-part="meta"
-							>
-								{
-									hasClientLabel ? (
-										<p class="project-hero__client-label uppercase text-white">
-											[
-											<span
-												class="project-hero__client-label-text"
-												data-project-field="clientLabel"
-												data-i18n={usesI18nClientLabel ? 'project.client' : undefined}
-											>
-												{resolvedClientLabel}
-											</span>
-											]
-										</p>
-									) : null
-								}
-								{
-									hasClientName ? (
-										<p
-											class:list={[
-												'project-hero__client-name uppercase text-white',
-												hasClientLabel && 'mt-3',
-											]}
-											data-project-field="client"
-										>
-											{client.toUpperCase()}
-										</p>
-									) : null
-								}
-							</div>
-						) : null
-					}
+					<p
+						class:list={[
+							'project-hero__scroll-label',
+							hasTagline && 'lg:ml-auto lg:max-w-md lg:text-right',
+						]}
+					>
+						[scroll down]
+					</p>
 				</div>
 			</div>
 		) : null
@@ -165,23 +119,14 @@ const usesI18nClientLabel = !customClientLabel && hasClientLabel;
 		-webkit-touch-callout: none;
 	}
 
-	.project-hero__client-label {
+	.project-hero__scroll-label {
 		margin: 0;
 		font-size: 1rem;
 		font-weight: 600;
 		letter-spacing: 0;
 		line-height: 1.2;
-	}
-
-	.project-hero__client-label-text {
-		letter-spacing: var(--label-text-tracking);
-	}
-
-	.project-hero__client-name {
-		font-size: 1.6rem;
-		font-weight: 500;
-		line-height: 1.15;
-		letter-spacing: var(--letter-spacing-ui);
+		text-transform: lowercase;
+		color: #ffffff;
 	}
 
 	@media (min-width: 768px) {
