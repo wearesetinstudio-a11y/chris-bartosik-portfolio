@@ -26,31 +26,42 @@
 	}
 
 	.hero-pillar:not(.is-pressed) .hero-pillar__roll-inner,
-	.hero-cta:not(.is-pressed) .hero-cta__roll-inner,
-	.contact-email-cta:not(.is-pressed) .contact-email-cta__roll-inner,
+	.hero-cta:not(.is-pressed):not(.is-pixel-hover) .hero-cta__roll-inner,
+	.contact-email-cta:not(.is-pressed):not(.is-pixel-hover) .contact-email-cta__roll-inner,
 	.rolling-link:not(.is-pressed) .flex.flex-col.transition-transform,
 	.work-with-us-button:not(.is-pressed) .flex.flex-col.transition-transform,
+	.work-with-us-button:not(.is-pressed) .work-with-us-button__solid:not(.is-pixel-hover) .work-with-us-button__solid-roll,
 	.see-all-projects:not(.is-pressed) .flex.flex-col.transition-transform,
 	.contact-social__link:not(.is-pressed) .contact-social__roll {
 		transform: none !important;
 	}
 
 	.work-with-us-button:not(.is-pressed) .flex.h-\[1\.5em\].flex-col.overflow-hidden > .flex.flex-col > span:last-child,
+	.work-with-us-button:not(.is-pressed) .work-with-us-button__solid:not(.is-pixel-hover) .work-with-us-button__solid-text[aria-hidden='true'],
 	.see-all-projects:not(.is-pressed) .see-all-projects__label:last-child,
 	.contact-social__link:not(.is-pressed) .contact-social__roll .contact-social__label-line:last-child {
 		display: none;
 	}
 
 	.hero-cta.is-pressed .hero-cta__roll-inner,
+	.hero-cta.is-pixel-hover .hero-cta__roll-inner,
 	.hero-pillar.is-pressed .hero-pillar__roll-inner,
 	.contact-email-cta.is-pressed .contact-email-cta__roll-inner,
+	.contact-email-cta.is-pixel-hover .contact-email-cta__roll-inner,
 	.rolling-link.is-pressed .flex.flex-col.transition-transform,
 	.work-with-us-button.is-pressed .flex.flex-col.transition-transform,
+	.work-with-us-button.is-pressed .work-with-us-button__solid-roll,
+	.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-roll,
 	.see-all-projects.is-pressed .flex.flex-col.transition-transform,
 	.contact-social__link.is-pressed .contact-social__roll {
 		transform: translateY(-50%);
 		transition-duration: 450ms;
 		transition-timing-function: ease-out;
+	}
+
+	.work-with-us-button.is-pressed .work-with-us-button__solid-arrow,
+	.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-arrow {
+		transform: rotate(0deg);
 	}
 
 	.work-with-us-button.is-pressed .work-with-us-button__underline,

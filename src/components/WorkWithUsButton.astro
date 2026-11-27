@@ -25,8 +25,10 @@ const isSolid = variant === 'solid';
 const isDark = variant === 'dark';
 const textColor = isSolid ? 'text-white' : isDark ? 'text-black' : 'text-setin-fg';
 const underlineColor = isDark ? 'bg-black' : 'bg-white';
-const textSize = size === 'large' ? 'text-[2rem]' : isSolid ? 'text-[0.95rem]' : 'text-[1.05rem]';
-const lineClass = `flex h-[1.5em] items-center leading-none ${textSize} font-semibold uppercase ${textColor}`;
+const textSize = size === 'large' ? 'text-[2rem]' : isSolid ? '' : 'text-[1.05rem]';
+const lineClass = isSolid
+	? `work-with-us-button__solid-text uppercase ${textColor}`
+	: `flex h-[1.5em] items-center leading-none ${textSize} font-semibold uppercase ${textColor}`;
 const isStatic = size === 'large';
 const displayLabel = count !== undefined ? `${label} [${count}]` : label;
 const opensContact =
@@ -40,13 +42,13 @@ const opensContact =
 		<div class="work-with-us-button work-with-us-button--solid group relative inline-block">
 			<a
 				href={href}
-				class="work-with-us-button__solid relative inline-flex items-center gap-2.5 overflow-hidden px-4 py-2 text-white md:px-5 md:py-2.5"
+				class="work-with-us-button__solid relative inline-flex items-center gap-2 overflow-hidden text-white"
 				data-open-contact={opensContact ? '' : undefined}
 				data-pixel-hover="dark"
 			>
-				<span class="work-with-us-button__solid-inner relative z-[1] inline-flex items-center gap-2.5">
-					<span class="work-with-us-button__solid-label flex h-[1.5em] flex-col overflow-hidden">
-						<span class="work-with-us-button__solid-roll flex flex-col">
+				<span class="work-with-us-button__solid-inner">
+					<span class="work-with-us-button__solid-label">
+						<span class="work-with-us-button__solid-roll">
 							<span class={lineClass} data-i18n={i18nKey} data-i18n-count={count}>
 								{displayLabel}
 							</span>
@@ -106,20 +108,56 @@ const opensContact =
 
 <style>
 	.work-with-us-button__solid {
+		display: inline-flex;
+		align-items: center;
 		border: 1px solid rgba(245, 245, 245, 0.18);
 		border-radius: 0;
+		padding: 0.72rem 0.95rem;
 		background-color: #18191b;
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
 		text-decoration: none;
+		line-height: 1;
 		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
+	.work-with-us-button__solid-inner {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		line-height: 1;
+	}
+
+	.work-with-us-button__solid-label {
+		display: block;
+		height: 1em;
+		overflow: hidden;
+		line-height: 1;
+	}
+
 	.work-with-us-button__solid-roll {
+		display: flex;
+		flex-direction: column;
 		transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.work-with-us-button__solid-text {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		height: 1em;
+		font-size: inherit;
+		font-weight: inherit;
+		letter-spacing: inherit;
+		line-height: 1;
 	}
 
 	.work-with-us-button__solid-arrow {
 		display: block;
-		width: 16px;
+		width: 14px;
 		height: auto;
 		flex-shrink: 0;
 		transform: rotate(-45deg);
@@ -127,22 +165,35 @@ const opensContact =
 		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	@media (max-width: 767px) {
+	@media (min-width: 768px) {
+		.work-with-us-button__solid {
+			padding: 0.85rem 1.25rem;
+			font-size: 0.95rem;
+		}
+
 		.work-with-us-button__solid-arrow {
-			width: 14px;
+			width: 16px;
 		}
 	}
 
+	.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-roll,
+	.work-with-us-button__solid:focus-visible .work-with-us-button__solid-roll,
+	.work-with-us-button--solid.is-pressed .work-with-us-button__solid-roll {
+		transform: translateY(-50%);
+	}
+
+	.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-arrow,
+	.work-with-us-button__solid:focus-visible .work-with-us-button__solid-arrow,
+	.work-with-us-button--solid.is-pressed .work-with-us-button__solid-arrow {
+		transform: rotate(0deg);
+	}
+
 	@media (hover: hover) and (pointer: fine) {
-		.work-with-us-button__solid:hover .work-with-us-button__solid-roll,
-		.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-roll,
-		.work-with-us-button__solid:focus-visible .work-with-us-button__solid-roll {
+		.work-with-us-button__solid:hover .work-with-us-button__solid-roll {
 			transform: translateY(-50%);
 		}
 
-		.work-with-us-button__solid:hover .work-with-us-button__solid-arrow,
-		.work-with-us-button__solid.is-pixel-hover .work-with-us-button__solid-arrow,
-		.work-with-us-button__solid:focus-visible .work-with-us-button__solid-arrow {
+		.work-with-us-button__solid:hover .work-with-us-button__solid-arrow {
 			transform: rotate(0deg);
 		}
 	}

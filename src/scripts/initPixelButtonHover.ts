@@ -25,7 +25,14 @@ type PixelButton = {
 	raf: number;
 	lastTs: number;
 	phase: number;
+	touchPointerId: number | null;
+	touchStartX: number;
+	touchStartY: number;
+	touchReleaseTimer: number;
 };
+
+const TOUCH_CANCEL_PX = 10;
+const TOUCH_RELEASE_MS = 180;
 
 const instances = new WeakMap<HTMLElement, PixelButton>();
 let pageBound = false;
@@ -197,10 +204,15 @@ function startLoop(state: PixelButton) {
 	state.raf = requestAnimationFrame((t) => tick(state, t));
 }
 
-function onEnter(state: PixelButton, event: PointerEvent) {
-	if (event.pointerType === 'touch') return;
-	if (!finePointer() || prefersReducedMotion()) return;
+function clearTouchRelease(state: PixelButton) {
+	if (!state.touchReleaseTimer) return;
+	window.clearTimeout(state.touchReleaseTimer);
+	state.touchReleaseTimer = 0;
+}
 
+function activate(state: PixelButton) {
+	if (prefersReducedMotion()) return;
+	clearTouchRelease(state);
 	rebuild(state);
 	state.hovering = true;
 	state.target = 1;
@@ -208,7 +220,15 @@ function onEnter(state: PixelButton, event: PointerEvent) {
 	startLoop(state);
 }
 
+function onEnter(state: PixelButton, event: PointerEvent) {
+	if (event.pointerType === 'touch') return;
+	if (!finePointer()) return;
+	activate(state);
+}
+
 function onLeave(state: PixelButton) {
+	clearTouchRelease(state);
+	state.touchPointerId = null;
 	if (!state.hovering && state.target === 0) return;
 	state.hovering = false;
 	state.target = 0;
@@ -216,6 +236,35 @@ function onLeave(state: PixelButton) {
 	// while the pixel fill can still clear on its own.
 	state.el.classList.remove('is-pixel-hover');
 	startLoop(state);
+}
+
+function onTouchDown(state: PixelButton, event: PointerEvent) {
+	if (event.pointerType !== 'touch') return;
+	state.touchPointerId = event.pointerId;
+	state.touchStartX = event.clientX;
+	state.touchStartY = event.clientY;
+	activate(state);
+}
+
+function onTouchMove(state: PixelButton, event: PointerEvent) {
+	if (event.pointerType !== 'touch' || event.pointerId !== state.touchPointerId) return;
+	const dx = event.clientX - state.touchStartX;
+	const dy = event.clientY - state.touchStartY;
+	if (Math.abs(dx) > TOUCH_CANCEL_PX || Math.abs(dy) > TOUCH_CANCEL_PX) {
+		onLeave(state);
+	}
+}
+
+function onTouchUp(state: PixelButton, event: PointerEvent) {
+	if (event.pointerType !== 'touch') return;
+	if (state.touchPointerId !== null && event.pointerId !== state.touchPointerId) return;
+	state.touchPointerId = null;
+	clearTouchRelease(state);
+	// Hold the pressed look briefly so the tap reads like desktop hover.
+	state.touchReleaseTimer = window.setTimeout(() => {
+		state.touchReleaseTimer = 0;
+		onLeave(state);
+	}, TOUCH_RELEASE_MS);
 }
 
 function bind(el: HTMLElement) {
@@ -247,21 +296,32 @@ function bind(el: HTMLElement) {
 		raf: 0,
 		lastTs: 0,
 		phase: 0,
+		touchPointerId: null,
+		touchStartX: 0,
+		touchStartY: 0,
+		touchReleaseTimer: 0,
 	};
 	instances.set(el, state);
 	rebuild(state);
 
 	el.addEventListener('pointerenter', (event) => onEnter(state, event));
-	el.addEventListener('pointerleave', () => onLeave(state));
+	el.addEventListener('pointerleave', (event) => {
+		// Touch end is handled by pointerup (with a short hold); don't clear early.
+		if (event.pointerType === 'touch') return;
+		onLeave(state);
+	});
+	el.addEventListener('pointerdown', (event) => onTouchDown(state, event));
+	el.addEventListener('pointermove', (event) => onTouchMove(state, event), { passive: true });
+	el.addEventListener('pointerup', (event) => onTouchUp(state, event));
+	el.addEventListener('pointercancel', (event) => {
+		if (event.pointerType !== 'touch') return;
+		onLeave(state);
+	});
 
 	el.addEventListener('focusin', () => {
 		if (!finePointer() || prefersReducedMotion()) return;
 		if (!el.matches(':focus-visible')) return;
-		rebuild(state);
-		state.hovering = true;
-		state.target = 1;
-		state.el.classList.add('is-pixel-hover');
-		startLoop(state);
+		activate(state);
 	});
 
 	el.addEventListener('focusout', () => onLeave(state));

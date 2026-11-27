@@ -634,21 +634,13 @@ const panamaTime = formatPanamaTimeLabel();
 
 	@media (hover: none), (pointer: coarse) {
 		.hero-cta.is-pressed,
+		.hero-cta.is-pixel-hover,
 		.hero-cta:active {
 			transform: scale(1.03);
 		}
 
-		.hero-cta--primary.is-pressed,
-		.hero-cta--primary:active {
-			background-color: #c73400;
-		}
-
-		.hero-cta--secondary.is-pressed,
-		.hero-cta--secondary:active {
-			background-color: #222222;
-		}
-
 		.hero-cta.is-pressed .hero-cta__arrow,
+		.hero-cta.is-pixel-hover .hero-cta__arrow,
 		.hero-cta:active .hero-cta__arrow {
 			transform: translateX(-10px) rotate(0deg);
 		}
